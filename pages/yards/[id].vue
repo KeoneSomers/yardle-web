@@ -1,5 +1,12 @@
 <script setup>
     const { id } = useRoute().params;
+
+    // use the following code to send the user to the error page
+    throw createError({
+        statusCode: 404,
+        statusMessage: "Item not found!",
+        fatal: true,
+    });
 </script>
 
 <template>
