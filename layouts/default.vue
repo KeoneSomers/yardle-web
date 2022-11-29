@@ -13,7 +13,7 @@
         InboxIcon,
         UsersIcon,
         XMarkIcon,
-    } from "@heroicons/vue/24/outline";
+    } from "@heroicons/vue/24/outline/index.js";
 
     const navigation = [
         { name: "Dashboard", to: "/", icon: HomeIcon, current: true },
