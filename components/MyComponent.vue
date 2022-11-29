@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div>
+    <div v-if="name">
         <p>Your name is {{ name }}</p>
     </div>
 </template>

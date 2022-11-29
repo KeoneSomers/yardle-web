@@ -16,9 +16,11 @@
 
 <template>
     <div>
-        <h2>Homepage</h2>
-        <MyComponent :first-name="'Keone'" />
+        <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+        <div class="py-4">
+            <MyComponent :first-name="'Keone'" />
 
-        <div>{{ data }}</div>
+            <div>{{ data }}</div>
+        </div>
     </div>
 </template>
