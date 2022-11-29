@@ -20,7 +20,7 @@
 
         if (err) {
             // somthing went wrong!
-            error.value = err;
+            error.value = err.message;
         }
     };
 </script>

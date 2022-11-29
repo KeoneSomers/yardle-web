@@ -16,13 +16,28 @@
     const error = ref(null);
 
     const handleSubmit = async () => {
-        console.log(horse.value);
+        // try to update the row in the database
+        const { data, error: err } = await client
+            .from("horses")
+            .update(horse.value)
+            .eq("id", id)
+            .select();
+
+        if (data) {
+            // success!
+            await navigateTo("/crud");
+        }
+
+        if (err) {
+            // somthing went wrong!
+            error.value = err.message;
+        }
     };
 </script>
 
 <template>
     <div>
-        <form @submit.prevent="handleSubmit">
+        <form v-if="horse" @submit.prevent="handleSubmit">
             <label class="block text-sm font-medium text-gray-700">Name</label>
             <div class="mt-1">
                 <input
