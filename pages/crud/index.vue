@@ -16,6 +16,12 @@
                 class="border bg-blue-100 rounded-xl p-4"
             >
                 <pre><code>{{ horse }}</code></pre>
+                <NuxtLink
+                    :to="`/crud/update/${horse.id}`"
+                    class="bg-blue-500 rounded mt-3 text-white p-2"
+                >
+                    Edit
+                </NuxtLink>
                 <button class="bg-red-500 rounded mt-3 text-white p-2">
                     Delete
                 </button>
