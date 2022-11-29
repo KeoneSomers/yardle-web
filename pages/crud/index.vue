@@ -33,6 +33,14 @@
 <template>
     <div>
         <div class="flex flex-col gap-4 p-8">
+            <div>
+                <NuxtLink
+                    to="/crud/create"
+                    class="bg-indigo-600 hover:bg-indigo-700 rounded mt-3 text-white px-4 py-2"
+                    >Add a new horse</NuxtLink
+                >
+            </div>
+
             <div
                 v-for="(horse, index) in horses"
                 :key="horse.id"
