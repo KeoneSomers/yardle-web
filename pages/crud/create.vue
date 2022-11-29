@@ -7,7 +7,7 @@
     });
     const error = ref(null);
 
-    const handleSubmit = async () => {
+    const handleCreate = async () => {
         const { data, error: err } = await client
             .from("horses")
             .insert([horse.value])
@@ -27,7 +27,7 @@
 
 <template>
     <div>
-        <form @submit.prevent="handleSubmit">
+        <form @submit.prevent="handleCreate">
             <label class="block text-sm font-medium text-gray-700">Name</label>
             <div class="mt-1">
                 <input

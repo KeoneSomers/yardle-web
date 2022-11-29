@@ -2,7 +2,10 @@
     const client = useSupabaseClient();
 
     const { data: horses } = await useAsyncData("horses", async () => {
-        const { data } = await client.from("horses").select();
+        const { data } = await client
+            .from("horses")
+            .select()
+            .order("created_at", { ascending: false });
         return data;
     });
 
