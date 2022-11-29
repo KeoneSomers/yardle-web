@@ -5,13 +5,33 @@
         const { data } = await client.from("horses").select();
         return data;
     });
+
+    const handleDelete = async (id, index) => {
+        const { data, error } = await client
+            .from("horses")
+            .delete()
+            .eq("id", id)
+            .select();
+
+        if (data) {
+            // success!
+            console.log(data);
+            // remove the deleted horse from the webpage
+            horses.value.splice(index, 1);
+        }
+
+        if (error) {
+            // somthing went wrong!
+            console.log(error);
+        }
+    };
 </script>
 
 <template>
     <div>
         <div class="flex flex-col gap-4 p-8">
             <div
-                v-for="horse in horses"
+                v-for="(horse, index) in horses"
                 :key="horse.id"
                 class="border bg-blue-100 rounded-xl p-4"
             >
@@ -22,7 +42,10 @@
                 >
                     Edit
                 </NuxtLink>
-                <button class="bg-red-500 rounded mt-3 text-white p-2">
+                <button
+                    @click="handleDelete(horse.id, index)"
+                    class="bg-red-500 rounded mt-3 text-white p-2"
+                >
                     Delete
                 </button>
             </div>
