@@ -5,7 +5,8 @@
     onMounted(() => {
         watchEffect(() => {
             if (user.value) {
-                console.log("annon layout: " + user);
+                console.log("annon layout: ");
+                console.log(user.value);
                 navigateTo("/");
             }
         });
