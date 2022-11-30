@@ -1,6 +1,16 @@
 <script setup>
-    const supabase = useSupabaseClient();
     const user = useSupabaseUser();
+
+    onMounted(() => {
+        watchEffect(
+            () => {
+                if (user.value) {
+                    console.log(user.value);
+                }
+            },
+            { flush: "post" }
+        );
+    });
 
     // get request
     // const { data } = await useFetch("/api/horse");
