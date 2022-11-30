@@ -9,9 +9,9 @@
 
     // have to get user this way because supaase nuxt module is fooked
 
-    const supabase = useSupabaseAuthClient();
-
     onMounted(async () => {
+        const supabase = useSupabaseAuthClient();
+
         const { data } = await supabase.auth.getUser();
         console.log(data);
         user.value = data.user;
