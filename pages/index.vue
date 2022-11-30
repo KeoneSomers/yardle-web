@@ -3,14 +3,13 @@
     //     middleware: "auth",
     // });
 
-    const user = ref();
+    // const user = useSupabaseUser();
 
-    onMounted(async () => {
-        watchEffect(() => {
-            user.value = useSupabaseUser();
-            console.log(user.value);
-        });
-    });
+    const supabase = useSupabaseAuthClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
     // get request
     // const { data } = await useFetch("/api/horse");
 
