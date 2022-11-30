@@ -1,7 +1,11 @@
 <script setup>
     definePageMeta({
         middleware: "auth",
+        layout: "annon",
     });
+
+    const user = useSupabaseUser();
+
     // get request
     const { data } = await useFetch("/api/horse");
 
@@ -23,5 +27,6 @@
 
             <div>{{ data }}</div>
         </div>
+        <div v-if="user">{{ user }}</div>
     </div>
 </template>
