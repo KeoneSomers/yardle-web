@@ -42,7 +42,7 @@
 </script>
 
 <template>
-    <div>
+    <div v-if="user">
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog
                 as="div"
