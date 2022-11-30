@@ -3,8 +3,10 @@
     //     middleware: "auth",
     // });
 
+    const user = ref();
+
     onMounted(async () => {
-        const user = useSupabaseUser();
+        user.value = useSupabaseUser();
         console.log(user.value);
     });
     // get request
