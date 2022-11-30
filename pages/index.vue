@@ -1,6 +1,8 @@
 <script setup>
-    const user = useSupabaseUser();
-    console.log(user);
+    onMounted(() => {
+        const user = useSupabaseUser();
+        console.log(user.value);
+    });
 
     // get request
     // const { data } = await useFetch("/api/horse");
