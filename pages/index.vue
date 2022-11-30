@@ -9,11 +9,9 @@
 
         const client = useSupabaseAuthClient();
 
-        const {
-            data: { _user },
-        } = await client.auth.getUser();
-        console.log(user);
-        user.value = _user;
+        const { data } = await client.auth.getUser();
+        console.log(data);
+        user.value = data;
     });
 
     // get request
