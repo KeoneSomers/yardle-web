@@ -1,4 +1,6 @@
 <script setup>
+    const user = ref(null);
+
     onMounted(async () => {
         // const user = useSupabaseUser();
         // watchEffect(() => {
@@ -8,9 +10,10 @@
         const client = useSupabaseAuthClient();
 
         const {
-            data: { user },
+            data: { _user },
         } = await client.auth.getUser();
         console.log(user);
+        user.value = _user;
     });
 
     // get request
@@ -34,6 +37,6 @@
 
             <div>{{ data }}</div>
         </div> -->
-        <!-- <div v-if="user">{{ user }}</div> -->
+        <div v-if="user">{{ user }}</div>
     </div>
 </template>
