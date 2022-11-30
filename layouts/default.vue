@@ -7,7 +7,6 @@
     } from "@headlessui/vue";
     import {
         Bars3Icon,
-        CalendarIcon,
         FolderIcon,
         HomeIcon,
         InboxIcon,
@@ -18,16 +17,23 @@
     const user = useSupabaseUser();
     const client = useSupabaseAuthClient();
 
+    // watch for logout
+    onMounted(() => {
+        watchEffect(() => {
+            if (!user.value) {
+                navigateTo("/login");
+            }
+        });
+    });
+
     const handleSignout = async () => {
         client.auth.signOut();
-        await navigateTo("/login");
     };
 
     const navigation = [
         { name: "Dashboard", to: "/", icon: HomeIcon, current: true },
         { name: "About", to: "/about", icon: UsersIcon, current: false },
         { name: "Yards", to: "/yards", icon: FolderIcon, current: false },
-        { name: "Login", to: "/login", icon: CalendarIcon, current: false },
         { name: "CRUD", to: "/crud", icon: InboxIcon, current: false },
     ];
 
@@ -35,7 +41,7 @@
 </script>
 
 <template>
-    <div v-if="user">
+    <div>
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog
                 as="div"
@@ -129,6 +135,7 @@
                                 </nav>
                             </div>
                             <div
+                                v-if="user"
                                 class="flex flex-shrink-0 border-t border-gray-200 p-4"
                             >
                                 <a href="#" class="group block flex-shrink-0">
@@ -205,7 +212,10 @@
                         </NuxtLink>
                     </nav>
                 </div>
-                <div class="flex flex-shrink-0 border-t border-gray-200 p-4">
+                <div
+                    v-if="user"
+                    class="flex flex-shrink-0 border-t border-gray-200 p-4"
+                >
                     <a href="#" class="group block w-full flex-shrink-0">
                         <div class="flex items-center">
                             <div>

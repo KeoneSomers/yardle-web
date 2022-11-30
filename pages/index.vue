@@ -1,6 +1,4 @@
 <script setup>
-    import MyComponent from "~~/components/MyComponent.vue";
-
     // get request
     const { data } = await useFetch("/api/horse");
 

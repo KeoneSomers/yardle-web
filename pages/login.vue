@@ -11,10 +11,9 @@
             password: "Kudokudo12!",
         });
 
-        if (data) {
-            console.log(data);
-            await navigateTo("/");
-        }
+        // if (data) {
+        //     await navigateTo("/");
+        // }
 
         if (error) {
             console.log(error);
