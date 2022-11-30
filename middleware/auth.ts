@@ -1,5 +1,11 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
     const user = useSupabaseUser();
+
+    const client = useSupabaseAuthClient();
+    const { data, error } = await client.auth.getSession();
+
+    console.log("session is: ");
+    console.log(data.session);
 
     console.log("Hit middleware!");
     console.log(user.value);
