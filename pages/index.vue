@@ -1,22 +1,12 @@
 <script setup>
-    definePageMeta({
-        middleware: "auth",
-    });
-
-    const user = ref(null);
-
-    // const user = useSupabaseUser();
-
-    // have to get user this way because supaase nuxt module is fooked
+    // definePageMeta({
+    //     middleware: "auth",
+    // });
 
     onMounted(async () => {
-        const supabase = useSupabaseAuthClient();
-
-        const { data } = await supabase.auth.getUser();
-        console.log(data);
-        user.value = data.user;
+        const user = useSupabaseUser();
+        console.log(user.value);
     });
-
     // get request
     // const { data } = await useFetch("/api/horse");
 
