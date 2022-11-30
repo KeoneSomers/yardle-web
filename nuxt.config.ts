@@ -5,13 +5,6 @@ export default defineNuxtConfig({
     typescript: {
         shim: false,
     },
-    supabase: {
-        client: {
-            auth: {
-                persistSession: true,
-            },
-        },
-    },
     app: {
         head: {
             title: "Yardle - Yard Management App",

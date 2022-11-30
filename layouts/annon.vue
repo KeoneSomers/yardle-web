@@ -1,6 +1,6 @@
 <script setup>
     // watch for login
-    const supabase = useSupabaseAuthClient();
+    const supabase = useSupabaseClient();
 
     supabase.auth.onAuthStateChange((event, session) => {
         if (session) {

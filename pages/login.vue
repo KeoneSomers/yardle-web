@@ -4,10 +4,10 @@
         middleware: "auth",
     });
 
-    const client = useSupabaseAuthClient();
+    const supabase = useSupabaseClient();
 
     const handleLogin = async () => {
-        const { data, error } = await client.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
             email: "keone.somers@outlook.com",
             password: "Kudokudo12!",
         });

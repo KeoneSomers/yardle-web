@@ -15,17 +15,17 @@
     } from "@heroicons/vue/24/outline/index.js";
 
     const user = useSupabaseUser();
-    const client = useSupabaseAuthClient();
+    const supabase = useSupabaseClient();
 
     // watch for logout
-    client.auth.onAuthStateChange((event, session) => {
+    supabase.auth.onAuthStateChange((event, session) => {
         if (!session) {
             navigateTo("/login");
         }
     });
 
     const handleSignout = async () => {
-        client.auth.signOut();
+        supabase.auth.signOut();
     };
 
     const navigation = [
