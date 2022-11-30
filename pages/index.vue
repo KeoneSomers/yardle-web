@@ -3,12 +3,7 @@
     //     middleware: "auth",
     // });
 
-    // const user = useSupabaseUser();
-
-    const supabase = useSupabaseAuthClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    const user = useSupabaseUser();
 
     // get request
     // const { data } = await useFetch("/api/horse");
