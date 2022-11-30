@@ -1,15 +1,11 @@
 <script setup>
-    const user = useSupabaseUser();
+    // const user = useSupabaseUser();
 
-    onMounted(() => {
-        watchEffect(
-            () => {
-                if (user.value) {
-                    console.log(user.value);
-                }
-            },
-            { flush: "post" }
-        );
+    const user = ref();
+
+    watchEffect(() => {
+        const _user = useSupabaseUser();
+        user.value = _user.value;
     });
 
     // get request
