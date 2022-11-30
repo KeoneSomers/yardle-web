@@ -3,17 +3,20 @@
         layout: "annon",
     });
 
+    const user = useSupabaseUser();
     const client = useSupabaseAuthClient();
 
-    const handleLogin = async () => {
-        const { data, error } = await client.auth.signInWithPassword({
+    const handleSignup = async () => {
+        const { data, error } = await client.auth.signUp({
             email: "keone.somers@outlook.com",
             password: "Kudokudo12!",
         });
 
         if (data) {
             console.log(data);
-            await navigateTo("/");
+
+            // TODO: first prompt the user to confirm their email
+            // await navigateTo("/");
         }
 
         if (error) {
@@ -24,7 +27,8 @@
 
 <template>
     <div>
-        <p>Login Page</p>
-        <button @click="handleLogin">LOGIN</button>
+        <p>Create an account!</p>
+        <button @click="handleSignup">Create</button>
+        <div v-if="user">{{ user }}</div>
     </div>
 </template>

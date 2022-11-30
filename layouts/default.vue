@@ -15,6 +15,14 @@
         XMarkIcon,
     } from "@heroicons/vue/24/outline/index.js";
 
+    const user = useSupabaseUser();
+    const client = useSupabaseAuthClient();
+
+    const handleSignout = async () => {
+        client.auth.signOut();
+        await navigateTo("/login");
+    };
+
     const navigation = [
         { name: "Dashboard", to: "/", icon: HomeIcon, current: true },
         { name: "About", to: "/about", icon: UsersIcon, current: false },
@@ -27,7 +35,7 @@
 </script>
 
 <template>
-    <div>
+    <div v-if="user">
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog
                 as="div"
@@ -136,13 +144,14 @@
                                             <p
                                                 class="text-base font-medium text-gray-700 group-hover:text-gray-900"
                                             >
-                                                Tom Cook
+                                                {{ user.email }}
                                             </p>
-                                            <p
+                                            <button
+                                                @click="handleSignout"
                                                 class="text-sm font-medium text-gray-500 group-hover:text-gray-700"
                                             >
-                                                View profile
-                                            </p>
+                                                Logout
+                                            </button>
                                         </div>
                                     </div>
                                 </a>
@@ -210,13 +219,14 @@
                                 <p
                                     class="text-sm font-medium text-gray-700 group-hover:text-gray-900"
                                 >
-                                    Tom Cook
+                                    {{ user.email }}
                                 </p>
-                                <p
-                                    class="text-xs font-medium text-gray-500 group-hover:text-gray-700"
+                                <button
+                                    @click="handleSignout"
+                                    class="text-sm font-medium text-gray-500 group-hover:text-gray-700"
                                 >
-                                    View profile
-                                </p>
+                                    Logout
+                                </button>
                             </div>
                         </div>
                     </a>

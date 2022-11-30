@@ -1,9 +1,13 @@
 <script setup>
-    const { name } = defineProps(["first-name"]);
+    defineProps({
+        firstName: String,
+    });
 </script>
 
 <template>
-    <div v-if="name">
-        <p>Your name is {{ name }}</p>
+    <div>
+        <div>
+            <p>Your name is {{ firstName }}</p>
+        </div>
     </div>
 </template>
