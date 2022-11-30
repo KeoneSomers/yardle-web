@@ -1,6 +1,7 @@
 <script setup>
     definePageMeta({
         layout: "annon",
+        middleware: "auth",
     });
 
     const client = useSupabaseAuthClient();

@@ -1,4 +1,7 @@
 <script setup>
+    definePageMeta({
+        middleware: "auth",
+    });
     // get request
     const { data } = await useFetch("/api/horse");
 
