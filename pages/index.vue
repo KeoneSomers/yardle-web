@@ -1,17 +1,13 @@
 <script setup>
     const user = ref(null);
+    // const user = useSupabaseUser();
 
     onMounted(async () => {
-        // const user = useSupabaseUser();
-        // watchEffect(() => {
-        //     console.log(user.value);
-        // });
+        const supabase = useSupabaseAuthClient();
 
-        const client = useSupabaseAuthClient();
-
-        const { data } = await client.auth.getUser();
+        const { data } = await supabase.auth.getUser();
         console.log(data);
-        user.value = data;
+        user.value = data.user;
     });
 
     // get request
