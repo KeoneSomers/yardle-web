@@ -6,8 +6,10 @@
     const user = ref();
 
     onMounted(async () => {
-        user.value = useSupabaseUser();
-        console.log(user.value);
+        watchEffect(() => {
+            console.log(user.value);
+            user.value = useSupabaseUser();
+        });
     });
     // get request
     // const { data } = await useFetch("/api/horse");
