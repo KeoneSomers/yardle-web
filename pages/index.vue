@@ -4,14 +4,18 @@
     });
 
     const user = ref(null);
+
     // const user = useSupabaseUser();
 
     // have to get user this way because supaase nuxt module is fooked
+
     const supabase = useSupabaseAuthClient();
 
-    const { data } = await supabase.auth.getUser();
-    console.log(data);
-    user.value = data.user;
+    onMounted(async () => {
+        const { data } = await supabase.auth.getUser();
+        console.log(data);
+        user.value = data.user;
+    });
 
     // get request
     // const { data } = await useFetch("/api/horse");
