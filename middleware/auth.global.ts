@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware((to, from) => {
     const user = useSupabaseUser();
 
     console.log("Hit middleware!");
@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         // trying to access a protected page
         // - must be logged in
         console.log("trying to access a protected page: " + to.path);
-        console.log(user.value);
+        console.log(user.value); // !! this is null for some reason
         if (!user.value) {
             return navigateTo("/login");
         }
