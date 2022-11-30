@@ -5,17 +5,6 @@
     });
 
     const client = useSupabaseAuthClient();
-    const user = useSupabaseUser();
-
-    // watch for login
-    onMounted(() => {
-        watchEffect(() => {
-            if (user.value) {
-                navigateTo("/");
-                console.log("hitt");
-            }
-        });
-    });
 
     const handleLogin = async () => {
         const { data, error } = await client.auth.signInWithPassword({

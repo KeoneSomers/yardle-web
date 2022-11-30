@@ -18,14 +18,14 @@
     const client = useSupabaseAuthClient();
 
     // watch for logout
-    onMounted(() => {
-        watchEffect(() => {
-            if (!user.value) {
-                navigateTo("/login");
-                console.log("get out");
-            }
-        });
-    });
+    // onMounted(() => {
+    //     watchEffect(() => {
+    //         if (!user.value) {
+    //             navigateTo("/login");
+    //             console.log("get out");
+    //         }
+    //     });
+    // });
 
     const handleSignout = async () => {
         client.auth.signOut();
