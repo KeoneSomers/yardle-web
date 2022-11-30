@@ -20,6 +20,7 @@
     // watch for logout
     onMounted(() => {
         watchEffect(() => {
+            console.log("default layout: " + user);
             if (!user.value) {
                 navigateTo("/login");
             }
