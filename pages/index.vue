@@ -7,8 +7,8 @@
 
     onMounted(async () => {
         watchEffect(() => {
-            console.log(user.value);
             user.value = useSupabaseUser();
+            console.log(user.value);
         });
     });
     // get request
