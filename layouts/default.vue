@@ -136,7 +136,6 @@
                                 </nav>
                             </div>
                             <div
-                                v-if="user"
                                 class="flex flex-shrink-0 border-t border-gray-200 p-4"
                             >
                                 <a href="#" class="group block flex-shrink-0">
@@ -213,10 +212,7 @@
                         </NuxtLink>
                     </nav>
                 </div>
-                <div
-                    v-if="user"
-                    class="flex flex-shrink-0 border-t border-gray-200 p-4"
-                >
+                <div class="flex flex-shrink-0 border-t border-gray-200 p-4">
                     <a href="#" class="group block w-full flex-shrink-0">
                         <div class="flex items-center">
                             <div>
