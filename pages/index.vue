@@ -1,7 +1,9 @@
 <script setup>
     onMounted(() => {
         const user = useSupabaseUser();
-        console.log(user.value);
+        watchEffect(() => {
+            console.log(user.value);
+        });
     });
 
     // get request
