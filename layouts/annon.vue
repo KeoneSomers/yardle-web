@@ -1,13 +1,11 @@
 <script setup>
-    const user = useSupabaseUser();
-
     // watch for login
-    onMounted(() => {
-        watchEffect(() => {
-            if (user.value) {
-                navigateTo("/");
-            }
-        });
+    const supabase = useSupabaseAuthClient();
+
+    supabase.auth.onAuthStateChange((event, session) => {
+        if (session) {
+            navigateTo("/");
+        }
     });
 </script>
 

@@ -1,7 +1,12 @@
 <script setup>
+    definePageMeta({
+        middleware: "auth",
+    });
+
     const user = ref(null);
     // const user = useSupabaseUser();
 
+    // have to get user this way because supaase nuxt module is fooked
     onMounted(async () => {
         const supabase = useSupabaseAuthClient();
 
