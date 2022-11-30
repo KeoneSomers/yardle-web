@@ -1,12 +1,6 @@
 <script setup>
-    // const user = useSupabaseUser();
-
-    const user = ref();
-
-    watchEffect(() => {
-        const _user = useSupabaseUser();
-        user.value = _user.value;
-    });
+    const user = useSupabaseUser();
+    console.log(user);
 
     // get request
     // const { data } = await useFetch("/api/horse");
