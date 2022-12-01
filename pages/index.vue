@@ -6,11 +6,11 @@
     // const user = ref(null);
 
     onMounted(() => {
-        watchEffect(() => {
+        setTimeout(() => {
             const user = useSupabaseUser();
 
             console.log(user.value);
-        });
+        }, 1);
     });
 
     // get request
