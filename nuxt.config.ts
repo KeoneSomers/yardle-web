@@ -1,13 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    ssr: false,
-    modules: ["@nuxtjs/tailwindcss", "@nuxtjs/supabase"],
+    modules: ["@nuxtjs/supabase", "@nuxtjs/tailwindcss"],
     typescript: {
         shim: false,
     },
     app: {
-        pageTransition: false,
-        layoutTransition: false,
         head: {
             title: "Yardle - Yard Management App",
             meta: [
