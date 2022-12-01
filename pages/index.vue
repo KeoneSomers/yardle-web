@@ -2,15 +2,16 @@
     // definePageMeta({
     //     middleware: "auth",
     // });
+    definePageMeta({
+        pageTransition: false,
+    });
 
     // const user = ref(null);
 
     onMounted(() => {
-        setTimeout(() => {
-            const user = useSupabaseUser();
+        const user = useSupabaseUser();
 
-            console.log(user.value);
-        }, 1);
+        console.log(user.value);
     });
 
     // get request
