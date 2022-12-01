@@ -32,9 +32,13 @@
 
     const navigation = [
         { name: "Dashboard", to: "/", icon: HomeIcon, current: true },
-        { name: "About", to: "/about", icon: UsersIcon, current: false },
-        { name: "Yards", to: "/yards", icon: FolderIcon, current: false },
         { name: "CRUD", to: "/crud", icon: InboxIcon, current: false },
+        {
+            name: "Your Profile",
+            to: "/account",
+            icon: InboxIcon,
+            current: false,
+        },
     ];
 
     const sidebarOpen = ref(false);
