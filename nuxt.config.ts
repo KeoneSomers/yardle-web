@@ -6,6 +6,8 @@ export default defineNuxtConfig({
         shim: false,
     },
     app: {
+        pageTransition: false,
+        layoutTransition: false,
         head: {
             title: "Yardle - Yard Management App",
             meta: [
