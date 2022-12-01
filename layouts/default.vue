@@ -17,15 +17,6 @@
     const user = useSupabaseUser();
     const supabase = useSupabaseAuthClient();
 
-    // watch for logout
-    onMounted(() => {
-        watchEffect(() => {
-            if (!user.value) {
-                navigateTo("/login");
-            }
-        });
-    });
-
     const handleSignout = async () => {
         supabase.auth.signOut();
     };
