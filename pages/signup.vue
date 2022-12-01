@@ -4,7 +4,7 @@
     });
 
     const user = useSupabaseUser();
-    const supabase = useSupabaseClient();
+    const supabase = useSupabaseAuthClient();
 
     const handleSignup = async () => {
         const { data, error } = await supabase.auth.signUp({

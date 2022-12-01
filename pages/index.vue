@@ -6,9 +6,11 @@
     // const user = ref(null);
 
     onMounted(() => {
-        const user = useSupabaseUser();
+        watchEffect(() => {
+            const user = useSupabaseUser();
 
-        console.log(user.value);
+            console.log(user.value);
+        });
     });
 
     // get request
