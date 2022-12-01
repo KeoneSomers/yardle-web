@@ -3,10 +3,10 @@
     //     middleware: "auth",
     // });
 
-    const user = ref(null);
+    // const user = ref(null);
 
     onMounted(() => {
-        user.value = useSupabaseUser();
+        const user = useSupabaseUser();
 
         console.log(user.value);
     });
@@ -32,6 +32,6 @@
 
             <div>{{ data }}</div>
         </div> -->
-        <div v-if="user">{{ user }}</div>
+        <!-- <div v-if="user">{{ user }}</div> -->
     </div>
 </template>
