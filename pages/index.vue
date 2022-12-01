@@ -8,11 +8,9 @@
 
     // const user = ref(null);
 
-    onMounted(() => {
-        const user = useSupabaseUser();
+    const user = useSupabaseUser();
 
-        console.log(user.value);
-    });
+    console.log(user.value);
 
     // get request
     // const { data } = await useFetch("/api/horse");
