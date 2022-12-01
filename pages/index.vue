@@ -1,12 +1,7 @@
 <script setup>
-    // definePageMeta({
-    //     middleware: "auth",
-    // });
     definePageMeta({
-        pageTransition: false,
+        middleware: "auth",
     });
-
-    // const user = ref(null);
 
     const user = useSupabaseUser();
 
@@ -33,6 +28,6 @@
 
             <div>{{ data }}</div>
         </div> -->
-        <!-- <div v-if="user">{{ user }}</div> -->
+        <div v-if="user">{{ user }}</div>
     </div>
 </template>
