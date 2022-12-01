@@ -45,12 +45,13 @@
 
 <template>
     <form class="form-widget" @submit.prevent="updateProfile">
+        <ProfilePicture v-model:path="avatar_path" @upload="updateProfile" />
         <div>
             <label for="email">Email</label>
             <input id="email" type="text" :value="user.email" disabled />
         </div>
         <div>
-            <label for="username">Username</label>
+            <label for="username">Name</label>
             <input id="username" type="text" v-model="username" />
         </div>
         <div>
@@ -65,12 +66,6 @@
                 :value="loading ? 'Loading ...' : 'Update'"
                 :disabled="loading"
             />
-        </div>
-
-        <div>
-            <button class="button block" @click="signOut" :disabled="loading">
-                Sign Out
-            </button>
         </div>
     </form>
 </template>
