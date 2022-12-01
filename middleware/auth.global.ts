@@ -1,9 +1,6 @@
 export default defineNuxtRouteMiddleware((to) => {
     const user = useSupabaseUser();
 
-    console.log("Hit middleware!");
-    console.log(user.value);
-
     if (to.path != "/login" && to.path != "/signup") {
         // trying to access a protected page
         // - must be logged in
@@ -16,7 +13,5 @@ export default defineNuxtRouteMiddleware((to) => {
         if (user.value) {
             return navigateTo("/");
         }
-    } else {
-        return navigateTo("/login");
     }
 });

@@ -1,10 +1,19 @@
 <script setup>
     definePageMeta({
         layout: "annon",
-        middleware: "auth",
     });
 
     const supabase = useSupabaseAuthClient();
+    const user = useSupabaseUser();
+
+    // watch for auth changes
+    onMounted(() => {
+        watchEffect(() => {
+            if (user.value) {
+                navigateTo("/");
+            }
+        });
+    });
 
     const handleLogin = async () => {
         const { data, error } = await supabase.auth.signInWithPassword({
