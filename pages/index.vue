@@ -1,19 +1,49 @@
 <script setup>
     const user = useSupabaseUser();
-    // get request
-    // const { data } = await useFetch("/api/horse");
+    const client = useSupabaseClient();
 
-    // get request with param
-    //const { data } = await useFetch("/api/horse?name=poppy");
-
-    // post request
-    // const { data2 } = await useFetch("/api/horse", {
-    //     method: "post",
-    //     body: { name: poppy, age: 25 },
-    // });
-
+    const yardName = ref("");
     // TODO: set from pinia store
     const selectedYard = ref(null);
+
+    // feels like there should be a cleaner way to get related data
+    const { data: yards } = await useAsyncData("joinedYards", async () => {
+        const { data } = await client
+            .from("users")
+            .select("yards(*)")
+            .eq("id", user.value.id)
+            .single();
+
+        return data.yards;
+    });
+
+    const handleCreateYard = async () => {
+        // step 1: create the yard in the database
+        const { data: newYard, error: createError } = await client
+            .from("yards")
+            .insert({
+                name: yardName.value,
+            })
+            .select()
+            .single();
+
+        // step 2: create the user/yard relationship
+        if (!createError) {
+            const { error: relError } = await client
+                .from("users_yards")
+                .insert([
+                    {
+                        user_id: user.value.id,
+                        yard_id: newYard.id,
+                    },
+                ]);
+        }
+
+        // step 3: update local state
+        if (!relError) {
+            yards.value.push(newYard);
+        }
+    };
 </script>
 
 <template>
@@ -25,8 +55,34 @@
                 Selected Yard is: {{ selectedYard.id }}
             </div>
             <div v-else>
-                You have not selected a yard. Showing Yards List and button for
-                create yard.
+                <p>
+                    You have not selected a yard. Showing Yards List and button
+                    for create yard.
+                </p>
+
+                <div class="my-4 p-4 border">
+                    <form @submit.prevent="handleCreateYard">
+                        <input
+                            required
+                            v-model="yardName"
+                            type="text"
+                            placeholder="Name your new yard"
+                        />
+                        <button
+                            type="submit"
+                            class="bg-indigo-500 text-white p-2 rounded ml-2"
+                        >
+                            Create yard
+                        </button>
+                    </form>
+                </div>
+                <div
+                    v-for="yard in yards"
+                    :key="yard.id"
+                    class="border my-3 p-2"
+                >
+                    {{ yard.name }}
+                </div>
             </div>
         </div>
     </div>
