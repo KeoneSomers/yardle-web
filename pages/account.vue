@@ -1,4 +1,6 @@
 <script setup>
+    import ManageProfilePicture from "~~/components/ManageProfilePicture.vue";
+
     const supabase = useSupabaseClient();
 
     const loading = ref(true);
@@ -45,7 +47,10 @@
 
 <template>
     <form class="form-widget" @submit.prevent="updateProfile">
-        <ProfilePicture v-model:path="avatar_path" @upload="updateProfile" />
+        <ManageProfilePicture
+            v-model:path="avatar_path"
+            @upload="updateProfile"
+        />
         <div>
             <label for="email">Email</label>
             <input id="email" type="text" :value="user.email" disabled />

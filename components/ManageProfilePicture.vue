@@ -58,7 +58,7 @@
 </script>
 
 <template>
-    <div>
+    <div class="m-4 border p-4 inline-block bg-gray-100">
         <img
             v-if="src"
             :src="src"
@@ -72,7 +72,6 @@
                 {{ uploading ? "Uploading ..." : "Upload" }}
             </label>
             <input
-                style="position: absolute; visibility: hidden"
                 type="file"
                 id="single"
                 accept="image/*"

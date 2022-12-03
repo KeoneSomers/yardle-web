@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     typescript: {
         shim: false,
     },
+    css: ["@/assets/css/main.css"],
     app: {
         head: {
             title: "Yardle - Yard Management App",
