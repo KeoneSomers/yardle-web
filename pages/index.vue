@@ -2,6 +2,9 @@
     const client = useSupabaseClient();
     const user = useSupabaseUser();
 
+    // TESTING
+    const profile = useProfile();
+
     const yardName = ref("");
     // TODO: set from pinia store
     const selectedYard = ref(null);
@@ -11,7 +14,7 @@
         const { data, error } = await client
             .from("users")
             .select("yards!users_yards(*)")
-            .eq("id", user.value.id)
+            .eq("id", profile.value.id)
             .single();
 
         return data.yards;
@@ -48,6 +51,7 @@
 
 <template>
     <div>
+        <pre><code>{{ profile }}</code></pre>
         <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
         <div class="py-4">
             <!-- <MyComponent first-name="Keone" /> -->
