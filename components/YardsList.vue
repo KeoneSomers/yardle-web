@@ -5,6 +5,7 @@
 
     // get the logged in users yards
     const { data: yards } = await useAsyncData("joinedYard", async () => {
+        // TODO: see if there is a better way to get yards so that I can order them
         const { data } = await client
             .from("profiles")
             .select("yards!profiles_yards(*)")
@@ -57,39 +58,46 @@
 
 <template>
     <div>
-        <p>
-            You have not selected a yard. Showing Yards List and button for
-            create yard.
-        </p>
+        <h1 class="text-2xl font-semibold text-gray-900">Your Yards</h1>
+        <div class="py-4">
+            <p>
+                You have not selected a yard. Showing Yards List and button for
+                create yard.
+            </p>
 
-        <div class="my-4 p-4 border">
-            <form @submit.prevent="handleCreateYard">
-                <input
-                    required
-                    v-model="yardName"
-                    type="text"
-                    placeholder="Name your new yard"
-                />
-                <button
-                    type="submit"
-                    class="bg-indigo-500 text-white p-2 rounded ml-2"
+            <div class="my-4 p-4 border bg-indigo-100">
+                <form @submit.prevent="handleCreateYard">
+                    <input
+                        required
+                        v-model="yardName"
+                        type="text"
+                        placeholder="Name your new yard"
+                    />
+                    <button
+                        type="submit"
+                        class="bg-indigo-500 text-white p-2 rounded ml-2"
+                    >
+                        Create yard
+                    </button>
+                </form>
+            </div>
+            <div v-if="yards">
+                <div
+                    v-for="yard in yards"
+                    :key="yard.id"
+                    class="border my-3 p-2"
                 >
-                    Create yard
-                </button>
-            </form>
-        </div>
-        <div v-if="yards">
-            <div v-for="yard in yards" :key="yard.id" class="border my-3 p-2">
-                <div @click="handleSelectYard(yard)">
-                    {{ yard.name }}
+                    <div @click="handleSelectYard(yard)">
+                        {{ yard.name }}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div v-else>
-            <p>
-                It looks as though youre not a memeber of any yards. Create a
-                yard to get started!
-            </p>
+            <div v-else>
+                <p>
+                    It looks as though youre not a memeber of any yards. Create
+                    a yard to get started!
+                </p>
+            </div>
         </div>
     </div>
 </template>
