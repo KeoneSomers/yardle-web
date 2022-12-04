@@ -1,16 +1,16 @@
 <script setup>
-    const user = useSupabaseUser();
     const client = useSupabaseClient();
+    const user = useSupabaseUser();
 
     const yardName = ref("");
     // TODO: set from pinia store
     const selectedYard = ref(null);
 
-    // feels like there should be a cleaner way to get related data
-    const { data: yards } = await useAsyncData("joinedYards", async () => {
-        const { data } = await client
+    // get the logged in users yards
+    const { data: yards } = await useAsyncData("joinedYard", async () => {
+        const { data, error } = await client
             .from("users")
-            .select("yards(*)")
+            .select("yards!users_yards(*)")
             .eq("id", user.value.id)
             .single();
 
