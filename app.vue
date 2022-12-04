@@ -10,8 +10,8 @@
                 "profile",
                 async () => {
                     const { data } = await client
-                        .from("users")
-                        .select()
+                        .from("profiles")
+                        .select("*, selected_yard(*)")
                         .eq("id", user.value.id)
                         .single();
 

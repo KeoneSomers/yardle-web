@@ -2,18 +2,15 @@
     const client = useSupabaseClient();
     const user = useSupabaseUser();
 
-    // TESTING
     const profile = useProfile();
 
     const yardName = ref("");
-    // TODO: set from pinia store
-    const selectedYard = ref(null);
 
     // get the logged in users yards
     const { data: yards } = await useAsyncData("joinedYard", async () => {
-        const { data, error } = await client
-            .from("users")
-            .select("yards!users_yards(*)")
+        const { data } = await client
+            .from("profiles")
+            .select("yards!profiles_yards(*)")
             .eq("id", profile.value.id)
             .single();
 
@@ -47,16 +44,45 @@
             yards.value.push(newYard);
         }
     };
+
+    const handleSelectYard = async (yard) => {
+        // update db with id
+        const { data, error } = await client
+            .from("profiles")
+            .update({ selected_yard: yard.id })
+            .eq("id", profile.value.id)
+            .select();
+
+        // update state with obj
+        profile.value.selected_yard = yard;
+    };
+
+    const handleUnselectYard = async () => {
+        // update db with id
+        const { data, error } = await client
+            .from("profiles")
+            .update({ selected_yard: null })
+            .eq("id", profile.value.id)
+            .select();
+
+        // update state with obj
+        profile.value.selected_yard = null;
+    };
 </script>
 
 <template>
     <div>
-        <pre><code>{{ profile }}</code></pre>
         <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
         <div class="py-4">
             <!-- <MyComponent first-name="Keone" /> -->
-            <div v-if="selectedYard">
-                Selected Yard is: {{ selectedYard.id }}
+            <div v-if="profile.selected_yard">
+                {{ profile.selected_yard.name }}
+                <button
+                    @click="handleUnselectYard"
+                    class="bg-indigo-500 rounded p-2 m-2 text-white"
+                >
+                    Switch Yard
+                </button>
             </div>
             <div v-else>
                 <p>
@@ -80,12 +106,22 @@
                         </button>
                     </form>
                 </div>
-                <div
-                    v-for="yard in yards"
-                    :key="yard.id"
-                    class="border my-3 p-2"
-                >
-                    {{ yard.name }}
+                <div v-if="yards">
+                    <div
+                        v-for="yard in yards"
+                        :key="yard.id"
+                        class="border my-3 p-2"
+                    >
+                        <div @click="handleSelectYard(yard)">
+                            {{ yard.name }}
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
+                    <p>
+                        It looks as though youre not a memeber of any yards.
+                        Create a yard to get started!
+                    </p>
                 </div>
             </div>
         </div>
