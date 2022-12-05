@@ -59,13 +59,7 @@
 
 <template>
     <div class="m-4 border p-4 inline-block bg-gray-100">
-        <img
-            v-if="src"
-            :src="src"
-            alt="Avatar"
-            class="avatar image"
-            style="width: 10em; height: 10em"
-        />
+        <img v-if="src" :src="src" alt="Avatar" class="avatar image w-5 h-5" />
 
         <div style="width: 10em; position: relative">
             <label class="button primary block" for="single">

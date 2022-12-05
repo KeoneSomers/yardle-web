@@ -26,6 +26,7 @@
     const user = useSupabaseUser();
     const supabase = useSupabaseAuthClient();
     const router = useRouter();
+    const profile = useProfile();
 
     // watch for auth changes
     onMounted(() => {
@@ -220,11 +221,19 @@
                                     class="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                     <span class="sr-only">Open user menu</span>
-                                    <img
-                                        class="h-8 w-8 rounded-full"
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                        alt=""
+                                    <SupabaseImage
+                                        v-if="profile.avatar_url"
+                                        id="avatars"
+                                        :path="profile.avatar_url"
+                                        class="w-8 h-8 rounded-full overflow-hidden"
                                     />
+                                    <div
+                                        v-else
+                                        class="h-8 w-8 bg-indigo-500 rounded-full flex items-center justify-center text-white"
+                                    >
+                                        <!-- TODO: this should not be hardcoded! -->
+                                        KS
+                                    </div>
                                 </MenuButton>
                             </div>
                             <transition
