@@ -13,20 +13,24 @@
     import {
         Bars3BottomLeftIcon,
         BellIcon,
-        CalendarIcon,
-        ChartBarIcon,
-        FolderIcon,
         HomeIcon,
         InboxIcon,
-        UsersIcon,
         XMarkIcon,
     } from "@heroicons/vue/24/outline";
-    import { MagnifyingGlassIcon } from "@heroicons/vue/20/solid";
 
     const user = useSupabaseUser();
     const supabase = useSupabaseAuthClient();
+    const client = useSupabaseClient();
     const router = useRouter();
-    const profile = useProfile();
+
+    const { data: profile } = await useAsyncData("profile", async () => {
+        const { data } = await client
+            .from("profiles")
+            .select()
+            .eq("id", user.value.id)
+            .single();
+        return data;
+    });
 
     // watch for auth changes
     onMounted(() => {
@@ -215,7 +219,7 @@
                         </button>
 
                         <!-- Profile dropdown -->
-                        <Menu as="div" class="relative ml-3">
+                        <Menu v-if="profile" as="div" class="relative ml-3">
                             <div>
                                 <MenuButton
                                     class="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

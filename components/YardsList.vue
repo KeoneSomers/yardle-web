@@ -1,6 +1,6 @@
 <script setup>
     const client = useSupabaseClient();
-    const profile = useProfile();
+    const user = useSupabaseUser();
     const yardName = ref("");
 
     // get the logged in users yards
@@ -8,8 +8,8 @@
         // TODO: see if there is a better way to get yards so that I can order them
         const { data } = await client
             .from("profiles")
-            .select("yards!profiles_yards(*)")
-            .eq("id", profile.value.id)
+            .select("yards(*)")
+            .eq("id", user.value.id)
             .single();
 
         return data.yards;
@@ -47,6 +47,9 @@
         const { data, error } = await client.auth.updateUser({
             data: { selected_yard: yardId },
         });
+
+        // TODO: put user in global state so i can edit it?
+        console.log(data.user.user_metadata.selected_yard);
     };
 </script>
 
