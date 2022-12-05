@@ -1,21 +1,31 @@
 <script setup>
+    import { ref } from "vue";
     import {
         Dialog,
         DialogPanel,
+        Menu,
+        MenuButton,
+        MenuItem,
+        MenuItems,
         TransitionChild,
         TransitionRoot,
     } from "@headlessui/vue";
     import {
-        Bars3Icon,
+        Bars3BottomLeftIcon,
+        BellIcon,
+        CalendarIcon,
+        ChartBarIcon,
         FolderIcon,
         HomeIcon,
         InboxIcon,
         UsersIcon,
         XMarkIcon,
-    } from "@heroicons/vue/24/outline/index.js";
+    } from "@heroicons/vue/24/outline";
+    import { MagnifyingGlassIcon } from "@heroicons/vue/20/solid";
 
     const user = useSupabaseUser();
     const supabase = useSupabaseAuthClient();
+    const router = useRouter();
 
     // watch for auth changes
     onMounted(() => {
@@ -31,21 +41,21 @@
     };
 
     const navigation = [
-        { name: "Dashboard", to: "/", icon: HomeIcon, current: true },
-        { name: "CRUD", to: "/crud", icon: InboxIcon, current: false },
-        {
-            name: "Your Profile",
-            to: "/account",
-            icon: InboxIcon,
-            current: false,
-        },
+        { name: "Dashboard", to: "/", icon: HomeIcon },
+        { name: "CRUD", to: "/crud", icon: InboxIcon },
+    ];
+
+    const userNavigation = [
+        { name: "Your Profile", to: "/profile" },
+        { name: "Manage Yards", to: "/" },
     ];
 
     const sidebarOpen = ref(false);
 </script>
 
 <template>
-    <div v-if="user">
+    <div>
+        <!-- Mobile Sidebar -->
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog
                 as="div"
@@ -75,7 +85,7 @@
                         leave-to="-translate-x-full"
                     >
                         <DialogPanel
-                            class="relative flex w-full max-w-xs flex-1 flex-col bg-white"
+                            class="relative flex w-full max-w-xs flex-1 flex-col bg-indigo-700 pt-5 pb-4"
                         >
                             <TransitionChild
                                 as="template"
@@ -102,74 +112,40 @@
                                     </button>
                                 </div>
                             </TransitionChild>
-                            <div class="h-0 flex-1 overflow-y-auto pt-5 pb-4">
-                                <div
-                                    class="flex flex-shrink-0 items-center px-4"
-                                >
-                                    <img
-                                        class="h-8 w-auto"
-                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                                        alt="Your Company"
-                                    />
-                                </div>
-                                <nav class="mt-5 space-y-1 px-2">
+                            <div class="flex flex-shrink-0 items-center px-4">
+                                <img
+                                    class="h-8 w-auto"
+                                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300"
+                                    alt="Your Company"
+                                />
+                            </div>
+                            <div class="mt-5 h-0 flex-1 overflow-y-auto">
+                                <nav class="space-y-1 px-2">
                                     <NuxtLink
                                         v-for="item in navigation"
                                         :key="item.name"
-                                        :to="item.to"
+                                        :to="item.href"
                                         :class="[
-                                            item.current
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                            item.to ==
+                                            router.currentRoute.value.path
+                                                ? 'bg-indigo-800 text-white'
+                                                : 'text-indigo-100 hover:bg-indigo-600',
                                             'group flex items-center px-2 py-2 text-base font-medium rounded-md',
                                         ]"
                                     >
                                         <component
                                             :is="item.icon"
-                                            :class="[
-                                                item.current
-                                                    ? 'text-gray-500'
-                                                    : 'text-gray-400 group-hover:text-gray-500',
-                                                'mr-4 flex-shrink-0 h-6 w-6',
-                                            ]"
+                                            class="mr-4 h-6 w-6 flex-shrink-0 text-indigo-300"
                                             aria-hidden="true"
                                         />
                                         {{ item.name }}
                                     </NuxtLink>
                                 </nav>
                             </div>
-                            <div
-                                class="flex flex-shrink-0 border-t border-gray-200 p-4"
-                            >
-                                <a href="#" class="group block flex-shrink-0">
-                                    <div class="flex items-center">
-                                        <div>
-                                            <img
-                                                class="inline-block h-10 w-10 rounded-full"
-                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                alt=""
-                                            />
-                                        </div>
-                                        <div class="ml-3">
-                                            <p
-                                                class="text-base font-medium text-gray-700 group-hover:text-gray-900"
-                                            >
-                                                {{ user.email }}
-                                            </p>
-                                            <button
-                                                @click="handleSignout"
-                                                class="text-sm font-medium text-gray-500 group-hover:text-gray-700"
-                                            >
-                                                Logout
-                                            </button>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
                         </DialogPanel>
                     </TransitionChild>
-                    <div class="w-14 flex-shrink-0">
-                        <!-- Force sidebar to shrink to fit close icon -->
+                    <div class="w-14 flex-shrink-0" aria-hidden="true">
+                        <!-- Dummy element to force sidebar to shrink to fit close icon -->
                     </div>
                 </div>
             </Dialog>
@@ -179,88 +155,121 @@
         <div class="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
             <!-- Sidebar component, swap this element with another sidebar if you like -->
             <div
-                class="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white"
+                class="flex flex-grow flex-col overflow-y-auto bg-indigo-700 pt-5"
             >
-                <div class="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-                    <div class="flex flex-shrink-0 items-center px-4">
-                        <img
-                            class="h-8 w-auto"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                            alt="Your Company"
-                        />
-                    </div>
-                    <nav class="mt-5 flex-1 space-y-1 bg-white px-2">
+                <div class="flex flex-shrink-0 items-center px-4">
+                    <img
+                        class="h-8 w-auto"
+                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300"
+                        alt="Your Company"
+                    />
+                </div>
+                <div class="mt-5 flex flex-1 flex-col">
+                    <nav class="flex-1 space-y-1 px-2 pb-4">
                         <NuxtLink
                             v-for="item in navigation"
                             :key="item.name"
                             :to="item.to"
                             :class="[
-                                item.current
-                                    ? 'bg-gray-100 text-gray-900'
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                item.to == router.currentRoute.value.path
+                                    ? 'bg-indigo-800 text-white'
+                                    : 'text-indigo-100 hover:bg-indigo-600',
                                 'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
                             ]"
                         >
                             <component
                                 :is="item.icon"
-                                :class="[
-                                    item.current
-                                        ? 'text-gray-500'
-                                        : 'text-gray-400 group-hover:text-gray-500',
-                                    'mr-3 flex-shrink-0 h-6 w-6',
-                                ]"
+                                class="mr-3 h-6 w-6 flex-shrink-0 text-indigo-300"
                                 aria-hidden="true"
                             />
                             {{ item.name }}
                         </NuxtLink>
                     </nav>
                 </div>
-                <div class="flex flex-shrink-0 border-t border-gray-200 p-4">
-                    <a href="#" class="group block w-full flex-shrink-0">
-                        <div class="flex items-center">
-                            <div>
-                                <img
-                                    class="inline-block h-9 w-9 rounded-full"
-                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                    alt=""
-                                />
-                            </div>
-                            <div class="ml-3">
-                                <p
-                                    class="text-sm font-medium text-gray-700 group-hover:text-gray-900"
-                                >
-                                    {{ user.email }}
-                                </p>
-                                <button
-                                    @click="handleSignout"
-                                    class="text-sm font-medium text-gray-500 group-hover:text-gray-700"
-                                >
-                                    Logout
-                                </button>
-                            </div>
-                        </div>
-                    </a>
-                </div>
             </div>
         </div>
+
+        <!-- Navbar -->
         <div class="flex flex-1 flex-col md:pl-64">
             <div
-                class="sticky top-0 z-10 bg-white pl-1 pt-1 sm:pl-3 sm:pt-3 md:hidden"
+                class="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow"
             >
                 <button
                     type="button"
-                    class="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                    class="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
                     @click="sidebarOpen = true"
                 >
                     <span class="sr-only">Open sidebar</span>
-                    <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+                    <Bars3BottomLeftIcon class="h-6 w-6" aria-hidden="true" />
                 </button>
-            </div>
-            <main class="flex-1">
-                <div class="py-6">
-                    <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                        <slot />
+                <div class="flex flex-1 justify-between px-4">
+                    <div class="flex flex-1"></div>
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <button
+                            type="button"
+                            class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            <span class="sr-only">View notifications</span>
+                            <BellIcon class="h-6 w-6" aria-hidden="true" />
+                        </button>
+
+                        <!-- Profile dropdown -->
+                        <Menu as="div" class="relative ml-3">
+                            <div>
+                                <MenuButton
+                                    class="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                >
+                                    <span class="sr-only">Open user menu</span>
+                                    <img
+                                        class="h-8 w-8 rounded-full"
+                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                        alt=""
+                                    />
+                                </MenuButton>
+                            </div>
+                            <transition
+                                enter-active-class="transition ease-out duration-100"
+                                enter-from-class="transform opacity-0 scale-95"
+                                enter-to-class="transform opacity-100 scale-100"
+                                leave-active-class="transition ease-in duration-75"
+                                leave-from-class="transform opacity-100 scale-100"
+                                leave-to-class="transform opacity-0 scale-95"
+                            >
+                                <MenuItems
+                                    class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                >
+                                    <MenuItem
+                                        v-for="item in userNavigation"
+                                        :key="item.name"
+                                        v-slot="{ active }"
+                                    >
+                                        <NuxtLink
+                                            :to="item.to"
+                                            :class="[
+                                                active ? 'bg-gray-100' : '',
+                                                'block px-4 py-2 text-sm text-gray-700',
+                                            ]"
+                                            >{{ item.name }}</NuxtLink
+                                        >
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <button
+                                            @click="handleSignout"
+                                            class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        >
+                                            Sign out
+                                        </button>
+                                    </MenuItem>
+                                </MenuItems>
+                            </transition>
+                        </Menu>
                     </div>
+                </div>
+            </div>
+
+            <main>
+                <div class="py-6 mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+                    <slot />
                 </div>
             </main>
         </div>
@@ -268,11 +277,11 @@
 </template>
 
 <style>
-    .router-link-exact-active {
-        color: blue;
+    html {
+        height: 100%;
+        background-color: rgb(243 244 246);
     }
 
-    html,
     body {
         height: 100%;
     }
