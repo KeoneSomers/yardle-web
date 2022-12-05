@@ -1,11 +1,12 @@
 <script setup>
-    const profile = useProfile();
+    const user = useSupabaseUser();
 </script>
 
 <template>
     <div>
-        <!-- <MyComponent first-name="Keone" /> -->
-        <YardDashboard v-if="profile.selected_yard" />
-        <YardsList v-else />
+        <div v-if="user">
+            <YardDashboard v-if="user.user_metadata.selected_yard" />
+            <YardsList v-else />
+        </div>
     </div>
 </template>

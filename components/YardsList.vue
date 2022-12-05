@@ -43,16 +43,10 @@
         }
     };
 
-    const handleSelectYard = async (yard) => {
-        // update db with id
-        const { data, error } = await client
-            .from("profiles")
-            .update({ selected_yard: yard.id })
-            .eq("id", profile.value.id)
-            .select();
-
-        // update state with obj
-        profile.value.selected_yard = yard;
+    const handleSelectYard = async (yardId) => {
+        const { data, error } = await client.auth.updateUser({
+            data: { selected_yard: yardId },
+        });
     };
 </script>
 
@@ -87,7 +81,7 @@
                     :key="yard.id"
                     class="border my-3 p-2"
                 >
-                    <div @click="handleSelectYard(yard)">
+                    <div @click="handleSelectYard(yard.id)">
                         {{ yard.name }}
                     </div>
                 </div>
