@@ -4,7 +4,7 @@
     });
 
     const supabase = useSupabaseAuthClient();
-    const user = useSupabaseUser();
+    const user = useState("user");
 
     const email = ref("");
     const password = ref("");

@@ -3,7 +3,7 @@
         layout: "annon",
     });
 
-    const user = useSupabaseUser();
+    const user = useState("user");
     const supabase = useSupabaseAuthClient();
 
     const handleSignup = async () => {

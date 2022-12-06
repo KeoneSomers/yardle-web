@@ -1,6 +1,6 @@
 <script setup>
     const client = useSupabaseClient();
-    const user = useSupabaseUser();
+    const user = useState("user");
     const yardName = ref("");
 
     // get the logged in users yards
@@ -44,12 +44,14 @@
     };
 
     const handleSelectYard = async (yardId) => {
+        // update user in db
         const { data, error } = await client.auth.updateUser({
             data: { selected_yard: yardId },
         });
 
-        // TODO: put user in global state so i can edit it?
-        console.log(data.user.user_metadata.selected_yard);
+        // update user local state
+        user.value.user_metadata.selected_yard =
+            data.user.user_metadata.selected_yard;
     };
 </script>
 
@@ -57,12 +59,7 @@
     <div>
         <h1 class="text-2xl font-semibold text-gray-900">Your Yards</h1>
         <div class="py-4">
-            <p>
-                You have not selected a yard. Showing Yards List and button for
-                create yard.
-            </p>
-
-            <div class="my-4 p-4 border bg-indigo-100">
+            <div class="my-4 p-4 border bg-indigo-100 rounded-xl bordered">
                 <form @submit.prevent="handleCreateYard">
                     <input
                         required
@@ -82,17 +79,20 @@
                 <div
                     v-for="yard in yards"
                     :key="yard.id"
-                    class="border my-3 p-2"
+                    class="border my-3 rounded-xl bg-gray-50 overflow-hidden"
                 >
-                    <div @click="handleSelectYard(yard.id)">
+                    <div
+                        @click="handleSelectYard(yard.id)"
+                        class="p-4 cursor-pointer hover:bg-white"
+                    >
                         {{ yard.name }}
                     </div>
                 </div>
             </div>
             <div v-else>
                 <p>
-                    It looks as though youre not a memeber of any yards. Create
-                    a yard to get started!
+                    It looks as though you&apos;re not a memeber of any yards.
+                    Create a yard to get started!
                 </p>
             </div>
         </div>

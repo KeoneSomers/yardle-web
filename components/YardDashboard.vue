@@ -1,17 +1,33 @@
 <script setup>
     const client = useSupabaseClient();
+    const user = useState("user");
+
+    // get data for selected yard
+    const { data: yard } = await useAsyncData("yard", async () => {
+        const { data } = await client
+            .from("yards")
+            .select()
+            .eq("id", user.value.user_metadata.selected_yard)
+            .single();
+
+        return data;
+    });
 
     const handleUnselectYard = async () => {
+        // update user in db
         const { data, error } = await client.auth.updateUser({
             data: { selected_yard: null },
         });
+
+        // update user local state
+        user.value.user_metadata.selected_yard = null;
     };
 </script>
 
 <template>
     <div>
         <h1 class="text-2xl font-semibold text-gray-900">
-            <!-- {{ profile.selected_yard.name }} -->
+            {{ yard.name }}
         </h1>
         <div class="py-4">
             <button

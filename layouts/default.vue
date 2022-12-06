@@ -18,10 +18,10 @@
         XMarkIcon,
     } from "@heroicons/vue/24/outline";
 
-    const user = useSupabaseUser();
     const supabase = useSupabaseAuthClient();
     const client = useSupabaseClient();
     const router = useRouter();
+    const user = useState("user");
 
     const { data: profile } = await useAsyncData("profile", async () => {
         const { data } = await client

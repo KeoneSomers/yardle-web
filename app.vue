@@ -1,3 +1,7 @@
+<script setup>
+    useState("user", () => useSupabaseUser());
+</script>
+
 <template>
     <div>
         <NuxtLayout>
