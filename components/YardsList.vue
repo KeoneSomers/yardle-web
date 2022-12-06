@@ -1,10 +1,13 @@
 <script setup>
+    import CreateYardModal from "./modals/CreateYardModal.vue";
+
     const client = useSupabaseClient();
     const user = useState("user");
-    const yardName = ref("");
+    const isOpen = ref(false);
 
     // get the logged in users yards
-    const { data: yards } = await useAsyncData("joinedYard", async () => {
+    const yards = useState("yards");
+    const { data: _yards } = await useAsyncData("joinedYards", async () => {
         // TODO: see if there is a better way to get yards so that I can order them
         const { data } = await client
             .from("profiles")
@@ -14,34 +17,7 @@
 
         return data.yards;
     });
-
-    const handleCreateYard = async () => {
-        // step 1: create the yard in the database
-        const { data: newYard, error: createError } = await client
-            .from("yards")
-            .insert({
-                name: yardName.value,
-            })
-            .select()
-            .single();
-
-        // step 2: create the user/yard relationship
-        if (!createError) {
-            const { error: relError } = await client
-                .from("users_yards")
-                .insert([
-                    {
-                        user_id: user.value.id,
-                        yard_id: newYard.id,
-                    },
-                ]);
-        }
-
-        // step 3: update local state
-        if (!relError) {
-            yards.value.push(newYard);
-        }
-    };
+    yards.value = _yards.value;
 
     const handleSelectYard = async (yardId) => {
         // update user in db
@@ -57,9 +33,19 @@
 
 <template>
     <div>
-        <h1 class="text-2xl font-semibold text-gray-900">Your Yards</h1>
+        <!-- <CodeBlock>{{ yards }}</CodeBlock> -->
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-semibold text-gray-900">Your Yards</h1>
+            <button
+                type="button"
+                @click="isOpen = true"
+                class="inline-flex items-center rounded border border-transparent bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+                Create Yard
+            </button>
+        </div>
         <div class="py-4">
-            <div class="my-4 p-4 border bg-indigo-100 rounded-xl bordered">
+            <!-- <div class="my-4 p-4 border bg-indigo-100 rounded-xl bordered">
                 <form @submit.prevent="handleCreateYard">
                     <input
                         required
@@ -74,7 +60,7 @@
                         Create yard
                     </button>
                 </form>
-            </div>
+            </div> -->
             <div v-if="yards">
                 <div
                     v-for="yard in yards"
@@ -97,4 +83,7 @@
             </div>
         </div>
     </div>
+
+    <!-- Modals -->
+    <CreateYardModal :is-open="isOpen" @close="isOpen = false" />
 </template>

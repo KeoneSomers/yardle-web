@@ -15,7 +15,9 @@
         BellIcon,
         HomeIcon,
         InboxIcon,
+        UsersIcon,
         XMarkIcon,
+        Cog6ToothIcon,
     } from "@heroicons/vue/24/outline/index.js";
 
     const supabase = useSupabaseAuthClient();
@@ -47,7 +49,8 @@
 
     const navigation = [
         { name: "Dashboard", to: "/", icon: HomeIcon },
-        { name: "CRUD", to: "/crud", icon: InboxIcon },
+        { name: "Members", to: "/crud", icon: UsersIcon },
+        { name: "Settings", to: "/crud", icon: Cog6ToothIcon },
     ];
 
     const userNavigation = [

@@ -29,7 +29,6 @@
 
             if (data) {
                 // console.log(data);
-                console.log(user.value);
             }
 
             if (error) {
