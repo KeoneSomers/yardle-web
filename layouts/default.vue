@@ -16,7 +16,7 @@
         HomeIcon,
         InboxIcon,
         XMarkIcon,
-    } from "@heroicons/vue/24/outline";
+    } from "@heroicons/vue/24/outline/index.js";
 
     const supabase = useSupabaseAuthClient();
     const client = useSupabaseClient();
