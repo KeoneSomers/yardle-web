@@ -41,7 +41,7 @@
 
             // step 3: update local state
             if (!relError) {
-                yards.value.push(newYard);
+                yards.value.unshift(newYard);
                 // now close the modal
                 emits("close");
             } else {

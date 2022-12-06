@@ -8,11 +8,11 @@
     // get the logged in users yards
     const yards = useState("yards");
     const { data: _yards } = await useAsyncData("joinedYards", async () => {
-        // TODO: see if there is a better way to get yards so that I can order them
         const { data } = await client
             .from("profiles")
             .select("yards(*)")
             .eq("id", user.value.id)
+            .order("created_at", { foreignTable: "yards", ascending: false })
             .single();
 
         return data.yards;
