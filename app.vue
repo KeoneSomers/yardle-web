@@ -1,5 +1,10 @@
 <script setup>
-    useState("user", () => useSupabaseUser());
+    const user = useSupabaseUser();
+    const _user = useState("user", () => user.value);
+
+    watchEffect(() => {
+        _user.value = user.value;
+    });
 </script>
 
 <template>
