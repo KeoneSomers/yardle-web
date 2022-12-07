@@ -14,7 +14,6 @@
         Bars3BottomLeftIcon,
         BellIcon,
         HomeIcon,
-        InboxIcon,
         UsersIcon,
         XMarkIcon,
         Cog6ToothIcon,

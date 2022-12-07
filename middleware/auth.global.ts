@@ -11,6 +11,7 @@ export default defineNuxtRouteMiddleware((to) => {
         // trying to access login or signup page
         // - must be logged out
         if (user.value) {
+            // todo - also check token has not expired! (currently set to 1 week)
             return navigateTo("/");
         }
     }

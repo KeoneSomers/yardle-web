@@ -1,19 +1,39 @@
 <script setup>
-    import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+    import {
+        Dialog,
+        DialogPanel,
+        TransitionChild,
+        TransitionRoot,
+    } from "@headlessui/vue";
+    import {
+        Bars3Icon,
+        CalendarIcon,
+        CogIcon,
+        HomeIcon,
+        MagnifyingGlassCircleIcon,
+        SquaresPlusIcon,
+        UserGroupIcon,
+        XMarkIcon,
+        ArrowLeftOnRectangleIcon,
+    } from "@heroicons/vue/24/outline";
+
+    const navigation = [
+        { name: "Dashboard", to: "/", icon: HomeIcon },
+        {
+            name: "Horses",
+            to: "/horses",
+            icon: MagnifyingGlassCircleIcon,
+        },
+        { name: "Members", to: "/members", icon: UserGroupIcon },
+        { name: "Calendar", to: "/calendar", icon: CalendarIcon },
+    ];
+
+    const secondaryNavigation = [{ name: "Settings", to: "/", icon: CogIcon }];
 
     const supabase = useSupabaseAuthClient();
     const client = useSupabaseClient();
     const router = useRouter();
     const user = useState("user");
-
-    const { data: profile } = await useAsyncData("profile", async () => {
-        const { data } = await client
-            .from("profiles")
-            .select()
-            .eq("id", user.value.id)
-            .single();
-        return data;
-    });
 
     // watch for auth changes
     onMounted(() => {
@@ -28,127 +48,335 @@
         supabase.auth.signOut();
     };
 
-    const navigation = [
-        { name: "Horses", to: "/" },
-        { name: "Members", to: "/crud" },
-        { name: "Settings", to: "/crud" },
-    ];
+    const { data: profile } = await useAsyncData("profile", async () => {
+        const { data } = await client
+            .from("profiles")
+            .select()
+            .eq("id", user.value.id)
+            .single();
+        return data;
+    });
 
-    const userNavigation = [{ name: "Your Profile", to: "/profile" }];
-
-    const handleUnselectYard = async () => {
-        // update user in db
-        const { data, error } = await client.auth.updateUser({
-            data: { selected_yard: null },
-        });
-
-        // update user local state
-        user.value.user_metadata.selected_yard = null;
-    };
+    const sidebarOpen = ref(false);
 </script>
 
 <template>
-    <div v-if="user">
-        <div class="bg-gray-900 p-4">
-            <header>
-                <nav>
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center space-x-4">
-                            <div class="text-yellow-500 text-xl">Yardle</div>
-                            <NuxtLink
-                                v-if="user.user_metadata.selected_yard"
-                                v-for="item in navigation"
-                                :key="item.name"
-                                :to="item.to"
-                                :class="[
-                                    item.to == router.currentRoute.value.path
-                                        ? 'bg-indigo-800 text-white'
-                                        : 'text-indigo-100 hover:bg-indigo-600',
-                                    'p-2 text-sm font-medium rounded-md',
-                                ]"
-                            >
-                                {{ item.name }}
-                            </NuxtLink>
-                        </div>
+    <div class="flex h-screen">
+        <TransitionRoot as="template" :show="sidebarOpen">
+            <Dialog
+                as="div"
+                class="relative z-40 lg:hidden"
+                @close="sidebarOpen = false"
+            >
+                <TransitionChild
+                    as="template"
+                    enter="transition-opacity ease-linear duration-300"
+                    enter-from="opacity-0"
+                    enter-to="opacity-100"
+                    leave="transition-opacity ease-linear duration-300"
+                    leave-from="opacity-100"
+                    leave-to="opacity-0"
+                >
+                    <div class="fixed inset-0 bg-gray-600 bg-opacity-75" />
+                </TransitionChild>
 
-                        <div class="flex items-center text-white space-x-4">
-                            <Menu v-if="profile" as="div" class="relative ml-3">
-                                <div>
-                                    <MenuButton
-                                        class="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                <div class="fixed inset-0 z-40 flex">
+                    <TransitionChild
+                        as="template"
+                        enter="transition ease-in-out duration-300 transform"
+                        enter-from="-translate-x-full"
+                        enter-to="translate-x-0"
+                        leave="transition ease-in-out duration-300 transform"
+                        leave-from="translate-x-0"
+                        leave-to="-translate-x-full"
+                    >
+                        <DialogPanel
+                            class="relative flex w-full max-w-xs flex-1 flex-col bg-white focus:outline-none"
+                        >
+                            <TransitionChild
+                                as="template"
+                                enter="ease-in-out duration-300"
+                                enter-from="opacity-0"
+                                enter-to="opacity-100"
+                                leave="ease-in-out duration-300"
+                                leave-from="opacity-100"
+                                leave-to="opacity-0"
+                            >
+                                <div class="absolute top-0 right-0 -mr-12 pt-2">
+                                    <button
+                                        type="button"
+                                        class="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                                        @click="sidebarOpen = false"
                                     >
                                         <span class="sr-only"
-                                            >Open user menu</span
+                                            >Close sidebar</span
                                         >
-                                        <SupabaseImage
-                                            v-if="profile.avatar_url"
-                                            id="avatars"
-                                            :path="profile.avatar_url"
-                                            class="w-8 h-8 rounded-full overflow-hidden"
+                                        <XMarkIcon
+                                            class="h-6 w-6 text-white"
+                                            aria-hidden="true"
                                         />
-                                        <div
-                                            v-else
-                                            class="h-8 w-8 bg-indigo-500 rounded-full flex items-center justify-center text-white"
-                                        >
-                                            <!-- TODO: this should not be hardcoded! -->
-                                            KS
-                                        </div>
-                                    </MenuButton>
+                                    </button>
                                 </div>
-                                <transition
-                                    enter-active-class="transition ease-out duration-100"
-                                    enter-from-class="transform opacity-0 scale-95"
-                                    enter-to-class="transform opacity-100 scale-100"
-                                    leave-active-class="transition ease-in duration-75"
-                                    leave-from-class="transform opacity-100 scale-100"
-                                    leave-to-class="transform opacity-0 scale-95"
+                            </TransitionChild>
+                            <div class="h-0 flex-1 overflow-y-auto pt-5 pb-4">
+                                <div
+                                    class="flex flex-shrink-0 items-center px-4"
                                 >
-                                    <MenuItems
-                                        class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                                    >
-                                        <MenuItem
-                                            v-for="item in userNavigation"
+                                    <img
+                                        class="h-8 w-auto"
+                                        src="https://tailwindui.com/img/logos/mark.svg?color=pink&shade=500"
+                                        alt="Your Company"
+                                    />
+                                </div>
+                                <nav aria-label="Sidebar" class="mt-5">
+                                    <div class="space-y-1 px-2">
+                                        <NuxtLink
+                                            v-for="item in navigation"
                                             :key="item.name"
-                                            v-slot="{ active }"
+                                            :to="item.to"
+                                            :class="[
+                                                item.to ==
+                                                router.currentRoute.value.path
+                                                    ? 'bg-gray-100 text-gray-900'
+                                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                                'group flex items-center px-2 py-2 text-base font-medium rounded-md',
+                                            ]"
                                         >
-                                            <NuxtLink
-                                                :to="item.to"
+                                            <component
+                                                :is="item.icon"
                                                 :class="[
-                                                    active ? 'bg-gray-100' : '',
-                                                    'block px-4 py-2 text-sm text-gray-700',
+                                                    item.to ==
+                                                    router.currentRoute.value
+                                                        .path
+                                                        ? 'text-gray-500'
+                                                        : 'text-gray-400 group-hover:text-gray-500',
+                                                    'mr-4 h-6 w-6',
                                                 ]"
-                                                >{{ item.name }}</NuxtLink
+                                                aria-hidden="true"
+                                            />
+                                            {{ item.name }}
+                                        </NuxtLink>
+                                    </div>
+                                    <hr
+                                        class="my-5 border-t border-gray-200"
+                                        aria-hidden="true"
+                                    />
+                                    <div class="space-y-1 px-2">
+                                        <NuxtLink
+                                            v-for="item in secondaryNavigation"
+                                            :key="item.name"
+                                            :to="item.to"
+                                            class="group flex items-center rounded-md px-2 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                        >
+                                            <component
+                                                :is="item.icon"
+                                                class="mr-4 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                                aria-hidden="true"
+                                            />
+                                            {{ item.name }}
+                                        </NuxtLink>
+                                        <button
+                                            @click="handleSignout"
+                                            class="w-full text-base group flex items-center rounded-md px-2 py-2 font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                        >
+                                            <ArrowLeftOnRectangleIcon
+                                                class="mr-4 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                                aria-hidden="true"
+                                            />
+                                            Logout
+                                        </button>
+                                    </div>
+                                </nav>
+                            </div>
+                            <div
+                                class="flex flex-shrink-0 border-t border-gray-200 p-4"
+                            >
+                                <NuxtLink
+                                    to="/profile"
+                                    class="group block flex-shrink-0"
+                                >
+                                    <div class="flex items-center">
+                                        <div>
+                                            <SupabaseImage
+                                                v-if="profile.avatar_url"
+                                                id="avatars"
+                                                :path="profile.avatar_url"
+                                                class="w-9 h-9 rounded-full overflow-hidden"
+                                            />
+                                            <div
+                                                v-else
+                                                class="h-9 w-9 bg-indigo-500 rounded-full flex items-center justify-center text-white"
                                             >
-                                        </MenuItem>
-                                        <MenuItem>
-                                            <button
-                                                @click="handleUnselectYard"
-                                                class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                <!-- TODO: this should not be hardcoded! -->
+                                                KS
+                                            </div>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p
+                                                class="text-base font-medium text-gray-700 group-hover:text-gray-900"
                                             >
-                                                View Yards
-                                            </button>
-                                        </MenuItem>
-                                        <MenuItem>
-                                            <button
-                                                @click="handleSignout"
-                                                class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                {{ profile.username }}
+                                            </p>
+                                            <p
+                                                class="text-sm font-medium text-gray-500 group-hover:text-gray-700"
                                             >
-                                                Sign out
-                                            </button>
-                                        </MenuItem>
-                                    </MenuItems>
-                                </transition>
-                            </Menu>
-                        </div>
+                                                View profile
+                                            </p>
+                                        </div>
+                                    </div>
+                                </NuxtLink>
+                            </div>
+                        </DialogPanel>
+                    </TransitionChild>
+                    <div class="w-14 flex-shrink-0" aria-hidden="true">
+                        <!-- Force sidebar to shrink to fit close icon -->
                     </div>
-                </nav>
-            </header>
-        </div>
+                </div>
+            </Dialog>
+        </TransitionRoot>
 
-        <main>
-            <div class="py-6 mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                <slot />
+        <!-- Static sidebar for desktop -->
+        <div class="hidden lg:flex lg:flex-shrink-0">
+            <div class="flex w-64 flex-col">
+                <!-- Sidebar component, swap this element with another sidebar if you like -->
+                <div
+                    class="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-gray-100"
+                >
+                    <div class="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
+                        <div class="flex flex-shrink-0 items-center px-4">
+                            <img
+                                class="h-8 w-auto"
+                                src="https://tailwindui.com/img/logos/mark.svg?color=pink&shade=500"
+                                alt="Your Company"
+                            />
+                        </div>
+                        <nav class="mt-5 flex-1" aria-label="Sidebar">
+                            <div class="space-y-1 px-2">
+                                <NuxtLink
+                                    v-for="item in navigation"
+                                    :key="item.name"
+                                    :to="item.to"
+                                    :class="[
+                                        item.to ==
+                                        router.currentRoute.value.path
+                                            ? 'bg-gray-200 text-gray-900'
+                                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                        'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                                    ]"
+                                >
+                                    <component
+                                        :is="item.icon"
+                                        :class="[
+                                            item.to ==
+                                            router.currentRoute.value.path
+                                                ? 'text-gray-500'
+                                                : 'text-gray-400 group-hover:text-gray-500',
+                                            'mr-3 flex-shrink-0 h-6 w-6',
+                                        ]"
+                                        aria-hidden="true"
+                                    />
+                                    {{ item.name }}
+                                </NuxtLink>
+                            </div>
+                            <hr
+                                class="my-5 border-t border-gray-200"
+                                aria-hidden="true"
+                            />
+                            <div class="flex-1 space-y-1 px-2">
+                                <NuxtLink
+                                    v-for="item in secondaryNavigation"
+                                    :key="item.name"
+                                    :to="item.to"
+                                    class="group flex items-center rounded-md px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                >
+                                    <component
+                                        :is="item.icon"
+                                        class="mr-3 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                        aria-hidden="true"
+                                    />
+                                    {{ item.name }}
+                                </NuxtLink>
+                                <button
+                                    @click="handleSignout"
+                                    class="w-full text-sm group flex items-center rounded-md px-2 py-2 font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                >
+                                    <ArrowLeftOnRectangleIcon
+                                        class="mr-3 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                        aria-hidden="true"
+                                    />
+                                    Logout
+                                </button>
+                            </div>
+                        </nav>
+                    </div>
+                    <div
+                        class="flex flex-shrink-0 border-t border-gray-200 p-4"
+                    >
+                        <NuxtLink
+                            to="/profile"
+                            class="group block w-full flex-shrink-0"
+                        >
+                            <div class="flex items-center">
+                                <div>
+                                    <SupabaseImage
+                                        v-if="profile.avatar_url"
+                                        id="avatars"
+                                        :path="profile.avatar_url"
+                                        class="w-9 h-9 rounded-full overflow-hidden"
+                                    />
+                                    <div
+                                        v-else
+                                        class="h-9 w-9 bg-indigo-500 rounded-full flex items-center justify-center text-white"
+                                    >
+                                        <!-- TODO: this should not be hardcoded! -->
+                                        KS
+                                    </div>
+                                </div>
+                                <div class="ml-3">
+                                    <p
+                                        class="text-sm font-medium text-gray-700 group-hover:text-gray-900"
+                                    >
+                                        {{ profile.username }}
+                                    </p>
+                                    <p
+                                        class="text-xs font-medium text-gray-500 group-hover:text-gray-700"
+                                    >
+                                        View profile
+                                    </p>
+                                </div>
+                            </div>
+                        </NuxtLink>
+                    </div>
+                </div>
             </div>
-        </main>
+        </div>
+        <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
+            <!-- mobile navbar -->
+            <div class="lg:hidden">
+                <div
+                    class="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-1.5"
+                >
+                    <div>
+                        <img
+                            class="h-8 w-auto"
+                            src="https://tailwindui.com/img/logos/mark.svg?color=pink&shade=500"
+                            alt="Your Company"
+                        />
+                    </div>
+                    <div>
+                        <button
+                            type="button"
+                            class="-mr-3 inline-flex h-12 w-12 items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-600"
+                            @click="sidebarOpen = true"
+                        >
+                            <span class="sr-only">Open sidebar</span>
+                            <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- here? -->
+            <slot />
+        </div>
     </div>
 </template>
