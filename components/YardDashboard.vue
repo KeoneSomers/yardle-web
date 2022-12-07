@@ -12,16 +12,6 @@
 
         return data;
     });
-
-    const handleUnselectYard = async () => {
-        // update user in db
-        const { data, error } = await client.auth.updateUser({
-            data: { selected_yard: null },
-        });
-
-        // update user local state
-        user.value.user_metadata.selected_yard = null;
-    };
 </script>
 
 <template>
@@ -29,13 +19,6 @@
         <h1 class="text-2xl font-semibold text-gray-900">
             {{ yard.name }}
         </h1>
-        <div class="py-4">
-            <button
-                @click="handleUnselectYard"
-                class="bg-indigo-500 rounded p-2 m-2 text-white"
-            >
-                Switch Yard
-            </button>
-        </div>
+        <div class="py-4"></div>
     </div>
 </template>

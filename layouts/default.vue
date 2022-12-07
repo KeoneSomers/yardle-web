@@ -29,19 +29,26 @@
     };
 
     const navigation = [
-        { name: "Dashboard", to: "/" },
+        { name: "Horses", to: "/" },
         { name: "Members", to: "/crud" },
         { name: "Settings", to: "/crud" },
     ];
 
-    const userNavigation = [
-        { name: "Your Profile", to: "/profile" },
-        { name: "Manage Yards", to: "/" },
-    ];
+    const userNavigation = [{ name: "Your Profile", to: "/profile" }];
+
+    const handleUnselectYard = async () => {
+        // update user in db
+        const { data, error } = await client.auth.updateUser({
+            data: { selected_yard: null },
+        });
+
+        // update user local state
+        user.value.user_metadata.selected_yard = null;
+    };
 </script>
 
 <template>
-    <div>
+    <div v-if="user">
         <div class="bg-gray-900 p-4">
             <header>
                 <nav>
@@ -112,6 +119,14 @@
                                                 ]"
                                                 >{{ item.name }}</NuxtLink
                                             >
+                                        </MenuItem>
+                                        <MenuItem>
+                                            <button
+                                                @click="handleUnselectYard"
+                                                class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            >
+                                                View Yards
+                                            </button>
                                         </MenuItem>
                                         <MenuItem>
                                             <button
