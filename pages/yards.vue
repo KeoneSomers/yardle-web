@@ -29,7 +29,7 @@
         user.value.user_metadata.selected_yard =
             data.user.user_metadata.selected_yard;
 
-        navigateTo("/dashboard");
+        navigateTo("/horses");
     };
 </script>
 

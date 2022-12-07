@@ -42,7 +42,7 @@
     onMounted(() => {
         watchEffect(() => {
             if (!user.value) {
-                navigateTo("/login");
+                navigateTo("/");
             }
         });
     });

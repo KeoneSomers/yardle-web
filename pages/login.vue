@@ -4,25 +4,11 @@
     });
 
     const supabase = useSupabaseAuthClient();
-    const user = useState("user");
 
     const email = ref("");
     const password = ref("");
 
     const errorMessage = ref("");
-
-    // watch for auth changes
-    onMounted(() => {
-        watchEffect(() => {
-            if (user.value) {
-                if (user.value.user_metadata.selected_yard) {
-                    navigateTo("/dashboard");
-                } else {
-                    navigateTo("/yards");
-                }
-            }
-        });
-    });
 
     const handleLogin = async () => {
         if (email.value && password.value) {
