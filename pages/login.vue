@@ -16,7 +16,7 @@
         watchEffect(() => {
             if (user.value) {
                 if (user.value.user_metadata.selected_yard) {
-                    navigateTo("/");
+                    navigateTo("/dashboard");
                 } else {
                     navigateTo("/yards");
                 }

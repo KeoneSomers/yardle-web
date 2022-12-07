@@ -1,18 +1,22 @@
 export default defineNuxtRouteMiddleware((to) => {
     const user = useSupabaseUser();
 
-    if (to.path != "/login" && to.path != "/signup") {
+    if (
+        to.path != "/" &&
+        to.path != "/login" &&
+        to.path != "/signup" &&
+        !user.value
+    ) {
         // trying to access a protected page
         // - must be logged in
-        if (!user.value) {
-            return navigateTo("/login");
-        }
-    } else if (to.path == "/login" || to.path == "/signup") {
+        return navigateTo("/login");
+    } else if (
+        (to.path == "/" || to.path == "/login" || to.path == "/signup") &&
+        user.value
+    ) {
         // trying to access login or signup page
         // - must be logged out
-        if (user.value) {
-            // todo - also check token has not expired! (currently set to 1 week)
-            return navigateTo("/");
-        }
+        // todo - also check token has not expired! (currently set to 1 week)
+        return navigateTo("/dashboard");
     }
 });

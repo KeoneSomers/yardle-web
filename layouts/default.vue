@@ -19,7 +19,7 @@
     } from "@heroicons/vue/24/outline";
 
     const navigation = [
-        { name: "Dashboard", to: "/", icon: HomeIcon },
+        { name: "Dashboard", to: "/dashboard", icon: HomeIcon },
         {
             name: "Horses",
             to: "/horses",
@@ -76,7 +76,7 @@
 </script>
 
 <template>
-    <div class="flex h-screen">
+    <div v-if="user" class="flex h-screen">
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog
                 as="div"

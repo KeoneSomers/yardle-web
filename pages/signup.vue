@@ -16,7 +16,7 @@
             console.log(data);
 
             // TODO: first prompt the user to confirm their email
-            // await navigateTo("/");
+            // await navigateTo("/dashboard");
         }
 
         if (error) {
