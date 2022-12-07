@@ -11,10 +11,11 @@
         CogIcon,
         HomeIcon,
         MagnifyingGlassCircleIcon,
-        SquaresPlusIcon,
         UserGroupIcon,
         XMarkIcon,
         ArrowLeftOnRectangleIcon,
+        ArrowsRightLeftIcon,
+        RectangleStackIcon,
     } from "@heroicons/vue/24/outline";
 
     const navigation = [
@@ -28,7 +29,9 @@
         { name: "Calendar", to: "/calendar", icon: CalendarIcon },
     ];
 
-    const secondaryNavigation = [{ name: "Settings", to: "/", icon: CogIcon }];
+    const secondaryNavigation = [
+        { name: "Settings", to: "/settings", icon: CogIcon },
+    ];
 
     const supabase = useSupabaseAuthClient();
     const client = useSupabaseClient();
@@ -43,6 +46,18 @@
             }
         });
     });
+
+    const handleUnselectYard = async () => {
+        // update user in db
+        const { data, error } = await client.auth.updateUser({
+            data: { selected_yard: null },
+        });
+
+        // update user local state
+        user.value.user_metadata.selected_yard = null;
+
+        navigateTo("/yards");
+    };
 
     const handleSignout = async () => {
         supabase.auth.signOut();
@@ -253,6 +268,30 @@
                         <nav class="mt-5 flex-1" aria-label="Sidebar">
                             <div class="space-y-1 px-2">
                                 <NuxtLink
+                                    v-if="!user.user_metadata.selected_yard"
+                                    to="/yards"
+                                    :class="[
+                                        '/yards' ==
+                                        router.currentRoute.value.path
+                                            ? 'bg-gray-200 text-gray-900'
+                                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                        'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                                    ]"
+                                >
+                                    <RectangleStackIcon
+                                        :class="[
+                                            '/yards' ==
+                                            router.currentRoute.value.path
+                                                ? 'text-gray-500'
+                                                : 'text-gray-400 group-hover:text-gray-500',
+                                            'mr-3 flex-shrink-0 h-6 w-6',
+                                        ]"
+                                        aria-hidden="true"
+                                    />
+                                    Your Yards
+                                </NuxtLink>
+                                <NuxtLink
+                                    v-else
                                     v-for="item in navigation"
                                     :key="item.name"
                                     :to="item.to"
@@ -283,6 +322,17 @@
                                 aria-hidden="true"
                             />
                             <div class="flex-1 space-y-1 px-2">
+                                <button
+                                    v-if="user.user_metadata.selected_yard"
+                                    @click="handleUnselectYard"
+                                    class="w-full text-sm group flex items-center rounded-md px-2 py-2 font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                >
+                                    <ArrowsRightLeftIcon
+                                        class="mr-3 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                        aria-hidden="true"
+                                    />
+                                    Switch Yard
+                                </button>
                                 <NuxtLink
                                     v-for="item in secondaryNavigation"
                                     :key="item.name"

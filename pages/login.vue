@@ -15,7 +15,11 @@
     onMounted(() => {
         watchEffect(() => {
             if (user.value) {
-                navigateTo("/");
+                if (user.value.user_metadata.selected_yard) {
+                    navigateTo("/");
+                } else {
+                    navigateTo("/yards");
+                }
             }
         });
     });
