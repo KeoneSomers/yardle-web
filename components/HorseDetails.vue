@@ -6,31 +6,21 @@
     } from "@heroicons/vue/20/solid/index.js";
 
     const tabs = [
-        { name: "Profile", href: "#", current: true },
-        { name: "Calendar", href: "#", current: false },
-        { name: "Recognition", href: "#", current: false },
+        { name: "General", href: "#", current: true },
+        { name: "Rugs (soon)", href: "#", current: false },
+        { name: "Feeds (soon)", href: "#", current: false },
+        { name: "Medications (soon)", href: "#", current: false },
     ];
 
-    const profile = {
-        name: "Ricardo Cooper",
-        imageUrl:
-            "https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-        coverImageUrl:
-            "https://images.unsplash.com/photo-1444628838545-ac4016a5418a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-        about: `
-      <p>Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut sit dolor consectetur urna, dui cras nec sed. Cursus risus congue arcu aenean posuere aliquam.</p>
-      <p>Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.</p>
-    `,
-        fields: {
-            Phone: "(555) 123-4567",
-            Email: "ricardocooper@example.com",
-            Title: "Senior Front-End Developer",
-            Team: "Product Development",
-            Location: "San Francisco",
-            Sits: "Oasis, 4th floor",
-            Salary: "$145,000",
-            Birthday: "June 8, 1990",
-        },
+    const fields = {
+        Phone: "(555) 123-4567",
+        Email: "ricardocooper@example.com",
+        Title: "Senior Front-End Developer",
+        Team: "Product Development",
+        Location: "San Francisco",
+        Sits: "Oasis, 4th floor",
+        Salary: "$145,000",
+        Birthday: "June 8, 1990",
     };
 
     const team = [
@@ -67,26 +57,39 @@
     const client = useSupabaseClient();
 
     const selectedHorseId = useState("selectedHorseId");
-    const horse = ref(null);
+    const horse = ref();
 
-    onMounted(() => {
-        watchEffect(async () => {
-            if (selectedHorseId.value) {
-                const { data: _horse } = await useAsyncData(
-                    "horseDetails",
-                    async () => {
-                        const { data } = await client
-                            .from("horses")
-                            .select()
-                            .eq("id", selectedHorseId.value)
-                            .single();
+    // initial fetch
+    const { data: _horse } = await useAsyncData("horseDetails", async () => {
+        const { data } = await client
+            .from("horses")
+            .select()
+            .eq("id", selectedHorseId.value)
+            .single();
 
-                        return data;
-                    }
-                );
-                horse.value = _horse.value;
-            }
-        });
+        return data;
+    });
+
+    horse.value = _horse.value;
+
+    // Subsiquent Fetching when id changes
+    watchEffect(async () => {
+        if (selectedHorseId.value) {
+            const { data: _horse_ } = await useAsyncData(
+                "horseDetails",
+                async () => {
+                    const { data } = await client
+                        .from("horses")
+                        .select()
+                        .eq("id", selectedHorseId.value)
+                        .single();
+
+                    return data;
+                }
+            );
+
+            horse.value = _horse_.value;
+        }
     });
 
     // const handleDelete = async (id, index) => {
@@ -138,7 +141,7 @@
                     <div>
                         <img
                             class="h-32 w-full object-cover lg:h-48"
-                            :src="profile.coverImageUrl"
+                            src="https://png.pngtree.com/thumb_back/fh260/back_our/20190625/ourmid/pngtree-cartoon-countryside-background-image_262889.jpg"
                             alt=""
                         />
                     </div>
@@ -148,10 +151,17 @@
                         >
                             <div class="flex">
                                 <img
+                                    v-if="horse.imageUrl"
                                     class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32"
                                     :src="profile.imageUrl"
                                     alt=""
                                 />
+                                <div
+                                    v-else
+                                    class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 flex items-center justify-center bg-pink-500 text-white text-6xl"
+                                >
+                                    {{ horse.name[0].toUpperCase() }}
+                                </div>
                             </div>
                             <div
                                 class="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1"
@@ -235,7 +245,7 @@
                 <div class="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
                     <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                         <div
-                            v-for="field in Object.keys(profile.fields)"
+                            v-for="field in Object.keys(fields)"
                             :key="field"
                             class="sm:col-span-1"
                         >
@@ -243,7 +253,7 @@
                                 {{ field }}
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900">
-                                {{ profile.fields[field] }}
+                                {{ fields[field] }}
                             </dd>
                         </div>
                         <div class="sm:col-span-2">
@@ -252,8 +262,24 @@
                             </dt>
                             <dd
                                 class="mt-1 max-w-prose space-y-5 text-sm text-gray-900"
-                                v-html="profile.about"
-                            />
+                            >
+                                <p>
+                                    Tincidunt quam neque in cursus viverra orci,
+                                    dapibus nec tristique. Nullam ut sit dolor
+                                    consectetur urna, dui cras nec sed. Cursus
+                                    risus congue arcu aenean posuere aliquam.
+                                </p>
+                                <p>
+                                    Et vivamus lorem pulvinar nascetur non.
+                                    Pulvinar a sed platea rhoncus ac mauris
+                                    amet. Urna, sem pretium sit pretium urna,
+                                    senectus vitae. Scelerisque fermentum,
+                                    cursus felis dui suspendisse velit pharetra.
+                                    Augue et duis cursus maecenas eget quam
+                                    lectus. Accumsan vitae nascetur pharetra
+                                    rhoncus praesent dictum risus suspendisse.
+                                </p>
+                            </dd>
                         </div>
                     </dl>
                 </div>

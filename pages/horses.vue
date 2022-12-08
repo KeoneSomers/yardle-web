@@ -10,13 +10,15 @@
             .from("horses")
             .select()
             .eq("yard_id", user.value.user_metadata.selected_yard)
-            .order("created_at", { ascending: false });
+            .order("name", { ascending: true });
         return data;
     });
 
     watchEffect(() => {
         if (horses.value.length > 0) {
             selectedHorseId.value = horses.value[0].id;
+        } else {
+            selectedHorseId.value = 0;
         }
     });
 
