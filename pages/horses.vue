@@ -7,7 +7,9 @@
     const isOpen = ref(false);
     const searchString = ref("");
     const selectedHorseId = useState("selectedHorseId", () => 0);
-    const { data: horses } = await useAsyncData("horses", async () => {
+    const horses = useState("horses");
+
+    const { data: _horses } = await useAsyncData("horses", async () => {
         const { data } = await client
             .from("horses")
             .select()
@@ -16,8 +18,10 @@
         return data;
     });
 
+    // use watchEffect to update the grouped list
+    horses.value = _horses.value;
     // auto select first horse if there is one
-    watchEffect(() => {
+    onMounted(() => {
         if (horses.value.length > 0) {
             selectedHorseId.value = horses.value[0].id;
         } else {
@@ -57,32 +61,18 @@
         }
     };
 
-    const removeHorseFromDirectoryList = () => {
-        // find the horse to remove
-        const i = horses.value.map((e) => e.id).indexOf(selectedHorseId.value);
-
-        // remove from array
-        horses.value.splice(i, 1);
-
-        // change selected horse
-        if (horses.value.length > 0) {
-            selectedHorseId.value = horses.value[0].id;
-        } else {
-            console.log("hit");
-            selectedHorseId.value = 0;
+    // keep grouped list up to date
+    watchEffect(() => {
+        if (horses.value) {
+            groupedHorses.value = groupByFirstLetter(horses.value, "name");
         }
-
-        groupedHorses.value = groupByFirstLetter(horses.value, "name");
-    };
+    });
 </script>
 
 <template>
     <div class="relative z-0 flex flex-1 overflow-hidden">
         <!-- New component - HorseDetails.vue -->
-        <HorseDetails
-            v-if="selectedHorseId > 0"
-            @onDeleteHorse="removeHorseFromDirectoryList"
-        />
+        <HorseDetails v-if="selectedHorseId > 0" />
         <!-- New component - HorseList.vue -->
         <aside
             class="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col"

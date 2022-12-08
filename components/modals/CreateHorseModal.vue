@@ -12,6 +12,8 @@
 
     const client = useSupabaseClient();
     const user = useState("user");
+    const horses = useState("horses");
+    const selectedHorseId = useState("selectedHorseId");
 
     const name = ref("");
 
@@ -30,8 +32,10 @@
 
         // step 2: update local state
         if (!createError) {
-            // now close the modal
-            // TODO: use state and not emits for create and delete. Then use watchEffect to update the grouped list
+            horses.value.push(newHorse);
+            name.value = "";
+            selectedHorseId.value = newHorse.id;
+            emits("close");
         } else {
             error.value = createError.message + createError.hint;
         }

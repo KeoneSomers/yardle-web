@@ -54,12 +54,12 @@
                 "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
     ];
-    const emits = defineEmits(["onDeleteHorse"]);
 
     const client = useSupabaseClient();
 
     const selectedHorseId = useState("selectedHorseId");
     const horse = ref();
+    const horses = useState("horses");
 
     // initial fetch
     const { data: _horse } = await useAsyncData("horseDetails", async () => {
@@ -105,8 +105,19 @@
             // success!
             console.log(data);
             // remove the deleted horse from the webpage
-            // emmit
-            emits("onDeleteHorse");
+            const i = horses.value
+                .map((e) => e.id)
+                .indexOf(selectedHorseId.value);
+
+            // remove from array
+            horses.value.splice(i, 1);
+
+            // change selected horse
+            if (horses.value.length > 0) {
+                selectedHorseId.value = horses.value[0].id;
+            } else {
+                selectedHorseId.value = 0;
+            }
         }
 
         if (error) {

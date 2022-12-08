@@ -7,6 +7,10 @@
 
     // get the logged in users yards
     const yards = useState("yards");
+    const yard = useState("yard");
+    const selectedHorseId = useState("selectedHorseId");
+    const horse = useState("horse");
+
     const { data: _yards } = await useAsyncData("joinedYards", async () => {
         const { data } = await client
             .from("profiles")
