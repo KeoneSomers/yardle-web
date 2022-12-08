@@ -1,8 +1,10 @@
 <script setup>
     import { MagnifyingGlassIcon } from "@heroicons/vue/20/solid/index.js";
+    import CreateHorseModal from "@/components/modals/CreateHorseModal.vue";
 
     const client = useSupabaseClient();
     const user = useState("user");
+    const isOpen = ref(false);
     const searchString = ref("");
     const selectedHorseId = useState("selectedHorseId", () => 0);
     const { data: horses } = await useAsyncData("horses", async () => {
@@ -63,9 +65,10 @@
         horses.value.splice(i, 1);
 
         // change selected horse
-        if (horses.value.length + 1 > 0) {
+        if (horses.value.length > 0) {
             selectedHorseId.value = horses.value[0].id;
         } else {
+            console.log("hit");
             selectedHorseId.value = 0;
         }
 
@@ -76,7 +79,10 @@
 <template>
     <div class="relative z-0 flex flex-1 overflow-hidden">
         <!-- New component - HorseDetails.vue -->
-        <HorseDetails @onDeleteHorse="removeHorseFromDirectoryList" />
+        <HorseDetails
+            v-if="selectedHorseId > 0"
+            @onDeleteHorse="removeHorseFromDirectoryList"
+        />
         <!-- New component - HorseList.vue -->
         <aside
             class="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col"
@@ -113,6 +119,7 @@
                         </div>
                     </div>
                     <button
+                        @click="() => (isOpen = true)"
                         type="submit"
                         class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                     >
@@ -192,4 +199,7 @@
             </nav>
         </aside>
     </div>
+
+    <!-- Modals -->
+    <CreateHorseModal :is-open="isOpen" @close="isOpen = false" />
 </template>
