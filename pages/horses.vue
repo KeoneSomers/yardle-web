@@ -3,8 +3,8 @@
 
     const client = useSupabaseClient();
     const user = useState("user");
+    const searchString = ref("");
     const selectedHorseId = useState("selectedHorseId", () => 0);
-
     const { data: horses } = await useAsyncData("horses", async () => {
         const { data } = await client
             .from("horses")
@@ -14,6 +14,7 @@
         return data;
     });
 
+    // auto select first horse if there is one
     watchEffect(() => {
         if (horses.value.length > 0) {
             selectedHorseId.value = horses.value[0].id;
@@ -22,7 +23,7 @@
         }
     });
 
-    var groupByFirstLetter = (input, key) => {
+    const groupByFirstLetter = (input, key) => {
         if (input) {
             return input.reduce((acc, currentValue) => {
                 let groupKey = currentValue[key][0].toUpperCase();
@@ -36,7 +37,23 @@
         return {};
     };
 
-    const groupedHorses = groupByFirstLetter(horses.value, "name");
+    const groupedHorses = ref(groupByFirstLetter(horses.value, "name"));
+
+    // Local horse search (no db hits)
+    const handleSearch = () => {
+        if (searchString.value) {
+            // filter the grouped horses
+            const filteredHorses = horses.value.filter((horse) =>
+                horse.name
+                    .toLowerCase()
+                    .includes(searchString.value.toLowerCase())
+            );
+            groupedHorses.value = groupByFirstLetter(filteredHorses, "name");
+        } else {
+            // return all horses
+            groupedHorses.value = groupByFirstLetter(horses.value, "name");
+        }
+    };
 </script>
 
 <template>
@@ -55,7 +72,7 @@
                         >s</span
                     >
                 </p>
-                <form class="mt-6 flex space-x-4" action="#">
+                <div class="mt-6 flex space-x-4">
                     <div class="min-w-0 flex-1">
                         <label for="search" class="sr-only">Search</label>
                         <div class="relative rounded-md shadow-sm">
@@ -68,7 +85,9 @@
                                 />
                             </div>
                             <input
-                                type="search"
+                                v-model="searchString"
+                                @keyup="handleSearch"
+                                type="text"
                                 name="search"
                                 id="search"
                                 class="block w-full rounded-md border-gray-300 pl-10 focus:border-pink-500 focus:ring-pink-500 sm:text-sm"
@@ -87,7 +106,7 @@
                         /> -->
                         <span class="sr-only">Search</span>
                     </button>
-                </form>
+                </div>
             </div>
             <!-- Directory list -->
             <nav class="min-h-0 flex-1 overflow-y-auto" aria-label="Directory">
