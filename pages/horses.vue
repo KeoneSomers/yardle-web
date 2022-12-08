@@ -54,12 +54,29 @@
             groupedHorses.value = groupByFirstLetter(horses.value, "name");
         }
     };
+
+    const removeHorseFromDirectoryList = () => {
+        // find the horse to remove
+        const i = horses.value.map((e) => e.id).indexOf(selectedHorseId.value);
+
+        // remove from array
+        horses.value.splice(i, 1);
+
+        // change selected horse
+        if (horses.value.length + 1 > 0) {
+            selectedHorseId.value = horses.value[0].id;
+        } else {
+            selectedHorseId.value = 0;
+        }
+
+        groupedHorses.value = groupByFirstLetter(horses.value, "name");
+    };
 </script>
 
 <template>
     <div class="relative z-0 flex flex-1 overflow-hidden">
         <!-- New component - HorseDetails.vue -->
-        <HorseDetails />
+        <HorseDetails @onDeleteHorse="removeHorseFromDirectoryList" />
         <!-- New component - HorseList.vue -->
         <aside
             class="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col"

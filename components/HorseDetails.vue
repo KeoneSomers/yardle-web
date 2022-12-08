@@ -3,6 +3,7 @@
         ChevronLeftIcon,
         EnvelopeIcon,
         PhoneIcon,
+        TrashIcon,
     } from "@heroicons/vue/20/solid/index.js";
 
     const tabs = [
@@ -53,6 +54,7 @@
                 "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
     ];
+    const emits = defineEmits(["onDeleteHorse"]);
 
     const client = useSupabaseClient();
 
@@ -92,25 +94,26 @@
         }
     });
 
-    // const handleDelete = async (id, index) => {
-    //     const { data, error } = await client
-    //         .from("horses")
-    //         .delete()
-    //         .eq("id", id)
-    //         .select();
+    const handleDelete = async () => {
+        const { data, error } = await client
+            .from("horses")
+            .delete()
+            .eq("id", selectedHorseId.value)
+            .select();
 
-    //     if (data) {
-    //         // success!
-    //         console.log(data);
-    //         // remove the deleted horse from the webpage
-    //         horses.value.splice(index, 1);
-    //     }
+        if (data) {
+            // success!
+            console.log(data);
+            // remove the deleted horse from the webpage
+            // emmit
+            emits("onDeleteHorse");
+        }
 
-    //     if (error) {
-    //         // somthing went wrong!
-    //         console.log(error);
-    //     }
-    // };
+        if (error) {
+            // somthing went wrong!
+            console.log(error);
+        }
+    };
 </script>
 
 <template>
@@ -189,14 +192,15 @@
                                         <span>Message</span>
                                     </button>
                                     <button
+                                        @click="handleDelete"
                                         type="button"
                                         class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                                     >
-                                        <PhoneIcon
+                                        <TrashIcon
                                             class="-ml-1 mr-2 h-5 w-5 text-gray-400"
                                             aria-hidden="true"
                                         />
-                                        <span>Call</span>
+                                        <span>Delete</span>
                                     </button>
                                 </div>
                             </div>
