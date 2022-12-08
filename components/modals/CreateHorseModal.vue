@@ -19,12 +19,16 @@
 
     const error = ref("");
 
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     const handleSubmit = async () => {
         // step 1: create the horse in the database
         const { data: newHorse, error: createError } = await client
             .from("horses")
             .insert({
-                name: name.value,
+                name: capitalizeFirstLetter(name.value),
                 yard_id: user.value.user_metadata.selected_yard,
             })
             .select()
