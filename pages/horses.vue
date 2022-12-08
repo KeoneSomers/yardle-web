@@ -20,9 +20,9 @@
         coverImageUrl:
             "https://images.unsplash.com/photo-1444628838545-ac4016a5418a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
         about: `
-    <p>Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut sit dolor consectetur urna, dui cras nec sed. Cursus risus congue arcu aenean posuere aliquam.</p>
-    <p>Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.</p>
-  `,
+      <p>Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut sit dolor consectetur urna, dui cras nec sed. Cursus risus congue arcu aenean posuere aliquam.</p>
+      <p>Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.</p>
+    `,
         fields: {
             Phone: "(555) 123-4567",
             Email: "ricardocooper@example.com",
@@ -270,10 +270,59 @@
                 "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
     ];
+
+    const client = useSupabaseClient();
+    const user = useState("user");
+
+    const { data: horses } = await useAsyncData("horses", async () => {
+        const { data } = await client
+            .from("horses")
+            .select()
+            .eq("yard_id", user.value.user_metadata.selected_yard)
+            .order("created_at", { ascending: false });
+        return data;
+    });
+
+    var groupByFirstLetter = (input, key) => {
+        if (input) {
+            return input.reduce((acc, currentValue) => {
+                let groupKey = currentValue[key][0].toUpperCase();
+                if (!acc[groupKey]) {
+                    acc[groupKey] = [];
+                }
+                acc[groupKey].push(currentValue);
+                return acc;
+            }, {});
+        }
+        return {};
+    };
+
+    const groupedHorses = groupByFirstLetter(horses.value, "name");
+
+    const handleDelete = async (id, index) => {
+        const { data, error } = await client
+            .from("horses")
+            .delete()
+            .eq("id", id)
+            .select();
+
+        if (data) {
+            // success!
+            console.log(data);
+            // remove the deleted horse from the webpage
+            horses.value.splice(index, 1);
+        }
+
+        if (error) {
+            // somthing went wrong!
+            console.log(error);
+        }
+    };
 </script>
 
 <template>
     <div class="relative z-0 flex flex-1 overflow-hidden">
+        <!-- New component - HorseDetails.vue -->
         <main
             class="relative z-0 flex-1 overflow-y-auto focus:outline-none xl:order-last"
         >
@@ -460,13 +509,17 @@
             </article>
         </main>
 
+        <!-- New component - HorseList.vue -->
         <aside
             class="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col"
         >
             <div class="px-6 pt-6 pb-4">
                 <h2 class="text-lg font-medium text-gray-900">Horses</h2>
                 <p class="mt-1 text-sm text-gray-600">
-                    Search directory of 3,018 horses
+                    Search directory of {{ horses.length }} horse<span
+                        v-if="horses.length != 1"
+                        >s</span
+                    >
                 </p>
                 <form class="mt-6 flex space-x-4" action="#">
                     <div class="min-w-0 flex-1">
@@ -493,10 +546,11 @@
                         type="submit"
                         class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                     >
-                        <FunnelIcon
+                        Add Horse
+                        <!-- <FunnelIcon
                             class="h-5 w-5 text-gray-400"
                             aria-hidden="true"
-                        />
+                        /> -->
                         <span class="sr-only">Search</span>
                     </button>
                 </form>
@@ -504,7 +558,7 @@
             <!-- Directory list -->
             <nav class="min-h-0 flex-1 overflow-y-auto" aria-label="Directory">
                 <div
-                    v-for="letter in Object.keys(directory)"
+                    v-for="letter in Object.keys(groupedHorses)"
                     :key="letter"
                     class="relative"
                 >
@@ -518,18 +572,23 @@
                         class="relative z-0 divide-y divide-gray-200"
                     >
                         <li
-                            v-for="person in directory[letter]"
-                            :key="person.id"
+                            v-for="horse in groupedHorses[letter]"
+                            :key="horse.id"
                         >
                             <div
                                 class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 hover:bg-gray-50"
                             >
                                 <div class="flex-shrink-0">
-                                    <img
+                                    <!-- <img
                                         class="h-10 w-10 rounded-full"
-                                        :src="person.imageUrl"
+                                        :src="horse.imageUrl"
                                         alt=""
-                                    />
+                                    /> -->
+                                    <div
+                                        class="bg-indigo-500 rounded-full h-10 w-10 text-white flex items-center justify-center"
+                                    >
+                                        {{ horse.name[0].toUpperCase() }}
+                                    </div>
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <a href="#" class="focus:outline-none">
@@ -541,12 +600,12 @@
                                         <p
                                             class="text-sm font-medium text-gray-900"
                                         >
-                                            {{ person.name }}
+                                            {{ horse.name }}
                                         </p>
                                         <p
                                             class="truncate text-sm text-gray-500"
                                         >
-                                            {{ person.role }}
+                                            {{ horse.created_at }}
                                         </p>
                                     </a>
                                 </div>
