@@ -1,13 +1,5 @@
 <script setup>
     import {
-        CalendarIcon,
-        CogIcon,
-        HomeIcon,
-        MagnifyingGlassCircleIcon,
-        SquaresPlusIcon,
-        UserGroupIcon,
-    } from "@heroicons/vue/24/outline";
-    import {
         ChevronLeftIcon,
         EnvelopeIcon,
         FunnelIcon,
