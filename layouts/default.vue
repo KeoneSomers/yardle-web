@@ -19,14 +19,15 @@
     } from "@heroicons/vue/24/outline";
 
     const navigation = [
-        { name: "Dashboard", to: "/dashboard", icon: HomeIcon },
+        { name: "Dashboard", to: "/dashboard", icon: HomeIcon, hint: "Soon" },
         {
             name: "Horses",
             to: "/horses",
             icon: MagnifyingGlassCircleIcon,
+            hint: "",
         },
-        { name: "Members", to: "/members", icon: UserGroupIcon },
-        { name: "Calendar", to: "/calendar", icon: CalendarIcon },
+        { name: "Members", to: "/members", icon: UserGroupIcon, hint: "" },
+        { name: "Calendar", to: "/calendar", icon: CalendarIcon, hint: "Soon" },
     ];
 
     const secondaryNavigation = [
@@ -155,6 +156,9 @@
                                                     ? 'bg-gray-100 text-gray-900'
                                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                                 'group flex items-center px-2 py-2 text-base font-medium rounded-md',
+                                                item.hint
+                                                    ? 'pointer-events-none'
+                                                    : '',
                                             ]"
                                         >
                                             <component
@@ -169,7 +173,22 @@
                                                 ]"
                                                 aria-hidden="true"
                                             />
-                                            {{ item.name }}
+                                            <span class="flex-1">{{
+                                                item.name
+                                            }}</span>
+
+                                            <span
+                                                v-if="item.hint"
+                                                :class="[
+                                                    item.to ==
+                                                    router.currentRoute.value
+                                                        .path
+                                                        ? 'bg-white'
+                                                        : 'bg-white group-hover:bg-gray-200',
+                                                    'ml-3 inline-block py-0.5 px-3 text-xs font-medium rounded-full border',
+                                                ]"
+                                                >{{ item.hint }}</span
+                                            >
                                         </NuxtLink>
                                     </div>
                                     <hr
@@ -301,6 +320,7 @@
                                             ? 'bg-gray-200 text-gray-900'
                                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                         'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                                        item.hint ? 'pointer-events-none' : '',
                                     ]"
                                 >
                                     <component
@@ -314,7 +334,19 @@
                                         ]"
                                         aria-hidden="true"
                                     />
-                                    {{ item.name }}
+                                    <span class="flex-1">{{ item.name }}</span>
+
+                                    <span
+                                        v-if="item.hint"
+                                        :class="[
+                                            item.to ==
+                                            router.currentRoute.value.path
+                                                ? 'bg-white'
+                                                : 'bg-white group-hover:bg-gray-200',
+                                            'ml-3 inline-block py-0.5 px-3 text-xs font-medium rounded-full',
+                                        ]"
+                                        >{{ item.hint }}</span
+                                    >
                                 </NuxtLink>
                             </div>
                             <hr
