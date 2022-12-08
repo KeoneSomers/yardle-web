@@ -27,6 +27,7 @@
         const { data: newYard, error: createError } = await client
             .from("yards")
             .insert({
+                created_by: user.value.id,
                 name: capitalizeFirstLetter(yardName.value),
             })
             .select()
@@ -45,7 +46,12 @@
 
             // step 3: update local state
             if (!relError) {
-                yards.value.unshift(newYard);
+                if (yards.value) {
+                    yards.value.unshift(newYard);
+                } else {
+                    yards.value = [newYard];
+                }
+
                 // now close the modal
                 emits("close");
             } else {

@@ -7,21 +7,21 @@
 
     // get the logged in users yards
     const yards = useState("yards");
-    const yard = useState("yard");
-    const selectedHorseId = useState("selectedHorseId");
-    const horse = useState("horse");
 
-    const { data: _yards } = await useAsyncData("joinedYards", async () => {
-        const { data } = await client
+    // this is not ssr - needs to be cleaned up
+    onMounted(async () => {
+        const { data, error } = await client
             .from("profiles")
-            .select("yards(*)")
+            .select("yards!profiles_yards(*)")
             .eq("id", user.value.id)
-            .order("created_at", { foreignTable: "yards", ascending: false })
+            .order("created_at", {
+                foreignTable: "yards",
+                ascending: false,
+            })
             .single();
 
-        return data.yards;
+        yards.value = data.yards;
     });
-    yards.value = _yards.value;
 
     const handleSelectYard = async (yardId) => {
         // update user in db
@@ -65,22 +65,6 @@
                 </div>
             </div>
             <div class="py-4">
-                <!-- <div class="my-4 p-4 border bg-indigo-100 rounded-xl bordered">
-                <form @submit.prevent="handleCreateYard">
-                    <input
-                        required
-                        v-model="yardName"
-                        type="text"
-                        placeholder="Name your new yard"
-                    />
-                    <button
-                        type="submit"
-                        class="bg-indigo-500 text-white p-2 rounded ml-2"
-                    >
-                        Create yard
-                    </button>
-                </form>
-            </div> -->
                 <div v-if="yards">
                     <div
                         v-for="yard in yards"

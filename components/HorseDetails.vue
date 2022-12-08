@@ -1,8 +1,7 @@
 <script setup>
     import {
         ChevronLeftIcon,
-        EnvelopeIcon,
-        PhoneIcon,
+        PencilSquareIcon,
         TrashIcon,
     } from "@heroicons/vue/20/solid/index.js";
 
@@ -23,37 +22,6 @@
         Salary: "$145,000",
         Birthday: "June 8, 1990",
     };
-
-    const team = [
-        {
-            name: "Leslie Alexander",
-            handle: "lesliealexander",
-            role: "Co-Founder / CEO",
-            imageUrl:
-                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-            name: "Michael Foster",
-            handle: "michaelfoster",
-            role: "Co-Founder / CTO",
-            imageUrl:
-                "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-            name: "Dries Vincent",
-            handle: "driesvincent",
-            role: "Manager, Business Relations",
-            imageUrl:
-                "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-            name: "Lindsay Walton",
-            handle: "lindsaywalton",
-            role: "Front-end Developer",
-            imageUrl:
-                "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-    ];
 
     const client = useSupabaseClient();
 
@@ -196,11 +164,11 @@
                                         type="button"
                                         class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                                     >
-                                        <EnvelopeIcon
+                                        <PencilSquareIcon
                                             class="-ml-1 mr-2 h-5 w-5 text-gray-400"
                                             aria-hidden="true"
                                         />
-                                        <span>Message</span>
+                                        <span>Edit</span>
                                     </button>
                                     <button
                                         @click="handleDelete"
@@ -257,7 +225,7 @@
                 </div>
 
                 <!-- Description list -->
-                <div class="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
+                <div class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
                     <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                         <div
                             v-for="field in Object.keys(fields)"
@@ -297,44 +265,6 @@
                             </dd>
                         </div>
                     </dl>
-                </div>
-
-                <!-- Team member list -->
-                <div class="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
-                    <h2 class="text-sm font-medium text-gray-500">
-                        Team members
-                    </h2>
-                    <div class="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div
-                            v-for="person in team"
-                            :key="person.handle"
-                            class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-pink-500 focus-within:ring-offset-2 hover:border-gray-400"
-                        >
-                            <div class="flex-shrink-0">
-                                <img
-                                    class="h-10 w-10 rounded-full"
-                                    :src="person.imageUrl"
-                                    alt=""
-                                />
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <a href="#" class="focus:outline-none">
-                                    <span
-                                        class="absolute inset-0"
-                                        aria-hidden="true"
-                                    />
-                                    <p
-                                        class="text-sm font-medium text-gray-900"
-                                    >
-                                        {{ person.name }}
-                                    </p>
-                                    <p class="truncate text-sm text-gray-500">
-                                        {{ person.role }}
-                                    </p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </article>
         </main>

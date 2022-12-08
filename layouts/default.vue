@@ -402,6 +402,28 @@
                     <div
                         class="flex flex-shrink-0 border-t border-gray-200 p-4"
                     >
+                        <div
+                            class="group block w-full flex-shrink-0 pointer-events-none"
+                        >
+                            <div class="ml-3">
+                                <p
+                                    class="text-sm font-medium text-gray-700 group-hover:text-gray-900 truncate overflow-hidden"
+                                >
+                                    Alborne Equestrian
+                                    Centrereoiuhgireuhguirehgregreiu
+                                </p>
+
+                                <p
+                                    class="text-xs font-medium text-gray-500 group-hover:text-gray-700"
+                                >
+                                    Member
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="flex flex-shrink-0 border-t border-gray-200 p-4"
+                    >
                         <NuxtLink
                             to="/profile"
                             class="group block w-full flex-shrink-0"
