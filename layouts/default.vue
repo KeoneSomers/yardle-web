@@ -17,7 +17,7 @@
         ArrowLeftOnRectangleIcon,
         ArrowsRightLeftIcon,
         RectangleStackIcon,
-    } from "@heroicons/vue/24/outline";
+    } from "@heroicons/vue/24/outline/index.js";
 
     const navigation = [
         { name: "Dashboard", to: "/dashboard", icon: HomeIcon, hint: "Soon" },

@@ -5,7 +5,7 @@
         ChevronRightIcon,
         ClockIcon,
         EllipsisHorizontalIcon,
-    } from "@heroicons/vue/20/solid";
+    } from "@heroicons/vue/20/solid/index.js";
     import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
     const days = [

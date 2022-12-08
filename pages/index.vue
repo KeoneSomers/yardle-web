@@ -1,11 +1,10 @@
 <script setup>
+    import { Dialog, DialogPanel, TransitionRoot } from "@headlessui/vue";
     import {
-        Dialog,
-        DialogPanel,
-        TransitionChild,
-        TransitionRoot,
-    } from "@headlessui/vue";
-    import { Bars3Icon, XMarkIcon, CheckIcon } from "@heroicons/vue/24/outline";
+        Bars3Icon,
+        XMarkIcon,
+        CheckIcon,
+    } from "@heroicons/vue/24/outline/index.js";
 
     definePageMeta({
         layout: "annon",

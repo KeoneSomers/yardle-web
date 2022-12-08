@@ -5,7 +5,7 @@
         FunnelIcon,
         MagnifyingGlassIcon,
         PhoneIcon,
-    } from "@heroicons/vue/20/solid";
+    } from "@heroicons/vue/20/solid/index.js";
 
     const tabs = [
         { name: "Profile", href: "#", current: true },
