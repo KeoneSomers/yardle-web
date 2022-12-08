@@ -17,6 +17,7 @@
         ArrowLeftOnRectangleIcon,
         ArrowsRightLeftIcon,
         RectangleStackIcon,
+        RectangleGroupIcon,
     } from "@heroicons/vue/24/outline/index.js";
 
     const navigation = [
@@ -29,6 +30,12 @@
         },
         { name: "Members", to: "/members", icon: UserGroupIcon, hint: "" },
         { name: "Calendar", to: "/calendar", icon: CalendarIcon, hint: "Soon" },
+        {
+            name: "Field Groups",
+            to: "/fields",
+            icon: RectangleGroupIcon,
+            hint: "Soon",
+        },
     ];
 
     const secondaryNavigation = [
