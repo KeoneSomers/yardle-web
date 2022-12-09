@@ -8,7 +8,7 @@
     } from "@headlessui/vue";
     import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
-    defineProps(["isOpen"]);
+    const props = defineProps(["isOpen", "horseId"]);
     const emits = defineEmits(["close"]);
 
     const client = useSupabaseClient();
@@ -17,33 +17,42 @@
     const horses = useState("horses");
 
     const handleDelete = async () => {
-        const { data, error } = await client
-            .from("horses")
+        // TODO: also delete horses rugs, feeds, medications and image
+        const { error: rugDeleteError } = await client
+            .from("rugs")
             .delete()
-            .eq("id", selectedHorseId.value)
-            .select();
+            .eq("horse_id", props.horseId);
 
-        if (data) {
-            // success! - now remove the deleted horse from the webpage
-            const index = horses.value
-                .map((e) => e.id)
-                .indexOf(selectedHorseId.value);
-            horses.value.splice(index, 1);
+        if (!rugDeleteError) {
+            const { error: horseDeleteError } = await client
+                .from("horses")
+                .delete()
+                .eq("id", props.horseId)
+                .select();
 
-            // change selected horse
-            if (horses.value.length > 0) {
-                selectedHorseId.value = horses.value[0].id;
+            if (!horseDeleteError) {
+                // success! - now handle cleanup on frontend
+                const index = horses.value
+                    .map((e) => e.id)
+                    .indexOf(props.horseId);
+                horses.value.splice(index, 1);
+
+                // change selected horse
+                if (horses.value.length > 0) {
+                    selectedHorseId.value = horses.value[0].id;
+                } else {
+                    selectedHorseId.value = 0;
+                }
+
+                // close the modal
+                emits("close");
             } else {
-                selectedHorseId.value = 0;
+                console.log("error deleting horse");
+                console.log(horseDeleteError);
             }
-
-            // close the modal
-            emits("close");
-        }
-
-        if (error) {
-            // somthing went wrong!
-            console.log(error);
+        } else {
+            console.log("error deleting rugs");
+            console.log(rugDeleteError);
         }
     };
 </script>

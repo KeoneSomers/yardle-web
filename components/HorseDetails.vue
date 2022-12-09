@@ -19,11 +19,13 @@
         { name: "Medications", component: HorseMedicationsTab },
     ];
 
+    // supabase
     const client = useSupabaseClient();
 
     const selectedHorseId = useState("selectedHorseId");
     const horse = ref();
-    const isOpen = ref(false);
+    const horseToDelete = ref(0);
+    const deleteModalOpen = ref(false);
 
     // initial fetch
     const { data: _horse } = await useAsyncData("horseDetails", async () => {
@@ -38,8 +40,9 @@
 
     horse.value = _horse.value;
 
-    // Subsiquent Fetching when id changes
+    // watchers
     watchEffect(async () => {
+        // Subsiquent Fetching when horse id changes
         if (selectedHorseId.value) {
             const { data: _horse_ } = await useAsyncData(
                 "horseDetails",
@@ -57,6 +60,12 @@
             horse.value = _horse_.value;
         }
     });
+
+    // functions
+    const handleDelete = (horseId) => {
+        horseToDelete.value = horseId;
+        deleteModalOpen.value = true;
+    };
 </script>
 
 <template>
@@ -135,7 +144,7 @@
                                         <span>Edit</span>
                                     </button>
                                     <button
-                                        @click="() => (isOpen = true)"
+                                        @click="handleDelete(horse.id)"
                                         type="button"
                                         class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                                     >
@@ -195,5 +204,9 @@
     </div>
 
     <!-- Modals -->
-    <DeleteHorseModal :is-open="isOpen" @close="isOpen = false" />
+    <DeleteHorseModal
+        :is-open="deleteModalOpen"
+        :horse-id="horseToDelete"
+        @close="deleteModalOpen = false"
+    />
 </template>
