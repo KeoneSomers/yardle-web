@@ -6,23 +6,18 @@
     } from "@heroicons/vue/20/solid/index.js";
     import DeleteHorseModal from "@/components/modals/DeleteHorseModal.vue";
 
-    const tabs = [
-        { name: "General", href: "#", current: true },
-        { name: "Rugs (soon)", href: "#", current: false },
-        { name: "Feeds (soon)", href: "#", current: false },
-        { name: "Medications (soon)", href: "#", current: false },
-    ];
+    import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
+    import HorseRugsTab from "@/components/HorseRugsTab.vue";
+    import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
+    import HorseMedicationsTab from "@/components/HorseMedicationsTab.vue";
 
-    const fields = {
-        Phone: "(555) 123-4567",
-        Email: "ricardocooper@example.com",
-        Title: "Senior Front-End Developer",
-        Team: "Product Development",
-        Location: "San Francisco",
-        Sits: "Oasis, 4th floor",
-        Salary: "$145,000",
-        Birthday: "June 8, 1990",
-    };
+    const selectedTab = ref(0);
+    const tabs = [
+        { name: "General", component: HorseGeneralTab },
+        { name: "Rugs", component: HorseRugsTab },
+        { name: "Feeds", component: HorseFeedsTab },
+        { name: "Medications", component: HorseMedicationsTab },
+    ];
 
     const client = useSupabaseClient();
 
@@ -178,12 +173,12 @@
                                 class="-mb-px flex space-x-8"
                                 aria-label="Tabs"
                             >
-                                <a
-                                    v-for="tab in tabs"
+                                <button
+                                    v-for="(tab, index) in tabs"
+                                    @click="() => (selectedTab = index)"
                                     :key="tab.name"
-                                    :href="tab.href"
                                     :class="[
-                                        tab.current
+                                        index == selectedTab
                                             ? 'border-pink-500 text-gray-900'
                                             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
                                         'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
@@ -191,55 +186,18 @@
                                     :aria-current="
                                         tab.current ? 'page' : undefined
                                     "
-                                    >{{ tab.name }}</a
                                 >
+                                    {{ tab.name }}
+                                </button>
                             </nav>
                         </div>
                     </div>
                 </div>
 
-                <!-- Description list -->
-                <div class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
-                    <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                        <div
-                            v-for="field in Object.keys(fields)"
-                            :key="field"
-                            class="sm:col-span-1"
-                        >
-                            <dt class="text-sm font-medium text-gray-500">
-                                {{ field }}
-                            </dt>
-                            <dd class="mt-1 text-sm text-gray-900">
-                                {{ fields[field] }}
-                            </dd>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <dt class="text-sm font-medium text-gray-500">
-                                About
-                            </dt>
-                            <dd
-                                class="mt-1 max-w-prose space-y-5 text-sm text-gray-900"
-                            >
-                                <p>
-                                    Tincidunt quam neque in cursus viverra orci,
-                                    dapibus nec tristique. Nullam ut sit dolor
-                                    consectetur urna, dui cras nec sed. Cursus
-                                    risus congue arcu aenean posuere aliquam.
-                                </p>
-                                <p>
-                                    Et vivamus lorem pulvinar nascetur non.
-                                    Pulvinar a sed platea rhoncus ac mauris
-                                    amet. Urna, sem pretium sit pretium urna,
-                                    senectus vitae. Scelerisque fermentum,
-                                    cursus felis dui suspendisse velit pharetra.
-                                    Augue et duis cursus maecenas eget quam
-                                    lectus. Accumsan vitae nascetur pharetra
-                                    rhoncus praesent dictum risus suspendisse.
-                                </p>
-                            </dd>
-                        </div>
-                    </dl>
-                </div>
+                <!-- {{ tabs[selectedTab].component }} -->
+                <component :is="tabs[selectedTab].component" />
+
+                <!-- <HorseGeneralTab /> -->
             </article>
         </main>
     </div>
