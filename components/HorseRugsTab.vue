@@ -1,11 +1,23 @@
 <script setup>
+    // imports
     import CreateRugModal from "@/components/modals/CreateRugModal.vue";
+    import DeleteRugModal from "@/components/modals/DeleteRugModal.vue";
 
+    // modal toggles
+    const createModalOpen = ref(false);
+    const deleteModalOpen = ref(false);
+
+    // supabase
     const client = useSupabaseClient();
-    const isOpen = ref(false);
+
+    // states
     const rugs = useState("rugs");
     const selectedHorseId = useState("selectedHorseId");
 
+    // refs
+    const rugToDelete = ref(0);
+
+    // start - can this be simplified?
     const { data: _rugs } = await useAsyncData("rugs", async () => {
         const { data } = await client
             .from("rugs")
@@ -13,8 +25,14 @@
             .eq("horse_id", selectedHorseId.value);
         return data;
     });
-
     rugs.value = _rugs.value;
+    // end
+
+    // functions
+    const handleDelete = (rugId) => {
+        rugToDelete.value = rugId;
+        deleteModalOpen.value = true;
+    };
 </script>
 
 <template>
@@ -29,7 +47,7 @@
             </div>
             <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                 <button
-                    @click="() => (isOpen = true)"
+                    @click="() => (createModalOpen = true)"
                     type="button"
                     class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                 >
@@ -98,7 +116,12 @@
                                     <td
                                         class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6 break-all"
                                     >
-                                        Delete
+                                        <button
+                                            @click="handleDelete(rug.id)"
+                                            class="bg-red-400 rounded px-3 py-1 text-white"
+                                        >
+                                            Delete
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -110,5 +133,13 @@
     </div>
 
     <!-- Modals -->
-    <CreateRugModal :is-open="isOpen" @close="isOpen = false" />
+    <CreateRugModal
+        :is-open="createModalOpen"
+        @close="createModalOpen = false"
+    />
+    <DeleteRugModal
+        :is-open="deleteModalOpen"
+        :rug-id="rugToDelete"
+        @close="deleteModalOpen = false"
+    />
 </template>
