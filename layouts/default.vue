@@ -18,6 +18,7 @@
         ArrowsRightLeftIcon,
         RectangleStackIcon,
         RectangleGroupIcon,
+        ClipboardDocumentListIcon,
     } from "@heroicons/vue/24/outline/index.js";
 
     const navigation = [
@@ -34,6 +35,18 @@
             name: "Field Groups",
             to: "/fields",
             icon: RectangleGroupIcon,
+            hint: "Soon",
+        },
+        {
+            name: "Rug Report",
+            to: "/calendar",
+            icon: ClipboardDocumentListIcon,
+            hint: "soon",
+        },
+        {
+            name: "Feed Report",
+            to: "/calendar",
+            icon: ClipboardDocumentListIcon,
             hint: "Soon",
         },
     ];
