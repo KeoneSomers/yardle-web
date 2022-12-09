@@ -1,6 +1,6 @@
 <script setup>
     // imports
-    import CreateRugModal from "@/components/modals/CreateRugModal.vue";
+    import CreateMedicationModal from "@/components/modals/CreateMedicationModal.vue";
     import DeleteMedicationModal from "@/components/modals/DeleteMedicationModal.vue";
 
     // modal toggles
@@ -125,7 +125,7 @@
     </div>
 
     <!-- Modals -->
-    <CreateRugModal
+    <CreateMedicationModal
         :is-open="createModalOpen"
         @close="createModalOpen = false"
     />

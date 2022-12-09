@@ -1,6 +1,6 @@
 <script setup>
     // imports
-    import CreateRugModal from "@/components/modals/CreateRugModal.vue";
+    import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
     import DeleteFeedModal from "@/components/modals/DeleteFeedModal.vue";
 
     // modal toggles
@@ -133,7 +133,7 @@
     </div>
 
     <!-- Modals -->
-    <CreateRugModal
+    <CreateFeedModal
         :is-open="createModalOpen"
         @close="createModalOpen = false"
     />
