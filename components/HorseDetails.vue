@@ -4,6 +4,7 @@
         PencilSquareIcon,
         TrashIcon,
     } from "@heroicons/vue/20/solid/index.js";
+    import DeleteHorseModal from "@/components/modals/DeleteHorseModal.vue";
 
     const tabs = [
         { name: "General", href: "#", current: true },
@@ -27,7 +28,7 @@
 
     const selectedHorseId = useState("selectedHorseId");
     const horse = ref();
-    const horses = useState("horses");
+    const isOpen = ref(false);
 
     // initial fetch
     const { data: _horse } = await useAsyncData("horseDetails", async () => {
@@ -63,35 +64,8 @@
     });
 
     const handleDelete = async () => {
-        const { data, error } = await client
-            .from("horses")
-            .delete()
-            .eq("id", selectedHorseId.value)
-            .select();
-
-        if (data) {
-            // success!
-            console.log(data);
-            // remove the deleted horse from the webpage
-            const i = horses.value
-                .map((e) => e.id)
-                .indexOf(selectedHorseId.value);
-
-            // remove from array
-            horses.value.splice(i, 1);
-
-            // change selected horse
-            if (horses.value.length > 0) {
-                selectedHorseId.value = horses.value[0].id;
-            } else {
-                selectedHorseId.value = 0;
-            }
-        }
-
-        if (error) {
-            // somthing went wrong!
-            console.log(error);
-        }
+        // open the delete modal
+        isOpen.value = true;
     };
 </script>
 
@@ -269,4 +243,7 @@
             </article>
         </main>
     </div>
+
+    <!-- Modals -->
+    <DeleteHorseModal :is-open="isOpen" @close="isOpen = false" />
 </template>
