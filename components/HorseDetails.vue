@@ -11,7 +11,7 @@
     import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
     import HorseMedicationsTab from "@/components/HorseMedicationsTab.vue";
 
-    const selectedTab = ref(0);
+    const selectedTab = useState("horseTab", () => 0);
     const tabs = [
         { name: "General", component: HorseGeneralTab },
         { name: "Rugs", component: HorseRugsTab },

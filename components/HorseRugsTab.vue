@@ -1,8 +1,20 @@
 <script setup>
     import CreateRugModal from "@/components/modals/CreateRugModal.vue";
 
-    const rugs = ref(null);
+    const client = useSupabaseClient();
     const isOpen = ref(false);
+    const rugs = useState("rugs");
+    const selectedHorseId = useState("selectedHorseId");
+
+    const { data: _rugs } = await useAsyncData("rugs", async () => {
+        const { data } = await client
+            .from("rugs")
+            .select()
+            .eq("horse_id", selectedHorseId.value);
+        return data;
+    });
+
+    rugs.value = _rugs.value;
 </script>
 
 <template>

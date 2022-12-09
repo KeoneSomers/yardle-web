@@ -67,6 +67,18 @@
             groupedHorses.value = groupByFirstLetter(horses.value, "name");
         }
     });
+
+    // horse states
+    const rugs = useState("rugs");
+    const horseTab = useState("horseTab");
+
+    // clear states of previously selected horse
+    watchEffect(() => {
+        if (selectedHorseId.value) {
+            rugs.value = null;
+            horseTab.value = 0;
+        }
+    });
 </script>
 
 <template>
