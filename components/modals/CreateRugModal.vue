@@ -28,7 +28,6 @@
             .insert({
                 horse_id: selectedHorseId.value,
                 created_by: user.value.id,
-                yard_id: user.value.user_metadata.selected_yard,
                 name: name.value,
                 details: details.value,
                 type: type.value,
@@ -38,7 +37,11 @@
 
         // step 2: update local state
         if (!createError) {
-            rugs.value.push(newRug);
+            if (rugs.value) {
+                rugs.value.push(newRug);
+            } else {
+                rugs.value = [newRug];
+            }
 
             // clear form
             name.value = "";
@@ -89,44 +92,53 @@
                             >
                                 Add a rug
                             </DialogTitle>
-                            <form @submit.prevent="handleSubmit" class="mt-4">
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Name</label
-                                >
-                                <div class="mt-1">
-                                    <input
-                                        type="text"
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        v-model="name"
-                                        required
-                                    />
+                            <form
+                                @submit.prevent="handleSubmit"
+                                class="mt-4 flex flex-col space-y-4"
+                            >
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700"
+                                        >Name</label
+                                    >
+                                    <div class="mt-1">
+                                        <input
+                                            type="text"
+                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            v-model="name"
+                                            required
+                                        />
+                                    </div>
                                 </div>
 
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Details</label
-                                >
-                                <div class="mt-1">
-                                    <input
-                                        type="text"
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        v-model="details"
-                                        required
-                                    />
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700"
+                                        >Details</label
+                                    >
+                                    <div class="mt-1">
+                                        <input
+                                            type="text"
+                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            v-model="details"
+                                            required
+                                        />
+                                    </div>
                                 </div>
 
-                                <label
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Type</label
-                                >
-                                <div class="mt-1">
-                                    <input
-                                        type="text"
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        v-model="type"
-                                        required
-                                    />
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700"
+                                        >Type</label
+                                    >
+                                    <div class="mt-1">
+                                        <input
+                                            type="text"
+                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            v-model="type"
+                                            required
+                                        />
+                                    </div>
                                 </div>
 
                                 <div

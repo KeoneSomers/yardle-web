@@ -57,11 +57,6 @@
             horse.value = _horse_.value;
         }
     });
-
-    const handleDelete = async () => {
-        // open the delete modal
-        isOpen.value = true;
-    };
 </script>
 
 <template>
@@ -140,7 +135,7 @@
                                         <span>Edit</span>
                                     </button>
                                     <button
-                                        @click="handleDelete"
+                                        @click="() => (isOpen = true)"
                                         type="button"
                                         class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                                     >

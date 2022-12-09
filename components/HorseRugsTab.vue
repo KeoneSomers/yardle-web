@@ -1,12 +1,8 @@
 <script setup>
-    const people = [
-        {
-            name: "Lindsay Walton",
-            title: "Front-end Developer",
-            email: "lindsay.walton@example.com",
-            role: "Member",
-        },
-    ];
+    import CreateRugModal from "@/components/modals/CreateRugModal.vue";
+
+    const rugs = ref(null);
+    const isOpen = ref(false);
 </script>
 
 <template>
@@ -21,6 +17,7 @@
             </div>
             <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                 <button
+                    @click="() => (isOpen = true)"
                     type="button"
                     class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                 >
@@ -51,47 +48,45 @@
                                         scope="col"
                                         class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
                                     >
-                                        Title
+                                        Details
                                     </th>
                                     <th
                                         scope="col"
                                         class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
                                     >
-                                        Email
+                                        Type
                                     </th>
                                     <th
                                         scope="col"
                                         class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-6"
-                                    >
-                                        Role
-                                    </th>
+                                    ></th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white">
                                 <tr
-                                    v-for="person in people"
-                                    :key="person.email"
+                                    v-for="rug in rugs"
+                                    :key="rug.id"
                                     class="divide-x divide-gray-200 grid grid-cols-4"
                                 >
                                     <td
                                         class="py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6 break-all"
                                     >
-                                        {{ person.name }}
+                                        {{ rug.name }}
                                     </td>
                                     <td
                                         class="p-4 text-sm text-gray-500 break-all break-all"
                                     >
-                                        {{ person.title }}
+                                        {{ rug.details }}
                                     </td>
                                     <td
                                         class="p-4 text-sm text-gray-500 break-all"
                                     >
-                                        {{ person.email }}
+                                        {{ rug.type }}
                                     </td>
                                     <td
                                         class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6 break-all"
                                     >
-                                        {{ person.role }}
+                                        Delete
                                     </td>
                                 </tr>
                             </tbody>
@@ -101,4 +96,7 @@
             </div>
         </div>
     </div>
+
+    <!-- Modals -->
+    <CreateRugModal :is-open="isOpen" @close="isOpen = false" />
 </template>
