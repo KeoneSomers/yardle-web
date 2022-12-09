@@ -72,19 +72,13 @@
                                         scope="col"
                                         class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                                     >
-                                        Name
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        Details
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
                                         Type
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="col-span-2 px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                    >
+                                        Description
                                     </th>
                                     <th
                                         scope="col"
@@ -101,17 +95,12 @@
                                     <td
                                         class="py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6 break-all"
                                     >
-                                        {{ rug.name }}
-                                    </td>
-                                    <td
-                                        class="p-4 text-sm text-gray-500 break-all break-all"
-                                    >
-                                        {{ rug.details }}
-                                    </td>
-                                    <td
-                                        class="p-4 text-sm text-gray-500 break-all"
-                                    >
                                         {{ rug.type }}
+                                    </td>
+                                    <td
+                                        class="col-span-2 p-4 text-sm text-gray-500 break-all break-all"
+                                    >
+                                        {{ rug.description }}
                                     </td>
                                     <td
                                         class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6 break-all"

@@ -15,9 +15,8 @@
     const rugs = useState("rugs");
     const selectedHorseId = useState("selectedHorseId");
 
-    const name = ref("");
-    const details = ref("");
     const type = ref("");
+    const description = ref("");
 
     const error = ref("");
 
@@ -28,9 +27,8 @@
             .insert({
                 horse_id: selectedHorseId.value,
                 created_by: user.value.id,
-                name: name.value,
-                details: details.value,
                 type: type.value,
+                description: description.value,
             })
             .select()
             .single();
@@ -44,9 +42,8 @@
             }
 
             // clear form
-            name.value = "";
-            details.value = "";
             type.value = "";
+            description.value = "";
 
             emits("close");
         } else {
@@ -99,36 +96,6 @@
                                 <div>
                                     <label
                                         class="block text-sm font-medium text-gray-700"
-                                        >Name</label
-                                    >
-                                    <div class="mt-1">
-                                        <input
-                                            type="text"
-                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                            v-model="name"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-gray-700"
-                                        >Details</label
-                                    >
-                                    <div class="mt-1">
-                                        <input
-                                            type="text"
-                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                            v-model="details"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-gray-700"
                                         >Type</label
                                     >
                                     <div class="mt-1">
@@ -136,6 +103,21 @@
                                             type="text"
                                             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                             v-model="type"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700"
+                                        >Description</label
+                                    >
+                                    <div class="mt-1">
+                                        <input
+                                            type="text"
+                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            v-model="description"
                                             required
                                         />
                                     </div>
