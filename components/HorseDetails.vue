@@ -194,10 +194,7 @@
                     </div>
                 </div>
 
-                <!-- {{ tabs[selectedTab].component }} -->
                 <component :is="tabs[selectedTab].component" />
-
-                <!-- <HorseGeneralTab /> -->
             </article>
         </main>
     </div>
