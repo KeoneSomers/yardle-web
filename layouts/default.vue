@@ -81,6 +81,23 @@
         return data;
     });
 
+    const yard = ref(null);
+    watchEffect(async () => {
+        if (user.value && user.value.user_metadata.selected_yard) {
+            const { data: _yard } = await useAsyncData("yard", async () => {
+                const { data } = await client
+                    .from("yards")
+                    .select()
+                    .eq("id", user.value.user_metadata.selected_yard)
+                    .single();
+                return data;
+            });
+            yard.value = _yard.value;
+        } else {
+            yard.value = null;
+        }
+    });
+
     const sidebarOpen = ref(false);
 </script>
 
@@ -400,6 +417,7 @@
                         </nav>
                     </div>
                     <div
+                        v-if="yard"
                         class="flex flex-shrink-0 border-t border-gray-200 p-4"
                     >
                         <div
@@ -409,14 +427,16 @@
                                 <p
                                     class="text-sm font-medium text-gray-700 group-hover:text-gray-900 truncate overflow-hidden"
                                 >
-                                    Alborne Equestrian
-                                    Centrereoiuhgireuhguirehgregreiu
+                                    {{ yard.name }}
                                 </p>
 
                                 <p
                                     class="text-xs font-medium text-gray-500 group-hover:text-gray-700"
                                 >
-                                    Member
+                                    <span v-if="yard.created_by == user.id"
+                                        >Owner</span
+                                    >
+                                    <span v-else>Member</span>
                                 </p>
                             </div>
                         </div>
