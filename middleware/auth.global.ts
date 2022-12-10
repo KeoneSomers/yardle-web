@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware((to) => {
     const hasSelectedYard =
         user.value != null && user.value.user_metadata.selected_yard != null;
 
-    const nonProtectedPages = ["/", "/login", "signup"];
+    const nonProtectedPages = ["/", "/login", "/signup"];
 
     // visiter is trying to access NON-AUTH pages
     if (nonProtectedPages.includes(to.path)) {
