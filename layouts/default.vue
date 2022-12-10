@@ -39,9 +39,9 @@
         },
         {
             name: "Rug Report",
-            to: "/calendar",
+            to: "/report/rugs",
             icon: ClipboardDocumentListIcon,
-            hint: "soon",
+            hint: "Soon",
         },
         {
             name: "Feed Report",
