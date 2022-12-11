@@ -5,6 +5,7 @@
 
     const client = useSupabaseAuthClient();
 
+    const username = ref("");
     const email = ref("");
     const password = ref("");
     const passwordConfirm = ref("");
@@ -16,21 +17,32 @@
         console.log(password.value);
         if (password.value == passwordConfirm.value) {
             if (password.value != "" && email.value != "") {
-                const { data, error } = await client.auth.signUp({
-                    email: email.value,
-                    password: password.value,
-                });
+                if (username.value != "") {
+                    const { data, error } = await client.auth.signUp({
+                        email: email.value,
+                        password: password.value,
+                        options: {
+                            data: {
+                                username: username.value,
+                            },
+                        },
+                    });
 
-                if (!error) {
-                    console.log(data);
+                    if (!error) {
+                        console.log(data);
 
-                    // TODO: first prompt the user to confirm their email
-                    // await navigateTo("/horses");
+                        // TODO: first prompt the user to confirm their email
+                        // await navigateTo("/horses");
+                    } else {
+                        console.log(error.name);
+                        console.log(error.cause);
+                        console.log(error.message);
+                        errorMessage.value = error.message;
+                    }
                 } else {
-                    console.log(error.name);
-                    console.log(error.cause);
-                    console.log(error.message);
-                    errorMessage.value = error.message;
+                    console.log("Please enter a username");
+                    errorMessage.value =
+                        "Please enter a username of your choice";
                 }
             }
         } else {
@@ -66,6 +78,25 @@
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                 <form @submit.prevent="handleSignup" class="space-y-6">
+                    <div>
+                        <label
+                            for="username"
+                            class="block text-sm font-medium text-gray-700"
+                            >Username</label
+                        >
+                        <div class="mt-1">
+                            <input
+                                id="username"
+                                name="username"
+                                type="text"
+                                autocomplete="username"
+                                required
+                                v-model="username"
+                                class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                    </div>
+
                     <div>
                         <label
                             for="email"
@@ -106,7 +137,7 @@
 
                     <div>
                         <label
-                            for="password"
+                            for="passwordConfirm"
                             class="block text-sm font-medium text-gray-700"
                             >Confirm Password</label
                         >
