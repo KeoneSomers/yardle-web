@@ -17,18 +17,15 @@
     // refs
     const rugToDelete = ref(0);
 
-    // start - can this be simplified?
-    const { data: _rugs } = await useAsyncData("rugs", async () => {
+    // functions
+    await useAsyncData("rugs", async () => {
         const { data } = await client
             .from("rugs")
             .select()
             .eq("horse_id", selectedHorseId.value);
-        return data;
+        rugs.value = data;
     });
-    rugs.value = _rugs.value;
-    // end
 
-    // functions
     const handleDelete = (rugId) => {
         rugToDelete.value = rugId;
         deleteModalOpen.value = true;
