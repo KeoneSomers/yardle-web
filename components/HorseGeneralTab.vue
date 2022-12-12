@@ -1,7 +1,18 @@
 <script setup>
     const horse = useState("horse");
 
-    const fields = [
+    const getAge = (dateString) => {
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    };
+
+    const fields = ref([
         {
             title: "Last Farrier visit",
             value: "--",
@@ -20,9 +31,20 @@
         },
         {
             title: "Date of Birth",
-            value: horse.value.dob,
+            value: "",
         },
-    ];
+    ]);
+
+    watchEffect(() => {
+        if (horse.value.dob) {
+            fields.value[4].value = `${horse.value.dob} 
+                     (
+                    ${getAge(horse.value.dob)}
+                     year${getAge(horse.value.dob) != 1 ? "s" : ""} old)`;
+        } else {
+            fields.value[4].value = "--";
+        }
+    });
 </script>
 
 <template>
