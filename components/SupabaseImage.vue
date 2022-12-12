@@ -7,6 +7,12 @@
 
     onMounted(() => {
         downloadImage();
+
+        watchEffect(() => {
+            if (path) {
+                downloadImage();
+            }
+        });
     });
 
     const downloadImage = async () => {

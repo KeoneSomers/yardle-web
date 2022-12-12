@@ -167,7 +167,7 @@
                                         v-if="horse.avatar_url"
                                         class="h-10 w-10 rounded-full overflow-hidden"
                                         id="horse-avatars"
-                                        :path="horse.avatar_url"
+                                        v-model:path="horse.avatar_url"
                                     />
                                     <div
                                         v-else

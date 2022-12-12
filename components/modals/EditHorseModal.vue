@@ -43,6 +43,7 @@
         if (!createError) {
             const index = horses.value.map((e) => e.id).indexOf(horse.value.id);
             horses.value[index].name = horse.value.name;
+            horses.value[index].avatar_url = horse.value.avatar_url;
             emits("close");
         } else {
             error.value = createError.message + createError.hint;
