@@ -1,4 +1,5 @@
 <script setup>
+    import { DateTime } from "luxon";
     const horse = useState("horse");
 
     const getAge = (dateString) => {
@@ -37,10 +38,10 @@
 
     watchEffect(() => {
         if (horse.value.dob) {
-            fields.value[4].value = `${horse.value.dob} 
-                     (
-                    ${getAge(horse.value.dob)}
-                     year${getAge(horse.value.dob) != 1 ? "s" : ""} old)`;
+            const d = new Date();
+            fields.value[4].value = DateTime.fromISO(
+                String(horse.value.dob)
+            ).toLocaleString(DateTime.DATE_MED);
         } else {
             fields.value[4].value = "--";
         }
