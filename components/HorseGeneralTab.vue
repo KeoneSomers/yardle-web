@@ -38,7 +38,6 @@
 
     watchEffect(() => {
         if (horse.value.dob) {
-            const d = new Date();
             fields.value[4].value = DateTime.fromISO(
                 String(horse.value.dob)
             ).toLocaleString(DateTime.DATE_MED);
