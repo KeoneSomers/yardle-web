@@ -28,36 +28,29 @@
     const deleteModalOpen = ref(false);
 
     // initial fetch
-    const { data: _horse } = await useAsyncData("horseDetails", async () => {
+    await useAsyncData("horseDetails", async () => {
         const { data } = await client
             .from("horses")
             .select()
             .eq("id", selectedHorseId.value)
             .single();
 
-        return data;
+        horse.value = data;
     });
-
-    horse.value = _horse.value;
 
     // watchers
     watchEffect(async () => {
         // Subsiquent Fetching when horse id changes
         if (selectedHorseId.value) {
-            const { data: _horse_ } = await useAsyncData(
-                "horseDetails",
-                async () => {
-                    const { data } = await client
-                        .from("horses")
-                        .select()
-                        .eq("id", selectedHorseId.value)
-                        .single();
+            await useAsyncData("horseDetails", async () => {
+                const { data } = await client
+                    .from("horses")
+                    .select()
+                    .eq("id", selectedHorseId.value)
+                    .single();
 
-                    return data;
-                }
-            );
-
-            horse.value = _horse_.value;
+                horse.value = data;
+            });
         }
     });
 

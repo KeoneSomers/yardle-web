@@ -17,16 +17,14 @@
     // refs
     const feedToDelete = ref(0);
 
-    // start - can this be simplified?
-    const { data: _feeds } = await useAsyncData("feeds", async () => {
+    await useAsyncData("feeds", async () => {
         const { data } = await client
             .from("feeds")
             .select()
             .eq("horse_id", selectedHorseId.value);
-        return data;
+
+        feeds.value = data;
     });
-    feeds.value = _feeds.value;
-    // end
 
     // functions
     const handleDelete = (feedId) => {

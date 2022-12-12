@@ -9,17 +9,16 @@
     const selectedHorseId = useState("selectedHorseId", () => 0);
     const horses = useState("horses");
 
-    const { data: _horses } = await useAsyncData("horses", async () => {
+    await useAsyncData("horses", async () => {
         const { data } = await client
             .from("horses")
             .select()
             .eq("yard_id", user.value.user_metadata.selected_yard)
             .order("name", { ascending: true });
-        return data;
+
+        horses.value = data;
     });
 
-    // use watchEffect to update the grouped list
-    horses.value = _horses.value;
     // auto select first horse if there is one
     onMounted(() => {
         if (horses.value.length > 0) {

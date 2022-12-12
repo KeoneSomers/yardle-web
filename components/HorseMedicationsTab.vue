@@ -17,19 +17,14 @@
     // refs
     const medicationToDelete = ref(0);
 
-    // start - can this be simplified?
-    const { data: _medications } = await useAsyncData(
-        "medications",
-        async () => {
-            const { data } = await client
-                .from("medications")
-                .select()
-                .eq("horse_id", selectedHorseId.value);
-            return data;
-        }
-    );
-    medications.value = _medications.value;
-    // end
+    await useAsyncData("medications", async () => {
+        const { data } = await client
+            .from("medications")
+            .select()
+            .eq("horse_id", selectedHorseId.value);
+
+        medications.value = data;
+    });
 
     // functions
     const handleDelete = (medicationId) => {

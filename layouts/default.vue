@@ -95,20 +95,33 @@
     });
 
     const yard = ref(null);
-    watchEffect(async () => {
+
+    const getSelectedYardData = async () => {
         if (user.value && user.value.user_metadata.selected_yard) {
-            const { data: _yard } = await useAsyncData("yard", async () => {
+            await useAsyncData("yard", async () => {
                 const { data } = await client
                     .from("yards")
                     .select()
                     .eq("id", user.value.user_metadata.selected_yard)
                     .single();
-                return data;
+
+                yard.value = data;
             });
-            yard.value = _yard.value;
         } else {
             yard.value = null;
         }
+    };
+
+    onMounted(async () => {
+        await getSelectedYardData();
+
+        watchEffect(async () => {
+            if (user.value && user.value.user_metadata.selected_yard) {
+                await getSelectedYardData();
+            } else {
+                yard.value = null;
+            }
+        });
     });
 
     const sidebarOpen = ref(false);
@@ -474,7 +487,7 @@
                                         class="h-9 w-9 bg-indigo-500 rounded-full flex items-center justify-center text-white"
                                     >
                                         <!-- TODO: this should not be hardcoded! -->
-                                        KS
+                                        {{ profile.username[0].toUpperCase() }}
                                     </div>
                                 </div>
                                 <div class="ml-3">
