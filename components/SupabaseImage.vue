@@ -29,7 +29,7 @@
 </script>
 
 <template>
-    <div>
-        <img v-if="src" :src="src" alt="Image" class="w-full h-full" />
+    <div class="flex justify-center items-center bg-pink-500">
+        <img v-if="src" :src="src" alt="Image" class="object-cover" />
     </div>
 </template>
