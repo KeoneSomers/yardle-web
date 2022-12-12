@@ -2,7 +2,7 @@
     const props = defineProps(["path"]);
     const { path } = toRefs(props);
 
-    const emit = defineEmits(["update:path", "upload"]);
+    const emit = defineEmits(["update:path"]);
 
     const supabase = useSupabaseClient();
 
@@ -13,7 +13,7 @@
     const downloadImage = async () => {
         try {
             const { data, error } = await supabase.storage
-                .from("avatars")
+                .from("horse-avatars")
                 .download(path.value);
             if (error) throw error;
             src.value = URL.createObjectURL(data);
@@ -34,11 +34,10 @@
             const fileName = `${Math.random()}.${fileExt}`;
             const filePath = `${fileName}`;
             let { error: uploadError } = await supabase.storage
-                .from("avatars")
+                .from("horse-avatars")
                 .upload(filePath, file);
             if (uploadError) throw uploadError;
             emit("update:path", filePath);
-            emit("upload");
         } catch (error) {
             alert(error.message);
         } finally {

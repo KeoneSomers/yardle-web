@@ -24,6 +24,6 @@
 
 <template>
     <div>
-        <img v-if="src" :src="src" alt="Image" />
+        <img v-if="src" :src="src" alt="Image" class="w-full h-full" />
     </div>
 </template>

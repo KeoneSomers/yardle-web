@@ -93,10 +93,11 @@
                             class="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5"
                         >
                             <div class="flex">
-                                <img
-                                    v-if="horse.imageUrl"
-                                    class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32"
-                                    :src="profile.imageUrl"
+                                <SupabaseImage
+                                    v-if="horse.avatar_url"
+                                    class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 overflow-hidden"
+                                    id="horse-avatars"
+                                    :path="horse.avatar_url"
                                     alt=""
                                 />
                                 <div

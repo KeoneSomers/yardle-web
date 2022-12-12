@@ -28,10 +28,12 @@
             .update({
                 name: capitalizeFirstLetter(horse.value.name),
                 breed: horse.value.breed,
+                about: horse.value.about,
                 color_markings: horse.value.color_markings,
                 dob: new Date(horse.value.dob).toISOString(),
                 updated_by: user.value.id,
                 updated_at: new Date().toISOString(),
+                avatar_url: horse.value.avatar_url,
             })
             .eq("id", horse.value.id)
             .select()
@@ -90,6 +92,11 @@
                                 class="mt-4 flex flex-col space-y-3"
                             >
                                 <div>
+                                    <ManageProfilePicture
+                                        v-model:path="horse.avatar_url"
+                                    />
+                                </div>
+                                <div>
                                     <label
                                         class="block text-sm font-medium text-gray-700"
                                         >Name</label
@@ -142,6 +149,20 @@
                                             type="text"
                                             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                             v-model="horse.color_markings"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700"
+                                        >About</label
+                                    >
+                                    <div class="mt-1">
+                                        <textarea
+                                            rows="5"
+                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            v-model="horse.about"
                                         />
                                     </div>
                                 </div>

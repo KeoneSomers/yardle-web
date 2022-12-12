@@ -163,12 +163,14 @@
                                 class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500"
                             >
                                 <div class="flex-shrink-0">
-                                    <!-- <img
-                                        class="h-10 w-10 rounded-full"
-                                        :src="horse.imageUrl"
-                                        alt=""
-                                    /> -->
+                                    <SupabaseImage
+                                        v-if="horse.avatar_url"
+                                        class="h-10 w-10 rounded-full overflow-hidden"
+                                        id="horse-avatars"
+                                        :path="horse.avatar_url"
+                                    />
                                     <div
+                                        v-else
                                         class="bg-pink-500 rounded-full h-10 w-10 text-white flex items-center justify-center"
                                     >
                                         {{ horse.name[0].toUpperCase() }}

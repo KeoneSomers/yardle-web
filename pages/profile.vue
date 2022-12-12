@@ -1,9 +1,8 @@
 <script setup>
     const user = useState("user");
-
     const client = useSupabaseClient();
-
     const loading = ref(true);
+
     const username = ref("");
     const website = ref("");
     const avatar_path = ref("");
@@ -15,11 +14,13 @@
         .select(`username, website, avatar_url`)
         .eq("id", user.value.id)
         .single();
+
     if (data) {
         username.value = data.username;
         website.value = data.website;
         avatar_path.value = data.avatar_url;
     }
+
     loading.value = false;
 
     async function updateProfile() {
