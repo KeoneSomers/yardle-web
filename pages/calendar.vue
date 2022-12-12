@@ -7,8 +7,66 @@
         EllipsisHorizontalIcon,
     } from "@heroicons/vue/20/solid/index.js";
     import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+    import { DateTime } from "luxon";
 
-    const days = [
+    const dt = ref(DateTime.now());
+
+    const months = [
+        "January",
+        "Febuary",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+
+    const weekdays = [
+        { id: 1, shortName: "Mon", name: "Monday" },
+        { id: 2, shortName: "Tue", name: "Tuesday" },
+        { id: 3, shortName: "Wed", name: "Wednesday" },
+        { id: 4, shortName: "Thu", name: "Thursday" },
+        { id: 5, shortName: "Fri", name: "Friday" },
+        { id: 6, shortName: "Sat", name: "Saturday" },
+        { id: 7, shortName: "Sun", name: "Sunday" },
+    ];
+
+    const firstWeekdayOfMonth = dt.value.startOf("month").weekday;
+    const offset = ref(0);
+    const firstDay = ref(
+        dt.value.startOf("month").minus({
+            months: offset.value,
+            days: weekdays.length - firstWeekdayOfMonth,
+        })
+    );
+
+    const days = ref([]);
+
+    const setDays = () => {
+        let i = 0;
+        days.value = [];
+
+        while (i < 42) {
+            let day = firstDay.value.plus({ days: i });
+
+            day = day;
+            days.value.push(day);
+            i++;
+        }
+    };
+
+    // get days on load
+    setDays();
+
+    // console.log(dt.endOf("month").day);
+    // console.log(dt);
+
+    const daysOld = [
         { date: "2021-12-27", events: [] },
         { date: "2021-12-28", events: [] },
         { date: "2021-12-29", events: [] },
@@ -98,6 +156,41 @@
                     datetime: "2022-01-22T19:00",
                     href: "#",
                 },
+                {
+                    id: 6,
+                    name: "Hockey game",
+                    time: "7PM",
+                    datetime: "2022-01-22T19:00",
+                    href: "#",
+                },
+                {
+                    id: 7,
+                    name: "Hockey game",
+                    time: "7PM",
+                    datetime: "2022-01-22T19:00",
+                    href: "#",
+                },
+                {
+                    id: 8,
+                    name: "Hockey game",
+                    time: "7PM",
+                    datetime: "2022-01-22T19:00",
+                    href: "#",
+                },
+                {
+                    id: 9,
+                    name: "Hockey game",
+                    time: "7PM",
+                    datetime: "2022-01-22T19:00",
+                    href: "#",
+                },
+                {
+                    id: 10,
+                    name: "Hockey game",
+                    time: "7PM",
+                    datetime: "2022-01-22T19:00",
+                    href: "#",
+                },
             ],
         },
         { date: "2022-01-23", isCurrentMonth: true, events: [] },
@@ -115,7 +208,7 @@
             date: "2022-02-03",
             events: [
                 {
-                    id: 7,
+                    id: 11,
                     name: "Cinema with friends",
                     time: "9PM",
                     datetime: "2022-02-04T21:00",
@@ -127,7 +220,7 @@
         { date: "2022-02-05", events: [] },
         { date: "2022-02-06", events: [] },
     ];
-    const selectedDay = days.find((day) => day.isSelected);
+    const selectedDayOld = daysOld.find((day) => day.isSelected);
 </script>
 
 <template>
@@ -136,7 +229,9 @@
             class="flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none"
         >
             <h1 class="text-lg font-semibold text-gray-900">
-                <time datetime="2022-01">January 2022</time>
+                <time datetime="2022-01"
+                    >{{ months[dt.month - 1] }} {{ dt.year }}</time
+                >
             </h1>
             <div class="flex items-center">
                 <div
@@ -167,7 +262,7 @@
                     </button>
                 </div>
                 <div class="hidden md:ml-4 md:flex md:items-center">
-                    <Menu as="div" class="relative">
+                    <!-- <Menu as="div" class="relative">
                         <MenuButton
                             type="button"
                             class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
@@ -242,8 +337,8 @@
                                 </div>
                             </MenuItems>
                         </transition>
-                    </Menu>
-                    <div class="ml-6 h-6 w-px bg-gray-300" />
+                    </Menu> -->
+                    <!-- <div class="ml-6 h-6 w-px bg-gray-300" /> -->
                     <button
                         type="button"
                         class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -251,6 +346,7 @@
                         Add event
                     </button>
                 </div>
+                <!-- mobile menu -->
                 <Menu as="div" class="relative ml-6 md:hidden">
                     <MenuButton
                         class="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500"
@@ -289,19 +385,19 @@
                             </div>
                             <div class="py-1">
                                 <MenuItem v-slot="{ active }">
-                                    <a
-                                        href="#"
+                                    <button
                                         :class="[
                                             active
                                                 ? 'bg-gray-100 text-gray-900'
                                                 : 'text-gray-700',
                                             'block px-4 py-2 text-sm',
                                         ]"
-                                        >Go to today</a
                                     >
+                                        Go to today
+                                    </button>
                                 </MenuItem>
                             </div>
-                            <div class="py-1">
+                            <!-- <div class="py-1">
                                 <MenuItem v-slot="{ active }">
                                     <a
                                         href="#"
@@ -350,7 +446,7 @@
                                         >Year view</a
                                     >
                                 </MenuItem>
-                            </div>
+                            </div> -->
                         </MenuItems>
                     </transition>
                 </Menu>
@@ -362,26 +458,12 @@
             <div
                 class="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none"
             >
-                <div class="bg-white py-2">
-                    M<span class="sr-only sm:not-sr-only">on</span>
-                </div>
-                <div class="bg-white py-2">
-                    T<span class="sr-only sm:not-sr-only">ue</span>
-                </div>
-                <div class="bg-white py-2">
-                    W<span class="sr-only sm:not-sr-only">ed</span>
-                </div>
-                <div class="bg-white py-2">
-                    T<span class="sr-only sm:not-sr-only">hu</span>
-                </div>
-                <div class="bg-white py-2">
-                    F<span class="sr-only sm:not-sr-only">ri</span>
-                </div>
-                <div class="bg-white py-2">
-                    S<span class="sr-only sm:not-sr-only">at</span>
-                </div>
-                <div class="bg-white py-2">
-                    S<span class="sr-only sm:not-sr-only">un</span>
+                <div
+                    v-for="day in weekdays"
+                    :key="day.id"
+                    class="bg-white py-2"
+                >
+                    {{ day.shortName }}
                 </div>
             </div>
             <div
@@ -392,9 +474,9 @@
                 >
                     <div
                         v-for="day in days"
-                        :key="day.date"
+                        :key="day"
                         :class="[
-                            day.isCurrentMonth
+                            day.month == dt.month
                                 ? 'bg-white'
                                 : 'bg-gray-50 text-gray-500',
                             'relative py-2 px-3',
@@ -403,15 +485,13 @@
                         <time
                             :datetime="day.date"
                             :class="
-                                day.isToday
+                                day.day == dt.day && day.month == dt.month
                                     ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
                                     : undefined
                             "
-                            >{{
-                                day.date.split("-").pop().replace(/^0/, "")
-                            }}</time
+                            >{{ day.day }}</time
                         >
-                        <ol v-if="day.events.length > 0" class="mt-2">
+                        <!-- <ol v-if="day.events.length > 0" class="mt-2">
                             <li
                                 v-for="event in day.events.slice(0, 2)"
                                 :key="event.id"
@@ -435,10 +515,10 @@
                             >
                                 + {{ day.events.length - 2 }} more
                             </li>
-                        </ol>
+                        </ol> -->
                     </div>
                 </div>
-                <div
+                <!-- <div
                     class="isolate grid w-full grid-cols-7 grid-rows-6 gap-px lg:hidden"
                 >
                     <button
@@ -490,18 +570,18 @@
                             />
                         </span>
                     </button>
-                </div>
+                </div> -->
             </div>
         </div>
         <div
-            v-if="selectedDay?.events.length > 0"
+            v-if="selectedDayOld?.events.length > 0"
             class="py-10 px-4 sm:px-6 lg:hidden"
         >
             <ol
                 class="divide-y divide-gray-100 overflow-hidden rounded-lg bg-white text-sm shadow ring-1 ring-black ring-opacity-5"
             >
                 <li
-                    v-for="event in selectedDay.events"
+                    v-for="event in selectedDayOld.events"
                     :key="event.id"
                     class="group flex p-4 pr-6 focus-within:bg-gray-50 hover:bg-gray-50"
                 >

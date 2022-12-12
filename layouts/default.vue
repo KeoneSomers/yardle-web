@@ -30,7 +30,7 @@
             hint: "",
         },
         { name: "Members", to: "/members", icon: UserGroupIcon, hint: "" },
-        { name: "Calendar", to: "/calendar", icon: CalendarIcon, hint: "Soon" },
+        { name: "Calendar", to: "/calendar", icon: CalendarIcon, hint: "" },
         {
             name: "Field Groups",
             to: "/fields",
@@ -45,7 +45,7 @@
         },
         {
             name: "Feed Report",
-            to: "/calendar",
+            to: "/report/feeds",
             icon: ClipboardDocumentListIcon,
             hint: "Soon",
         },
