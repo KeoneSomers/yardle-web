@@ -30,6 +30,7 @@
             .insert({
                 name: capitalizeFirstLetter(name.value),
                 yard_id: user.value.user_metadata.selected_yard,
+                created_by: user.value.id,
             })
             .select()
             .single();

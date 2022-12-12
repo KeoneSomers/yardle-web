@@ -4,6 +4,7 @@
         PencilSquareIcon,
         TrashIcon,
     } from "@heroicons/vue/20/solid/index.js";
+    import EditHorseModal from "@/components/modals/EditHorseModal.vue";
     import DeleteHorseModal from "@/components/modals/DeleteHorseModal.vue";
 
     import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
@@ -24,8 +25,8 @@
 
     const selectedHorseId = useState("selectedHorseId");
     const horse = ref();
-    const horseToDelete = ref(0);
     const deleteModalOpen = ref(false);
+    const editModalOpen = ref(false);
 
     // initial fetch
     await useAsyncData("horseDetails", async () => {
@@ -53,12 +54,6 @@
             });
         }
     });
-
-    // functions
-    const handleDelete = (horseId) => {
-        horseToDelete.value = horseId;
-        deleteModalOpen.value = true;
-    };
 </script>
 
 <template>
@@ -127,6 +122,7 @@
                                     class="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4"
                                 >
                                     <button
+                                        @click="() => (editModalOpen = true)"
                                         type="button"
                                         class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                                     >
@@ -137,7 +133,7 @@
                                         <span>Edit</span>
                                     </button>
                                     <button
-                                        @click="handleDelete(horse.id)"
+                                        @click="() => (deleteModalOpen = true)"
                                         type="button"
                                         class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                                     >
@@ -197,9 +193,16 @@
     </div>
 
     <!-- Modals -->
+    <EditHorseModal
+        v-if="horse"
+        :is-open="editModalOpen"
+        :horse="horse"
+        @close="editModalOpen = false"
+    />
     <DeleteHorseModal
+        v-if="horse"
         :is-open="deleteModalOpen"
-        :horse-id="horseToDelete"
+        :horse-id="horse.id"
         @close="deleteModalOpen = false"
     />
 </template>
