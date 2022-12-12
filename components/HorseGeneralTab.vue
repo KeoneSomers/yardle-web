@@ -1,12 +1,14 @@
 <script setup>
+    const horse = useState("horse");
+
     const fields = [
         {
             title: "Last Farrier visit",
-            value: "2 Weeks ago",
+            value: "--",
         },
         {
             title: "Last Dentist visit",
-            value: "4 Weeks ago",
+            value: "--",
         },
         {
             title: "Last Worming",
@@ -14,11 +16,11 @@
         },
         {
             title: "Last Vaccination",
-            value: "4 Weeks ago",
+            value: "-",
         },
         {
             title: "Date of Birth",
-            value: "1st October 1997 (25 years old)",
+            value: horse.value.dob,
         },
     ];
 </script>
@@ -43,10 +45,7 @@
                 <dt class="text-sm font-medium text-gray-500">About</dt>
                 <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
                     <p>
-                        Tincidunt quam neque in cursus viverra orci, dapibus nec
-                        tristique. Nullam ut sit dolor consectetur urna, dui
-                        cras nec sed. Cursus risus congue arcu aenean posuere
-                        aliquam.
+                        {{ horse.about }}
                     </p>
                 </dd>
             </div>

@@ -24,7 +24,7 @@
     const client = useSupabaseClient();
 
     const selectedHorseId = useState("selectedHorseId");
-    const horse = ref();
+    const horse = useState("horse");
     const deleteModalOpen = ref(false);
     const editModalOpen = ref(false);
 
