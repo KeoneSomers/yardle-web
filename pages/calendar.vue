@@ -80,16 +80,17 @@
 
         let i = 0;
         days.value = [];
-        console.log(events.value);
 
         while (i < 42) {
             let day = firstDay.value.plus({ days: i });
 
             // add  events from events array
+            // TODO: This could be optimised I think.
             day.events = events.value.filter((e) => {
-                let eventDate = DateTime.fromISO(e.date_time).toLocaleString();
-
-                return eventDate == day.toLocaleString();
+                return (
+                    DateTime.fromISO(e.date_time).toLocaleString() ==
+                    day.toLocaleString()
+                );
             });
 
             days.value.push(day);
