@@ -9,6 +9,9 @@
     import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
     import { DateTime } from "luxon";
 
+    const client = useSupabaseClient();
+    const user = useState("user");
+
     const offset = ref(0);
     const dt = ref(DateTime.now());
     const trueDateTime = DateTime.now();
@@ -38,9 +41,36 @@
         { id: 7, shortName: "Sun", name: "Sunday" },
     ];
 
-    const days = ref([]);
+    const eventsOld = ref([
+        {
+            id: 1,
+            name: "Design review",
+            time: "10AM",
+            datetime: "2022-01-03T10:00",
+            href: "#",
+        },
+        {
+            id: 2,
+            name: "Sales meeting",
+            time: "2PM",
+            datetime: "2022-01-03T14:00",
+            href: "#",
+        },
+    ]);
 
-    const setDays = () => {
+    const days = ref([]);
+    const events = useState("events", () => []);
+
+    const getEvents = async () => {
+        await useAsyncData("events", async () => {
+            const { data } = await client.from("events").select();
+            // .eq("yard_id", user.value.user_metadata.selected_yard)
+
+            events.value = data;
+        });
+    };
+
+    const setDays = async () => {
         const firstWeekdayOfMonth = dt.value.startOf("month").weekday;
         const firstDay = ref(
             dt.value.startOf("month").minus({
@@ -50,18 +80,27 @@
 
         let i = 0;
         days.value = [];
+        console.log(events.value);
 
         while (i < 42) {
             let day = firstDay.value.plus({ days: i });
 
-            day = day;
+            // add  events from events array
+            day.events = events.value.filter((e) => {
+                let eventDate = DateTime.fromISO(e.date_time).toLocaleString();
+
+                return eventDate == day.toLocaleString();
+            });
+
             days.value.push(day);
+
             i++;
         }
     };
 
     // get days on load
-    setDays();
+    await getEvents();
+    await setDays();
 
     const goToNextMonth = () => {
         offset.value++;
@@ -80,165 +119,6 @@
         dt.value = DateTime.now().plus({ months: offset.value });
         setDays();
     };
-
-    // console.log(dt.endOf("month").day);
-    // console.log(dt);
-
-    const daysOld = [
-        { date: "2021-12-27", events: [] },
-        { date: "2021-12-28", events: [] },
-        { date: "2021-12-29", events: [] },
-        { date: "2021-12-30", events: [] },
-        { date: "2021-12-31", events: [] },
-        { date: "2022-01-01", isCurrentMonth: true, events: [] },
-        { date: "2022-01-02", isCurrentMonth: true, events: [] },
-        {
-            date: "2022-01-03",
-            isCurrentMonth: true,
-            events: [
-                {
-                    id: 1,
-                    name: "Design review",
-                    time: "10AM",
-                    datetime: "2022-01-03T10:00",
-                    href: "#",
-                },
-                {
-                    id: 2,
-                    name: "Sales meeting",
-                    time: "2PM",
-                    datetime: "2022-01-03T14:00",
-                    href: "#",
-                },
-            ],
-        },
-        { date: "2022-01-04", isCurrentMonth: true, events: [] },
-        { date: "2022-01-05", isCurrentMonth: true, events: [] },
-        { date: "2022-01-06", isCurrentMonth: true, events: [] },
-        {
-            date: "2022-01-07",
-            isCurrentMonth: true,
-            events: [
-                {
-                    id: 3,
-                    name: "Date night",
-                    time: "6PM",
-                    datetime: "2022-01-08T18:00",
-                    href: "#",
-                },
-            ],
-        },
-        { date: "2022-01-08", isCurrentMonth: true, events: [] },
-        { date: "2022-01-09", isCurrentMonth: true, events: [] },
-        { date: "2022-01-10", isCurrentMonth: true, events: [] },
-        { date: "2022-01-11", isCurrentMonth: true, events: [] },
-        {
-            date: "2022-01-12",
-            isCurrentMonth: true,
-            isToday: true,
-            events: [
-                {
-                    id: 6,
-                    name: "Sam's birthday party",
-                    time: "2PM",
-                    datetime: "2022-01-25T14:00",
-                    href: "#",
-                },
-            ],
-        },
-        { date: "2022-01-13", isCurrentMonth: true, events: [] },
-        { date: "2022-01-14", isCurrentMonth: true, events: [] },
-        { date: "2022-01-15", isCurrentMonth: true, events: [] },
-        { date: "2022-01-16", isCurrentMonth: true, events: [] },
-        { date: "2022-01-17", isCurrentMonth: true, events: [] },
-        { date: "2022-01-18", isCurrentMonth: true, events: [] },
-        { date: "2022-01-19", isCurrentMonth: true, events: [] },
-        { date: "2022-01-20", isCurrentMonth: true, events: [] },
-        { date: "2022-01-21", isCurrentMonth: true, events: [] },
-        {
-            date: "2022-01-22",
-            isCurrentMonth: true,
-            isSelected: true,
-            events: [
-                {
-                    id: 4,
-                    name: "Maple syrup museum",
-                    time: "3PM",
-                    datetime: "2022-01-22T15:00",
-                    href: "#",
-                },
-                {
-                    id: 5,
-                    name: "Hockey game",
-                    time: "7PM",
-                    datetime: "2022-01-22T19:00",
-                    href: "#",
-                },
-                {
-                    id: 6,
-                    name: "Hockey game",
-                    time: "7PM",
-                    datetime: "2022-01-22T19:00",
-                    href: "#",
-                },
-                {
-                    id: 7,
-                    name: "Hockey game",
-                    time: "7PM",
-                    datetime: "2022-01-22T19:00",
-                    href: "#",
-                },
-                {
-                    id: 8,
-                    name: "Hockey game",
-                    time: "7PM",
-                    datetime: "2022-01-22T19:00",
-                    href: "#",
-                },
-                {
-                    id: 9,
-                    name: "Hockey game",
-                    time: "7PM",
-                    datetime: "2022-01-22T19:00",
-                    href: "#",
-                },
-                {
-                    id: 10,
-                    name: "Hockey game",
-                    time: "7PM",
-                    datetime: "2022-01-22T19:00",
-                    href: "#",
-                },
-            ],
-        },
-        { date: "2022-01-23", isCurrentMonth: true, events: [] },
-        { date: "2022-01-24", isCurrentMonth: true, events: [] },
-        { date: "2022-01-25", isCurrentMonth: true, events: [] },
-        { date: "2022-01-26", isCurrentMonth: true, events: [] },
-        { date: "2022-01-27", isCurrentMonth: true, events: [] },
-        { date: "2022-01-28", isCurrentMonth: true, events: [] },
-        { date: "2022-01-29", isCurrentMonth: true, events: [] },
-        { date: "2022-01-30", isCurrentMonth: true, events: [] },
-        { date: "2022-01-31", isCurrentMonth: true, events: [] },
-        { date: "2022-02-01", events: [] },
-        { date: "2022-02-02", events: [] },
-        {
-            date: "2022-02-03",
-            events: [
-                {
-                    id: 11,
-                    name: "Cinema with friends",
-                    time: "9PM",
-                    datetime: "2022-02-04T21:00",
-                    href: "#",
-                },
-            ],
-        },
-        { date: "2022-02-04", events: [] },
-        { date: "2022-02-05", events: [] },
-        { date: "2022-02-06", events: [] },
-    ];
-    const selectedDayOld = daysOld.find((day) => day.isSelected);
 </script>
 
 <template>
@@ -515,23 +395,27 @@
                             >{{ day.day }}</time
                         >
 
-                        <!-- <ol v-if="day.events.length > 0" class="mt-2">
+                        <ol v-if="day.events" class="mt-2">
                             <li
                                 v-for="event in day.events.slice(0, 2)"
                                 :key="event.id"
                             >
-                                <a :href="event.href" class="group flex">
+                                <div class="group flex">
                                     <p
                                         class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
                                     >
-                                        {{ event.name }}
+                                        {{ event.title }}
                                     </p>
                                     <time
                                         :datetime="event.datetime"
                                         class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
-                                        >{{ event.time }}</time
+                                        >{{
+                                            DateTime.fromISO(
+                                                String(event.date_time)
+                                            ).toFormat("h:mma")
+                                        }}</time
                                     >
-                                </a>
+                                </div>
                             </li>
                             <li
                                 v-if="day.events.length > 2"
@@ -539,7 +423,7 @@
                             >
                                 + {{ day.events.length - 2 }} more
                             </li>
-                        </ol> -->
+                        </ol>
                     </div>
                 </div>
                 <!-- <div
@@ -597,7 +481,7 @@
                 </div> -->
             </div>
         </div>
-        <div
+        <!-- <div
             v-if="selectedDayOld?.events.length > 0"
             class="py-10 px-4 sm:px-6 lg:hidden"
         >
@@ -631,6 +515,6 @@
                     >
                 </li>
             </ol>
-        </div>
+        </div> -->
     </div>
 </template>
