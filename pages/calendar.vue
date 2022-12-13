@@ -8,9 +8,12 @@
     } from "@heroicons/vue/20/solid/index.js";
     import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
     import { DateTime } from "luxon";
+    import CreateEventModal from "@/components/modals/CreateEventModal.vue";
 
     const client = useSupabaseClient();
     const user = useState("user");
+
+    const createModalOpen = ref(false);
 
     const offset = ref(0);
     const dt = ref(DateTime.now());
@@ -41,29 +44,12 @@
         { id: 7, shortName: "Sun", name: "Sunday" },
     ];
 
-    const eventsOld = ref([
-        {
-            id: 1,
-            name: "Design review",
-            time: "10AM",
-            datetime: "2022-01-03T10:00",
-            href: "#",
-        },
-        {
-            id: 2,
-            name: "Sales meeting",
-            time: "2PM",
-            datetime: "2022-01-03T14:00",
-            href: "#",
-        },
-    ]);
-
     const days = ref([]);
     const events = useState("events", () => []);
 
     const getEvents = async () => {
         await useAsyncData("events", async () => {
-            const { data } = await client.from("events").select();
+            const { data } = await client.from("calendar_events").select();
             // .eq("yard_id", user.value.user_metadata.selected_yard)
 
             events.value = data;
@@ -86,18 +72,29 @@
 
             // add  events from events array
             // TODO: This could be optimised I think.
-            day.events = events.value.filter((e) => {
-                return (
-                    DateTime.fromISO(e.date_time).toLocaleString() ==
-                    day.toLocaleString()
-                );
-            });
+            if (events.value) {
+                day.events = events.value.filter((e) => {
+                    return (
+                        DateTime.fromISO(e.date_time).toLocaleString() ==
+                        day.toLocaleString()
+                    );
+                });
+            }
 
             days.value.push(day);
 
             i++;
         }
     };
+
+    // watch for added events
+    // TODO: have days be stored in useState and add the event
+    // directly to the day when it's created (big optimisation)
+    watchEffect(() => {
+        if (events.value) {
+            setDays();
+        }
+    });
 
     // get days on load
     await getEvents();
@@ -242,6 +239,7 @@
                     </Menu> -->
                     <!-- <div class="ml-6 h-6 w-px bg-gray-300" /> -->
                     <button
+                        @click="() => (createModalOpen = true)"
                         type="button"
                         class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
@@ -518,4 +516,10 @@
             </ol>
         </div> -->
     </div>
+
+    <!-- Modals -->
+    <CreateEventModal
+        :is-open="createModalOpen"
+        @close="createModalOpen = false"
+    />
 </template>
