@@ -9,7 +9,9 @@
     import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
     import { DateTime } from "luxon";
 
+    const offset = ref(0);
     const dt = ref(DateTime.now());
+    const trueDateTime = DateTime.now();
 
     const months = [
         "January",
@@ -36,18 +38,16 @@
         { id: 7, shortName: "Sun", name: "Sunday" },
     ];
 
-    const firstWeekdayOfMonth = dt.value.startOf("month").weekday;
-    const offset = ref(0);
-    const firstDay = ref(
-        dt.value.startOf("month").minus({
-            months: offset.value,
-            days: weekdays.length - firstWeekdayOfMonth,
-        })
-    );
-
     const days = ref([]);
 
     const setDays = () => {
+        const firstWeekdayOfMonth = dt.value.startOf("month").weekday;
+        const firstDay = ref(
+            dt.value.startOf("month").minus({
+                days: 6 - (7 - firstWeekdayOfMonth),
+            })
+        );
+
         let i = 0;
         days.value = [];
 
@@ -62,6 +62,24 @@
 
     // get days on load
     setDays();
+
+    const goToNextMonth = () => {
+        offset.value++;
+        dt.value = DateTime.now().plus({ months: offset.value });
+        setDays();
+    };
+
+    const goToPreviousMonth = () => {
+        offset.value--;
+        dt.value = DateTime.now().plus({ months: offset.value });
+        setDays();
+    };
+
+    const goToCurrentMonth = () => {
+        offset.value = 0;
+        dt.value = DateTime.now().plus({ months: offset.value });
+        setDays();
+    };
 
     // console.log(dt.endOf("month").day);
     // console.log(dt);
@@ -238,6 +256,7 @@
                     class="flex items-center rounded-md shadow-sm md:items-stretch"
                 >
                     <button
+                        @click="() => goToPreviousMonth()"
                         type="button"
                         class="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
                     >
@@ -245,6 +264,7 @@
                         <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
                     </button>
                     <button
+                        @click="() => goToCurrentMonth()"
                         type="button"
                         class="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
                     >
@@ -254,6 +274,7 @@
                         class="relative -mx-px h-5 w-px bg-gray-300 md:hidden"
                     />
                     <button
+                        @click="() => goToNextMonth()"
                         type="button"
                         class="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
                     >
@@ -485,12 +506,15 @@
                         <time
                             :datetime="day.date"
                             :class="
-                                day.day == dt.day && day.month == dt.month
+                                day.day == trueDateTime.day &&
+                                day.month == trueDateTime.month &&
+                                day.year == trueDateTime.year
                                     ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
                                     : undefined
                             "
                             >{{ day.day }}</time
                         >
+
                         <!-- <ol v-if="day.events.length > 0" class="mt-2">
                             <li
                                 v-for="event in day.events.slice(0, 2)"
