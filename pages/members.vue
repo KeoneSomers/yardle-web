@@ -45,7 +45,6 @@
     const yard = useState("yard");
     const members = useState("members");
     const role = useState("role");
-    const newRole = ref(role.value);
 
     // correct way to get joined data
     await useAsyncData("members", async () => {
@@ -57,6 +56,15 @@
 
         members.value = data;
     });
+
+    const handleRoleChange = (memberId, roleId) => {
+        // TODO: 1. change the members role in the db
+
+        // 2. update local members role
+        const index = members.value.map((e) => e.profile.id).indexOf(memberId);
+        console.log(index);
+        members.value[index].role = roleId;
+    };
 </script>
 
 <template>
@@ -145,15 +153,15 @@
                                         <div
                                             class="flex justify-end items-center"
                                         >
-                                            <div>
+                                            <div
+                                                v-if="
+                                                    yard &&
+                                                    member.profile.id !=
+                                                        user.id &&
+                                                    role < 3
+                                                "
+                                            >
                                                 <button
-                                                    v-if="
-                                                        yard &&
-                                                        member.profile.id !=
-                                                            user.id &&
-                                                        member.profile.id !=
-                                                            yard.created_by
-                                                    "
                                                     @click="
                                                         handleDelete(feed.id)
                                                     "
@@ -166,19 +174,23 @@
                                                     </p>
                                                 </button>
                                             </div>
-                                            <Listbox as="div" v-model="newRole">
+                                            <Listbox
+                                                v-if="member.role >= role"
+                                                as="div"
+                                                v-model="member.role"
+                                            >
                                                 <ListboxLabel class="sr-only">
                                                     Change members role
                                                 </ListboxLabel>
                                                 <div class="relative">
                                                     <div
-                                                        class="inline-flex divide-x divide-indigo-600 rounded-md shadow-sm"
+                                                        class="inline-flex divide-x rounded-md shadow-sm"
                                                     >
                                                         <div
-                                                            class="inline-flex divide-x divide-indigo-600 rounded-md shadow-sm"
+                                                            class="inline-flex divide-x rounded-md shadow-sm"
                                                         >
                                                             <div
-                                                                class="inline-flex items-center rounded-l-md border border-transparent bg-indigo-500 py-2 pl-3 pr-4 text-white shadow-sm"
+                                                                class="inline-flex items-center rounded-l-md border border-transparent py-2 pl-3 pr-4 shadow-sm"
                                                             >
                                                                 <p
                                                                     class="text-sm font-medium"
@@ -192,7 +204,7 @@
                                                                 </p>
                                                             </div>
                                                             <ListboxButton
-                                                                class="inline-flex items-center rounded-l-none rounded-r-md bg-indigo-500 p-2 text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                                                                class="inline-flex items-center rounded-l-none rounded-r-md p-2 text-sm font-medium hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                                                             >
                                                                 <span
                                                                     class="sr-only"
@@ -201,7 +213,7 @@
                                                                     status</span
                                                                 >
                                                                 <ChevronDownIcon
-                                                                    class="h-5 w-5 text-white"
+                                                                    class="h-5 w-5"
                                                                     aria-hidden="true"
                                                                 />
                                                             </ListboxButton>
@@ -217,6 +229,14 @@
                                                             class="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                                         >
                                                             <ListboxOption
+                                                                @click="
+                                                                    handleRoleChange(
+                                                                        member
+                                                                            .profile
+                                                                            .id,
+                                                                        roleOption.id
+                                                                    )
+                                                                "
                                                                 as="template"
                                                                 v-for="roleOption in roles"
                                                                 :key="
@@ -228,11 +248,11 @@
                                                             >
                                                                 <li
                                                                     :class="[
-                                                                        roleOption.id ==
-                                                                        role
-                                                                            ? 'text-white bg-indigo-500'
-                                                                            : 'text-gray-900',
-                                                                        'cursor-default select-none p-4 text-sm',
+                                                                        member.role ==
+                                                                        roleOption.id
+                                                                            ? 'text-white bg-indigo-500 hover:bg-indigo-600'
+                                                                            : 'text-gray-900 hover:bg-gray-50',
+                                                                        'cursor-pointer select-none p-4 text-sm',
                                                                     ]"
                                                                 >
                                                                     <div
@@ -244,7 +264,7 @@
                                                                             <p
                                                                                 :class="
                                                                                     member.role ==
-                                                                                    0
+                                                                                    roleOption.id
                                                                                         ? 'font-semibold'
                                                                                         : 'font-normal'
                                                                                 "
@@ -256,10 +276,11 @@
                                                                             <span
                                                                                 v-if="
                                                                                     member.role ==
-                                                                                    0
+                                                                                    roleOption.id
                                                                                 "
                                                                                 :class="
-                                                                                    active
+                                                                                    member.role ==
+                                                                                    roleOption.id
                                                                                         ? 'text-white'
                                                                                         : 'text-indigo-500'
                                                                                 "
@@ -273,7 +294,7 @@
                                                                         <p
                                                                             :class="[
                                                                                 member.role ==
-                                                                                0
+                                                                                roleOption.id
                                                                                     ? 'text-indigo-200'
                                                                                     : 'text-gray-500',
                                                                                 'mt-2',
