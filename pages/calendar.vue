@@ -63,7 +63,8 @@
         const firstWeekdayOfMonth = dt.value.startOf("month").weekday;
         const firstDay = ref(
             dt.value.startOf("month").minus({
-                days: 6 - (7 - firstWeekdayOfMonth),
+                // days: 6 - (7 - firstWeekdayOfMonth),
+                days: firstWeekdayOfMonth - 1,
             })
         );
 

@@ -16,25 +16,25 @@
             id: 1,
             name: "Owner",
             description:
-                "This job posting can be viewed by anyone who has the link.",
+                "Transfer yard ownership to this user. You will then be demoted to Admin.",
         },
         {
             id: 2,
             name: "Admin",
             description:
-                "This job posting will no longer be publicly accessible.",
+                "Admins may create, edit and delete any horses in the yard. They can also manage members.",
         },
         {
             id: 3,
             name: "Member",
             description:
-                "This job posting can be viewed by anyone who has the link.",
+                "Members may create, edit and delete their own horses.",
         },
         {
             id: 4,
             name: "Guest",
             description:
-                "This job posting will no longer be publicly accessible.",
+                "Guests can only view information, but not edit or create.",
         },
     ];
 
