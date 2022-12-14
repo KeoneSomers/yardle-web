@@ -79,21 +79,25 @@
         });
     });
 
-    // Get users role
+    const getMemberRole = async () => {
+        await useAsyncData("role", async () => {
+            const { data: roleData, error: roleError } = await client
+                .from("profiles_yards")
+                .select("role")
+                .eq("profile_id", user.value.id)
+                .eq("yard_id", yard.value.id)
+                .single();
+
+            // todo get role name value (not just the id)
+
+            role.value = roleData.role;
+        });
+    };
+
+    // // Get users role
     watchEffect(async () => {
         if (yard.value) {
-            await useAsyncData("role", async () => {
-                const { data: roleData, error: roleError } = await client
-                    .from("profiles_yards")
-                    .select("role")
-                    .eq("profile_id", user.value.id)
-                    .eq("yard_id", yard.value.id)
-                    .single();
-
-                // todo get role name value (not just the id)
-
-                role.value = roleData.role;
-            });
+            await getMemberRole();
         }
     });
 
@@ -125,29 +129,32 @@
     const getSelectedYardData = async () => {
         if (user.value && user.value.user_metadata.selected_yard) {
             await useAsyncData("yard", async () => {
-                const { data } = await client
+                const { data, error } = await client
                     .from("yards")
                     .select()
                     .eq("id", user.value.user_metadata.selected_yard)
                     .single();
 
                 yard.value = data;
+
+                if (!error) {
+                    // also get users role in this yard
+                    await getMemberRole();
+                }
             });
         } else {
             yard.value = null;
         }
     };
 
-    onMounted(async () => {
-        await getSelectedYardData();
+    await getSelectedYardData();
 
-        watchEffect(async () => {
-            if (user.value && user.value.user_metadata.selected_yard) {
-                await getSelectedYardData();
-            } else {
-                yard.value = null;
-            }
-        });
+    watchEffect(async () => {
+        if (user.value && user.value.user_metadata.selected_yard) {
+            await getSelectedYardData();
+        } else {
+            yard.value = null;
+        }
     });
 
     const sidebarOpen = ref(false);

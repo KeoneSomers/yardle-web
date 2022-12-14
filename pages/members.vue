@@ -184,9 +184,6 @@
                                                 </button>
                                             </div>
                                             <Listbox
-                                                v-if="
-                                                    member.role > 1 && role < 3
-                                                "
                                                 as="div"
                                                 v-model="member.role"
                                             >
@@ -264,6 +261,9 @@
                                                                             ? 'text-white bg-indigo-500 hover:bg-indigo-600'
                                                                             : 'text-gray-900 hover:bg-gray-50',
                                                                         'cursor-pointer select-none p-4 text-sm',
+                                                                        role > 3
+                                                                            ? 'opacity-20 pointer-events-none'
+                                                                            : '',
                                                                     ]"
                                                                 >
                                                                     <div
@@ -282,6 +282,8 @@
                                                                             >
                                                                                 {{
                                                                                     roleOption.name
+                                                                                }}{{
+                                                                                    role
                                                                                 }}
                                                                             </p>
                                                                             <span
