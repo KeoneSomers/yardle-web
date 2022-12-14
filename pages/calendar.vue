@@ -404,7 +404,7 @@
                                 :key="event.id"
                                 :class="
                                     event.all_day
-                                        ? 'bg-gray-300 px-1 rounded'
+                                        ? 'bg-indigo-100 px-1 rounded'
                                         : ''
                                 "
                             >

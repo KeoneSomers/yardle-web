@@ -53,7 +53,7 @@
                 date_time: formattedDateTime,
                 notes: notes.value,
                 all_day: all_day.value,
-                type: event_type.value,
+                type: event_type.value, // TODO: also need yardID
             })
             .select()
             .single();
