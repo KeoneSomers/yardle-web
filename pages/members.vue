@@ -15,8 +15,7 @@
         {
             id: 1,
             name: "Owner",
-            description:
-                "Transfer yard ownership to this user. You will then be demoted to Admin.",
+            description: "The owner has all permissions within this yard.",
         },
         {
             id: 2,
