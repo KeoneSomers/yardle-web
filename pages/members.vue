@@ -1,4 +1,43 @@
 <script setup>
+    import {
+        Listbox,
+        ListboxButton,
+        ListboxLabel,
+        ListboxOption,
+        ListboxOptions,
+    } from "@headlessui/vue";
+    import {
+        CheckIcon,
+        ChevronDownIcon,
+    } from "@heroicons/vue/20/solid/index.js";
+
+    const roles = [
+        {
+            id: 1,
+            name: "Owner",
+            description:
+                "This job posting can be viewed by anyone who has the link.",
+        },
+        {
+            id: 2,
+            name: "Admin",
+            description:
+                "This job posting will no longer be publicly accessible.",
+        },
+        {
+            id: 3,
+            name: "Member",
+            description:
+                "This job posting can be viewed by anyone who has the link.",
+        },
+        {
+            id: 4,
+            name: "Guest",
+            description:
+                "This job posting will no longer be publicly accessible.",
+        },
+    ];
+
     const client = useSupabaseClient();
 
     // since I just need the uid I can use this even though it's not in state
@@ -6,15 +45,17 @@
     const yard = useState("yard");
     const members = useState("members");
     const role = useState("role");
+    const newRole = ref(role.value);
 
+    // correct way to get joined data
     await useAsyncData("members", async () => {
         const { data, error } = await client
-            .from("yards")
-            .select("profiles!profiles_yards(*)")
-            .eq("id", user.value.user_metadata.selected_yard)
-            .single();
+            .from("profiles_yards")
+            .select("profile:profiles(*), role")
+            .eq("yard_id", user.value.user_metadata.selected_yard)
+            .order("role", { ascending: true });
 
-        members.value = data.profiles;
+        members.value = data;
     });
 </script>
 
@@ -38,13 +79,13 @@
                 </button>
             </div>
         </div>
-        <div class="mt-8 flex flex-col">
-            <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="mt-8">
+            <div class="-my-2 -mx-4 sm:-mx-6 lg:-mx-8">
                 <div
                     class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8"
                 >
                     <div
-                        class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
+                        class="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
                     >
                         <table class="w-full divide-y divide-gray-300">
                             <thead class="bg-gray-50">
@@ -64,19 +105,21 @@
                             <tbody class="divide-y divide-gray-200 bg-white">
                                 <tr
                                     v-for="member in members"
-                                    :key="member.id"
+                                    :key="member.profile.id"
                                     class="divide-x divide-gray-200"
                                 >
                                     <td
                                         class="flex items-center py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6 break-all"
                                     >
                                         <div
-                                            v-if="member.avatar_url"
+                                            v-if="member.profile.avatar_url"
                                             class="h-9 w-9 rounded-full overflow-hidden mr-3"
                                         >
                                             <SupabaseImage
                                                 id="avatars"
-                                                :path="member.avatar_url"
+                                                :path="
+                                                    member.profile.avatar_url
+                                                "
                                             />
                                         </div>
                                         <div
@@ -84,26 +127,170 @@
                                             class="h-9 w-9 mr-3 bg-indigo-500 rounded-full flex items-center justify-center text-white"
                                         >
                                             {{
-                                                member.username[0].toUpperCase()
+                                                member.profile.username[0].toUpperCase()
                                             }}
                                         </div>
 
-                                        {{ member.username }}
+                                        {{ member.profile.username }}
+                                        <span
+                                            v-if="user.id == member.profile.id"
+                                            class="ml-2"
+                                        >
+                                            (You)</span
+                                        >
                                     </td>
                                     <td
-                                        class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6 break-all"
+                                        class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
                                     >
-                                        <button
-                                            v-if="
-                                                yard &&
-                                                member.id != user.id &&
-                                                member.id != yard.created_by
-                                            "
-                                            @click="handleDelete(feed.id)"
-                                            class="bg-red-400 rounded px-3 py-1 text-white"
+                                        <div
+                                            class="flex justify-end items-center"
                                         >
-                                            Remove
-                                        </button>
+                                            <div>
+                                                <button
+                                                    v-if="
+                                                        yard &&
+                                                        member.profile.id !=
+                                                            user.id &&
+                                                        member.profile.id !=
+                                                            yard.created_by
+                                                    "
+                                                    @click="
+                                                        handleDelete(feed.id)
+                                                    "
+                                                    class="mr-3 inline-flex items-center rounded-md bg-red-500 p-2 px-3 font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                                                >
+                                                    <p
+                                                        class="text-sm font-medium"
+                                                    >
+                                                        Remove
+                                                    </p>
+                                                </button>
+                                            </div>
+                                            <Listbox as="div" v-model="newRole">
+                                                <ListboxLabel class="sr-only">
+                                                    Change members role
+                                                </ListboxLabel>
+                                                <div class="relative">
+                                                    <div
+                                                        class="inline-flex divide-x divide-indigo-600 rounded-md shadow-sm"
+                                                    >
+                                                        <div
+                                                            class="inline-flex divide-x divide-indigo-600 rounded-md shadow-sm"
+                                                        >
+                                                            <div
+                                                                class="inline-flex items-center rounded-l-md border border-transparent bg-indigo-500 py-2 pl-3 pr-4 text-white shadow-sm"
+                                                            >
+                                                                <p
+                                                                    class="text-sm font-medium"
+                                                                >
+                                                                    {{
+                                                                        roles[
+                                                                            member.role -
+                                                                                1
+                                                                        ].name
+                                                                    }}
+                                                                </p>
+                                                            </div>
+                                                            <ListboxButton
+                                                                class="inline-flex items-center rounded-l-none rounded-r-md bg-indigo-500 p-2 text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                                                            >
+                                                                <span
+                                                                    class="sr-only"
+                                                                    >Change
+                                                                    published
+                                                                    status</span
+                                                                >
+                                                                <ChevronDownIcon
+                                                                    class="h-5 w-5 text-white"
+                                                                    aria-hidden="true"
+                                                                />
+                                                            </ListboxButton>
+                                                        </div>
+                                                    </div>
+
+                                                    <transition
+                                                        leave-active-class="transition ease-in duration-100"
+                                                        leave-from-class="opacity-100"
+                                                        leave-to-class="opacity-0"
+                                                    >
+                                                        <ListboxOptions
+                                                            class="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                                        >
+                                                            <ListboxOption
+                                                                as="template"
+                                                                v-for="roleOption in roles"
+                                                                :key="
+                                                                    roleOption.id
+                                                                "
+                                                                :value="
+                                                                    roleOption.id
+                                                                "
+                                                            >
+                                                                <li
+                                                                    :class="[
+                                                                        roleOption.id ==
+                                                                        role
+                                                                            ? 'text-white bg-indigo-500'
+                                                                            : 'text-gray-900',
+                                                                        'cursor-default select-none p-4 text-sm',
+                                                                    ]"
+                                                                >
+                                                                    <div
+                                                                        class="flex flex-col"
+                                                                    >
+                                                                        <div
+                                                                            class="flex justify-between"
+                                                                        >
+                                                                            <p
+                                                                                :class="
+                                                                                    member.role ==
+                                                                                    0
+                                                                                        ? 'font-semibold'
+                                                                                        : 'font-normal'
+                                                                                "
+                                                                            >
+                                                                                {{
+                                                                                    roleOption.name
+                                                                                }}
+                                                                            </p>
+                                                                            <span
+                                                                                v-if="
+                                                                                    member.role ==
+                                                                                    0
+                                                                                "
+                                                                                :class="
+                                                                                    active
+                                                                                        ? 'text-white'
+                                                                                        : 'text-indigo-500'
+                                                                                "
+                                                                            >
+                                                                                <CheckIcon
+                                                                                    class="h-5 w-5"
+                                                                                    aria-hidden="true"
+                                                                                />
+                                                                            </span>
+                                                                        </div>
+                                                                        <p
+                                                                            :class="[
+                                                                                member.role ==
+                                                                                0
+                                                                                    ? 'text-indigo-200'
+                                                                                    : 'text-gray-500',
+                                                                                'mt-2',
+                                                                            ]"
+                                                                        >
+                                                                            {{
+                                                                                roleOption.description
+                                                                            }}
+                                                                        </p>
+                                                                    </div>
+                                                                </li>
+                                                            </ListboxOption>
+                                                        </ListboxOptions>
+                                                    </transition>
+                                                </div>
+                                            </Listbox>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
