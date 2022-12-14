@@ -58,6 +58,7 @@
     });
 
     const handleRoleChange = async (memberId, roleId) => {
+        // TODO: if roleId == 1 then also need to set old owner as admin
         const { error } = await client
             .from("profiles_yards")
             .update({ role: roleId })
@@ -256,14 +257,33 @@
                                                             >
                                                                 <li
                                                                     :class="[
-                                                                        member.role ==
-                                                                        roleOption.id
-                                                                            ? 'text-white bg-indigo-500 hover:bg-indigo-600'
-                                                                            : 'text-gray-900 hover:bg-gray-50',
-                                                                        'cursor-pointer select-none p-4 text-sm',
-                                                                        role > 3
-                                                                            ? 'opacity-20 pointer-events-none'
-                                                                            : '',
+                                                                        // default styles
+                                                                        'cursor-pointer p-4 text-sm hover:bg-gray-50',
+                                                                        {
+                                                                            // Highlight currenly set role
+                                                                            'text-white bg-indigo-500 pointer-events-none':
+                                                                                member.role ==
+                                                                                roleOption.id,
+                                                                        },
+                                                                        {
+                                                                            // Can't change someones role if you're not owner or admin
+                                                                            'opacity-20 pointer-events-none':
+                                                                                role >
+                                                                                2,
+                                                                        },
+                                                                        {
+                                                                            // Can't promote a member to owner
+                                                                            // TODO: remove this so that owner can be transfered
+                                                                            'opacity-20 pointer-events-none':
+                                                                                roleOption.id ==
+                                                                                1,
+                                                                        },
+                                                                        {
+                                                                            // Can't change owners role!
+                                                                            'opacity-20 pointer-events-none':
+                                                                                member.role ==
+                                                                                1,
+                                                                        },
                                                                     ]"
                                                                 >
                                                                     <div
@@ -282,8 +302,6 @@
                                                                             >
                                                                                 {{
                                                                                     roleOption.name
-                                                                                }}{{
-                                                                                    role
                                                                                 }}
                                                                             </p>
                                                                             <span
