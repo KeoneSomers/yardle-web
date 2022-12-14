@@ -15,11 +15,16 @@
     const user = useState("user");
     const events = useState("events");
 
+    const { data: eventTypes, error: eventTypesError } = await client
+        .from("calendar_event_types")
+        .select();
+
     const title = ref("");
     const date = ref("");
     const time = ref("");
     const notes = ref("");
     const all_day = ref(false);
+    const event_type = ref(1);
 
     const error = ref("");
 
@@ -48,6 +53,7 @@
                 date_time: formattedDateTime,
                 notes: notes.value,
                 all_day: all_day.value,
+                type: event_type.value,
             })
             .select()
             .single();
@@ -130,6 +136,26 @@
                                             required
                                         />
                                     </div>
+                                </div>
+
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700"
+                                        >Event Type</label
+                                    >
+                                    <select
+                                        v-model="event_type"
+                                        required
+                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    >
+                                        <option
+                                            v-for="eventType in eventTypes"
+                                            :key="eventType.id"
+                                            :value="eventType.id"
+                                        >
+                                            {{ eventType.type }}
+                                        </option>
+                                    </select>
                                 </div>
 
                                 <div>
