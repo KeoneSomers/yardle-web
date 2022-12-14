@@ -162,6 +162,7 @@
                                         <div
                                             class="flex justify-end items-center"
                                         >
+                                            <!-- TODO: only show this button if user is admin or owner and member.role is > role -->
                                             <div
                                                 v-if="
                                                     yard &&
