@@ -57,13 +57,22 @@
         members.value = data;
     });
 
-    const handleRoleChange = (memberId, roleId) => {
-        // TODO: 1. change the members role in the db
+    const handleRoleChange = async (memberId, roleId) => {
+        const { error } = await client
+            .from("profiles_yards")
+            .update({ role: roleId })
+            .eq("profile_id", memberId)
+            .eq("yard_id", yard.value.id);
 
-        // 2. update local members role
-        const index = members.value.map((e) => e.profile.id).indexOf(memberId);
-        console.log(index);
-        members.value[index].role = roleId;
+        if (!error) {
+            // now update local members role
+            const index = members.value
+                .map((e) => e.profile.id)
+                .indexOf(memberId);
+            members.value[index].role = roleId;
+        } else {
+            console.log(error);
+        }
     };
 </script>
 
@@ -175,7 +184,9 @@
                                                 </button>
                                             </div>
                                             <Listbox
-                                                v-if="member.role >= role"
+                                                v-if="
+                                                    member.role > 1 && role < 3
+                                                "
                                                 as="div"
                                                 v-model="member.role"
                                             >
