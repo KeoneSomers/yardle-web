@@ -28,7 +28,7 @@
         let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
 
         // build time
-        if (time.value) {
+        if (time.value && !all_day) {
             const h = time.value.split(":")[0];
             const m = time.value.split(":")[1];
 
@@ -135,6 +135,23 @@
                                 <div>
                                     <label
                                         class="block text-sm font-medium text-gray-700"
+                                        >All day</label
+                                    >
+                                    <div class="relative flex items-start mt-1">
+                                        <div class="flex h-5 items-center">
+                                            <input
+                                                v-model="all_day"
+                                                id="all_day"
+                                                type="checkbox"
+                                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700"
                                         >Date</label
                                     >
                                     <div class="mt-1">
@@ -147,7 +164,7 @@
                                     </div>
                                 </div>
 
-                                <div>
+                                <div v-if="!all_day">
                                     <label
                                         class="block text-sm font-medium text-gray-700"
                                         >Time</label

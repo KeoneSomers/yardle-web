@@ -6,6 +6,7 @@
         DialogPanel,
         DialogTitle,
     } from "@headlessui/vue";
+    import { DateTime } from "luxon";
 
     const props = defineProps(["isOpen", "horse"]);
     const { horse } = toRefs(props);
@@ -44,6 +45,7 @@
             const index = horses.value.map((e) => e.id).indexOf(horse.value.id);
             horses.value[index].name = horse.value.name;
             horses.value[index].avatar_url = horse.value.avatar_url;
+            horses.value[index].updated_at = DateTime.now();
             emits("close");
         } else {
             error.value = createError.message + createError.hint;

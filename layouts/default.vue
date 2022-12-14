@@ -274,6 +274,34 @@
                                 </nav>
                             </div>
                             <div
+                                v-if="yard"
+                                class="flex flex-shrink-0 border-t border-gray-200 p-4"
+                            >
+                                <div
+                                    class="group block w-full flex-shrink-0 pointer-events-none"
+                                >
+                                    <div class="ml-3">
+                                        <p
+                                            class="text-sm font-medium text-gray-700 group-hover:text-gray-900 truncate overflow-hidden"
+                                        >
+                                            {{ yard.name }}
+                                        </p>
+
+                                        <p
+                                            class="text-xs font-medium text-gray-500 group-hover:text-gray-700"
+                                        >
+                                            <span
+                                                v-if="
+                                                    yard.created_by == user.id
+                                                "
+                                                >Owner</span
+                                            >
+                                            <span v-else>Member</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
                                 class="flex flex-shrink-0 border-t border-gray-200 p-4"
                             >
                                 <NuxtLink
@@ -292,8 +320,9 @@
                                                 v-else
                                                 class="h-9 w-9 bg-indigo-500 rounded-full flex items-center justify-center text-white"
                                             >
-                                                <!-- TODO: this should not be hardcoded! -->
-                                                KS
+                                                {{
+                                                    profile.username[0].toUpperCase()
+                                                }}
                                             </div>
                                         </div>
                                         <div class="ml-3">
@@ -486,7 +515,6 @@
                                         v-else
                                         class="h-9 w-9 bg-indigo-500 rounded-full flex items-center justify-center text-white"
                                     >
-                                        <!-- TODO: this should not be hardcoded! -->
                                         {{ profile.username[0].toUpperCase() }}
                                     </div>
                                 </div>

@@ -28,11 +28,19 @@
         },
         {
             title: "Last Vaccination",
-            value: "-",
+            value: "--",
         },
         {
             title: "Date of Birth",
+            value: "--",
+        },
+        {
+            title: "Breed",
             value: "",
+        },
+        {
+            title: "Color & Markings",
+            value: horse.value.color_markings,
         },
     ]);
 
@@ -43,6 +51,18 @@
             ).toLocaleString(DateTime.DATE_MED);
         } else {
             fields.value[4].value = "--";
+        }
+
+        if (horse.value.breed) {
+            fields.value[5].value = horse.value.breed;
+        } else {
+            fields.value[5].value = "--";
+        }
+
+        if (horse.value.color_markings) {
+            fields.value[6].value = horse.value.color_markings;
+        } else {
+            fields.value[6].value = "--";
         }
     });
 </script>

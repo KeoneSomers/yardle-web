@@ -1,6 +1,7 @@
 <script setup>
     import { MagnifyingGlassIcon } from "@heroicons/vue/20/solid/index.js";
     import CreateHorseModal from "@/components/modals/CreateHorseModal.vue";
+    import { DateTime } from "luxon";
 
     const client = useSupabaseClient();
     const user = useState("user");
@@ -191,7 +192,20 @@
                                         <p
                                             class="truncate text-sm text-gray-500"
                                         >
-                                            {{ horse.created_at }}
+                                            <span v-if="!horse.updated_at">
+                                                {{
+                                                    `Created ${DateTime.fromISO(
+                                                        horse.created_at
+                                                    ).toRelativeCalendar()}`
+                                                }}
+                                            </span>
+                                            <span v-else>
+                                                {{
+                                                    `Updated ${DateTime.fromISO(
+                                                        horse.updated_at
+                                                    ).toRelativeCalendar()}`
+                                                }}
+                                            </span>
                                         </p>
                                     </a>
                                 </div>

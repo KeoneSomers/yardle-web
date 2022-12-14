@@ -49,7 +49,10 @@
 
     const getEvents = async () => {
         await useAsyncData("events", async () => {
-            const { data } = await client.from("calendar_events").select();
+            const { data } = await client
+                .from("calendar_events")
+                .select()
+                .order("all_day", { ascending: false });
             // .eq("yard_id", user.value.user_metadata.selected_yard)
 
             events.value = data;
@@ -396,8 +399,14 @@
 
                         <ol v-if="day.events" class="mt-2">
                             <li
+                                @contextmenu.prevent="handler"
                                 v-for="event in day.events.slice(0, 2)"
                                 :key="event.id"
+                                :class="
+                                    event.all_day
+                                        ? 'bg-gray-300 px-1 rounded'
+                                        : ''
+                                "
                             >
                                 <div class="group flex">
                                     <p
@@ -408,12 +417,16 @@
                                     <time
                                         :datetime="event.datetime"
                                         class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
-                                        >{{
-                                            DateTime.fromISO(
-                                                String(event.date_time)
-                                            ).toFormat("h:mma")
-                                        }}</time
                                     >
+                                        <span v-if="!event.all_day">
+                                            {{
+                                                DateTime.fromISO(
+                                                    String(event.date_time)
+                                                ).toFormat("h:mma")
+                                            }}
+                                        </span>
+                                        <span v-else> All Day </span>
+                                    </time>
                                 </div>
                             </li>
                             <li
