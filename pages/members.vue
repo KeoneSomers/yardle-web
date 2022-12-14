@@ -162,13 +162,11 @@
                                         <div
                                             class="flex justify-end items-center"
                                         >
-                                            <!-- TODO: only show this button if user is admin or owner and member.role is > role -->
+                                            <!-- Only show this button if user is admin or owner and member.role is > role -->
                                             <div
                                                 v-if="
-                                                    yard &&
-                                                    member.profile.id !=
-                                                        user.id &&
-                                                    role < 3
+                                                    role < 3 &&
+                                                    member.role > role
                                                 "
                                             >
                                                 <button
