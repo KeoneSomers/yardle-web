@@ -59,6 +59,16 @@
     const client = useSupabaseClient();
     const router = useRouter();
     const user = useState("user");
+    const yard = useState("yard", () => null);
+    const role = useState("role", () => 0);
+
+    // TODO: this should pull from db
+    const roles = [
+        { id: 1, name: "Owner" },
+        { id: 2, name: "Admin" },
+        { id: 3, name: "Member" },
+        { id: 4, name: "Guest" },
+    ];
 
     // watch for auth changes
     onMounted(() => {
@@ -67,6 +77,24 @@
                 navigateTo("/");
             }
         });
+    });
+
+    // Get users role
+    watchEffect(async () => {
+        if (yard.value) {
+            await useAsyncData("role", async () => {
+                const { data: roleData, error: roleError } = await client
+                    .from("profiles_yards")
+                    .select("role")
+                    .eq("profile_id", user.value.id)
+                    .eq("yard_id", yard.value.id)
+                    .single();
+
+                // todo get role name value (not just the id)
+
+                role.value = roleData.role;
+            });
+        }
     });
 
     const handleUnselectYard = async () => {
@@ -93,8 +121,6 @@
             .single();
         return data;
     });
-
-    const yard = ref(null);
 
     const getSelectedYardData = async () => {
         if (user.value && user.value.user_metadata.selected_yard) {
@@ -486,12 +512,10 @@
                                 </p>
 
                                 <p
+                                    v-if="role"
                                     class="text-xs font-medium text-gray-500 group-hover:text-gray-700"
                                 >
-                                    <span v-if="yard.created_by == user.id"
-                                        >Owner</span
-                                    >
-                                    <span v-else>Member</span>
+                                    {{ roles[role - 1].name }}
                                 </p>
                             </div>
                         </div>

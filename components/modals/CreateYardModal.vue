@@ -41,6 +41,7 @@
                     {
                         profile_id: user.value.id,
                         yard_id: newYard.id,
+                        role: 1,
                     },
                 ]);
 
