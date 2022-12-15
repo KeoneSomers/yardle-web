@@ -20,7 +20,6 @@
     const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
     const copyLinkToClipboard = async () => {
-        // coinst link = `http://localhost:3000/join/${yard.value.invite_code}`
         await navigator.clipboard.writeText(link.value);
         copyButtonText.value = "Copied!";
         await delay(2000);
