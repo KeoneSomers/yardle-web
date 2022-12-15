@@ -176,6 +176,7 @@
                                             <!-- Only show this button if user is admin or owner and member.role is > role -->
                                             <div
                                                 v-if="
+                                                    role &&
                                                     role < 3 &&
                                                     member.role > role
                                                 "

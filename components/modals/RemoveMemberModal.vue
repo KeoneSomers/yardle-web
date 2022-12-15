@@ -15,6 +15,12 @@
     const yard = useState("yard");
 
     const handleDelete = async () => {
+        // this needs to be done on the server since it's an admin function
+        const { result } = await $fetch("/api/removeUsersSelectedYard", {
+            method: "post",
+            body: { memberId: props.memberId },
+        });
+
         const { error } = await client
             .from("profiles_yards")
             .delete()
