@@ -1,4 +1,5 @@
 <script setup>
+    import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
     import {
         Listbox,
         ListboxButton,
@@ -44,6 +45,14 @@
     const yard = useState("yard");
     const members = useState("members");
     const role = useState("role");
+
+    const removeMemberModalOpen = ref(false);
+    const memberToRemove = ref(0);
+
+    const handleRemoveMember = (memberId) => {
+        memberToRemove.value = memberId;
+        removeMemberModalOpen.value = true;
+    };
 
     // correct way to get joined data
     await useAsyncData("members", async () => {
@@ -171,7 +180,9 @@
                                             >
                                                 <button
                                                     @click="
-                                                        handleDelete(feed.id)
+                                                        handleRemoveMember(
+                                                            member.profile.id
+                                                        )
                                                     "
                                                     class="mr-3 inline-flex items-center rounded-md bg-red-500 p-2 px-3 font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                                                 >
@@ -350,4 +361,11 @@
             </div>
         </div>
     </div>
+
+    <!-- Modals -->
+    <RemoveMemberModal
+        :is-open="removeMemberModalOpen"
+        :member-id="memberToRemove"
+        @close="removeMemberModalOpen = false"
+    />
 </template>
