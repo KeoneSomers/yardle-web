@@ -49,12 +49,12 @@
                     </h2>
                 </div>
                 <div class="mt-4 flex md:mt-0 md:ml-4">
-                    <button
+                    <!-- <button
                         type="button"
                         class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         Join a Yard
-                    </button>
+                    </button> -->
                     <button
                         @click="isOpen = true"
                         type="button"
@@ -69,13 +69,21 @@
                     <div
                         v-for="yard in yards"
                         :key="yard.id"
-                        class="border my-3 rounded-xl bg-gray-50 overflow-hidden"
+                        class="border my-3 rounded-xl bg-gray-50 overflow-hidden flex items-center"
                     >
                         <div
                             @click="handleSelectYard(yard.id)"
-                            class="p-4 cursor-pointer hover:bg-white"
+                            class="flex-1 p-4 cursor-pointer hover:bg-white"
                         >
                             {{ yard.name }}
+                        </div>
+                        <!-- TODO: this should be based off role and not created_by -->
+                        <div v-if="yard.created_by != user.id">
+                            <button
+                                class="bg-red-500 mr-4 text-white rounded py-2 px-3"
+                            >
+                                Leave Yard
+                            </button>
                         </div>
                     </div>
                 </div>
