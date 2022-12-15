@@ -34,7 +34,25 @@
 
     const handleJoinYard = async () => {
         // TODO: if user is already a member of this yard, redirect them to the /horses page
-        console.log("Joining yard!");
+        await useAsyncData("existingMember", async () => {
+            const { data: existingMember, error: fetchError } = await client
+                .from("profiles_yards")
+                .select()
+                .eq("yard_id", yard.value.id)
+                .eq("profile_id", user.value.id)
+                .single();
+
+            if (existingMember) {
+                if (existingMember.is_banned == true) {
+                    error.value = "You have been banned from this yard.";
+                } else {
+                    error.value = "You are already a member of this yard.";
+                }
+            } else {
+                // no issues - join the yard
+                console.log("Joining yard!");
+            }
+        });
     };
 </script>
 
