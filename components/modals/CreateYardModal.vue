@@ -36,8 +36,8 @@
             .select()
             .single();
 
-        // step 2: create the user/yard relationship
         if (!createError) {
+            // step 2: create the user/yard relationship
             const { error: relError } = await client
                 .from("profiles_yards")
                 .insert([
