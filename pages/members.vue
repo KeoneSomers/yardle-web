@@ -1,5 +1,6 @@
 <script setup>
     import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
+    import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
     import {
         Listbox,
         ListboxButton,
@@ -46,6 +47,7 @@
     const members = useState("members");
     const role = useState("role");
 
+    const inviteLinkModalOpen = ref(false);
     const removeMemberModalOpen = ref(false);
     const memberToRemove = ref(0);
 
@@ -97,7 +99,7 @@
             </div>
             <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                 <button
-                    @click="() => (createModalOpen = true)"
+                    @click="() => (inviteLinkModalOpen = true)"
                     type="button"
                     class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                 >
@@ -367,5 +369,9 @@
         :is-open="removeMemberModalOpen"
         :member-id="memberToRemove"
         @close="removeMemberModalOpen = false"
+    />
+    <InviteLinkModal
+        :is-open="inviteLinkModalOpen"
+        @close="inviteLinkModalOpen = false"
     />
 </template>
