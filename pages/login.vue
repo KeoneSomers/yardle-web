@@ -1,14 +1,12 @@
 <script setup>
     definePageMeta({
-        layout: "annon",
+        layout: "blank",
     });
 
     const router = useRouter();
 
     // invite code if there is one (could also be undefined or null)
     const { invite_code } = router.currentRoute.value.query;
-
-    console.log(invite_code);
 
     const supabase = useSupabaseAuthClient();
 
@@ -24,11 +22,18 @@
                 password: password.value,
             });
 
-            if (data) {
-                // console.log(data);
-            }
-
-            if (error) {
+            if (!error) {
+                if (!invite_code) {
+                    if (data.user.user_metadata.selected_yard) {
+                        navigateTo("/horses");
+                    } else {
+                        navigateTo("/yards");
+                    }
+                } else {
+                    // navigate user back to joining a yard
+                    navigateTo("/join/" + invite_code);
+                }
+            } else {
                 errorMessage.value = error.message;
                 console.log(error);
             }

@@ -15,7 +15,6 @@ export default defineNuxtRouteMiddleware((to) => {
 
         // visiter is trying to access NON-AUTH pages
         if (nonProtectedPages.includes(to.path)) {
-            console.log(to.path);
             if (isLoggedIn) {
                 if (hasSelectedYard) {
                     navigateTo("/horses");

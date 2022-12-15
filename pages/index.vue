@@ -7,15 +7,23 @@
     } from "@heroicons/vue/24/outline/index.js";
 
     definePageMeta({
-        layout: "annon",
+        layout: "blank",
     });
 
-    // const navigation = [
-    //     { name: "Product", href: "#" },
-    //     { name: "Features", href: "#" },
-    //     { name: "Marketplace", href: "#" },
-    //     { name: "Company", href: "#" },
-    // ];
+    const user = useState("user");
+
+    // watch for auth changes
+    onMounted(() => {
+        watchEffect(() => {
+            if (user.value) {
+                if (user.value.user_metadata.selected_yard) {
+                    navigateTo("/horses");
+                } else {
+                    navigateTo("/yards");
+                }
+            }
+        });
+    });
 
     const mobileMenuOpen = ref(false);
 
