@@ -3,6 +3,13 @@
         layout: "annon",
     });
 
+    const router = useRouter();
+
+    // invite code if there is one (could also be undefined or null)
+    const { invite_code } = router.currentRoute.value.query;
+
+    console.log(invite_code);
+
     const supabase = useSupabaseAuthClient();
 
     const email = ref("");
