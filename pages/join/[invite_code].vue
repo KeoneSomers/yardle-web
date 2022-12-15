@@ -7,11 +7,12 @@
     const user = useSupabaseUser();
     const yard = ref(null);
     const client = useSupabaseClient();
+    const error = ref("");
 
     // first get some basic info about the yard from the db
     const getBasicYardData = async () => {
         await useAsyncData("yardBasic", async () => {
-            const { data, error } = await client
+            const { data, error: fetchError } = await client
                 .from("yards")
                 .select("id, name")
                 .eq("invite_code", invite_code)
@@ -31,7 +32,10 @@
         });
     });
 
-    // TODO: if user is already a member of this yard, redirect them to the /horses page
+    const handleJoinYard = async () => {
+        // TODO: if user is already a member of this yard, redirect them to the /horses page
+        console.log("Joining yard!");
+    };
 </script>
 
 <template>
@@ -42,7 +46,20 @@
                     yard.name
                 }}</span>
             </div>
-            <div v-if="user">You're logged in!</div>
+            <div v-if="user">
+                <button
+                    @click="handleJoinYard"
+                    class="bg-indigo-500 hover:bg-indigo-600 p-4 rounded text-white w-full"
+                >
+                    Join
+                </button>
+                <div
+                    v-if="error"
+                    class="text-red-500 bg-red-50 mt-3 p-2 border rounded-lg border-red-100"
+                >
+                    {{ error }}
+                </div>
+            </div>
             <div v-else>
                 <div>
                     <p>
