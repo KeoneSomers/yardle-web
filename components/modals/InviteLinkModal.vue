@@ -11,11 +11,20 @@
 
     const yard = useState("yard");
     const copyButtonText = ref("Copy");
+    const link = ref("");
+
+    onMounted(() => {
+        link.value = `${window.location.origin}/join/${yard.value.invite_code}`;
+    });
+
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
     const copyLinkToClipboard = async () => {
-        const link = `https://www.yardle.com.join/${yard.value.invite_code}`;
-        await navigator.clipboard.writeText(link);
+        // coinst link = `http://localhost:3000/join/${yard.value.invite_code}`
+        await navigator.clipboard.writeText(link.value);
         copyButtonText.value = "Copied!";
+        await delay(2000);
+        copyButtonText.value = "Copy";
     };
 </script>
 
@@ -68,10 +77,7 @@
                                         <input
                                             readonly
                                             type="text"
-                                            :value="
-                                                'www.yardle.com/join/' +
-                                                yard.invite_code
-                                            "
+                                            :value="link"
                                             class="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                         />
                                     </div>
