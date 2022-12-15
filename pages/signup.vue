@@ -3,6 +3,10 @@
         layout: "blank",
     });
 
+    const router = useRouter();
+    // invite code if there is one (could also be undefined or null)
+    const { invite_code } = router.currentRoute.value.query;
+
     const client = useSupabaseAuthClient();
 
     const username = ref("");
@@ -29,14 +33,15 @@
                     });
 
                     if (!error) {
-                        console.log(data);
-
-                        // TODO: first prompt the user to confirm their email
-                        // await navigateTo("/horses");
+                        // success! redirect the user
+                        if (!invite_code) {
+                            navigateTo("/yards");
+                        } else {
+                            // navigate user back to joining a yard
+                            navigateTo("/join/" + invite_code);
+                        }
                     } else {
-                        console.log(error.name);
-                        console.log(error.cause);
-                        console.log(error.message);
+                        console.log(error);
                         errorMessage.value = error.message;
                     }
                 } else {
