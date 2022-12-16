@@ -105,7 +105,15 @@
             .single();
 
         if (!createError) {
-            // TODO: step 2: create horses relationships
+            // step 2: create horses relationships
+            const { error: horseRelError } = await client
+                .from("calendar_events_horses")
+                .insert(
+                    selectedHorses.value.map(({ id }) => ({
+                        horse_id: id,
+                        calendar_event_id: newEvent.id,
+                    }))
+                );
 
             // step 3: update local state
             if (events.value) {
@@ -411,7 +419,6 @@
                                     <div class="mt-1">
                                         <textarea
                                             rows="4"
-                                            type="time"
                                             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                             v-model="notes"
                                         />
