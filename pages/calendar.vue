@@ -441,11 +441,7 @@
                                     </button>
                                     <!-- This will be the content of the popover -->
                                     <template #popper>
-                                        <div
-                                            class="bg-white shadow rounded-lg w-96 p-5"
-                                        >
-                                            event component here 1
-                                        </div>
+                                        <EventCard :event="event" />
                                     </template>
                                 </VDropdown>
                             </li>
@@ -465,13 +461,6 @@
                                         <div
                                             class="bg-white shadow rounded-lg w-64 py-5"
                                         >
-                                            <!-- <p>
-                                                {{
-                                                    day.toLocaleString(
-                                                        DateTime.DATE_MED_WITH_WEEKDAY
-                                                    )
-                                                }}
-                                            </p> -->
                                             <div>
                                                 <ol>
                                                     <li
@@ -532,13 +521,11 @@
                                                             </button>
                                                             <!-- This will be the content of the popover -->
                                                             <template #popper>
-                                                                <div
-                                                                    class="bg-white shadow rounded-lg w-96 p-5"
-                                                                >
-                                                                    event
-                                                                    component
-                                                                    here 2
-                                                                </div>
+                                                                <EventCard
+                                                                    :event="
+                                                                        event
+                                                                    "
+                                                                />
                                                             </template>
                                                         </VDropdown>
                                                     </li>
