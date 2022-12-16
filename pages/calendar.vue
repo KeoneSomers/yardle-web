@@ -6,7 +6,15 @@
         ClockIcon,
         EllipsisHorizontalIcon,
     } from "@heroicons/vue/20/solid/index.js";
-    import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+    import {
+        Menu,
+        MenuButton,
+        MenuItem,
+        MenuItems,
+        Popover,
+        PopoverButton,
+        PopoverPanel,
+    } from "@headlessui/vue";
     import { DateTime } from "luxon";
     import CreateEventModal from "@/components/modals/CreateEventModal.vue";
 
@@ -400,7 +408,6 @@
 
                         <ol v-if="day.events" class="mt-2">
                             <li
-                                @contextmenu.prevent="handler"
                                 v-for="event in day.events.slice(0, 2)"
                                 :key="event.id"
                                 :class="
@@ -434,7 +441,78 @@
                                 v-if="day.events.length > 2"
                                 class="text-gray-500"
                             >
-                                + {{ day.events.length - 2 }} more
+                                <VDropdown>
+                                    <!-- This will be the popover target (for the events and position) -->
+                                    <button>
+                                        + {{ day.events.length - 2 }} more
+                                    </button>
+                                    <!-- This will be the content of the popover -->
+                                    <template #popper>
+                                        <div
+                                            class="bg-white shadow rounded-lg w-64 p-5"
+                                        >
+                                            <!-- <p>
+                                                {{
+                                                    day.toLocaleString(
+                                                        DateTime.DATE_MED_WITH_WEEKDAY
+                                                    )
+                                                }}
+                                            </p> -->
+                                            <div>
+                                                <ol>
+                                                    <li
+                                                        v-for="event in day.events.slice(
+                                                            2,
+                                                            day.events.lenth
+                                                        )"
+                                                        :key="event.id"
+                                                        :class="
+                                                            event.all_day
+                                                                ? 'bg-indigo-100 px-1 rounded'
+                                                                : ''
+                                                        "
+                                                        class="mb-1"
+                                                    >
+                                                        <div class="group flex">
+                                                            <p
+                                                                class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
+                                                            >
+                                                                {{
+                                                                    event.title
+                                                                }}
+                                                            </p>
+                                                            <time
+                                                                :datetime="
+                                                                    event.datetime
+                                                                "
+                                                                class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
+                                                            >
+                                                                <span
+                                                                    v-if="
+                                                                        !event.all_day
+                                                                    "
+                                                                >
+                                                                    {{
+                                                                        DateTime.fromISO(
+                                                                            String(
+                                                                                event.date_time
+                                                                            )
+                                                                        ).toFormat(
+                                                                            "h:mma"
+                                                                        )
+                                                                    }}
+                                                                </span>
+                                                                <span v-else>
+                                                                    All Day
+                                                                </span>
+                                                            </time>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </VDropdown>
                             </li>
                         </ol>
                     </div>
