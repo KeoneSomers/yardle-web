@@ -52,8 +52,8 @@
             const { data } = await client
                 .from("calendar_events")
                 .select()
-                .order("all_day", { ascending: false });
-            // .eq("yard_id", user.value.user_metadata.selected_yard)
+                .order("all_day", { ascending: false })
+                .eq("yard_id", user.value.user_metadata.selected_yard);
 
             events.value = data;
         });

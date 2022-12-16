@@ -14,6 +14,7 @@
     const client = useSupabaseClient();
     const user = useState("user");
     const events = useState("events");
+    const yard = useState("yard");
 
     const { data: eventTypes, error: eventTypesError } = await client
         .from("calendar_event_types")
@@ -43,7 +44,6 @@
             });
         }
 
-        console.log(formattedDateTime.toLocaleString(DateTime.DATETIME_FULL));
         // step 1: create the event in the database
         const { data: newEvent, error: createError } = await client
             .from("calendar_events")
@@ -53,7 +53,8 @@
                 date_time: formattedDateTime,
                 notes: notes.value,
                 all_day: all_day.value,
-                type: event_type.value, // TODO: also need yardID
+                type: event_type.value,
+                yard_id: yard.value.id,
             })
             .select()
             .single();
