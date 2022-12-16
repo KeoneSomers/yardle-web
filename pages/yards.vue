@@ -35,6 +35,23 @@
 
         navigateTo("/horses");
     };
+
+    // Todo - Need a warning modal
+    const handleLeaveYard = async (yardId) => {
+        const { error } = await client
+            .from("profiles_yards")
+            .delete()
+            .eq("profile_id", user.value.id)
+            .eq("yard_id", yardId);
+
+        if (!error) {
+            // success! - now remove the yard from the webpage
+            const i = yards.value.map((e) => e.id).indexOf(yardId);
+            yards.value.splice(i, 1);
+        } else {
+            console.log(error);
+        }
+    };
 </script>
 
 <template>
@@ -80,6 +97,7 @@
                         <!-- TODO: this should be based off role and not created_by -->
                         <div v-if="yard.created_by != user.id">
                             <button
+                                @click="handleLeaveYard(yard.id)"
                                 class="bg-red-500 mr-4 text-white rounded py-2 px-3"
                             >
                                 Leave Yard

@@ -28,7 +28,7 @@
             .eq("yard_id", yard.value.id);
 
         if (!error) {
-            // success! - now remove the deleted rug from the webpage
+            // success! - now remove the member from the webpage
             const index = members.value
                 .map((e) => e.profile.id)
                 .indexOf(props.memberId);
