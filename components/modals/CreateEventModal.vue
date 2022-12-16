@@ -5,16 +5,61 @@
         Dialog,
         DialogPanel,
         DialogTitle,
+        Combobox,
+        ComboboxButton,
+        ComboboxInput,
+        ComboboxLabel,
+        ComboboxOption,
+        ComboboxOptions,
     } from "@headlessui/vue";
     import { DateTime } from "luxon";
+    import {
+        CheckIcon,
+        ChevronUpDownIcon,
+    } from "@heroicons/vue/20/solid/index.js";
 
-    defineProps(["isOpen"]);
+    const props = defineProps(["isOpen"]);
     const emits = defineEmits(["close"]);
 
     const client = useSupabaseClient();
     const user = useState("user");
     const events = useState("events");
     const yard = useState("yard");
+    const horses = useState("horses");
+
+    await useAsyncData("horses", async () => {
+        const { data } = await client
+            .from("horses")
+            .select()
+            .eq("yard_id", user.value.user_metadata.selected_yard)
+            .order("name", { ascending: true });
+
+        horses.value = data;
+    });
+
+    // horse combobox refs
+    const query = ref("");
+    const selectedHorse = ref(null);
+    const filteredHorses = computed(() =>
+        query.value === ""
+            ? horses.value
+            : horses.value.filter((horse) => {
+                  return horse.name
+                      .toLowerCase()
+                      .includes(query.value.toLowerCase());
+              })
+    );
+    const selectedHorses = ref([]);
+
+    // watch for combobox value changed
+    watchEffect(() => {
+        if (selectedHorse.value) {
+            // if not already added
+            if (!selectedHorses.value.includes(selectedHorse.value)) {
+                selectedHorses.value.push(selectedHorse.value);
+            }
+        }
+    });
 
     const { data: eventTypes, error: eventTypesError } = await client
         .from("calendar_event_types")
@@ -81,6 +126,19 @@
             error.value = createError.message + createError.hint;
         }
     };
+
+    // reset fields on open
+    watchEffect(() => {
+        if (props.isOpen) {
+            selectedHorses.value = [];
+            selectedHorse.value = null;
+            title.value = "";
+            date.value = "";
+            time.value = "";
+            notes.value = "";
+            all_day.value = false;
+        }
+    });
 </script>
 
 <template>
@@ -176,32 +234,172 @@
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-gray-700"
-                                        >Date</label
-                                    >
-                                    <div class="mt-1">
-                                        <input
-                                            type="date"
-                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                            v-model="date"
-                                            required
-                                        />
+                                <div class="flex space-x-2">
+                                    <div class="flex-1">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700"
+                                            >Date</label
+                                        >
+                                        <div class="mt-1">
+                                            <input
+                                                type="date"
+                                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                v-model="date"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div v-if="!all_day" class="flex-1">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700"
+                                            >Time</label
+                                        >
+                                        <div class="mt-1">
+                                            <input
+                                                type="time"
+                                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                v-model="time"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div v-if="!all_day">
-                                    <label
-                                        class="block text-sm font-medium text-gray-700"
-                                        >Time</label
+                                <div>
+                                    <Combobox
+                                        as="div"
+                                        class="mb-3"
+                                        v-model="selectedHorse"
                                     >
-                                    <div class="mt-1">
-                                        <input
-                                            type="time"
-                                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                            v-model="time"
-                                        />
+                                        <ComboboxLabel
+                                            class="block text-sm font-medium text-gray-700"
+                                            >Horses</ComboboxLabel
+                                        >
+                                        <div class="relative mt-1">
+                                            <ComboboxInput
+                                                class="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                                                @change="
+                                                    query = $event.target.value
+                                                "
+                                                placeholder="Start typing the name of the horse you want to add..."
+                                            />
+                                            <ComboboxButton
+                                                class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
+                                            >
+                                                <ChevronUpDownIcon
+                                                    class="h-5 w-5 text-gray-400"
+                                                    aria-hidden="true"
+                                                />
+                                            </ComboboxButton>
+
+                                            <ComboboxOptions
+                                                v-if="filteredHorses.length > 0"
+                                                class="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                                            >
+                                                <ComboboxOption
+                                                    v-for="horse in filteredHorses"
+                                                    :key="horse.id"
+                                                    :value="horse"
+                                                    as="template"
+                                                    v-slot="{
+                                                        active,
+                                                        selected,
+                                                    }"
+                                                >
+                                                    <li
+                                                        :class="[
+                                                            'relative cursor-default select-none py-2 pl-3 pr-9',
+                                                            active
+                                                                ? 'bg-indigo-600 text-white'
+                                                                : 'text-gray-900',
+                                                        ]"
+                                                    >
+                                                        <div
+                                                            class="flex items-center"
+                                                        >
+                                                            <SupabaseImage
+                                                                v-if="
+                                                                    horse.avatar_url
+                                                                "
+                                                                id="horse-avatars"
+                                                                :path="
+                                                                    horse.avatar_url
+                                                                "
+                                                                class="w-6 h-6 rounded-full overflow-hidden"
+                                                            />
+                                                            <div
+                                                                v-else
+                                                                class="h-6 w-6 bg-indigo-500 rounded-full flex items-center justify-center text-white"
+                                                            >
+                                                                {{
+                                                                    horse.name[0].toUpperCase()
+                                                                }}
+                                                            </div>
+                                                            <span
+                                                                :class="[
+                                                                    'ml-3 truncate',
+                                                                    selected &&
+                                                                        'font-semibold',
+                                                                ]"
+                                                            >
+                                                                {{ horse.name }}
+                                                            </span>
+                                                        </div>
+
+                                                        <span
+                                                            v-if="selected"
+                                                            :class="[
+                                                                'absolute inset-y-0 right-0 flex items-center pr-4',
+                                                                active
+                                                                    ? 'text-white'
+                                                                    : 'text-indigo-600',
+                                                            ]"
+                                                        >
+                                                            <CheckIcon
+                                                                class="h-5 w-5"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </span>
+                                                    </li>
+                                                </ComboboxOption>
+                                            </ComboboxOptions>
+                                        </div>
+                                    </Combobox>
+                                    <div class="flex flex-wrap">
+                                        <div
+                                            v-if="selectedHorses"
+                                            v-for="(
+                                                horse, index
+                                            ) in selectedHorses"
+                                            :key="horse.id"
+                                            class="inline-flex mr-1 mb-1 items-center rounded-full bg-indigo-100 py-0.5 pl-2.5 pr-1 text-sm font-medium text-indigo-700"
+                                        >
+                                            {{ horse.name }}
+                                            <button
+                                                @click="
+                                                    () =>
+                                                        selectedHorses.splice(
+                                                            index,
+                                                            1
+                                                        )
+                                                "
+                                                type="button"
+                                                class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:bg-indigo-500 focus:text-white focus:outline-none"
+                                            >
+                                                <svg
+                                                    class="h-2 w-2"
+                                                    stroke="currentColor"
+                                                    fill="none"
+                                                    viewBox="0 0 8 8"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-width="1.5"
+                                                        d="M1 1l6 6m0-6L1 7"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
