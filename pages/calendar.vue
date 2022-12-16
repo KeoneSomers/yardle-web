@@ -416,26 +416,38 @@
                                         : ''
                                 "
                             >
-                                <div class="group flex">
-                                    <p
-                                        class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
-                                    >
-                                        {{ event.title }}
-                                    </p>
-                                    <time
-                                        :datetime="event.datetime"
-                                        class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
-                                    >
-                                        <span v-if="!event.all_day">
-                                            {{
-                                                DateTime.fromISO(
-                                                    String(event.date_time)
-                                                ).toFormat("h:mma")
-                                            }}
-                                        </span>
-                                        <span v-else> All Day </span>
-                                    </time>
-                                </div>
+                                <VDropdown placement="right">
+                                    <!-- This will be the popover target (for the events and position) -->
+                                    <button class="group flex w-full text-left">
+                                        <p
+                                            class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
+                                        >
+                                            {{ event.title }}
+                                        </p>
+
+                                        <time
+                                            :datetime="event.datetime"
+                                            class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
+                                        >
+                                            <span v-if="!event.all_day">
+                                                {{
+                                                    DateTime.fromISO(
+                                                        String(event.date_time)
+                                                    ).toFormat("h:mma")
+                                                }}
+                                            </span>
+                                            <span v-else> All Day </span>
+                                        </time>
+                                    </button>
+                                    <!-- This will be the content of the popover -->
+                                    <template #popper>
+                                        <div
+                                            class="bg-white shadow rounded-lg w-96 p-5"
+                                        >
+                                            event component here 1
+                                        </div>
+                                    </template>
+                                </VDropdown>
                             </li>
                             <li
                                 v-if="day.events.length > 2"
@@ -443,13 +455,15 @@
                             >
                                 <VDropdown>
                                     <!-- This will be the popover target (for the events and position) -->
-                                    <button>
-                                        + {{ day.events.length - 2 }} more
+                                    <button class="w-full text-left">
+                                        <div>
+                                            + {{ day.events.length - 2 }} more
+                                        </div>
                                     </button>
                                     <!-- This will be the content of the popover -->
                                     <template #popper>
                                         <div
-                                            class="bg-white shadow rounded-lg w-64 p-5"
+                                            class="bg-white shadow rounded-lg w-64 py-5"
                                         >
                                             <!-- <p>
                                                 {{
@@ -471,42 +485,62 @@
                                                                 ? 'bg-indigo-100 px-1 rounded'
                                                                 : ''
                                                         "
-                                                        class="mb-1"
+                                                        class="mb-1 px-5"
                                                     >
-                                                        <div class="group flex">
-                                                            <p
-                                                                class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
+                                                        <VDropdown
+                                                            placement="right"
+                                                        >
+                                                            <!-- This will be the popover target (for the events and position) -->
+                                                            <button
+                                                                class="group flex text-left w-full"
                                                             >
-                                                                {{
-                                                                    event.title
-                                                                }}
-                                                            </p>
-                                                            <time
-                                                                :datetime="
-                                                                    event.datetime
-                                                                "
-                                                                class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
-                                                            >
-                                                                <span
-                                                                    v-if="
-                                                                        !event.all_day
-                                                                    "
+                                                                <p
+                                                                    class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
                                                                 >
                                                                     {{
-                                                                        DateTime.fromISO(
-                                                                            String(
-                                                                                event.date_time
-                                                                            )
-                                                                        ).toFormat(
-                                                                            "h:mma"
-                                                                        )
+                                                                        event.title
                                                                     }}
-                                                                </span>
-                                                                <span v-else>
-                                                                    All Day
-                                                                </span>
-                                                            </time>
-                                                        </div>
+                                                                </p>
+
+                                                                <time
+                                                                    :datetime="
+                                                                        event.datetime
+                                                                    "
+                                                                    class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
+                                                                >
+                                                                    <span
+                                                                        v-if="
+                                                                            !event.all_day
+                                                                        "
+                                                                    >
+                                                                        {{
+                                                                            DateTime.fromISO(
+                                                                                String(
+                                                                                    event.date_time
+                                                                                )
+                                                                            ).toFormat(
+                                                                                "h:mma"
+                                                                            )
+                                                                        }}
+                                                                    </span>
+                                                                    <span
+                                                                        v-else
+                                                                    >
+                                                                        All Day
+                                                                    </span>
+                                                                </time>
+                                                            </button>
+                                                            <!-- This will be the content of the popover -->
+                                                            <template #popper>
+                                                                <div
+                                                                    class="bg-white shadow rounded-lg w-96 p-5"
+                                                                >
+                                                                    event
+                                                                    component
+                                                                    here 2
+                                                                </div>
+                                                            </template>
+                                                        </VDropdown>
                                                     </li>
                                                 </ol>
                                             </div>
