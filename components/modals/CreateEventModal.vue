@@ -67,7 +67,7 @@
 
     const title = ref("");
     const date = ref("");
-    const time = ref("");
+    const time = ref("09:00");
     const notes = ref("");
     const all_day = ref(false);
     const event_type = ref(1);
@@ -79,7 +79,7 @@
         let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
 
         // build time
-        if (time.value && !all_day) {
+        if (time.value && !all_day.value) {
             const h = time.value.split(":")[0];
             const m = time.value.split(":")[1];
 
@@ -125,7 +125,7 @@
             // clear form
             title.value = "";
             date.value = "";
-            time.value = "";
+            time.value = "09:00";
             notes.value = "";
             all_day.value = false;
 
@@ -142,7 +142,7 @@
             selectedHorse.value = null;
             title.value = "";
             date.value = "";
-            time.value = "";
+            time.value = "09:00";
             notes.value = "";
             all_day.value = false;
         }

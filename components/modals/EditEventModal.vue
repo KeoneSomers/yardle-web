@@ -18,7 +18,8 @@
         ChevronUpDownIcon,
     } from "@heroicons/vue/20/solid/index.js";
 
-    const { isOpen, event } = defineProps(["isOpen", "event"]);
+    const props = defineProps(["isOpen", "event"]);
+    const { event } = toRefs(props);
     const emits = defineEmits(["close"]);
 
     const client = useSupabaseClient();
@@ -26,6 +27,7 @@
     const events = useState("events");
     const yard = useState("yard");
     const horses = useState("horses");
+    const days = useState("days");
 
     const date = ref("");
     const time = ref("");
@@ -54,11 +56,34 @@
     );
     const selectedHorses = ref([]);
 
+    watchEffect(async () => {
+        if (props.isOpen) {
+            date.value = event.value.date_time.substring(0, 10);
+            time.value = event.value.date_time.substring(11, 16);
+
+            const { data } = await client
+                .from("calendar_events_horses")
+                .select("horses(*)")
+                .eq("calendar_event_id", event.value.id);
+
+            selectedHorses.value = data.map((e) => {
+                return e.horses;
+            });
+        }
+    });
+
     // watch for combobox value changed
     watchEffect(() => {
         if (selectedHorse.value) {
             // if not already added
-            if (!selectedHorses.value.includes(selectedHorse.value)) {
+            console.log(selectedHorse.value);
+            console.log(selectedHorses.value);
+            console.log(!selectedHorses.value.includes(selectedHorse.value));
+            if (
+                !selectedHorses.value.find(
+                    (e) => e.id == selectedHorse.value.id
+                )
+            ) {
                 selectedHorses.value.push(selectedHorse.value);
             }
         }
@@ -75,7 +100,7 @@
         let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
 
         // build time
-        if (time.value && !all_day) {
+        if (time.value && !event.value.all_day) {
             const h = time.value.split(":")[0];
             const m = time.value.split(":")[1];
 
@@ -86,44 +111,40 @@
         }
 
         // step 1: create the event in the database
-        const { data: newEvent, error: createError } = await client
+        const { error: createError } = await client
             .from("calendar_events")
-            .insert({
-                created_by: user.value.id,
-                title: title.value,
+            .update({
+                title: event.value.title,
                 date_time: formattedDateTime,
-                notes: notes.value,
-                all_day: all_day.value,
-                type: event_type.value,
-                yard_id: yard.value.id,
+                notes: event.value.notes,
+                all_day: event.value.all_day,
+                type: event.value.type,
             })
-            .select()
-            .single();
+            .eq("id", event.value.id);
 
         if (!createError) {
-            // step 2: create horses relationships
-            const { error: horseRelError } = await client
+            // step 2a: TODO: delete horses that we dont have seletced anymore
+            // Shortcut for mvp: just delete all the relations for this event
+            const { error: delError } = await client
                 .from("calendar_events_horses")
-                .insert(
-                    selectedHorses.value.map(({ id }) => ({
-                        horse_id: id,
-                        calendar_event_id: newEvent.id,
-                    }))
-                );
+                .delete()
+                .eq("calendar_event_id", event.value.id);
 
-            // step 3: update local state
-            if (events.value) {
-                events.value.push(newEvent);
-            } else {
-                events.value = [newEvent];
+            // step 2b: create horses relationships
+            if (!delError) {
+                const { error: horseRelError } = await client
+                    .from("calendar_events_horses")
+                    .upsert(
+                        selectedHorses.value.map(({ id }) => ({
+                            horse_id: id,
+                            calendar_event_id: event.value.id,
+                        }))
+                    );
             }
 
-            // clear form
-            title.value = "";
-            date.value = "";
-            time.value = "";
-            notes.value = "";
-            all_day.value = false;
+            // step 3: update local state
+            const i = events.value.map((e) => e.id).indexOf(event.value.id);
+            events.value[i] = { ...event.value, date_time: formattedDateTime };
 
             emits("close");
         } else {
@@ -195,7 +216,7 @@
                                         >Event Type</label
                                     >
                                     <select
-                                        v-model="event.event_type"
+                                        v-model="event.type"
                                         required
                                         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     >

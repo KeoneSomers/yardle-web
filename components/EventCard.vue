@@ -79,10 +79,8 @@
                 <span
                     v-for="horse in horses"
                     :key="horse.id"
-                    class="inline-flex mr-1 items-center rounded-full bg-pink-100 pr-2 py-0.5 text-sm font-medium text-pink-800"
-                    ><div
-                        class="h-7 w-7 ml-1 rounded-full overflow-hidden mr-2"
-                    >
+                    class="inline-flex mr-1 items-center rounded-full bg-pink-100 pl-0.5 py-0.5 pr-2 text-sm font-medium text-pink-800"
+                    ><div class="h-7 w-7 rounded-full overflow-hidden mr-2">
                         <SupabaseImage
                             v-if="horse.avatar_url"
                             id="horse-avatars"

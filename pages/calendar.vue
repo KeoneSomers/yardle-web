@@ -61,7 +61,7 @@
         { id: 7, shortName: "Sun", name: "Sunday" },
     ];
 
-    const days = ref([]);
+    const days = useState("days", () => []);
     const events = useState("events", () => []);
 
     const getEvents = async () => {
