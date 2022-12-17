@@ -8,6 +8,18 @@
     const { data: eventTypes, error: eventTypesError } = await client
         .from("calendar_event_types")
         .select();
+
+    // perfect fetch of join data
+    const { data: horses } = await useAsyncData(String(event.id), async () => {
+        const { data, error } = await client
+            .from("calendar_events_horses")
+            .select("horse:horses(id, name, avatar_url)")
+            .eq("calendar_event_id", event.id);
+
+        return data.map((e) => {
+            return e.horse;
+        });
+    });
 </script>
 
 <template>
@@ -49,10 +61,36 @@
                     }}</span
                 >
             </p>
-            <div>
+            <div
+                v-if="horses && horses.length > 0"
+                class="pt-4 border-t border-dashed mt-4 flex flex-wrap"
+            >
                 <!-- event horses -->
+                <span
+                    v-for="horse in horses"
+                    :key="horse.id"
+                    class="inline-flex mr-1 items-center rounded-full bg-pink-100 pr-2 py-0.5 text-sm font-medium text-pink-800"
+                    ><div
+                        class="h-7 w-7 ml-1 rounded-full overflow-hidden mr-2"
+                    >
+                        <SupabaseImage
+                            v-if="horse.avatar_url"
+                            id="horse-avatars"
+                            :path="horse.avatar_url"
+                        />
+                        <div
+                            v-else
+                            class="flex items-center justify-center bg-white text-indigo-500 font-bold w-full h-full"
+                        >
+                            {{ horse.name[0].toUpperCase() }}
+                        </div>
+                    </div>
+                    {{ horse.name }}</span
+                >
             </div>
-            <p>{{ event.notes }}</p>
+            <p v-if="event.notes" class="pt-4 border-t border-dashed mt-4">
+                {{ event.notes }}
+            </p>
         </div>
     </div>
 </template>
