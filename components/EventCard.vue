@@ -1,40 +1,50 @@
 <script setup>
+    // imports
     import { DateTime } from "luxon";
     import { PencilIcon, TrashIcon } from "@heroicons/vue/24/outline/index.js";
 
+    // refs
     const { event } = defineProps(["event"]);
+    const emits = defineEmits(["edit"]);
+
     const client = useSupabaseClient();
 
+    // functions
     const { data: eventTypes, error: eventTypesError } = await client
         .from("calendar_event_types")
         .select();
 
-    // perfect fetch of join data
+    // (perfect fetch of join data!)
     const { data: horses } = await useAsyncData(String(event.id), async () => {
         const { data, error } = await client
             .from("calendar_events_horses")
             .select("horse:horses(id, name, avatar_url)")
             .eq("calendar_event_id", event.id);
 
-        return data.map((e) => {
-            return e.horse;
-        });
+        if (!error) {
+            return data.map((e) => {
+                return e.horse;
+            });
+        }
     });
 </script>
 
 <template>
     <div class="bg-white shadow rounded-lg w-96">
         <div class="bg-gray-50 mb-2 flex px-3 justify-end items-center">
-            <div
+            <a
+                v-close-popper
+                @click="() => $emit('edit')"
                 class="hover:bg-white hover:text-indigo-500 cursor-pointer rounded-full p-3 my-1"
             >
                 <PencilIcon class="h-6 w-6" />
-            </div>
-            <div
+            </a>
+            <a
+                v-close-popper
                 class="hover:bg-white hover:text-red-500 cursor-pointer rounded-full p-3 my-1"
             >
                 <TrashIcon class="h-6 w-6" />
-            </div>
+            </a>
         </div>
         <div class="p-5">
             <h1 class="font-bold text-xl">{{ event.title }}</h1>

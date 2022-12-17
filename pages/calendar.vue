@@ -17,11 +17,20 @@
     } from "@headlessui/vue";
     import { DateTime } from "luxon";
     import CreateEventModal from "@/components/modals/CreateEventModal.vue";
+    import EditEventModal from "@/components/modals/EditEventModal.vue";
 
     const client = useSupabaseClient();
     const user = useState("user");
 
     const createModalOpen = ref(false);
+    const editModalOpen = ref(false);
+
+    const selectedEvent = ref(null);
+
+    const openEditModal = (e) => {
+        selectedEvent.value = e;
+        editModalOpen.value = true;
+    };
 
     const offset = ref(0);
     const dt = ref(DateTime.now());
@@ -441,7 +450,10 @@
                                     </button>
                                     <!-- This will be the content of the popover -->
                                     <template #popper>
-                                        <EventCard :event="event" />
+                                        <EventCard
+                                            :event="event"
+                                            @edit="() => openEditModal(event)"
+                                        />
                                     </template>
                                 </VDropdown>
                             </li>
@@ -524,6 +536,12 @@
                                                                 <EventCard
                                                                     :event="
                                                                         event
+                                                                    "
+                                                                    @edit="
+                                                                        () =>
+                                                                            openEditModal(
+                                                                                event
+                                                                            )
                                                                     "
                                                                 />
                                                             </template>
@@ -634,5 +652,10 @@
     <CreateEventModal
         :is-open="createModalOpen"
         @close="createModalOpen = false"
+    />
+    <EditEventModal
+        :is-open="editModalOpen"
+        @close="editModalOpen = false"
+        :event="selectedEvent"
     />
 </template>
