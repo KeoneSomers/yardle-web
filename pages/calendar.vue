@@ -18,18 +18,25 @@
     import { DateTime } from "luxon";
     import CreateEventModal from "@/components/modals/CreateEventModal.vue";
     import EditEventModal from "@/components/modals/EditEventModal.vue";
+    import DeleteEventModal from "@/components/modals/DeleteEventModal.vue";
 
     const client = useSupabaseClient();
     const user = useState("user");
 
     const createModalOpen = ref(false);
     const editModalOpen = ref(false);
+    const deleteModalOpen = ref(false);
 
     const selectedEvent = ref(null);
 
     const openEditModal = (e) => {
         selectedEvent.value = e;
         editModalOpen.value = true;
+    };
+
+    const openDeleteModal = (e) => {
+        selectedEvent.value = e.id;
+        deleteModalOpen.value = true;
     };
 
     const offset = ref(0);
@@ -453,6 +460,9 @@
                                         <EventCard
                                             :event="event"
                                             @edit="() => openEditModal(event)"
+                                            @delete="
+                                                () => openDeleteModal(event)
+                                            "
                                         />
                                     </template>
                                 </VDropdown>
@@ -540,6 +550,12 @@
                                                                     @edit="
                                                                         () =>
                                                                             openEditModal(
+                                                                                event
+                                                                            )
+                                                                    "
+                                                                    @delete="
+                                                                        () =>
+                                                                            openDeleteModal(
                                                                                 event
                                                                             )
                                                                     "
@@ -657,5 +673,10 @@
         :is-open="editModalOpen"
         @close="editModalOpen = false"
         :event="selectedEvent"
+    />
+    <DeleteEventModal
+        :is-open="deleteModalOpen"
+        @close="deleteModalOpen = false"
+        :eventId="selectedEvent"
     />
 </template>

@@ -5,7 +5,7 @@
 
     // refs
     const { event } = defineProps(["event"]);
-    const emits = defineEmits(["edit"]);
+    const emits = defineEmits(["edit", "delete"]);
 
     const client = useSupabaseClient();
 
@@ -40,7 +40,8 @@
                 <PencilIcon class="h-6 w-6" />
             </a>
             <a
-                v-close-popper
+                v-close-popper.all
+                @click="() => $emit('delete')"
                 class="hover:bg-white hover:text-red-500 cursor-pointer rounded-full p-3 my-1"
             >
                 <TrashIcon class="h-6 w-6" />
