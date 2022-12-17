@@ -33,7 +33,7 @@
     <div class="bg-white shadow rounded-lg w-96">
         <div class="bg-gray-50 mb-2 flex px-3 justify-end items-center">
             <a
-                v-close-popper
+                v-close-popper.all
                 @click="() => $emit('edit')"
                 class="hover:bg-white hover:text-indigo-500 cursor-pointer rounded-full p-3 my-1"
             >
@@ -79,7 +79,7 @@
                 <span
                     v-for="horse in horses"
                     :key="horse.id"
-                    class="inline-flex mr-1 items-center rounded-full bg-pink-100 pl-0.5 py-0.5 pr-2 text-sm font-medium text-pink-800"
+                    class="inline-flex mr-1 mb-1 items-center rounded-full bg-pink-100 pl-0.5 py-0.5 pr-2 text-sm font-medium text-pink-800"
                     ><div class="h-7 w-7 rounded-full overflow-hidden mr-2">
                         <SupabaseImage
                             v-if="horse.avatar_url"
