@@ -17,13 +17,18 @@
     const horses = useState("horses");
 
     const handleDelete = async () => {
-        // TODO: also delete horses rugs, feeds, medications and image
-        const { error: rugDeleteError } = await client
-            .from("rugs")
+        // first delete horses rugs, feeds, medications and image
+        await client.from("rugs").delete().eq("horse_id", props.horseId);
+        await client.from("feeds").delete().eq("horse_id", props.horseId);
+        await client.from("medications").delete().eq("horse_id", props.horseId);
+
+        // second, delete horse from calendar events
+        const { error: delError } = await client
+            .from("calendar_events_horses")
             .delete()
             .eq("horse_id", props.horseId);
 
-        if (!rugDeleteError) {
+        if (!delError) {
             const { error: horseDeleteError } = await client
                 .from("horses")
                 .delete()
@@ -50,9 +55,6 @@
                 console.log("error deleting horse");
                 console.log(horseDeleteError);
             }
-        } else {
-            console.log("error deleting rugs");
-            console.log(rugDeleteError);
         }
     };
 </script>
