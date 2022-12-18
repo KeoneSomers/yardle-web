@@ -320,9 +320,8 @@
                     <p
                         class="mx-auto mt-4 max-w-xl text-lg leading-8 text-gray-600"
                     >
-                        Quia est qui aut velit exercitationem repudiandae
-                        voluptatem facilis. Neque est debitis dolor facilis ab
-                        amet.
+                        Yardle saves you time by providing a single location for
+                        your yards information and generating usfull insights.
                     </p>
                 </div>
                 <dl
