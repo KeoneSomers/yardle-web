@@ -310,8 +310,7 @@
                     <span v-if="horse.dob">{{
                         DateTime.fromISO(horse.dob).toLocaleString(
                             DateTime.DATE_MED
-                        ) +
-                        ` (${DateTime.fromISO(horse.dob).toRelativeCalendar()})`
+                        )
                     }}</span>
                     <span v-else>--</span>
                 </dd>
