@@ -73,7 +73,7 @@
         nextDate: undefined,
     });
 
-    watch(horse, async (newValue) => {
+    watchEffect(async () => {
         farrierLastAndNext.value = {
             prevDate: undefined,
             nextDate: undefined,
@@ -84,11 +84,65 @@
                 .select("*, calendar_events_horses!inner(horse_id)")
                 .eq("yard_id", yard.value.id)
                 .eq("type", 3)
-                .eq("calendar_events_horses.horse_id", newValue.id)
+                .eq("calendar_events_horses.horse_id", horse.value.id)
                 .order("date_time", { ascending: true });
 
             if (!error) {
                 farrierLastAndNext.value = await getLastAndNextDates(data);
+            }
+        });
+
+        dentistLastAndNext.value = {
+            prevDate: undefined,
+            nextDate: undefined,
+        };
+        await useAsyncData(String(horse.value.id + "dentist"), async () => {
+            const { data, error } = await client
+                .from("calendar_events")
+                .select("*, calendar_events_horses!inner(horse_id)")
+                .eq("yard_id", yard.value.id)
+                .eq("type", 5)
+                .eq("calendar_events_horses.horse_id", horse.value.id)
+                .order("date_time", { ascending: true });
+
+            if (!error) {
+                dentistLastAndNext.value = await getLastAndNextDates(data);
+            }
+        });
+
+        wormingLastAndNext.value = {
+            prevDate: undefined,
+            nextDate: undefined,
+        };
+        await useAsyncData(String(horse.value.id + "worming"), async () => {
+            const { data, error } = await client
+                .from("calendar_events")
+                .select("*, calendar_events_horses!inner(horse_id)")
+                .eq("yard_id", yard.value.id)
+                .eq("type", 2)
+                .eq("calendar_events_horses.horse_id", horse.value.id)
+                .order("date_time", { ascending: true });
+
+            if (!error) {
+                wormingLastAndNext.value = await getLastAndNextDates(data);
+            }
+        });
+
+        vaccinationsLastAndNext.value = {
+            prevDate: undefined,
+            nextDate: undefined,
+        };
+        await useAsyncData(String(horse.value.id + "vaccination"), async () => {
+            const { data, error } = await client
+                .from("calendar_events")
+                .select("*, calendar_events_horses!inner(horse_id)")
+                .eq("yard_id", yard.value.id)
+                .eq("type", 4)
+                .eq("calendar_events_horses.horse_id", horse.value.id)
+                .order("date_time", { ascending: true });
+
+            if (!error) {
+                vaccinationsLastAndNext.value = await getLastAndNextDates(data);
             }
         });
     });
@@ -136,23 +190,63 @@
                 <dt class="text-sm font-medium text-gray-500">
                     Last Dentist Visit
                 </dt>
-                <dd class="mt-1 text-sm text-gray-900">--</dd>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <span v-if="dentistLastAndNext.prevDate">{{
+                        `${DateTime.fromISO(
+                            dentistLastAndNext.prevDate.date_time
+                        ).toLocaleString(DateTime.DATE_MED)}
+                          (${DateTime.fromISO(
+                              dentistLastAndNext.prevDate.date_time
+                          ).toRelativeCalendar()})`
+                    }}</span>
+                    <span v-else>--</span>
+                </dd>
             </div>
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">
                     Next Dentist Visit
                 </dt>
-                <dd class="mt-1 text-sm text-gray-900">--</dd>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <span v-if="dentistLastAndNext.nextDate">{{
+                        `${DateTime.fromISO(
+                            dentistLastAndNext.nextDate.date_time
+                        ).toLocaleString(DateTime.DATE_MED)}
+                          (${DateTime.fromISO(
+                              dentistLastAndNext.nextDate.date_time
+                          ).toRelativeCalendar()})`
+                    }}</span>
+                    <span v-else>--</span>
+                </dd>
             </div>
 
             <!-- Worming -->
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Last Worming</dt>
-                <dd class="mt-1 text-sm text-gray-900">--</dd>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <span v-if="wormingLastAndNext.prevDate">{{
+                        `${DateTime.fromISO(
+                            wormingLastAndNext.prevDate.date_time
+                        ).toLocaleString(DateTime.DATE_MED)}
+                          (${DateTime.fromISO(
+                              wormingLastAndNext.prevDate.date_time
+                          ).toRelativeCalendar()})`
+                    }}</span>
+                    <span v-else>--</span>
+                </dd>
             </div>
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Next Worming</dt>
-                <dd class="mt-1 text-sm text-gray-900">--</dd>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <span v-if="wormingLastAndNext.nextDate">{{
+                        `${DateTime.fromISO(
+                            wormingLastAndNext.nextDate.date_time
+                        ).toLocaleString(DateTime.DATE_MED)}
+                          (${DateTime.fromISO(
+                              wormingLastAndNext.nextDate.date_time
+                          ).toRelativeCalendar()})`
+                    }}</span>
+                    <span v-else>--</span>
+                </dd>
             </div>
 
             <!-- Vaccinations -->
@@ -160,13 +254,33 @@
                 <dt class="text-sm font-medium text-gray-500">
                     Last Vaccinations
                 </dt>
-                <dd class="mt-1 text-sm text-gray-900">--</dd>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <span v-if="vaccinationsLastAndNext.prevDate">{{
+                        `${DateTime.fromISO(
+                            vaccinationsLastAndNext.prevDate.date_time
+                        ).toLocaleString(DateTime.DATE_MED)}
+                          (${DateTime.fromISO(
+                              vaccinationsLastAndNext.prevDate.date_time
+                          ).toRelativeCalendar()})`
+                    }}</span>
+                    <span v-else>--</span>
+                </dd>
             </div>
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">
                     Next Vaccinations
                 </dt>
-                <dd class="mt-1 text-sm text-gray-900">--</dd>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <span v-if="vaccinationsLastAndNext.nextDate">{{
+                        `${DateTime.fromISO(
+                            vaccinationsLastAndNext.nextDate.date_time
+                        ).toLocaleString(DateTime.DATE_MED)}
+                          (${DateTime.fromISO(
+                              vaccinationsLastAndNext.nextDate.date_time
+                          ).toRelativeCalendar()})`
+                    }}</span>
+                    <span v-else>--</span>
+                </dd>
             </div>
 
             <!-- Breed -->
@@ -194,9 +308,10 @@
                 <dt class="text-sm font-medium text-gray-500">Date of Birth</dt>
                 <dd class="mt-1 text-sm text-gray-900">
                     <span v-if="horse.dob">{{
-                        DateTime.fromISO(String(horse.dob)).toLocaleString(
+                        DateTime.fromISO(horse.dob).toLocaleString(
                             DateTime.DATE_MED
-                        )
+                        ) +
+                        ` (${DateTime.fromISO(horse.dob).toRelativeCalendar()})`
                     }}</span>
                     <span v-else>--</span>
                 </dd>
