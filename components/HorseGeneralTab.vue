@@ -1,6 +1,9 @@
 <script setup>
     import { DateTime } from "luxon";
+
     const horse = useState("horse");
+    const yard = useState("yard");
+    const client = useSupabaseClient();
 
     // const getAge = (dateString) => {
     //     var today = new Date();
@@ -12,6 +15,83 @@
     //     }
     //     return age;
     // };
+
+    const getLastAndNextDates = async (days) => {
+        let nextDateIndexesByDiff = [];
+        let prevDateIndexesByDiff = [];
+
+        for (var i = 0; i < days.length; i++) {
+            var thisDate = DateTime.fromISO(days[i].date_time);
+            var curDiff = DateTime.now() - thisDate;
+
+            curDiff < 0
+                ? nextDateIndexesByDiff.push([i, curDiff])
+                : prevDateIndexesByDiff.push([i, curDiff]);
+        }
+
+        nextDateIndexesByDiff.sort(function (a, b) {
+            return a[1] < b[1];
+        });
+        prevDateIndexesByDiff.sort(function (a, b) {
+            return a[1] > b[1];
+        });
+
+        let prevDate;
+        let nextDate;
+
+        if (prevDateIndexesByDiff.length > 0) {
+            prevDate =
+                days[
+                    prevDateIndexesByDiff[prevDateIndexesByDiff.length - 1][0]
+                ];
+        }
+
+        if (nextDateIndexesByDiff.length > 0) {
+            nextDate = days[nextDateIndexesByDiff[0][0]];
+        }
+
+        return { prevDate, nextDate };
+    };
+
+    const farrierLastAndNext = ref({
+        prevDate: undefined,
+        nextDate: undefined,
+    });
+
+    const dentistLastAndNext = ref({
+        prevDate: undefined,
+        nextDate: undefined,
+    });
+
+    const wormingLastAndNext = ref({
+        prevDate: undefined,
+        nextDate: undefined,
+    });
+
+    const vaccinationsLastAndNext = ref({
+        prevDate: undefined,
+        nextDate: undefined,
+    });
+
+    watch(horse, async (newValue) => {
+        farrierLastAndNext.value = {
+            prevDate: undefined,
+            nextDate: undefined,
+        };
+        await useAsyncData(String(horse.value.id + "farrier"), async () => {
+            const { data, error } = await client
+                .from("calendar_events")
+                .select("*, calendar_events_horses!inner(horse_id)")
+                .eq("yard_id", yard.value.id)
+                .eq("type", 3)
+                .eq("calendar_events_horses.horse_id", newValue.id)
+                .order("date_time", { ascending: true });
+
+            if (!error) {
+                farrierLastAndNext.value = await getLastAndNextDates(data);
+            }
+        });
+    });
 </script>
 
 <template>
@@ -22,13 +102,33 @@
                 <dt class="text-sm font-medium text-gray-500">
                     Last Farrier Visit
                 </dt>
-                <dd class="mt-1 text-sm text-gray-900">--</dd>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <span v-if="farrierLastAndNext.prevDate">{{
+                        `${DateTime.fromISO(
+                            farrierLastAndNext.prevDate.date_time
+                        ).toLocaleString(DateTime.DATE_MED)}
+                          (${DateTime.fromISO(
+                              farrierLastAndNext.prevDate.date_time
+                          ).toRelativeCalendar()})`
+                    }}</span>
+                    <span v-else>--</span>
+                </dd>
             </div>
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">
                     Next Farrier Visit
                 </dt>
-                <dd class="mt-1 text-sm text-gray-900">--</dd>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <span v-if="farrierLastAndNext.nextDate">{{
+                        `${DateTime.fromISO(
+                            farrierLastAndNext.nextDate.date_time
+                        ).toLocaleString(DateTime.DATE_MED)}
+                          (${DateTime.fromISO(
+                              farrierLastAndNext.nextDate.date_time
+                          ).toRelativeCalendar()})`
+                    }}</span>
+                    <span v-else>--</span>
+                </dd>
             </div>
 
             <!-- Dentist -->
