@@ -239,10 +239,10 @@
                                 <p
                                     class="mt-6 text-lg leading-8 text-gray-600 sm:text-center"
                                 >
-                                    Anim aute id magna aliqua ad ad non deserunt
-                                    sunt. Qui irure qui lorem cupidatat commodo.
-                                    Elit sunt amet fugiat veniam occaecat fugiat
-                                    aliqua.
+                                    Yardle gives you all the tools you and your
+                                    team need to help you run your equestrian
+                                    yard. Manage yards, horses, events and much
+                                    more.
                                 </p>
                                 <div
                                     class="mt-8 flex gap-x-4 sm:justify-center"
