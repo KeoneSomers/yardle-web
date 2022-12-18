@@ -145,6 +145,7 @@
             time.value = "09:00";
             notes.value = "";
             all_day.value = false;
+            event_type.value = 1;
         }
     });
 </script>
