@@ -7,13 +7,19 @@ export default defineNuxtConfig({
     css: ["@/assets/css/main.css"],
     app: {
         head: {
-            title: "Yardle - Yard Management App",
+            title: "Yardle - Equestrian Yard Management",
             meta: [
                 {
                     name: "description",
-                    content: "A website to help you with your yard.",
+                    content:
+                        "Digital horse yard management tool - Join multiple yards, manage horses, their feeds, rugs and medications.",
                 },
-                { name: "author", content: "Keone Somers" },
+                {
+                    name: "keywords",
+                    content:
+                        "horse livery, yard managment, horse tool, equestrian yard management",
+                },
+                { name: "author", content: "Yardle" },
             ],
         },
     },
