@@ -52,6 +52,71 @@
             console.log(error);
         }
     };
+
+    // Todo - Need a warning modal
+    const handleDeleteYard = async (yardId) => {
+        // first: get all horse id's
+        const { data: _horseIds, error: errHorseIds } = await client
+            .from("horses")
+            .select("id")
+            .eq("yard_id", yardId);
+
+        const horseIds = _horseIds.map((e) => e.id);
+
+        // delete calendar_events_horses
+        if (horseIds.length > 0) {
+            const { data, error } = await client
+                .from("calendar_events_horses")
+                .delete()
+                .filter("horse_id", "in", `(${horseIds})`);
+        }
+
+        // delete calendar_events
+        const { error: err2 } = await client
+            .from("calendar_events")
+            .delete()
+            .eq("yard_id", yardId);
+
+        if (horseIds.length > 0) {
+            // delete rugs, medications, feeds
+            await client
+                .from("rugs")
+                .delete()
+                .filter("horse_id", "in", `(${horseIds})`);
+
+            await client
+                .from("medications")
+                .delete()
+                .filter("horse_id", "in", `(${horseIds})`);
+
+            await client
+                .from("feeds")
+                .delete()
+                .filter("horse_id", "in", `(${horseIds})`);
+
+            // delete all the yard horses
+            const { error: err4 } = await client
+                .from("horses")
+                .delete()
+                .eq("yard_id", yardId);
+        }
+
+        // delete all the yard members
+        const { error: err5 } = await client
+            .from("profiles_yards")
+            .delete()
+            .eq("yard_id", yardId);
+
+        // delete the yard
+        const { error: err6 } = await client
+            .from("yards")
+            .delete()
+            .eq("id", yardId);
+
+        // success! - now remove the yard from the webpage
+        const i = yards.value.map((e) => e.id).indexOf(yardId);
+        yards.value.splice(i, 1);
+    };
 </script>
 
 <template>
@@ -82,7 +147,7 @@
                 </div>
             </div>
             <div class="py-4">
-                <div v-if="yards">
+                <div v-if="yards && yards.length > 0">
                     <div
                         v-for="yard in yards"
                         :key="yard.id"
@@ -100,7 +165,15 @@
                                 @click="handleLeaveYard(yard.id)"
                                 class="bg-red-500 mr-4 text-white rounded py-2 px-3"
                             >
-                                Leave Yard
+                                Leave
+                            </button>
+                        </div>
+                        <div v-else>
+                            <button
+                                @click="handleDeleteYard(yard.id)"
+                                class="bg-red-500 mr-4 text-white rounded py-2 px-3"
+                            >
+                                Delete
                             </button>
                         </div>
                     </div>
