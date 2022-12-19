@@ -79,18 +79,6 @@
         });
     });
 
-    // kick the user out if there selected yard is removed
-    // todo: need yard layout
-    watchEffect(async () => {
-        if (
-            user.value &&
-            router.currentRoute.value.path != "/yards" &&
-            !user.value.user_metadata.selected_yard
-        ) {
-            await navigateTo("/yards");
-        }
-    });
-
     const getMemberRole = async () => {
         await useAsyncData("role", async () => {
             const { data: roleData, error: roleError } = await client
