@@ -84,7 +84,7 @@
                     <div>
                         <img
                             class="h-32 w-full object-cover lg:h-48"
-                            src="https://png.pngtree.com/thumb_back/fh260/back_our/20190625/ourmid/pngtree-cartoon-countryside-background-image_262889.jpg"
+                            src="~/assets/banner.jpeg"
                             alt=""
                         />
                     </div>
