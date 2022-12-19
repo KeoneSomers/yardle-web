@@ -82,7 +82,7 @@
     // kick the user out if there selected yard is removed
     // todo: need yard layout
     watchEffect(async () => {
-        if (!user.user_metadata.selected_yard) {
+        if (user && !user.user_metadata.selected_yard) {
             await navigateTo("/yards");
         }
     });
