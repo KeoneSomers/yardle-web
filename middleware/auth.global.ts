@@ -3,7 +3,10 @@ export default defineNuxtRouteMiddleware((to) => {
 
     // TODO: middleware overhaul. splip out into multiple files and then define each middleware on each page
 
-    if (to.path != `/join/${to.params.invite_code}`) {
+    if (
+        to.path != `/join/${to.params.invite_code}` &&
+        to.path != "/resetpassword"
+    ) {
         // variables
         const isLoggedIn = user.value != null;
         const isLoggedOut = user.value == null;

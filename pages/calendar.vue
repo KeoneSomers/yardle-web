@@ -1,20 +1,10 @@
 <script setup>
     import {
-        ChevronDownIcon,
         ChevronLeftIcon,
         ChevronRightIcon,
-        ClockIcon,
         EllipsisHorizontalIcon,
     } from "@heroicons/vue/20/solid/index.js";
-    import {
-        Menu,
-        MenuButton,
-        MenuItem,
-        MenuItems,
-        Popover,
-        PopoverButton,
-        PopoverPanel,
-    } from "@headlessui/vue";
+    import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
     import { DateTime } from "luxon";
     import CreateEventModal from "@/components/modals/CreateEventModal.vue";
     import EditEventModal from "@/components/modals/EditEventModal.vue";
@@ -157,7 +147,7 @@
                 Yardle is working on a mobile app for smaller screens.
             </p>
         </div>
-        <div class="hidden lg:flex lg:h-full lg:flex-col">
+        <div class="hidden lg:flex lg:h-screen lg:flex-col">
             <header
                 class="flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none"
             >
@@ -395,7 +385,7 @@
                     </Menu>
                 </div>
             </header>
-            <div class="lg:flex lg:flex-auto lg:flex-col">
+            <div class="lg:flex lg:flex-auto lg:flex-col flex-1">
                 <!-- Weekday Lables -->
                 <div
                     class="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none"
