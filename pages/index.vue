@@ -29,44 +29,44 @@
 
     const features = [
         {
-            name: "Invite team members",
+            name: "Invite Team Members",
             description:
-                "Quam a velit animi fuga ad. Accusamus consectetur nulla perferendis quam. Aperiam error iusto id eos.",
+                "Members of your yard can join you on Yardle where they can view and contribute to yard information.",
         },
         {
-            name: "Notifications",
+            name: "Horses Details",
             description:
-                "Ut excepturi sequi et corrupti. Quidem est non ipsam sunt voluptatem. Velit dicta iusto. Molestiae.",
+                "Keep track of every detail of all your horses with ease. Yardle gives you insights based of the data provided.",
         },
         {
-            name: "List view",
+            name: "Multiple Yards",
             description:
-                "Quis ratione necessitatibus ullam id animi iure accusamus debitis voluptas. Cumque debitis exercitationem.",
+                "Yardle is the only Yard Management System to support full multi-yard functionality.",
         },
         {
-            name: "Boards",
+            name: "Calendar",
             description:
-                "Quae et accusantium quo molestiae sed sit ut quo. Quidem omnis iure et maiores porro. Eligendi deserunt.",
+                "View important events like horse Farrier visits and upcoming Vaccinations in the calendar section.",
         },
         {
-            name: "Keyboard shortcuts",
+            name: "Always In-Sync",
             description:
-                "Optio assumenda eos neque. Quaerat temporibus dicta provident. Quia unde quo aut aut molestiae sit..",
+                "With all your data in one place, all staff members are on the same page and the information they see is always up to date.",
         },
         {
-            name: "Reporting",
+            name: "Field Groups (Soon)",
             description:
-                "Excepturi sed quo mollitia voluptatibus. Qui quo ut nihil quo. Dolor at dignissimos ea voluptatem.",
+                "Create fields then, drag and drop horses into the fields they should be in. Simple but useful!",
         },
         {
-            name: "Calendars",
+            name: "Dashboard Overview (Soon)",
             description:
-                "Illum nesciunt odio. Dolorem nobis labore eveniet consequatur quas aut delectus molestias. Qui recusandae.",
+                "Get up to date at a glance with the dashboard view that'll give you all the most important information you need.",
         },
         {
-            name: "Mobile app",
+            name: "Team Roles",
             description:
-                "Aut velit est eius dolore repudiandae. Vitae temporibus amet possimus mollitia. Quia molestiae rerum.",
+                "Members of your yard can be assigned roles. This gives you control over what members can do and see on the platform.",
         },
     ];
 </script>
