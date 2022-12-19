@@ -12,6 +12,7 @@
     const props = defineProps(["isOpen"]);
     const emits = defineEmits(["close"]);
 
+    const loading = ref(false);
     const email = ref("");
     const errorMessage = ref("");
     const successMessage = ref("");
@@ -19,6 +20,7 @@
     const client = useSupabaseClient();
 
     const handleResetPassword = async () => {
+        loading.value = true;
         errorMessage.value = "";
         successMessage.value = "";
 
@@ -31,8 +33,10 @@
 
         if (!error) {
             successMessage.value = "Success! Please check your email.";
+            loading.value = false;
         } else {
             errorMessage.value = error.message;
+            loading.value = false;
         }
     };
 </script>
@@ -133,6 +137,7 @@
                                     class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse"
                                 >
                                     <button
+                                        :disabled="loading"
                                         type="submit"
                                         class="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                                         @click="handleResetPassword"
