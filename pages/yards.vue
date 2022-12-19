@@ -61,10 +61,11 @@
             .select("profile_id")
             .eq("yard_id", yardId);
         for (let i = 0; i < memberIds.length; i++) {
-            await $fetch("/api/removeUsersSelectedYard", {
+            const { result } = await $fetch("/api/removeUsersSelectedYard", {
                 method: "post",
                 body: { memberId: memberIds[i].profile_id },
             });
+            console.log(result);
         }
 
         // first: get all horse id's
