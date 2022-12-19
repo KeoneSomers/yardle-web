@@ -1,4 +1,6 @@
 <script setup>
+    import RequestPasswordResetModal from "@/components/modals/RequestPasswordResetModal.vue";
+
     definePageMeta({
         layout: "blank",
     });
@@ -12,6 +14,8 @@
 
     const email = ref("");
     const password = ref("");
+
+    const requestPasswordResetModalOpen = ref(false);
 
     const errorMessage = ref("");
 
@@ -123,8 +127,10 @@
 
                         <div class="text-sm">
                             <a
-                                href="#"
-                                class="font-medium text-indigo-600 hover:text-indigo-500"
+                                @click="
+                                    () => (requestPasswordResetModalOpen = true)
+                                "
+                                class="cursor-pointer font-medium text-indigo-600 hover:text-indigo-500"
                                 >Forgot your password?</a
                             >
                         </div>
@@ -229,4 +235,10 @@
             </div>
         </div>
     </div>
+
+    <!-- Modals -->
+    <RequestPasswordResetModal
+        :is-open="requestPasswordResetModalOpen"
+        @close="requestPasswordResetModalOpen = false"
+    />
 </template>
