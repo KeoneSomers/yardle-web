@@ -60,10 +60,10 @@
             .from("profiles_yards")
             .select("profile_id")
             .eq("yard_id", yardId);
-        for (let i = 0; i < memberIds.map((e) => e.profile_id).length; i++) {
+        for (let i = 0; i < memberIds.length; i++) {
             await $fetch("/api/removeUsersSelectedYard", {
                 method: "post",
-                body: { memberId: memberIds.map((e) => e.profile_id)[i] },
+                body: { memberId: memberIds[i].profile_id },
             });
         }
 
