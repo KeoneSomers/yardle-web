@@ -19,7 +19,21 @@
     const client = useSupabaseClient();
 
     const handleResetPassword = async () => {
-        // todo - call supabase
+        errorMessage.value = "";
+        successMessage.value = "";
+
+        const { data, error } = await client.auth.resetPasswordForEmail(
+            email.value,
+            {
+                redirectTo: `${window.location.origin}/resetpassword`,
+            }
+        );
+
+        if (!error) {
+            successMessage.value = "Success! Please check your email.";
+        } else {
+            errorMessage.value = error.message;
+        }
     };
 </script>
 
