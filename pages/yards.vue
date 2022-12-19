@@ -55,6 +55,18 @@
 
     // Todo - Need a warning modal
     const handleDeleteYard = async (yardId) => {
+        // remove members selected yard
+        const { data: memberIds, error: memberIdsError } = await client
+            .from("profiles_yards")
+            .select("profile_id")
+            .eq("yard_id", yardId);
+        for (let i = 0; i < memberIds.map((e) => e.profile_id).length; i++) {
+            await $fetch("/api/removeUsersSelectedYard", {
+                method: "post",
+                body: { memberId: memberIds.map((e) => e.profile_id)[i] },
+            });
+        }
+
         // first: get all horse id's
         const { data: _horseIds, error: errHorseIds } = await client
             .from("horses")
