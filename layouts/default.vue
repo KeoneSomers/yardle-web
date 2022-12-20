@@ -135,15 +135,16 @@
                     .eq("id", user.value.user_metadata.selected_yard)
                     .single();
 
-                yard.value = data;
-
                 if (!error) {
+                    yard.value = data;
                     // also get users role in this yard
                     await getMemberRole();
+                } else {
+                    await handleUnselectYard();
                 }
             });
         } else {
-            yard.value = null;
+            // user is logged in but has no selected yard
         }
     };
 

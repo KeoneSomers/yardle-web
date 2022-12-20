@@ -55,18 +55,19 @@
 
     // Todo - Need a warning modal
     const handleDeleteYard = async (yardId) => {
-        // TODO: remove members selected yard
-        // const { data: memberIds, error: memberIdsError } = await client
-        //     .from("profiles_yards")
-        //     .select("profile_id")
-        //     .eq("yard_id", yardId);
-        // for (let i = 0; i < memberIds.length; i++) {
-        //     const { result } = await $fetch("/api/removeUsersSelectedYard", {
-        //         method: "post",
-        //         body: { memberId: memberIds[i].profile_id },
-        //     });
-        //     console.log(result);
-        // }
+        // remove members selected yard
+        // TODO: Note that this will still allow users to use the yard for the remainer of their JWT session (1 week)
+        const { data: memberIds, error: memberIdsError } = await client
+            .from("profiles_yards")
+            .select("profile_id")
+            .eq("yard_id", yardId);
+        for (let i = 0; i < memberIds.length; i++) {
+            const { result } = await $fetch("/api/removeUsersSelectedYard", {
+                method: "post",
+                body: { memberId: memberIds[i].profile_id },
+            });
+            console.log(result);
+        }
 
         // first: get all horse id's
         const { data: _horseIds, error: errHorseIds } = await client
