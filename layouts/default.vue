@@ -55,8 +55,9 @@
         { name: "Settings", to: "/settings", icon: CogIcon },
     ];
 
-    const supabase = useSupabaseAuthClient();
-    const client = useSupabaseClient();
+    const supabaseAuthClient = useSupabaseAuthClient();
+    const supabaseClient = useSupabaseClient();
+
     const router = useRouter();
     const user = useState("user");
     const yard = useState("yard", () => null);
@@ -81,7 +82,7 @@
 
     const getMemberRole = async () => {
         await useAsyncData("role", async () => {
-            const { data: roleData, error: roleError } = await client
+            const { data: roleData, error: roleError } = await supabaseClient
                 .from("profiles_yards")
                 .select("role")
                 .eq("profile_id", user.value.id)
@@ -103,7 +104,7 @@
 
     const handleUnselectYard = async () => {
         // update user in db
-        const { data, error } = await client.auth.updateUser({
+        const { data, error } = await supabaseClient.auth.updateUser({
             data: { selected_yard: null },
         });
 
@@ -114,11 +115,11 @@
     };
 
     const handleSignout = async () => {
-        supabase.auth.signOut();
+        supabaseAuthClient.auth.signOut();
     };
 
     const { data: profile } = await useAsyncData("profile", async () => {
-        const { data } = await client
+        const { data } = await supabaseClient
             .from("profiles")
             .select()
             .eq("id", user.value.id)
@@ -129,7 +130,7 @@
     const getSelectedYardData = async () => {
         if (user.value && user.value.user_metadata.selected_yard) {
             await useAsyncData("yard", async () => {
-                const { data, error } = await client
+                const { data, error } = await supabaseClient
                     .from("yards")
                     .select()
                     .eq("id", user.value.user_metadata.selected_yard)

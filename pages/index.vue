@@ -1,16 +1,17 @@
-<script setup>
+<script setup lang="ts">
     import { Dialog, DialogPanel, TransitionRoot } from "@headlessui/vue";
     import {
         Bars3Icon,
         XMarkIcon,
         CheckIcon,
     } from "@heroicons/vue/24/outline/index.js";
+    import { User } from "@supabase/supabase-js";
 
     definePageMeta({
         layout: "blank",
     });
 
-    const user = useState("user");
+    const user = useState<User>("user");
 
     // watch for auth changes
     onMounted(() => {

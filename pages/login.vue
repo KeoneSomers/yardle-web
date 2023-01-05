@@ -10,7 +10,7 @@
     // invite code if there is one (could also be undefined or null)
     const { invite_code } = router.currentRoute.value.query;
 
-    const supabase = useSupabaseAuthClient();
+    const supabaseAuthClient = useSupabaseAuthClient();
 
     const email = ref("");
     const password = ref("");
@@ -21,10 +21,11 @@
 
     const handleLogin = async () => {
         if (email.value && password.value) {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email.value,
-                password: password.value,
-            });
+            const { data, error } =
+                await supabaseAuthClient.auth.signInWithPassword({
+                    email: email.value,
+                    password: password.value,
+                });
 
             if (!error) {
                 if (!invite_code) {
