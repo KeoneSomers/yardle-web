@@ -24,16 +24,13 @@
     });
 
     const handleSelectYard = async (yardId) => {
-        // update user in db
-        const { data, error } = await client.auth.updateUser({
-            data: { selected_yard: yardId },
-        });
+        // TODO: Check the yard still exists and that you're still and unbanned member of it
 
-        // update user local state
-        user.value.user_metadata.selected_yard =
-            data.user.user_metadata.selected_yard;
-
-        navigateTo("/horses");
+        // update user in db (realtime will navigate them to the /horses page automatically)
+        await client
+            .from("profiles")
+            .update({ selected_yard: yardId })
+            .eq("id", user.value.id);
     };
 
     // Todo - Need a warning modal

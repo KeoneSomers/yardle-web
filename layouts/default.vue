@@ -59,7 +59,9 @@
     const supabaseClient = useSupabaseClient();
 
     const router = useRouter();
+
     const user = useState("user");
+    const selectedYard = useState("selectedYard");
     const yard = useState("yard", () => null);
     const role = useState("role", () => 0);
 
@@ -72,13 +74,13 @@
     ];
 
     // watch for auth changes
-    onMounted(() => {
-        watchEffect(() => {
-            if (!user.value) {
-                navigateTo("/");
-            }
-        });
-    });
+    // onMounted(() => {
+    //     watchEffect(() => {
+    //         if (!user.value) {
+    //             navigateTo("/");
+    //         }
+    //     });
+    // });
 
     const getMemberRole = async () => {
         await useAsyncData("role", async () => {
@@ -96,22 +98,17 @@
     };
 
     // // Get users role
-    watchEffect(async () => {
-        if (yard.value) {
-            await getMemberRole();
-        }
-    });
+    // watchEffect(async () => {
+    //     if (yard.value) {
+    //         await getMemberRole();
+    //     }
+    // });
 
     const handleUnselectYard = async () => {
-        // update user in db
-        const { data, error } = await supabaseClient.auth.updateUser({
-            data: { selected_yard: null },
-        });
-
-        // update user local state
-        user.value.user_metadata.selected_yard = null;
-
-        navigateTo("/yards");
+        const { error } = await supabaseClient
+            .from("profiles")
+            .update({ selected_yard: null })
+            .eq("id", user.value.id);
     };
 
     const handleSignout = async () => {
@@ -128,20 +125,18 @@
     });
 
     const getSelectedYardData = async () => {
-        if (user.value && user.value.user_metadata.selected_yard) {
+        if (user.value && selectedYard.value) {
             await useAsyncData("yard", async () => {
                 const { data, error } = await supabaseClient
                     .from("yards")
                     .select()
-                    .eq("id", user.value.user_metadata.selected_yard)
+                    .eq("id", selectedYard.value)
                     .single();
 
                 if (!error) {
                     yard.value = data;
                     // also get users role in this yard
                     await getMemberRole();
-                } else {
-                    await handleUnselectYard();
                 }
             });
         } else {
@@ -151,13 +146,13 @@
 
     await getSelectedYardData();
 
-    watchEffect(async () => {
-        if (user.value && user.value.user_metadata.selected_yard) {
-            await getSelectedYardData();
-        } else {
-            yard.value = null;
-        }
-    });
+    // watchEffect(async () => {
+    //     if (user.value && selectedYard.value) {
+    //         await getSelectedYardData();
+    //     } else {
+    //         yard.value = null;
+    //     }
+    // });
 
     const sidebarOpen = ref(false);
 </script>
@@ -399,7 +394,7 @@
                         <nav class="mt-5 flex-1" aria-label="Sidebar">
                             <div class="space-y-1 px-2">
                                 <NuxtLink
-                                    v-if="!user.user_metadata.selected_yard"
+                                    v-if="!selectedYard"
                                     to="/yards"
                                     :class="[
                                         '/yards' ==
@@ -467,7 +462,7 @@
                             />
                             <div class="flex-1 space-y-1 px-2">
                                 <button
-                                    v-if="user.user_metadata.selected_yard"
+                                    v-if="selectedYard"
                                     @click="handleUnselectYard"
                                     class="w-full text-sm group flex items-center rounded-md px-2 py-2 font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                                 >

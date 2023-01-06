@@ -1,5 +1,20 @@
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
     const user = useSupabaseUser();
+    const client = useSupabaseClient();
+    const selectedYard = useState("selectedYard");
+
+    // on cold page load - get the users selected yard directly from the db since it will be undefined in the store at this point.
+    if (!selectedYard.value) {
+        const { data } = await client
+            .from("profiles")
+            .select("selected_yard")
+            .eq("id", user.value?.id)
+            .single();
+
+        if (data) {
+            selectedYard.value = data.selected_yard;
+        }
+    }
 
     // TODO: middleware overhaul. splip out into multiple files and then define each middleware on each page
 
@@ -10,9 +25,7 @@ export default defineNuxtRouteMiddleware((to) => {
         // variables
         const isLoggedIn = user.value != null;
         const isLoggedOut = user.value == null;
-        const hasSelectedYard =
-            user.value != null &&
-            user.value.user_metadata.selected_yard != null;
+        const hasSelectedYard = selectedYard.value;
 
         const nonProtectedPages = ["/", "/login", "/signup"];
 
