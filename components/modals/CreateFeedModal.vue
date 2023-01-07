@@ -11,7 +11,7 @@
     const emits = defineEmits(["close"]);
 
     const client = useSupabaseClient();
-    const user = useState("user");
+    const user = useSupabaseUser();
     const feeds = useState("feeds");
     const selectedHorseId = useState("selectedHorseId");
 

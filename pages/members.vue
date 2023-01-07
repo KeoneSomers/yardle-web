@@ -42,7 +42,7 @@
     const client = useSupabaseClient();
 
     // since I just need the uid I can use this even though it's not in state
-    const user = useState("user");
+    const user = useSupabaseUser();
     const yard = useState("yard");
     const members = useState("members");
     const role = useState("role");

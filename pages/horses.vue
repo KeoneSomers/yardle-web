@@ -4,7 +4,7 @@
     import { DateTime } from "luxon";
 
     const client = useSupabaseClient();
-    const user = useState("user");
+    const user = useSupabaseUser();
     const selectedYard = useState("selectedYard");
     const isOpen = ref(false);
     const searchString = ref("");

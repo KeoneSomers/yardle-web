@@ -22,7 +22,7 @@
     const emits = defineEmits(["close"]);
 
     const client = useSupabaseClient();
-    const user = useState("user");
+    const user = useSupabaseUser();
     const events = useState("events");
     const yard = useState("yard");
     const horses = useState("horses");

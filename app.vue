@@ -1,15 +1,12 @@
 <script setup lang="ts">
     import type { RealtimeChannel } from "@supabase/supabase-js";
 
-    // Supabase
     const user = useSupabaseUser();
     const client = useSupabaseClient();
-
     let realtimeChannel: RealtimeChannel;
-
-    // State
-    const _user = useState("user", () => user.value);
     const selectedYard = useState("selectedYard", () => undefined);
+
+    // TODO: only start subscribing to db if user is logged in (can use the onAuthStateChanged hook)
 
     // Fetch users selectedYard and get the refresh method provided by useAsyncData
     const { data: _selectedYard, refresh: _refreshSelectedYard } =
@@ -53,30 +50,6 @@
     // Don't forget to unsubscribe when user left the page
     onUnmounted(() => {
         client.removeChannel(realtimeChannel);
-    });
-
-    // watch users selected yard for changes
-    // client
-    //     .channel(`public:profiles:id=eq.${user.value?.id}`)
-    //     .on(
-    //         "postgres_changes",
-    //         {
-    //             event: "UPDATE",
-    //             schema: "public",
-    //             table: "profiles",
-    //             filter: `id=eq.${user.value?.id}`,
-    //         },
-    //         (e) => {
-    //             if (e.new.selected_yard != selectedYard.value) {
-    //                 selectedYard.value = e.new.selected_yard;
-    //                 console.log("Newly!2 Selected Yard: " + selectedYard.value);
-    //             }
-    //         }
-    //     )
-    //     .subscribe();
-
-    watchEffect(() => {
-        _user.value = user.value;
     });
 </script>
 

@@ -5,7 +5,6 @@
 
     const { invite_code } = useRoute().params;
     const user = useSupabaseUser();
-    const profile = useState("user");
     const yard = ref(null);
     const client = useSupabaseClient();
     const error = ref("");
@@ -34,17 +33,14 @@
     });
 
     const handleJoinYard = async () => {
-        // TODO: if user is already a member of this yard, redirect them to the /horses page
         await useAsyncData("existingMember", async () => {
-            const { data: existingMember, error: fetchError } = await client
+            // TODO: currently this will show an error in the browser console if you are not a member since it will fail to find a result for the query. This is fine but would be nice to clean up one day
+            const { data: existingMember } = await client
                 .from("profiles_yards")
                 .select()
                 .eq("yard_id", yard.value.id)
                 .eq("profile_id", user.value.id)
                 .single();
-
-            // TODO: if existing user is not found it will show an error in browser console.
-            // not an issue but would be nice to clean it up a bit
 
             if (existingMember) {
                 if (existingMember.is_banned == true) {
@@ -52,36 +48,30 @@
                 } else {
                     error.value = "You are already a member of this yard.";
                 }
-            } else {
-                //create the user/yard relationship
-                const { error: relError } = await client
-                    .from("profiles_yards")
-                    .insert([
-                        {
-                            profile_id: user.value.id,
-                            yard_id: yard.value.id,
-                            role: 3, // role = member
-                        },
-                    ]);
-
-                if (!relError) {
-                    const { data: u, error: userUpdateError } =
-                        await client.auth.updateUser({
-                            data: { selected_yard: yard.value.id },
-                        });
-                    if (!userUpdateError) {
-                        //update local state
-                        profile.value.user_metadata.selected_yard =
-                            u.user.user_metadata.selected_yard;
-                        // redirect the user to /horses
-                        navigateTo("/horses");
-                    } else {
-                        console.log(userUpdateError);
-                    }
-                } else {
-                    console.log(relError);
-                }
+                return;
             }
+
+            //create the user/yard relationship
+            const { error: relError } = await client
+                .from("profiles_yards")
+                .insert([
+                    {
+                        profile_id: user.value.id,
+                        yard_id: yard.value.id,
+                        role: 3, // role = member
+                    },
+                ]);
+
+            if (relError) {
+                console.log(relError);
+                return;
+            }
+
+            // set selected yard
+            await client
+                .from("profiles")
+                .update({ selected_yard: yard.value.id })
+                .eq("id", user.value.id);
         });
     };
 </script>

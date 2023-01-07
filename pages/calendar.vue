@@ -11,7 +11,7 @@
     import DeleteEventModal from "@/components/modals/DeleteEventModal.vue";
 
     const client = useSupabaseClient();
-    const user = useState("user");
+    const user = useSupabaseUser();
 
     const createModalOpen = ref(false);
     const editModalOpen = ref(false);

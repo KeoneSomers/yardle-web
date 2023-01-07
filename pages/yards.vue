@@ -2,7 +2,7 @@
     import CreateYardModal from "@/components/modals/CreateYardModal.vue";
 
     const client = useSupabaseClient();
-    const user = useState("user");
+    const user = useSupabaseUser();
     const isOpen = ref(false);
 
     // get the logged in users yards

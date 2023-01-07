@@ -1,5 +1,5 @@
 <script setup>
-    const user = useState("user");
+    const user = useSupabaseUser();
     const client = useSupabaseClient();
     const loading = ref(true);
 

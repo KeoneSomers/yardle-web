@@ -1,6 +1,6 @@
 <script setup>
     const client = useSupabaseClient();
-    const user = useState("user");
+    const user = useSupabaseUser();
 
     // get data for selected yard
     const { data: yard } = await useAsyncData("yard", async () => {

@@ -11,7 +11,7 @@
     const emits = defineEmits(["close"]);
 
     const client = useSupabaseClient();
-    const user = useState("user");
+    const user = useSupabaseUser();
     const yards = useState("yards");
 
     const yardName = ref("");

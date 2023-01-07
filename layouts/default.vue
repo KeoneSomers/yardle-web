@@ -60,7 +60,7 @@
 
     const router = useRouter();
 
-    const user = useState("user");
+    const user = useSupabaseUser();
     const selectedYard = useState("selectedYard");
     const yard = useState("yard", () => null);
     const role = useState("role", () => 0);
@@ -97,12 +97,12 @@
         });
     };
 
-    // // Get users role
-    // watchEffect(async () => {
-    //     if (yard.value) {
-    //         await getMemberRole();
-    //     }
-    // });
+    // Get users role
+    watchEffect(async () => {
+        if (yard.value) {
+            await getMemberRole();
+        }
+    });
 
     const handleUnselectYard = async () => {
         const { error } = await supabaseClient
