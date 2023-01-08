@@ -28,20 +28,22 @@
                     password: password.value,
                 });
 
-            if (!error) {
-                if (!invite_code) {
-                    if (selectedYard.value) {
-                        navigateTo("/horses");
-                    } else {
-                        navigateTo("/yards");
-                    }
-                } else {
-                    // navigate user back to joining a yard
-                    navigateTo("/join/" + invite_code);
-                }
-            } else {
+            if (error) {
                 errorMessage.value = error.message;
                 console.log(error);
+                return;
+            }
+
+            if (invite_code) {
+                // navigate user back to joining a yard
+                navigateTo("/join/" + invite_code);
+                return;
+            }
+
+            if (selectedYard.value) {
+                navigateTo("/horses");
+            } else {
+                navigateTo("/yards");
             }
         }
     };
