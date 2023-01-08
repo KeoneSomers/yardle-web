@@ -11,6 +11,7 @@
     const { invite_code } = router.currentRoute.value.query;
 
     const supabaseAuthClient = useSupabaseAuthClient();
+    const selectedYard = useState("selectedYard");
 
     const email = ref("");
     const password = ref("");
@@ -29,7 +30,7 @@
 
             if (!error) {
                 if (!invite_code) {
-                    if (data.user.user_metadata.selected_yard) {
+                    if (selectedYard.value) {
                         navigateTo("/horses");
                     } else {
                         navigateTo("/yards");

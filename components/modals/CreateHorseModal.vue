@@ -12,6 +12,7 @@
 
     const client = useSupabaseClient();
     const user = useSupabaseUser();
+    const selectedYard = useState("selectedYard");
     const horses = useState("horses");
     const selectedHorseId = useState("selectedHorseId");
 
@@ -29,7 +30,7 @@
             .from("horses")
             .insert({
                 name: capitalizeFirstLetter(name.value),
-                yard_id: user.value.user_metadata.selected_yard,
+                yard_id: selectedYard.value,
                 created_by: user.value.id,
             })
             .select()

@@ -23,6 +23,7 @@
 
     const client = useSupabaseClient();
     const user = useSupabaseUser();
+    const selectedYard = useState("selectedYard");
     const events = useState("events");
     const yard = useState("yard");
     const horses = useState("horses");
@@ -31,7 +32,7 @@
         const { data } = await client
             .from("horses")
             .select()
-            .eq("yard_id", user.value.user_metadata.selected_yard)
+            .eq("yard_id", selectedYard.value)
             .order("name", { ascending: true });
 
         horses.value = data;

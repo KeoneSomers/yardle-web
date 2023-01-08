@@ -1,13 +1,14 @@
 <script setup>
     const client = useSupabaseClient();
     const user = useSupabaseUser();
+    const selectedYard = useState("selectedYard");
 
     // get data for selected yard
     const { data: yard } = await useAsyncData("yard", async () => {
         const { data } = await client
             .from("yards")
             .select()
-            .eq("id", user.value.user_metadata.selected_yard)
+            .eq("id", selectedYard.value)
             .single();
 
         return data;

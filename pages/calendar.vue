@@ -12,6 +12,7 @@
 
     const client = useSupabaseClient();
     const user = useSupabaseUser();
+    const selectedYard = useState("selectedYard");
 
     const createModalOpen = ref(false);
     const editModalOpen = ref(false);
@@ -67,7 +68,7 @@
                 .from("calendar_events")
                 .select()
                 .order("all_day", { ascending: false })
-                .eq("yard_id", user.value.user_metadata.selected_yard);
+                .eq("yard_id", selectedYard.value);
 
             events.value = data;
         });

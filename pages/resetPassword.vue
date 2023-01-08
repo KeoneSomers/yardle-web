@@ -5,6 +5,7 @@
 
     const user = useSupabaseUser();
     const client = useSupabaseClient();
+    const selectedYard = useState("selectedYard");
 
     const errorMessage = ref();
 
@@ -22,7 +23,7 @@
 
                 if (!error) {
                     // success!
-                    if (data.user.user_metadata.selected_yard) {
+                    if (selectedYard.value) {
                         navigateTo("/horses");
                     } else {
                         navigateTo("/yards");

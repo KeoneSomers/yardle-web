@@ -12,12 +12,13 @@
     });
 
     const user = useState<User>("user");
+    const selectedYard = useState("selectedYard");
 
     // watch for auth changes
     onMounted(() => {
         watchEffect(() => {
             if (user.value) {
-                if (user.value.user_metadata.selected_yard) {
+                if (selectedYard.value) {
                     navigateTo("/horses");
                 } else {
                     navigateTo("/yards");

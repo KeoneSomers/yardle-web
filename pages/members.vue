@@ -46,6 +46,7 @@
     const yard = useState("yard");
     const members = useState("members");
     const role = useState("role");
+    const selectedYard = useState("selectedYard");
 
     const inviteLinkModalOpen = ref(false);
     const removeMemberModalOpen = ref(false);
@@ -61,7 +62,7 @@
         const { data, error } = await client
             .from("profiles_yards")
             .select("profile:profiles(*), role")
-            .eq("yard_id", user.value.user_metadata.selected_yard)
+            .eq("yard_id", selectedYard.value)
             .order("role", { ascending: true });
 
         members.value = data;

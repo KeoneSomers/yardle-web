@@ -14,12 +14,15 @@
     const members = useState("members");
     const yard = useState("yard");
 
-    const handleDelete = async () => {
-        // this needs to be done on the server since it's an admin function
-        const { result } = await $fetch("/api/removeUsersSelectedYard", {
-            method: "post",
-            body: { memberId: props.memberId },
-        });
+    const handleRemoveMember = async () => {
+        // const { result } = await $fetch("/api/removeUsersSelectedYard", {
+        //     method: "post",
+        //     body: { memberId: props.memberId },
+        // });
+        await client
+            .from("profiles")
+            .update({ selected_yard: null })
+            .eq("id", props.memberId);
 
         const { error } = await client
             .from("profiles_yards")
@@ -109,7 +112,7 @@
                                 <button
                                     type="button"
                                     class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                                    @click="handleDelete"
+                                    @click="handleRemoveMember"
                                 >
                                     Remove
                                 </button>

@@ -57,9 +57,7 @@
 
     const supabaseAuthClient = useSupabaseAuthClient();
     const supabaseClient = useSupabaseClient();
-
     const router = useRouter();
-
     const user = useSupabaseUser();
     const selectedYard = useState("selectedYard");
     const yard = useState("yard", () => null);
@@ -74,13 +72,13 @@
     ];
 
     // watch for auth changes
-    // onMounted(() => {
-    //     watchEffect(() => {
-    //         if (!user.value) {
-    //             navigateTo("/");
-    //         }
-    //     });
-    // });
+    onMounted(() => {
+        watchEffect(() => {
+            if (!user.value) {
+                navigateTo("/");
+            }
+        });
+    });
 
     const getMemberRole = async () => {
         await useAsyncData("role", async () => {
@@ -146,13 +144,13 @@
 
     await getSelectedYardData();
 
-    // watchEffect(async () => {
-    //     if (user.value && selectedYard.value) {
-    //         await getSelectedYardData();
-    //     } else {
-    //         yard.value = null;
-    //     }
-    // });
+    watchEffect(async () => {
+        if (user.value && selectedYard.value) {
+            await getSelectedYardData();
+        } else {
+            yard.value = null;
+        }
+    });
 
     const sidebarOpen = ref(false);
 </script>
