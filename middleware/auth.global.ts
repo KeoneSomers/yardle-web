@@ -23,15 +23,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
         to.path != "/resetpassword"
     ) {
         // variables
-        const isLoggedIn = user.value != null;
-        const isLoggedOut = user.value == null;
         const hasSelectedYard = selectedYard.value;
-
         const nonProtectedPages = ["/", "/login", "/signup"];
 
         // visiter is trying to access NON-AUTH pages
         if (nonProtectedPages.includes(to.path)) {
-            if (isLoggedIn) {
+            if (user.value) {
                 if (hasSelectedYard) {
                     navigateTo("/horses");
                 } else {
@@ -42,9 +39,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
         // visiter is trying to access AUTH pages
         if (!nonProtectedPages.includes(to.path)) {
-            if (isLoggedOut) navigateTo("/");
+            if (!user.value) navigateTo("/");
 
-            if (isLoggedIn) {
+            if (user.value) {
                 // already have selected yard
                 if (hasSelectedYard) {
                     if (to.path == "/yards") navigateTo("/horses");

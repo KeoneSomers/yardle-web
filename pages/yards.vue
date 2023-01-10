@@ -7,6 +7,7 @@
 
     // get the logged in users yards
     const yards = useState("yards");
+    const selectedYard = useState("selectedYard");
 
     // this is not ssr - needs to be cleaned up
     onMounted(async () => {
@@ -22,6 +23,12 @@
 
         yards.value = data.yards;
     });
+
+    // watchEffect(() => {
+    //     if (selectedYard) {
+    //         navigateTo("/horses");
+    //     }
+    // });
 
     const handleSelectYard = async (yardId) => {
         // TODO: Check the yard still exists and that you're still and unbanned member of it

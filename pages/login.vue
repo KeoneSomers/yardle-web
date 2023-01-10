@@ -11,6 +11,7 @@
     const { invite_code } = router.currentRoute.value.query;
 
     const supabaseAuthClient = useSupabaseAuthClient();
+    const user = useSupabaseUser();
     const selectedYard = useState("selectedYard");
 
     const email = ref("");
@@ -19,6 +20,22 @@
     const requestPasswordResetModalOpen = ref(false);
 
     const errorMessage = ref("");
+
+    watchEffect(() => {
+        if (user.value) {
+            if (invite_code) {
+                // navigate user back to joining a yard
+                navigateTo("/join/" + invite_code);
+                return;
+            }
+
+            if (selectedYard.value) {
+                navigateTo("/horses");
+            } else {
+                navigateTo("/yards");
+            }
+        }
+    });
 
     const handleLogin = async () => {
         if (email.value && password.value) {
@@ -32,18 +49,6 @@
                 errorMessage.value = error.message;
                 console.log(error);
                 return;
-            }
-
-            if (invite_code) {
-                // navigate user back to joining a yard
-                navigateTo("/join/" + invite_code);
-                return;
-            }
-
-            if (selectedYard.value) {
-                navigateTo("/horses");
-            } else {
-                navigateTo("/yards");
             }
         }
     };
