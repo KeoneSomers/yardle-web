@@ -113,13 +113,18 @@
         supabaseAuthClient.auth.signOut();
     };
 
-    const { data: profile } = await useAsyncData("profile", async () => {
-        const { data } = await supabaseClient
-            .from("profiles")
-            .select()
-            .eq("id", user.value.id)
-            .single();
-        return data;
+    const profile = ref(null);
+    onMounted(async () => {
+        const { data: _profile } = await useAsyncData("profile", async () => {
+            const { data } = await supabaseClient
+                .from("profiles")
+                .select()
+                .eq("id", user.value.id)
+                .single();
+            return data;
+        });
+
+        profile.value = _profile.value;
     });
 
     const getSelectedYardData = async () => {
@@ -144,19 +149,21 @@
 
     await getSelectedYardData();
 
-    watchEffect(async () => {
-        if (user.value && selectedYard.value) {
-            await getSelectedYardData();
-        } else {
-            yard.value = null;
-        }
+    onMounted(async () => {
+        watchEffect(async () => {
+            if (user.value && selectedYard.value) {
+                await getSelectedYardData();
+            } else {
+                yard.value = null;
+            }
+        });
     });
 
     const sidebarOpen = ref(false);
 </script>
 
 <template>
-    <div v-if="user" class="flex h-screen">
+    <div v-if="user && profile" class="flex h-screen">
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog
                 as="div"
