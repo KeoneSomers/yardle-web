@@ -1,5 +1,5 @@
 export function useRouteManager() {
-    const router = useRouter();
+    const route = useRoute();
     const user = useSupabaseUser();
     const selectedYard = useState("selectedYard");
     const nonProtectedPages = ["/", "/login", "/signup"];
@@ -15,14 +15,14 @@ export function useRouteManager() {
 
     onMounted(async () => {
         watchEffect(async () => {
-            let to = router.currentRoute.value;
+            console.log(route.meta.requireNoAuth === true);
 
             if (
-                to.path != `/join/${to.params.invite_code}` &&
-                to.path != "/resetpassword"
+                route.path != `/join/${route.params.invite_code}` &&
+                route.path != "/resetpassword"
             ) {
-                // visiter is trying to access NON-AUTH pages
-                if (nonProtectedPages.includes(to.path)) {
+                // visiter is trying route access NON-AUTH pages
+                if (nonProtectedPages.includes(route.path)) {
                     if (user.value) {
                         if (selectedYard.value) {
                             navigateTo("/horses");
@@ -32,16 +32,16 @@ export function useRouteManager() {
                     }
                 }
                 // visiter is trying to access AUTH pages
-                if (!nonProtectedPages.includes(to.path)) {
+                if (!nonProtectedPages.includes(route.path)) {
                     if (!user.value) navigateTo("/");
                     if (user.value) {
                         // already have selected yard
                         if (selectedYard.value) {
-                            if (to.path == "/yards") navigateTo("/horses");
+                            if (route.path == "/yards") navigateTo("/horses");
                         }
                         // have not selected a yard
                         if (!selectedYard.value) {
-                            if (yardProtectedPages.includes(to.path))
+                            if (yardProtectedPages.includes(route.path))
                                 navigateTo("/yards");
                         }
                     }

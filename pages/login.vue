@@ -3,6 +3,7 @@
 
     definePageMeta({
         layout: "blank",
+        requireNoAuth: true,
     });
 
     const router = useRouter();
