@@ -1,6 +1,11 @@
 <script setup>
     import CreateYardModal from "@/components/modals/CreateYardModal.vue";
 
+    definePageMeta({
+        requireAuth: true,
+        requireNoYard: true,
+    });
+
     const client = useSupabaseClient();
     const user = useSupabaseUser();
     const isOpen = ref(false);
