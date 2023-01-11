@@ -11,22 +11,6 @@
         layout: "blank",
     });
 
-    const user = useState<User>("user");
-    const selectedYard = useState("selectedYard");
-
-    // watch for auth changes
-    onMounted(() => {
-        watchEffect(() => {
-            if (user.value) {
-                if (selectedYard.value) {
-                    navigateTo("/horses");
-                } else {
-                    navigateTo("/yards");
-                }
-            }
-        });
-    });
-
     const mobileMenuOpen = ref(false);
 
     const features = [

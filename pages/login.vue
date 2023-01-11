@@ -22,17 +22,12 @@
     const errorMessage = ref("");
 
     watchEffect(() => {
+        // TODO: this will likely not work since it's being handled in useRoueManager.ts now
         if (user.value) {
             if (invite_code) {
                 // navigate user back to joining a yard
                 navigateTo("/join/" + invite_code);
                 return;
-            }
-
-            if (selectedYard.value) {
-                navigateTo("/horses");
-            } else {
-                navigateTo("/yards");
             }
         }
     });

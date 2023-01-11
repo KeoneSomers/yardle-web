@@ -24,12 +24,6 @@
         yards.value = data.yards;
     });
 
-    // watchEffect(() => {
-    //     if (selectedYard) {
-    //         navigateTo("/horses");
-    //     }
-    // });
-
     const handleSelectYard = async (yardId) => {
         // TODO: Check the yard still exists and that you're still and unbanned member of it
 
