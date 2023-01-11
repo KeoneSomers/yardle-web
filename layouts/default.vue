@@ -71,28 +71,22 @@
         { id: 4, name: "Guest" },
     ];
 
-    // watch for auth changes
-    onMounted(() => {
-        watchEffect(() => {
-            if (!user.value) {
-                navigateTo("/");
-            }
-        });
-    });
-
     const getMemberRole = async () => {
-        await useAsyncData("role", async () => {
-            const { data: roleData, error: roleError } = await supabaseClient
-                .from("profiles_yards")
-                .select("role")
-                .eq("profile_id", user.value.id)
-                .eq("yard_id", yard.value.id)
-                .single();
+        if (yard.value) {
+            await useAsyncData("role", async () => {
+                const { data: roleData, error: roleError } =
+                    await supabaseClient
+                        .from("profiles_yards")
+                        .select("role")
+                        .eq("profile_id", user.value.id)
+                        .eq("yard_id", yard.value.id)
+                        .single();
 
-            // todo get role name value (not just the id)
+                // todo get role name value (not just the id)
 
-            role.value = roleData.role;
-        });
+                role.value = roleData.role;
+            });
+        }
     };
 
     // Get users role
@@ -505,7 +499,7 @@
                     </div>
                     <div
                         v-if="yard"
-                        class="flex flex-shrink-0 border-t border-gray-200 p-4"
+                        class="flex flex-shrink-0 border-t border-gray-200 p-4 bg-gray-50"
                     >
                         <div
                             class="group block w-full flex-shrink-0 pointer-events-none"

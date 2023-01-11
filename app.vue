@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import type { RealtimeChannel } from "@supabase/supabase-js";
 
+    useRouteManager();
+
     const user = useSupabaseUser();
     const client = useSupabaseClient();
     let realtimeChannel: RealtimeChannel;
@@ -15,18 +17,14 @@
     const { refresh: refreshSeletcedYard } = await useAsyncData(
         "seletcedYard",
         async () => {
-            const { data } = await client
-                .from("profiles")
-                .select("selected_yard")
-                .eq("id", user.value?.id)
-                .single();
+            if (user.value) {
+                const { data } = await client
+                    .from("profiles")
+                    .select("selected_yard")
+                    .eq("id", user.value?.id)
+                    .single();
 
-            selectedYard.value = data?.selected_yard;
-
-            if (selectedYard.value) {
-                navigateTo("/horses");
-            } else {
-                navigateTo("/yards");
+                selectedYard.value = data?.selected_yard;
             }
         }
     );
