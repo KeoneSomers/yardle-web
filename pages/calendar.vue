@@ -10,6 +10,10 @@
     import EditEventModal from "@/components/modals/EditEventModal.vue";
     import DeleteEventModal from "@/components/modals/DeleteEventModal.vue";
 
+    definePageMeta({
+        guards: ["requireAuth", "requireYard"],
+    });
+
     const client = useSupabaseClient();
     const user = useSupabaseUser();
     const selectedYard = useState("selectedYard");

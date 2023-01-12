@@ -3,8 +3,11 @@
     import CreateHorseModal from "@/components/modals/CreateHorseModal.vue";
     import { DateTime } from "luxon";
 
+    definePageMeta({
+        guards: ["requireAuth", "requireYard"],
+    });
+
     const client = useSupabaseClient();
-    const user = useSupabaseUser();
     const selectedYard = useState("selectedYard");
     const isOpen = ref(false);
     const searchString = ref("");
@@ -90,7 +93,7 @@
         <aside
             class="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col"
         >
-            <div class="px-6 pt-6 pb-4">
+            <div class="px-4 pt-6 pb-4">
                 <h2 class="text-lg font-medium text-gray-900">Horses</h2>
                 <p class="mt-1 text-sm text-gray-600">
                     Search directory of {{ horses.length }} horse<span

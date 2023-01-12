@@ -1,4 +1,8 @@
 <script setup>
+    definePageMeta({
+        guards: ["requireAuth", "requireYard"],
+    });
+
     const locations = [
         {
             name: "Poppy",

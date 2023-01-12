@@ -1,5 +1,6 @@
 <script setup>
     definePageMeta({
+        guards: ["requireAuth"],
         layout: "blank",
     });
 

@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+    definePageMeta({
+        guards: ["requireAuth", "requireYard"],
+    });
+</script>
 
 <template>
     <div>

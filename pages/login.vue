@@ -2,8 +2,8 @@
     import RequestPasswordResetModal from "@/components/modals/RequestPasswordResetModal.vue";
 
     definePageMeta({
+        guards: ["requireNoAuth"],
         layout: "blank",
-        requireNoAuth: true,
     });
 
     const router = useRouter();

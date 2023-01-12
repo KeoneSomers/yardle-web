@@ -1,4 +1,8 @@
 <script setup>
+    definePageMeta({
+        guards: ["requireAuth"],
+    });
+
     const user = useSupabaseUser();
     const client = useSupabaseClient();
     const loading = ref(true);

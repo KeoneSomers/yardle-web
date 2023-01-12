@@ -1,6 +1,7 @@
 <script setup>
     definePageMeta({
         layout: "blank",
+        guards: [],
     });
 
     const { invite_code } = useRoute().params;

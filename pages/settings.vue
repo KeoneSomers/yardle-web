@@ -1,7 +1,11 @@
-<script setup></script>
+<script setup>
+    definePageMeta({
+        guards: ["requireAuth"],
+    });
+</script>
 
 <template>
     <div>
-        <p>Settings Page</p>
+        <p>Account Settings Page</p>
     </div>
 </template>

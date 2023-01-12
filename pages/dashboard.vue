@@ -1,4 +1,8 @@
 <script setup>
+    definePageMeta({
+        guards: ["requireAuth", "requireYard"],
+    });
+
     const client = useSupabaseClient();
     const user = useSupabaseUser();
     const selectedYard = useState("selectedYard");

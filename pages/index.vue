@@ -5,10 +5,10 @@
         XMarkIcon,
         CheckIcon,
     } from "@heroicons/vue/24/outline/index.js";
-    import { User } from "@supabase/supabase-js";
 
     definePageMeta({
         layout: "blank",
+        guards: ["requireNoAuth"],
     });
 
     const mobileMenuOpen = ref(false);

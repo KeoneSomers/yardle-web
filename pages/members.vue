@@ -13,6 +13,10 @@
         ChevronDownIcon,
     } from "@heroicons/vue/20/solid/index.js";
 
+    definePageMeta({
+        guards: ["requireAuth", "requireYard"],
+    });
+
     const roles = [
         {
             id: 1,

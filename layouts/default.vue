@@ -4,6 +4,10 @@
         DialogPanel,
         TransitionChild,
         TransitionRoot,
+        Menu,
+        MenuButton,
+        MenuItem,
+        MenuItems,
     } from "@headlessui/vue";
 
     import {
@@ -19,7 +23,17 @@
         RectangleStackIcon,
         RectangleGroupIcon,
         ClipboardDocumentListIcon,
+        Bars3BottomLeftIcon,
+        BellIcon,
+        ChartBarIcon,
+        FolderIcon,
+        InboxIcon,
+        UsersIcon,
     } from "@heroicons/vue/24/outline/index.js";
+    import {
+        MagnifyingGlassIcon,
+        EllipsisHorizontalIcon,
+    } from "@heroicons/vue/20/solid/index.js";
 
     const navigation = [
         { name: "Dashboard", to: "/dashboard", icon: HomeIcon, hint: "Soon" },
@@ -52,7 +66,13 @@
     ];
 
     const secondaryNavigation = [
-        { name: "Settings", to: "/settings", icon: CogIcon },
+        { name: "Yard Settings", to: "/settings", icon: CogIcon },
+    ];
+
+    const userNavigation = [
+        { name: "Your Profile", href: "#" },
+        { name: "Settings", href: "#" },
+        { name: "Sign out", href: "#" },
     ];
 
     const supabaseAuthClient = useSupabaseAuthClient();
@@ -271,35 +291,6 @@
                                             >
                                         </NuxtLink>
                                     </div>
-                                    <hr
-                                        class="my-5 border-t border-gray-200"
-                                        aria-hidden="true"
-                                    />
-                                    <div class="space-y-1 px-2">
-                                        <NuxtLink
-                                            v-for="item in secondaryNavigation"
-                                            :key="item.name"
-                                            :to="item.to"
-                                            class="group flex items-center rounded-md px-2 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                                        >
-                                            <component
-                                                :is="item.icon"
-                                                class="mr-4 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                                aria-hidden="true"
-                                            />
-                                            {{ item.name }}
-                                        </NuxtLink>
-                                        <button
-                                            @click="handleSignout"
-                                            class="w-full text-base group flex items-center rounded-md px-2 py-2 font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                                        >
-                                            <ArrowLeftOnRectangleIcon
-                                                class="mr-4 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                                aria-hidden="true"
-                                            />
-                                            Logout
-                                        </button>
-                                    </div>
                                 </nav>
                             </div>
                             <div
@@ -332,40 +323,7 @@
                             </div>
                             <div
                                 class="flex flex-shrink-0 border-t border-gray-200 p-4"
-                            >
-                                <NuxtLink class="group block flex-shrink-0">
-                                    <div class="flex items-center">
-                                        <div>
-                                            <SupabaseImage
-                                                v-if="profile.avatar_url"
-                                                id="avatars"
-                                                :path="profile.avatar_url"
-                                                class="w-9 h-9 rounded-full overflow-hidden"
-                                            />
-                                            <div
-                                                v-else
-                                                class="h-9 w-9 bg-indigo-500 rounded-full flex items-center justify-center text-white"
-                                            >
-                                                {{
-                                                    profile.username[0].toUpperCase()
-                                                }}
-                                            </div>
-                                        </div>
-                                        <div class="ml-3">
-                                            <p
-                                                class="text-base font-medium text-gray-700 group-hover:text-gray-900"
-                                            >
-                                                {{ profile.username }}
-                                            </p>
-                                            <p
-                                                class="text-sm font-medium text-gray-500 group-hover:text-gray-700"
-                                            >
-                                                <!-- View profile -->
-                                            </p>
-                                        </div>
-                                    </div>
-                                </NuxtLink>
-                            </div>
+                            ></div>
                         </DialogPanel>
                     </TransitionChild>
                     <div class="w-14 flex-shrink-0" aria-hidden="true">
@@ -390,7 +348,28 @@
                                 alt="Your Company"
                             />
                         </div>
-                        <nav class="mt-5 flex-1" aria-label="Sidebar">
+                        <nav class="mt-3 flex-1" aria-label="Sidebar">
+                            <div
+                                class="border-t border-b p-4 bg-gray-50 flex"
+                                v-if="yard"
+                            >
+                                <div class="flex-1">
+                                    <p class="text-md font-bold text-gray-600">
+                                        {{ yard.name }}
+                                    </p>
+                                    <p class="text-xs text-gray-500">
+                                        {{ roles[role - 1].name }}
+                                    </p>
+                                </div>
+                                <div class="flex items-center">
+                                    <button
+                                        @click="handleUnselectYard"
+                                        class="block p-2 text-sm text-gray-500 w-full text-left border rounded-full"
+                                    >
+                                        <ArrowsRightLeftIcon class="h-5 w-5" />
+                                    </button>
+                                </div>
+                            </div>
                             <div class="space-y-1 px-2">
                                 <NuxtLink
                                     v-if="!selectedYard"
@@ -455,70 +434,7 @@
                                     >
                                 </NuxtLink>
                             </div>
-                            <hr
-                                class="my-5 border-t border-gray-200"
-                                aria-hidden="true"
-                            />
-                            <div class="flex-1 space-y-1 px-2">
-                                <button
-                                    v-if="selectedYard"
-                                    @click="handleUnselectYard"
-                                    class="w-full text-sm group flex items-center rounded-md px-2 py-2 font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                                >
-                                    <ArrowsRightLeftIcon
-                                        class="mr-3 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                        aria-hidden="true"
-                                    />
-                                    Switch Yard
-                                </button>
-                                <NuxtLink
-                                    v-for="item in secondaryNavigation"
-                                    :key="item.name"
-                                    :to="item.to"
-                                    class="group flex items-center rounded-md px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                                >
-                                    <component
-                                        :is="item.icon"
-                                        class="mr-3 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                        aria-hidden="true"
-                                    />
-                                    {{ item.name }}
-                                </NuxtLink>
-                                <button
-                                    @click="handleSignout"
-                                    class="w-full text-sm group flex items-center rounded-md px-2 py-2 font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                                >
-                                    <ArrowLeftOnRectangleIcon
-                                        class="mr-3 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                        aria-hidden="true"
-                                    />
-                                    Logout
-                                </button>
-                            </div>
                         </nav>
-                    </div>
-                    <div
-                        v-if="yard"
-                        class="flex flex-shrink-0 border-t border-gray-200 p-4 bg-gray-50"
-                    >
-                        <div
-                            class="group block w-full flex-shrink-0 pointer-events-none"
-                        >
-                            <div class="ml-3">
-                                <p
-                                    class="text-sm font-medium text-gray-700 group-hover:text-gray-900 truncate overflow-hidden"
-                                >
-                                    {{ yard.name }}
-                                </p>
-
-                                <p
-                                    v-if="role"
-                                    class="text-xs font-medium text-gray-500 group-hover:text-gray-700"
-                                >
-                                    {{ roles[role - 1].name }}
-                                </p>
-                            </div>
-                        </div>
                     </div>
                     <div
                         class="flex flex-shrink-0 border-t border-gray-200 p-4"
@@ -539,7 +455,7 @@
                                         {{ profile.username[0].toUpperCase() }}
                                     </div>
                                 </div>
-                                <div class="ml-3">
+                                <div class="ml-3 flex-1">
                                     <p
                                         class="text-sm font-medium text-gray-700 group-hover:text-gray-900"
                                     >
@@ -550,6 +466,62 @@
                                     >
                                         <!-- View profile -->
                                     </p>
+                                </div>
+                                <div>
+                                    <Menu as="div" class="relative ml-3">
+                                        <div>
+                                            <MenuButton
+                                                class="flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                            >
+                                                <span class="sr-only"
+                                                    >Open user menu</span
+                                                >
+
+                                                <div
+                                                    class="rounded-full p-1 flex items-center justify-center border-2"
+                                                >
+                                                    <EllipsisHorizontalIcon
+                                                        class="h-5 w-5 text-gray-500"
+                                                    />
+                                                </div>
+                                            </MenuButton>
+                                        </div>
+                                        <transition
+                                            enter-active-class="transition ease-out duration-100"
+                                            enter-from-class="transform opacity-0 scale-95"
+                                            enter-to-class="transform opacity-100 scale-100"
+                                            leave-active-class="transition ease-in duration-75"
+                                            leave-from-class="transform opacity-100 scale-100"
+                                            leave-to-class="transform opacity-0 scale-95"
+                                        >
+                                            <MenuItems
+                                                class="absolute bottom-0 right-0 z-10 mt-2 w-48 origin-bottom-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                            >
+                                                <MenuItem>
+                                                    <NuxtLink
+                                                        to="/profile"
+                                                        class="block px-4 py-2 text-sm text-gray-700"
+                                                        >Your Profile</NuxtLink
+                                                    >
+                                                </MenuItem>
+                                                <MenuItem>
+                                                    <NuxtLink
+                                                        to="/settings"
+                                                        class="block px-4 py-2 text-sm text-gray-700"
+                                                        >Settings</NuxtLink
+                                                    >
+                                                </MenuItem>
+                                                <MenuItem>
+                                                    <button
+                                                        @click="handleSignout"
+                                                        class="block px-4 py-2 text-sm text-gray-700 w-full text-left"
+                                                    >
+                                                        Sign Out
+                                                    </button>
+                                                </MenuItem>
+                                            </MenuItems>
+                                        </transition>
+                                    </Menu>
                                 </div>
                             </div>
                         </NuxtLink>
