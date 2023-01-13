@@ -18,22 +18,12 @@
         MagnifyingGlassCircleIcon,
         UserGroupIcon,
         XMarkIcon,
-        ArrowLeftOnRectangleIcon,
         ArrowsRightLeftIcon,
         RectangleStackIcon,
         RectangleGroupIcon,
         ClipboardDocumentListIcon,
-        Bars3BottomLeftIcon,
-        BellIcon,
-        ChartBarIcon,
-        FolderIcon,
-        InboxIcon,
-        UsersIcon,
     } from "@heroicons/vue/24/outline/index.js";
-    import {
-        MagnifyingGlassIcon,
-        EllipsisHorizontalIcon,
-    } from "@heroicons/vue/20/solid/index.js";
+    import { EllipsisHorizontalIcon } from "@heroicons/vue/20/solid/index.js";
 
     const navigation = [
         { name: "Dashboard", to: "/dashboard", icon: HomeIcon, hint: "Soon" },
@@ -65,16 +55,7 @@
         },
     ];
 
-    const secondaryNavigation = [
-        { name: "Yard Settings", to: "/settings", icon: CogIcon },
-    ];
-
-    const userNavigation = [
-        { name: "Your Profile", href: "#" },
-        { name: "Settings", href: "#" },
-        { name: "Sign out", href: "#" },
-    ];
-
+    const sidebarOpen = ref(false);
     const supabaseAuthClient = useSupabaseAuthClient();
     const supabaseClient = useSupabaseClient();
     const router = useRouter();
@@ -172,8 +153,6 @@
             }
         });
     });
-
-    const sidebarOpen = ref(false);
 </script>
 
 <template>
