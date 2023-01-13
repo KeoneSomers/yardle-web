@@ -68,12 +68,12 @@
         }
     });
 
-    // Don't forget to unsubscribe when user left the page
-    onUnmounted(() => {
-        if (client.getChannels.length > 0) {
-            client.removeChannel(realtimeChannel);
-        }
-    });
+    // // Don't forget to unsubscribe when user left the page
+    // onUnmounted(() => {
+    //     if (client.getChannels.length > 0) {
+    //         client.removeChannel(realtimeChannel);
+    //     }
+    // });
 </script>
 
 <template>

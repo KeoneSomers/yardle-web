@@ -11,7 +11,6 @@
     } from "@headlessui/vue";
 
     import {
-        Bars3Icon,
         CalendarIcon,
         CogIcon,
         HomeIcon,
@@ -55,7 +54,7 @@
         },
     ];
 
-    const sidebarOpen = ref(false);
+    const sidebarOpen = useState("sidebarOpen", () => false);
     const supabaseAuthClient = useSupabaseAuthClient();
     const supabaseClient = useSupabaseClient();
     const router = useRouter();
@@ -63,6 +62,7 @@
     const selectedYard = useState("selectedYard");
     const yard = useState("yard", () => null);
     const role = useState("role", () => 0);
+    const profile = ref(null);
 
     // TODO: this should pull from db
     const roles = [
@@ -108,8 +108,7 @@
         supabaseAuthClient.auth.signOut();
     };
 
-    const profile = ref(null);
-    onMounted(async () => {
+    const setProfile = async () => {
         const { data: _profile } = await useAsyncData("profile", async () => {
             const { data } = await supabaseClient
                 .from("profiles")
@@ -120,6 +119,10 @@
         });
 
         profile.value = _profile.value;
+    };
+
+    onMounted(async () => {
+        await setProfile();
     });
 
     const getSelectedYardData = async () => {
@@ -148,6 +151,7 @@
         watchEffect(async () => {
             if (user.value && selectedYard.value) {
                 await getSelectedYardData();
+                await setProfile();
             } else {
                 yard.value = null;
             }
@@ -156,7 +160,8 @@
 </script>
 
 <template>
-    <div v-if="user && profile" class="flex h-screen">
+    <div class="flex h-screen">
+        <!-- Mobile Sidebar -->
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog
                 as="div"
@@ -312,7 +317,7 @@
             </Dialog>
         </TransitionRoot>
 
-        <!-- Static sidebar for desktop -->
+        <!-- Desktop Sidebar -->
         <div class="hidden lg:flex lg:flex-shrink-0">
             <div class="flex w-64 flex-col">
                 <!-- Sidebar component, swap this element with another sidebar if you like -->
@@ -328,15 +333,19 @@
                             />
                         </div>
                         <nav class="mt-3 flex-1" aria-label="Sidebar">
+                            <!-- yard widget -->
                             <div
-                                class="border-t border-b p-4 bg-gray-50 flex"
                                 v-if="yard"
+                                class="border-t border-b p-4 bg-gray-50 flex"
                             >
                                 <div class="flex-1">
                                     <p class="text-md font-bold text-gray-600">
                                         {{ yard.name }}
                                     </p>
-                                    <p class="text-xs text-gray-500">
+                                    <p
+                                        v-if="role"
+                                        class="text-xs text-gray-500"
+                                    >
                                         {{ roles[role - 1].name }}
                                     </p>
                                 </div>
@@ -416,6 +425,7 @@
                         </nav>
                     </div>
                     <div
+                        v-if="profile"
                         class="flex flex-shrink-0 border-t border-gray-200 p-4"
                     >
                         <NuxtLink class="group block w-full flex-shrink-0">
@@ -508,32 +518,12 @@
                 </div>
             </div>
         </div>
+
         <div class="flex min-w-0 flex-1 flex-col">
-            <!-- mobile navbar -->
-            <div class="lg:hidden">
-                <div
-                    class="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-1.5"
-                >
-                    <div>
-                        <img
-                            class="h-8 w-auto"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=pink&shade=500"
-                            alt="Your Company"
-                        />
-                    </div>
-                    <div>
-                        <button
-                            type="button"
-                            class="-mr-3 inline-flex h-12 w-12 items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-600"
-                            @click="sidebarOpen = true"
-                        >
-                            <span class="sr-only">Open sidebar</span>
-                            <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <!-- here? -->
+            <!-- Mobile Navbar -->
+            <MobileNavbar />
+
+            <!-- Page Content -->
             <slot />
         </div>
     </div>

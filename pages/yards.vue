@@ -11,7 +11,6 @@
 
     // get the logged in users yards
     const yards = useState("yards");
-    const selectedYard = useState("selectedYard");
 
     // this is not ssr - needs to be cleaned up
     onMounted(async () => {

@@ -1,9 +1,30 @@
 export function useRouteManager() {
-    const route = useRoute();
+    // =====================================================================================================================
+
+    // Watch for changes (user)
     const user = useSupabaseUser();
+    const authClient = useSupabaseAuthClient();
+    const authStateSubcription = authClient.auth.onAuthStateChange(
+        (event, session) => {
+            if (session) {
+                console.log("Logged in");
+                // check if need to redirect
+                // user.value = session.user;
+                authClient.auth.updateUser(session.user);
+            } else {
+                console.log("Logged out");
+                // check if need to redirect
+                user.value = null;
+            }
+        }
+    );
+
+    // =====================================================================================================================
+
+    const route = useRoute();
     const selectedYard = useState("selectedYard");
 
-    watchEffect(async () => {
+    watchEffect(() => {
         const requireAuth = route.meta.guards.includes("requireAuth");
         const requireNoAuth = route.meta.guards.includes("requireNoAuth");
         const requireYard = route.meta.guards.includes("requireYard");
