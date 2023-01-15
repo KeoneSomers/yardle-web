@@ -1,23 +1,24 @@
 export function useRouteManager() {
-    // =====================================================================================================================
-
     // Watch for changes (user)
     const user = useSupabaseUser();
     const authClient = useSupabaseAuthClient();
-    const authStateSubcription = authClient.auth.onAuthStateChange(
-        (event, session) => {
-            if (session) {
-                console.log("Logged in");
-                // check if need to redirect
-                // user.value = session.user;
-                authClient.auth.updateUser(session.user);
-            } else {
-                console.log("Logged out");
-                // check if need to redirect
-                user.value = null;
-            }
+    authClient.auth.onAuthStateChange((event, session) => {
+        if (session) {
+            console.log("Logged in");
+            // check if need to redirect
+            // user.value = session.user;
+
+            // TODO: Fix error - updating app_metadata requires admin priviledges
+            // const { app_metadata, ...newResponse } = session.user;
+
+            // console.log(newResponse);
+            // authClient.auth.updateUser(session.user);
+        } else {
+            console.log("Logged out");
+            // check if need to redirect
+            user.value = null;
         }
-    );
+    });
 
     // =====================================================================================================================
 
