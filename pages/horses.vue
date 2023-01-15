@@ -95,7 +95,7 @@
         >
             <div class="px-4 pt-6 pb-4">
                 <h2 class="text-lg font-medium text-gray-900">Horses</h2>
-                <p class="mt-1 text-sm text-gray-600">
+                <p v-if="horses" class="mt-1 text-sm text-gray-600">
                     Search directory of {{ horses.length }} horse<span
                         v-if="horses.length != 1"
                         >s</span
