@@ -1,5 +1,6 @@
 <script setup>
     import CreateYardModal from "@/components/modals/CreateYardModal.vue";
+    import DeleteYardModal from "@/components/modals/DeleteYardModal.vue";
 
     definePageMeta({
         guards: ["requireAuth", "requireNoYard"],
@@ -7,7 +8,11 @@
 
     const client = useSupabaseClient();
     const user = useSupabaseUser();
+
     const isOpen = ref(false);
+    const deleteYardModalOpen = ref(false);
+
+    const yardToDelete = ref(0);
 
     // get the logged in users yards
     const yards = useState("yards");
@@ -26,6 +31,11 @@
 
         yards.value = data.yards;
     });
+
+    const handleDeleteYard = (yardId) => {
+        yardToDelete.value = yardId;
+        deleteYardModalOpen.value = true;
+    };
 
     const handleSelectYard = async (yardId) => {
         // TODO: Check the yard still exists and that you're still and unbanned member of it
@@ -52,84 +62,6 @@
         } else {
             console.log(error);
         }
-    };
-
-    // Todo - Need a warning modal
-    const handleDeleteYard = async (yardId) => {
-        // remove members selected yard
-        // TODO: Note that this will still allow users to use the yard for the remainer of their JWT session (1 week)
-        const { data: memberIds, error: memberIdsError } = await client
-            .from("profiles_yards")
-            .select("profile_id")
-            .eq("yard_id", yardId);
-        for (let i = 0; i < memberIds.length; i++) {
-            await client
-                .from("profiles")
-                .update({ selected_yard: yardId })
-                .eq("id", memberIds[i].profile_id);
-        }
-
-        // first: get all horse id's
-        const { data: _horseIds } = await client
-            .from("horses")
-            .select("id")
-            .eq("yard_id", yardId);
-
-        const horseIds = _horseIds.map((e) => e.id);
-
-        // delete calendar_events_horses
-        if (horseIds.length > 0) {
-            const { data, error } = await client
-                .from("calendar_events_horses")
-                .delete()
-                .filter("horse_id", "in", `(${horseIds})`);
-        }
-
-        // delete calendar_events
-        const { error: err2 } = await client
-            .from("calendar_events")
-            .delete()
-            .eq("yard_id", yardId);
-
-        if (horseIds.length > 0) {
-            // delete rugs, medications, feeds
-            await client
-                .from("rugs")
-                .delete()
-                .filter("horse_id", "in", `(${horseIds})`);
-
-            await client
-                .from("medications")
-                .delete()
-                .filter("horse_id", "in", `(${horseIds})`);
-
-            await client
-                .from("feeds")
-                .delete()
-                .filter("horse_id", "in", `(${horseIds})`);
-
-            // delete all the yard horses
-            const { error: err4 } = await client
-                .from("horses")
-                .delete()
-                .eq("yard_id", yardId);
-        }
-
-        // delete all the yard members
-        const { error: err5 } = await client
-            .from("profiles_yards")
-            .delete()
-            .eq("yard_id", yardId);
-
-        // delete the yard
-        const { error: err6 } = await client
-            .from("yards")
-            .delete()
-            .eq("id", yardId);
-
-        // success! - now remove the yard from the webpage
-        const i = yards.value.map((e) => e.id).indexOf(yardId);
-        yards.value.splice(i, 1);
     };
 </script>
 
@@ -204,4 +136,9 @@
 
     <!-- Modals -->
     <CreateYardModal :is-open="isOpen" @close="isOpen = false" />
+    <DeleteYardModal
+        :is-open="deleteYardModalOpen"
+        :yard-id="yardToDelete"
+        @close="deleteYardModalOpen = false"
+    />
 </template>

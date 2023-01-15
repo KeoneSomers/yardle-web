@@ -8,22 +8,74 @@
     } from "@headlessui/vue";
     import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
-    const props = defineProps(["isOpen", "userId"]);
+    const props = defineProps(["isOpen", "yardId"]);
     const emits = defineEmits(["close"]);
 
+    const client = useSupabaseClient();
+    const yards = useState("yards");
+
     const handleSubmit = async () => {
-        // TODO: first delete all the users data
+        // set profiles selected yard to null
+        await client
+            .from("profiles")
+            .update({ selected_yard: null })
+            .eq("selected_yard", props.yardId);
 
-        // calendar_events + calendar_events_horses
-        // horses + Feeds + rugs + medications
-        // profile + profiles_yards
-        // yards (If they are the owner of any yards)
+        // first: get all horse id's
+        const { data: _horseIds } = await client
+            .from("horses")
+            .select("id")
+            .eq("yard_id", props.yardId);
 
-        // ... finally remove their account
-        const { result } = await $fetch("/api/deleteUserAccount", {
-            method: "post",
-            body: { userId: props.userId },
-        });
+        const horseIds = _horseIds.map((e) => e.id);
+
+        // delete calendar_events_horses
+        if (horseIds.length > 0) {
+            await client
+                .from("calendar_events_horses")
+                .delete()
+                .filter("horse_id", "in", `(${horseIds})`);
+        }
+
+        // delete calendar_events
+        await client
+            .from("calendar_events")
+            .delete()
+            .eq("yard_id", props.yardId);
+
+        if (horseIds.length > 0) {
+            // delete rugs, medications, feeds
+            await client
+                .from("rugs")
+                .delete()
+                .filter("horse_id", "in", `(${horseIds})`);
+
+            await client
+                .from("medications")
+                .delete()
+                .filter("horse_id", "in", `(${horseIds})`);
+
+            await client
+                .from("feeds")
+                .delete()
+                .filter("horse_id", "in", `(${horseIds})`);
+
+            // delete all the yard horses
+            await client.from("horses").delete().eq("yard_id", props.yardId);
+        }
+
+        // delete all the yard members
+        await client
+            .from("profiles_yards")
+            .delete()
+            .eq("yard_id", props.yardId);
+
+        // delete the yard
+        await client.from("yards").delete().eq("id", props.yardId);
+
+        // success! - now remove the yard from the webpage
+        const i = yards.value.map((e) => e.id).indexOf(props.yardId);
+        yards.value.splice(i, 1);
     };
 </script>
 
@@ -75,13 +127,13 @@
                                     <DialogTitle
                                         as="h3"
                                         class="text-lg font-medium leading-6 text-gray-900"
-                                        >Delete User Account</DialogTitle
+                                        >Delete Yard</DialogTitle
                                     >
                                     <div class="mt-2">
                                         <p class="text-sm text-gray-500">
-                                            Are you sure you want to delete your
-                                            user account? This action is
-                                            permanent and cannot be undone.
+                                            Are you sure you want to delete this
+                                            yard? This action is permanent and
+                                            cannot be undone.
                                         </p>
                                     </div>
                                 </div>
