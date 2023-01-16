@@ -65,12 +65,16 @@
     const errors = ref([]);
 
     const addIngredient = () => {
+        if (newIngredient.value.name === "") {
+            errors.value.push("Please enter a name");
+        }
+
         if (newIngredient.value.quantity === 0) {
-            errors.value.push("Please select a quantity");
+            errors.value.push("Please enter a quantity");
         }
 
         if (newIngredient.value.metric === "") {
-            errors.value.push("Please select a metric");
+            errors.value.push("Please enter a metric");
         }
 
         if (newIngredient.value.type === 0) {
@@ -80,6 +84,8 @@
         if (errors.value.length > 0) {
             return;
         }
+
+        ingredients.value.push(newIngredient.value);
 
         // success!
         addingIngredient.value = false;
@@ -138,7 +144,7 @@
 
             <div class="fixed inset-0 overflow-y-auto">
                 <div
-                    class="flex min-h-full items-center justify-center p-4 text-center"
+                    class="flex h-full items-center justify-center p-4 text-center"
                 >
                     <TransitionChild
                         as="template"
@@ -150,7 +156,7 @@
                         leave-to="opacity-0 scale-95"
                     >
                         <DialogPanel
-                            class="w-full h-96 max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
+                            class="w-full h-[32rem] max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
                         >
                             <div class="relative">
                                 <div class="absolute w-full">
@@ -180,6 +186,46 @@
                                             >
                                                 Add Ingredient
                                             </button>
+                                            <div class="flex flex-wrap mb-3">
+                                                <span
+                                                    v-for="ing in ingredients"
+                                                    :key="ing"
+                                                    class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 pl-2 pr-0.5 text-xs font-medium text-indigo-700 mr-3 mb-2"
+                                                >
+                                                    {{
+                                                        ingredientTypes[
+                                                            ing.type
+                                                        ]
+                                                    }}
+                                                    -
+                                                    {{
+                                                        ing.quantity +
+                                                        " " +
+                                                        ing.metric
+                                                    }}
+                                                    <button
+                                                        type="button"
+                                                        class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:bg-indigo-500 focus:text-white focus:outline-none"
+                                                    >
+                                                        <span class="sr-only"
+                                                            >Remove small
+                                                            option</span
+                                                        >
+                                                        <svg
+                                                            class="h-2 w-2"
+                                                            stroke="currentColor"
+                                                            fill="none"
+                                                            viewBox="0 0 8 8"
+                                                        >
+                                                            <path
+                                                                stroke-linecap="round"
+                                                                stroke-width="1.5"
+                                                                d="M1 1l6 6m0-6L1 7"
+                                                            />
+                                                        </svg>
+                                                    </button>
+                                                </span>
+                                            </div>
                                             <form
                                                 @submit.prevent="handleSubmit"
                                                 class="flex flex-col space-y-4"
@@ -276,11 +322,11 @@
                                                 <div class="col-span-12">
                                                     <label
                                                         class="block text-sm font-medium text-gray-700"
-                                                        >Name (optional)</label
+                                                        >Name</label
                                                     >
                                                     <input
                                                         type="text"
-                                                        placeholder="i.e: Hi-Fi Origional"
+                                                        placeholder="i.e: Hi-Fi Origional, Basic Chaff"
                                                         class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                                         v-model="
                                                             newIngredient.name
@@ -374,7 +420,7 @@
                                                             () =>
                                                                 (addingIngredient = false)
                                                         "
-                                                        class="w-full justify-center rounded-md border border-transparent bg-gray-500 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
+                                                        class="w-full justify-center rounded-md border border-transparent bg-gray-500 px-4 py-2 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
                                                     >
                                                         Back
                                                     </button>
