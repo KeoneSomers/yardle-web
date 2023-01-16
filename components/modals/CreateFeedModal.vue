@@ -26,7 +26,7 @@
 
     const resetModal = () => {
         addingIngredient.value = false;
-        ingredients.value = "";
+        ingredients.value = [];
         instructions.value = "";
         condition.value = "";
         newIngredient.value = {
@@ -91,13 +91,14 @@
         addingIngredient.value = false;
     };
 
-    const handleSubmit = async () => {
+    const handleCreateFeed = async () => {
+        // error - no ingredients
         if (ingredients.value.length == 0) {
             errors.value.push("Feed requires at least one ingredient.");
             return;
         }
 
-        // step 1: add new feed to db
+        // add new feed to db
         const { data, error } = await client
             .from("feeds")
             .insert({
@@ -109,21 +110,40 @@
             .select()
             .single();
 
-        // step 2: update local state
-        if (!error) {
-            if (feeds.value) {
-                feeds.value.push(data);
-            } else {
-                feeds.value = [data];
-            }
-
-            // clear form
-            resetModal();
-
-            emits("close");
-        } else {
+        // error - feed supabase db
+        if (error) {
             errors.value.push(createError.message + createError.hint);
+            return;
         }
+
+        // add ingredients to db
+        const { data: ingredientsData, error: ingredientsError } = await client
+            .from("ingredients")
+            .insert(
+                ingredients.value.map((ingredient) => ({
+                    feed_id: data.id,
+                    name: ingredient.name,
+                    quantity: ingredient.quantity,
+                    metric: ingredient.metric,
+                    type: ingredient.type,
+                }))
+            );
+
+        // error - ingredients supabase db
+        if (ingredientsError) {
+            errors.value.push(ingredientsError.message + ingredientsError.hint);
+            return;
+        }
+
+        // update local state
+        if (feeds.value) {
+            feeds.value.push(data);
+        } else {
+            feeds.value = [data];
+        }
+
+        resetModal();
+        emits("close");
     };
 </script>
 
@@ -227,7 +247,9 @@
                                                 </span>
                                             </div>
                                             <form
-                                                @submit.prevent="handleSubmit"
+                                                @submit.prevent="
+                                                    handleCreateFeed
+                                                "
                                                 class="flex flex-col space-y-4"
                                             >
                                                 <div>

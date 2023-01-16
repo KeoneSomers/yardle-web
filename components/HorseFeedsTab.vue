@@ -18,12 +18,11 @@
     const feedToDelete = ref(0);
 
     await useAsyncData("feeds", async () => {
-        const { data } = await client
-            .from("feeds")
-            .select()
-            .eq("horse_id", selectedHorseId.value);
-
-        feeds.value = data;
+        // const { data } = await client
+        //     .from("feeds")
+        //     .select()
+        //     .eq("horse_id", selectedHorseId.value);
+        // feeds.value = data;
     });
 
     // functions
