@@ -2,13 +2,6 @@
     import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
     import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
     import {
-        Listbox,
-        ListboxButton,
-        ListboxLabel,
-        ListboxOption,
-        ListboxOptions,
-    } from "@headlessui/vue";
-    import {
         CheckIcon,
         ChevronDownIcon,
     } from "@heroicons/vue/20/solid/index.js";

@@ -1,6 +1,4 @@
 <script setup>
-    import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-
     import {
         CalendarIcon,
         HomeIcon,

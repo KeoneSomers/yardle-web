@@ -4,7 +4,6 @@
         ChevronRightIcon,
         EllipsisHorizontalIcon,
     } from "@heroicons/vue/20/solid/index.js";
-    import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
     import { DateTime } from "luxon";
     import CreateEventModal from "@/components/modals/CreateEventModal.vue";
     import EditEventModal from "@/components/modals/EditEventModal.vue";

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-    import { Dialog, DialogPanel, TransitionRoot } from "@headlessui/vue";
     import {
         Bars3Icon,
         XMarkIcon,

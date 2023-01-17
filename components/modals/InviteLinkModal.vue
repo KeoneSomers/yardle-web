@@ -1,11 +1,4 @@
 <script setup>
-    import {
-        Dialog,
-        DialogPanel,
-        TransitionChild,
-        TransitionRoot,
-    } from "@headlessui/vue";
-
     const props = defineProps(["isOpen"]);
     const emits = defineEmits(["close"]);
 

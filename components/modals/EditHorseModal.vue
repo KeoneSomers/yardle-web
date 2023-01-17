@@ -1,11 +1,4 @@
 <script setup>
-    import {
-        TransitionRoot,
-        TransitionChild,
-        Dialog,
-        DialogPanel,
-        DialogTitle,
-    } from "@headlessui/vue";
     import { DateTime } from "luxon";
 
     const props = defineProps(["isOpen", "horse"]);

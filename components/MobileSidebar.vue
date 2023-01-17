@@ -1,12 +1,5 @@
 <script setup>
     import {
-        Dialog,
-        DialogPanel,
-        TransitionChild,
-        TransitionRoot,
-    } from "@headlessui/vue";
-
-    import {
         CalendarIcon,
         HomeIcon,
         MagnifyingGlassCircleIcon,

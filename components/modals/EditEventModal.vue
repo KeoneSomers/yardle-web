@@ -1,17 +1,4 @@
 <script setup>
-    import {
-        TransitionRoot,
-        TransitionChild,
-        Dialog,
-        DialogPanel,
-        DialogTitle,
-        Combobox,
-        ComboboxButton,
-        ComboboxInput,
-        ComboboxLabel,
-        ComboboxOption,
-        ComboboxOptions,
-    } from "@headlessui/vue";
     import { DateTime } from "luxon";
     import {
         CheckIcon,
