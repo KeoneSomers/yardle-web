@@ -65,6 +65,8 @@
     const errors = ref([]);
 
     const addIngredient = () => {
+        errors.value = [];
+
         if (newIngredient.value.name === "") {
             errors.value.push("Please enter a name");
         }
@@ -122,6 +124,7 @@
             .insert(
                 ingredients.value.map((ingredient) => ({
                     feed_id: data.id,
+                    horse_id: selectedHorseId.value,
                     name: ingredient.name,
                     quantity: ingredient.quantity,
                     metric: ingredient.metric,
@@ -135,13 +138,15 @@
             return;
         }
 
-        // update local state
+        // add feed to local state
         if (feeds.value) {
+            data.ingredients = ingredients.value;
             feeds.value.push(data);
         } else {
             feeds.value = [data];
         }
 
+        // cleanup
         resetModal();
         emits("close");
     };
@@ -224,6 +229,15 @@
                                                         ing.metric
                                                     }}
                                                     <button
+                                                        @click="
+                                                            () =>
+                                                                ingredients.splice(
+                                                                    ingredients.indexOf(
+                                                                        ing
+                                                                    ),
+                                                                    1
+                                                                )
+                                                        "
                                                         type="button"
                                                         class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:bg-indigo-500 focus:text-white focus:outline-none"
                                                     >
@@ -267,7 +281,6 @@
                                                             v-model="
                                                                 instructions
                                                             "
-                                                            required
                                                         />
                                                     </div>
                                                 </div>
@@ -284,7 +297,6 @@
                                                             placeholder="i.e: Morning, Evening, After Riding"
                                                             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                                             v-model="condition"
-                                                            required
                                                         />
                                                     </div>
                                                 </div>

@@ -18,11 +18,32 @@
     const feedToDelete = ref(0);
 
     await useAsyncData("feeds", async () => {
-        // const { data } = await client
-        //     .from("feeds")
-        //     .select()
-        //     .eq("horse_id", selectedHorseId.value);
-        // feeds.value = data;
+        // fetch feeds
+        const { data, error } = await client
+            .from("feeds")
+            .select()
+            .eq("horse_id", selectedHorseId.value);
+
+        if (!error) {
+            feeds.value = data;
+        }
+
+        // fetch feed ingredients
+        const { data: ingredientsData, error: ingredientsError } = await client
+            .from("ingredients")
+            .select()
+            .eq("horse_id", selectedHorseId.value);
+
+        // map ingredients to feeds
+        if (!ingredientsError) {
+            feeds.value = feeds.value.map((feed) => {
+                feed.ingredients = ingredientsData.filter(
+                    (ingredient) => ingredient.feed_id === feed.id
+                );
+
+                return feed;
+            });
+        }
     });
 
     // functions
@@ -30,6 +51,15 @@
         feedToDelete.value = feedId;
         deleteModalOpen.value = true;
     };
+
+    const ingredientTypes = [
+        "Pick one",
+        "Chaff",
+        "Nuts",
+        "Extra",
+        "Suppliments",
+        "Other",
+    ];
 </script>
 
 <template>
@@ -67,12 +97,6 @@
                                 >
                                     <th
                                         scope="col"
-                                        class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                    >
-                                        Name
-                                    </th>
-                                    <th
-                                        scope="col"
                                         class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
                                     >
                                         Ingredients
@@ -82,6 +106,12 @@
                                         class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
                                     >
                                         Instructions
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                    >
+                                        Condition
                                     </th>
                                     <th
                                         scope="col"
@@ -96,19 +126,42 @@
                                     class="divide-x divide-gray-200 grid grid-cols-4"
                                 >
                                     <td
-                                        class="py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6 break-all"
-                                    >
-                                        {{ feed.name }}
-                                    </td>
-                                    <td
                                         class="p-4 text-sm text-gray-500 break-all break-all"
                                     >
-                                        {{ feed.ingredients }}
+                                        <div class="flex flex-wrap mb-3">
+                                            <span
+                                                v-for="ingredient in feed.ingredients"
+                                                :key="ingredient"
+                                                class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700 mr-3 mb-2"
+                                            >
+                                                {{
+                                                    `${ingredient.name} (${
+                                                        ingredientTypes[
+                                                            ingredient.type
+                                                        ]
+                                                    })
+                                                     - ${ingredient.quantity} ${
+                                                        ingredient.metric
+                                                    }`
+                                                }}
+                                            </span>
+                                        </div>
                                     </td>
                                     <td
                                         class="p-4 text-sm text-gray-500 break-all"
                                     >
-                                        {{ feed.instructions }}
+                                        <span v-if="feed.instructions">{{
+                                            feed.instructions
+                                        }}</span>
+                                        <span v-else>--</span>
+                                    </td>
+                                    <td
+                                        class="p-4 text-sm text-gray-500 break-all"
+                                    >
+                                        <span v-if="feed.condition">{{
+                                            feed.condition
+                                        }}</span>
+                                        <span v-else>--</span>
                                     </td>
                                     <td
                                         class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6 break-all"
