@@ -1,11 +1,11 @@
 <script setup>
-    definePageMeta({
-        guards: ["requireAuth", "requireYard"],
-    });
+  definePageMeta({
+    guards: ["requireAuth", "requireYard"],
+  });
 </script>
 
 <template>
-    <div>
-        <p>Field Groups Page</p>
-    </div>
+  <div>
+    <p>Field Groups Page</p>
+  </div>
 </template>
