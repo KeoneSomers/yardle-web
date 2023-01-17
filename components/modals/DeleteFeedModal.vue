@@ -15,18 +15,29 @@
   const feeds = useState("feeds");
 
   const handleDelete = async () => {
-    //TODO: first delete the ingredients associated with the feed
+    // delete the feeds ingredients
+    const { error: ingredientsError } = await client
+      .from("ingredients")
+      .delete()
+      .eq("feed_id", props.feedId)
+      .select();
+
+    if (ingredientsError) {
+      // somthing went wrong!
+      console.log(ingredientsError);
+      return;
+    }
 
     // delete the feed
-    const { error } = await client
+    const { error: feedError } = await client
       .from("feeds")
       .delete()
       .eq("id", props.feedId)
       .select();
 
-    if (error) {
+    if (feedError) {
       // somthing went wrong!
-      console.log(error);
+      console.log(feedError);
       return;
     }
 
