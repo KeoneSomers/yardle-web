@@ -2,6 +2,7 @@
 import BasicModal from "@/components/BasicModal.vue";
 import { DialogTitle } from "@headlessui/vue";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
@@ -9,9 +10,11 @@ definePageMeta({
 
 const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
+const feeds = useState("feeds");
 
 const deleteModalOpen = ref(false);
 const selectedFeedId = ref(0);
+const editModalOpen = ref(false);
 
 const ingredientTypes = [
   "Pick one",
@@ -22,8 +25,9 @@ const ingredientTypes = [
   "Other",
 ];
 
+// TODO: this need to use the feeds state
 // fetch feeds
-const { data: feeds } = await useAsyncData("all_feeds", async () => {
+await useAsyncData("all_feeds", async () => {
   const { data, error } = await client
     .from("feeds")
     .select()
@@ -64,7 +68,7 @@ const { data: feeds } = await useAsyncData("all_feeds", async () => {
     };
   });
 
-  return Promise.all(mappedFeeds);
+  feeds.value = await Promise.all(mappedFeeds);
 });
 
 const handleDelete = async () => {
@@ -103,9 +107,15 @@ const handleDelete = async () => {
   selectedFeedId.value = 0;
 };
 
+// delete modal
 const handleModalOpen = (feedId) => {
-  deleteModalOpen.value = true;
   selectedFeedId.value = feedId;
+  deleteModalOpen.value = true;
+};
+
+const handleEdit = (feedId) => {
+  selectedFeedId.value = feedId;
+  editModalOpen.value = true;
 };
 </script>
 
@@ -318,6 +328,12 @@ const handleModalOpen = (feedId) => {
                     class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
                   >
                     <button
+                      @click="handleEdit(feed.id)"
+                      class="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Edit
+                    </button>
+                    <button
                       @click="handleModalOpen(feed.id)"
                       class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                     >
@@ -333,7 +349,13 @@ const handleModalOpen = (feedId) => {
     </div>
   </div>
 
-  <!-- Modals -->
+  <!-- Edit Feed Modal -->
+  <EditFeedModal
+    :is-open="editModalOpen"
+    :feed-id="selectedFeedId"
+    @close="editModalOpen = false"
+  />
+  <!-- Delete Feed Modal -->
   <BasicModal :is-open="deleteModalOpen" @close="deleteModalOpen = false">
     <div>
       <div class="sm:flex sm:items-start">

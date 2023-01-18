@@ -35,32 +35,35 @@ const resetModal = () => {
 };
 
 // handle open and close
-watch(props, async (newValue) => {
-  if (newValue.isOpen) {
-    // get values from db
-    const { data, error } = await client
-      .from("feeds")
-      .select()
-      .eq("id", newValue.feedId)
-      .single();
+watch(
+  () => props.isOpen,
+  async (isOpen) => {
+    if (isOpen) {
+      // get values from db
+      const { data, error } = await client
+        .from("feeds")
+        .select()
+        .eq("id", props.feedId)
+        .single();
 
-    if (!error) {
-      // set values
-      instructions.value = data.instructions;
-      condition.value = data.condition;
-    }
+      if (!error) {
+        // set values
+        instructions.value = data.instructions;
+        condition.value = data.condition;
+      }
 
-    // get ingredients from db
-    const { data: ingredientsData, error: ingredientsError } = await client
-      .from("ingredients")
-      .select()
-      .eq("feed_id", newValue.feedId);
+      // get ingredients from db
+      const { data: ingredientsData, error: ingredientsError } = await client
+        .from("ingredients")
+        .select()
+        .eq("feed_id", props.feedId);
 
-    if (!ingredientsError) {
-      ingredients.value = ingredientsData;
+      if (!ingredientsError) {
+        ingredients.value = ingredientsData;
+      }
     }
   }
-});
+);
 
 // reset values on change
 watch(addingIngredient, (newValue) => {
@@ -155,7 +158,9 @@ const handleUpdateFeed = async () => {
 
   const i = feeds.value.map((e) => e.id).indexOf(data.id);
   data.ingredients = ingredients.value;
-  feeds.value[i] = data;
+  // only update fields that have changed
+  feeds.value[i].instructions = data.instructions;
+  feeds.value[i] = { ...data, horse: feeds.value[i].horse };
 
   // cleanup
   resetModal();
