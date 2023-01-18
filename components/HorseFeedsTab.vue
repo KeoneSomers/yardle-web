@@ -1,10 +1,12 @@
 <script setup>
 // imports
 import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
+import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 import DeleteFeedModal from "@/components/modals/DeleteFeedModal.vue";
 
 // modal toggles
 const createModalOpen = ref(false);
+const editModalOpen = ref(false);
 const deleteModalOpen = ref(false);
 
 // supabase
@@ -15,7 +17,7 @@ const feeds = useState("feeds");
 const selectedHorseId = useState("selectedHorseId");
 
 // refs
-const feedToDelete = ref(0);
+const selectedFeedId = ref(0);
 
 await useAsyncData("feeds", async () => {
   // fetch feeds
@@ -48,8 +50,13 @@ await useAsyncData("feeds", async () => {
 
 // functions
 const handleDelete = (feedId) => {
-  feedToDelete.value = feedId;
+  selectedFeedId.value = feedId;
   deleteModalOpen.value = true;
+};
+
+const handleEdit = (feedId) => {
+  selectedFeedId.value = feedId;
+  editModalOpen.value = true;
 };
 
 const ingredientTypes = [
@@ -153,6 +160,12 @@ const ingredientTypes = [
                     class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6 break-all"
                   >
                     <button
+                      @click="handleEdit(feed.id)"
+                      class="bg-blue-400 rounded px-3 mr-3 py-1 text-white"
+                    >
+                      Edit
+                    </button>
+                    <button
                       @click="handleDelete(feed.id)"
                       class="bg-red-400 rounded px-3 py-1 text-white"
                     >
@@ -173,9 +186,14 @@ const ingredientTypes = [
     :is-open="createModalOpen"
     @close="createModalOpen = false"
   />
+  <EditFeedModal
+    :is-open="editModalOpen"
+    :feed-id="selectedFeedId"
+    @close="editModalOpen = false"
+  />
   <DeleteFeedModal
     :is-open="deleteModalOpen"
-    :feed-id="feedToDelete"
+    :feed-id="selectedFeedId"
     @close="deleteModalOpen = false"
   />
 </template>
