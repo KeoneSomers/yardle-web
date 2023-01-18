@@ -1,145 +1,144 @@
 <script setup>
-  import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
-  import {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    EllipsisHorizontalIcon,
-  } from "@heroicons/vue/20/solid/index.js";
-  import { DateTime } from "luxon";
-  import CreateEventModal from "@/components/modals/CreateEventModal.vue";
-  import EditEventModal from "@/components/modals/EditEventModal.vue";
-  import DeleteEventModal from "@/components/modals/DeleteEventModal.vue";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EllipsisHorizontalIcon,
+} from "@heroicons/vue/20/solid/index.js";
+import { DateTime } from "luxon";
+import CreateEventModal from "@/components/modals/CreateEventModal.vue";
+import EditEventModal from "@/components/modals/EditEventModal.vue";
+import DeleteEventModal from "@/components/modals/DeleteEventModal.vue";
 
-  definePageMeta({
-    guards: ["requireAuth", "requireYard"],
+definePageMeta({
+  guards: ["requireAuth", "requireYard"],
+});
+
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const selectedYard = useState("selectedYard");
+
+const createModalOpen = ref(false);
+const editModalOpen = ref(false);
+const deleteModalOpen = ref(false);
+
+const selectedEvent = ref(null);
+
+const openEditModal = (e) => {
+  selectedEvent.value = e;
+  editModalOpen.value = true;
+};
+
+const openDeleteModal = (e) => {
+  selectedEvent.value = e.id;
+  deleteModalOpen.value = true;
+};
+
+const offset = ref(0);
+const dt = ref(DateTime.now());
+const trueDateTime = DateTime.now();
+
+const months = [
+  "January",
+  "Febuary",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const weekdays = [
+  { id: 1, shortName: "Mon", name: "Monday" },
+  { id: 2, shortName: "Tue", name: "Tuesday" },
+  { id: 3, shortName: "Wed", name: "Wednesday" },
+  { id: 4, shortName: "Thu", name: "Thursday" },
+  { id: 5, shortName: "Fri", name: "Friday" },
+  { id: 6, shortName: "Sat", name: "Saturday" },
+  { id: 7, shortName: "Sun", name: "Sunday" },
+];
+
+const days = useState("days", () => []);
+const events = useState("events", () => []);
+
+const getEvents = async () => {
+  await useAsyncData("events", async () => {
+    const { data } = await client
+      .from("calendar_events")
+      .select()
+      .order("all_day", { ascending: false })
+      .eq("yard_id", selectedYard.value);
+
+    events.value = data;
   });
+};
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
-  const selectedYard = useState("selectedYard");
+const setDays = async () => {
+  const firstWeekdayOfMonth = dt.value.startOf("month").weekday;
+  const firstDay = ref(
+    dt.value.startOf("month").minus({
+      // days: 6 - (7 - firstWeekdayOfMonth),
+      days: firstWeekdayOfMonth - 1,
+    })
+  );
 
-  const createModalOpen = ref(false);
-  const editModalOpen = ref(false);
-  const deleteModalOpen = ref(false);
+  let i = 0;
+  days.value = [];
 
-  const selectedEvent = ref(null);
+  while (i < 42) {
+    let day = firstDay.value.plus({ days: i });
 
-  const openEditModal = (e) => {
-    selectedEvent.value = e;
-    editModalOpen.value = true;
-  };
-
-  const openDeleteModal = (e) => {
-    selectedEvent.value = e.id;
-    deleteModalOpen.value = true;
-  };
-
-  const offset = ref(0);
-  const dt = ref(DateTime.now());
-  const trueDateTime = DateTime.now();
-
-  const months = [
-    "January",
-    "Febuary",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const weekdays = [
-    { id: 1, shortName: "Mon", name: "Monday" },
-    { id: 2, shortName: "Tue", name: "Tuesday" },
-    { id: 3, shortName: "Wed", name: "Wednesday" },
-    { id: 4, shortName: "Thu", name: "Thursday" },
-    { id: 5, shortName: "Fri", name: "Friday" },
-    { id: 6, shortName: "Sat", name: "Saturday" },
-    { id: 7, shortName: "Sun", name: "Sunday" },
-  ];
-
-  const days = useState("days", () => []);
-  const events = useState("events", () => []);
-
-  const getEvents = async () => {
-    await useAsyncData("events", async () => {
-      const { data } = await client
-        .from("calendar_events")
-        .select()
-        .order("all_day", { ascending: false })
-        .eq("yard_id", selectedYard.value);
-
-      events.value = data;
-    });
-  };
-
-  const setDays = async () => {
-    const firstWeekdayOfMonth = dt.value.startOf("month").weekday;
-    const firstDay = ref(
-      dt.value.startOf("month").minus({
-        // days: 6 - (7 - firstWeekdayOfMonth),
-        days: firstWeekdayOfMonth - 1,
-      })
-    );
-
-    let i = 0;
-    days.value = [];
-
-    while (i < 42) {
-      let day = firstDay.value.plus({ days: i });
-
-      // add  events from events array
-      // TODO: This could be optimised I think.
-      if (events.value) {
-        day.events = events.value.filter((e) => {
-          return (
-            DateTime.fromISO(e.date_time).toLocaleString() ==
-            day.toLocaleString()
-          );
-        });
-      }
-
-      days.value.push(day);
-
-      i++;
-    }
-  };
-
-  // watch for added events
-  // TODO: have days be stored in useState and add the event
-  // directly to the day when it's created (big optimisation)
-  watchEffect(() => {
+    // add  events from events array
+    // TODO: This could be optimised I think.
     if (events.value) {
-      setDays();
+      day.events = events.value.filter((e) => {
+        return (
+          DateTime.fromISO(e.date_time).toLocaleString() == day.toLocaleString()
+        );
+      });
     }
-  });
 
-  // get days on load
-  await getEvents();
-  await setDays();
+    days.value.push(day);
 
-  const goToNextMonth = () => {
-    offset.value++;
-    dt.value = DateTime.now().plus({ months: offset.value });
+    i++;
+  }
+};
+
+// watch for added events
+// TODO: have days be stored in useState and add the event
+// directly to the day when it's created (big optimisation)
+watchEffect(() => {
+  if (events.value) {
     setDays();
-  };
+  }
+});
 
-  const goToPreviousMonth = () => {
-    offset.value--;
-    dt.value = DateTime.now().plus({ months: offset.value });
-    setDays();
-  };
+// get days on load
+await getEvents();
+await setDays();
 
-  const goToCurrentMonth = () => {
-    offset.value = 0;
-    dt.value = DateTime.now().plus({ months: offset.value });
-    setDays();
-  };
+const goToNextMonth = () => {
+  offset.value++;
+  dt.value = DateTime.now().plus({ months: offset.value });
+  setDays();
+};
+
+const goToPreviousMonth = () => {
+  offset.value--;
+  dt.value = DateTime.now().plus({ months: offset.value });
+  setDays();
+};
+
+const goToCurrentMonth = () => {
+  offset.value = 0;
+  dt.value = DateTime.now().plus({ months: offset.value });
+  setDays();
+};
 </script>
 
 <template>

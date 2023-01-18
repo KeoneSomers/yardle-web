@@ -1,22 +1,22 @@
 <script setup>
-  definePageMeta({
-    guards: ["requireAuth", "requireYard"],
-  });
+definePageMeta({
+  guards: ["requireAuth", "requireYard"],
+});
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
-  const selectedYard = useState("selectedYard");
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const selectedYard = useState("selectedYard");
 
-  // get data for selected yard
-  const { data: yard } = await useAsyncData("yard", async () => {
-    const { data } = await client
-      .from("yards")
-      .select()
-      .eq("id", selectedYard.value)
-      .single();
+// get data for selected yard
+const { data: yard } = await useAsyncData("yard", async () => {
+  const { data } = await client
+    .from("yards")
+    .select()
+    .eq("id", selectedYard.value)
+    .single();
 
-    return data;
-  });
+  return data;
+});
 </script>
 
 <template>

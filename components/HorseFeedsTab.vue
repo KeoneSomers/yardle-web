@@ -1,65 +1,65 @@
 <script setup>
-  // imports
-  import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
-  import DeleteFeedModal from "@/components/modals/DeleteFeedModal.vue";
+// imports
+import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
+import DeleteFeedModal from "@/components/modals/DeleteFeedModal.vue";
 
-  // modal toggles
-  const createModalOpen = ref(false);
-  const deleteModalOpen = ref(false);
+// modal toggles
+const createModalOpen = ref(false);
+const deleteModalOpen = ref(false);
 
-  // supabase
-  const client = useSupabaseClient();
+// supabase
+const client = useSupabaseClient();
 
-  // states
-  const feeds = useState("feeds");
-  const selectedHorseId = useState("selectedHorseId");
+// states
+const feeds = useState("feeds");
+const selectedHorseId = useState("selectedHorseId");
 
-  // refs
-  const feedToDelete = ref(0);
+// refs
+const feedToDelete = ref(0);
 
-  await useAsyncData("feeds", async () => {
-    // fetch feeds
-    const { data, error } = await client
-      .from("feeds")
-      .select()
-      .eq("horse_id", selectedHorseId.value);
+await useAsyncData("feeds", async () => {
+  // fetch feeds
+  const { data, error } = await client
+    .from("feeds")
+    .select()
+    .eq("horse_id", selectedHorseId.value);
 
-    if (!error) {
-      feeds.value = data;
-    }
+  if (!error) {
+    feeds.value = data;
+  }
 
-    // fetch feed ingredients
-    const { data: ingredientsData, error: ingredientsError } = await client
-      .from("ingredients")
-      .select()
-      .eq("horse_id", selectedHorseId.value);
+  // fetch feed ingredients
+  const { data: ingredientsData, error: ingredientsError } = await client
+    .from("ingredients")
+    .select()
+    .eq("horse_id", selectedHorseId.value);
 
-    // map ingredients to feeds
-    if (!ingredientsError) {
-      feeds.value = feeds.value.map((feed) => {
-        feed.ingredients = ingredientsData.filter(
-          (ingredient) => ingredient.feed_id === feed.id
-        );
+  // map ingredients to feeds
+  if (!ingredientsError) {
+    feeds.value = feeds.value.map((feed) => {
+      feed.ingredients = ingredientsData.filter(
+        (ingredient) => ingredient.feed_id === feed.id
+      );
 
-        return feed;
-      });
-    }
-  });
+      return feed;
+    });
+  }
+});
 
-  // functions
-  const handleDelete = (feedId) => {
-    feedToDelete.value = feedId;
-    deleteModalOpen.value = true;
-  };
+// functions
+const handleDelete = (feedId) => {
+  feedToDelete.value = feedId;
+  deleteModalOpen.value = true;
+};
 
-  const ingredientTypes = [
-    "Pick one",
-    "Chaff",
-    "Nuts",
-    "Extra",
-    "Suppliments",
-    "Other",
-  ];
+const ingredientTypes = [
+  "Pick one",
+  "Chaff",
+  "Nuts",
+  "Extra",
+  "Suppliments",
+  "Other",
+];
 </script>
 
 <template>
@@ -125,7 +125,7 @@
                     <div class="flex flex-wrap mb-3">
                       <span
                         v-for="ingredient in feed.ingredients"
-                        :key="ingredient"
+                        :key="ingredient.id"
                         class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700 mr-3 mb-2"
                       >
                         {{

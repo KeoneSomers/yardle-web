@@ -1,53 +1,53 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
-  const props = defineProps(["isOpen", "feedId"]);
-  const emits = defineEmits(["close"]);
+const props = defineProps(["isOpen", "feedId"]);
+const emits = defineEmits(["close"]);
 
-  const client = useSupabaseClient();
-  const feeds = useState("feeds");
+const client = useSupabaseClient();
+const feeds = useState("feeds");
 
-  const handleDelete = async () => {
-    // delete the feeds ingredients
-    const { error: ingredientsError } = await client
-      .from("ingredients")
-      .delete()
-      .eq("feed_id", props.feedId)
-      .select();
+const handleDelete = async () => {
+  // delete the feeds ingredients
+  const { error: ingredientsError } = await client
+    .from("ingredients")
+    .delete()
+    .eq("feed_id", props.feedId)
+    .select();
 
-    if (ingredientsError) {
-      // somthing went wrong!
-      console.log(ingredientsError);
-      return;
-    }
+  if (ingredientsError) {
+    // somthing went wrong!
+    console.log(ingredientsError);
+    return;
+  }
 
-    // delete the feed
-    const { error: feedError } = await client
-      .from("feeds")
-      .delete()
-      .eq("id", props.feedId)
-      .select();
+  // delete the feed
+  const { error: feedError } = await client
+    .from("feeds")
+    .delete()
+    .eq("id", props.feedId)
+    .select();
 
-    if (feedError) {
-      // somthing went wrong!
-      console.log(feedError);
-      return;
-    }
+  if (feedError) {
+    // somthing went wrong!
+    console.log(feedError);
+    return;
+  }
 
-    // success! - now remove the deleted feed from the webpage
-    const index = feeds.value.map((e) => e.id).indexOf(props.feedId);
-    feeds.value.splice(index, 1);
+  // success! - now remove the deleted feed from the webpage
+  const index = feeds.value.map((e) => e.id).indexOf(props.feedId);
+  feeds.value.splice(index, 1);
 
-    // close the modal
-    emits("close");
-  };
+  // close the modal
+  emits("close");
+};
 </script>
 
 <template>

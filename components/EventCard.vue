@@ -1,32 +1,32 @@
 <script setup>
-  // imports
-  import { DateTime } from "luxon";
-  import { PencilIcon, TrashIcon } from "@heroicons/vue/24/outline/index.js";
+// imports
+import { DateTime } from "luxon";
+import { PencilIcon, TrashIcon } from "@heroicons/vue/24/outline/index.js";
 
-  // refs
-  const { event } = defineProps(["event"]);
-  const emits = defineEmits(["edit", "delete"]);
+// refs
+const { event } = defineProps(["event"]);
+const emits = defineEmits(["edit", "delete"]);
 
-  const client = useSupabaseClient();
+const client = useSupabaseClient();
 
-  // functions
-  const { data: eventTypes, error: eventTypesError } = await client
-    .from("calendar_event_types")
-    .select();
+// functions
+const { data: eventTypes, error: eventTypesError } = await client
+  .from("calendar_event_types")
+  .select();
 
-  // (perfect fetch of join data!)
-  const { data: horses } = await useAsyncData(String(event.id), async () => {
-    const { data, error } = await client
-      .from("calendar_events_horses")
-      .select("horse:horses(id, name, avatar_url)")
-      .eq("calendar_event_id", event.id);
+// (perfect fetch of join data!)
+const { data: horses } = await useAsyncData(String(event.id), async () => {
+  const { data, error } = await client
+    .from("calendar_events_horses")
+    .select("horse:horses(id, name, avatar_url)")
+    .eq("calendar_event_id", event.id);
 
-    if (!error) {
-      return data.map((e) => {
-        return e.horse;
-      });
-    }
-  });
+  if (!error) {
+    return data.map((e) => {
+      return e.horse;
+    });
+  }
+});
 </script>
 
 <template>

@@ -1,154 +1,156 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  const props = defineProps(["isOpen"]);
-  const emits = defineEmits(["close"]);
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+const props = defineProps(["isOpen"]);
+const emits = defineEmits(["close"]);
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
-  const feeds = useState("feeds");
-  const selectedHorseId = useState("selectedHorseId");
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const feeds = useState("feeds");
+const selectedHorseId = useState("selectedHorseId");
+const selectedYard = useState("selectedYard");
 
-  const ingredients = ref([]);
+const ingredients = ref([]);
 
-  const instructions = ref("");
-  const condition = ref("");
+const instructions = ref("");
+const condition = ref("");
 
-  const addingIngredient = ref(false);
+const addingIngredient = ref(false);
 
-  const newIngredient = ref({});
+const newIngredient = ref({});
 
-  const resetModal = () => {
-    addingIngredient.value = false;
-    ingredients.value = [];
-    instructions.value = "";
-    condition.value = "";
-    newIngredient.value = {
-      name: "",
-      quantity: 0.0,
-      metric: "",
-      type: 0,
-    };
+const resetModal = () => {
+  addingIngredient.value = false;
+  ingredients.value = [];
+  instructions.value = "";
+  condition.value = "";
+  newIngredient.value = {
+    name: "",
+    quantity: 0.0,
+    metric: "",
+    type: 0,
   };
+};
 
-  // handle open and close
-  watch(props, (newValue) => {
-    resetModal();
-  });
+// handle open and close
+watch(props, (newValue) => {
+  resetModal();
+});
 
-  // reset values on change
-  watch(addingIngredient, (newValue) => {
-    newIngredient.value = {
-      name: "",
-      quantity: 0.0,
-      metric: "",
-      type: 0,
-    };
-    errors.value = [];
-  });
-
-  const ingredientTypes = [
-    "Pick one",
-    "Chaff",
-    "Nuts",
-    "Extra",
-    "Suppliments",
-    "Other",
-  ];
-
-  const errors = ref([]);
-
-  const addIngredient = () => {
-    errors.value = [];
-
-    if (newIngredient.value.name === "") {
-      errors.value.push("Please enter a name");
-    }
-
-    if (newIngredient.value.quantity === 0) {
-      errors.value.push("Please enter a quantity");
-    }
-
-    if (newIngredient.value.metric === "") {
-      errors.value.push("Please enter a metric");
-    }
-
-    if (newIngredient.value.type === 0) {
-      errors.value.push("Please select a type");
-    }
-
-    if (errors.value.length > 0) {
-      return;
-    }
-
-    ingredients.value.push(newIngredient.value);
-
-    // success!
-    addingIngredient.value = false;
+// reset values on change
+watch(addingIngredient, (newValue) => {
+  newIngredient.value = {
+    name: "",
+    quantity: 0.0,
+    metric: "",
+    type: 0,
   };
+  errors.value = [];
+});
 
-  const handleCreateFeed = async () => {
-    // error - no ingredients
-    if (ingredients.value.length == 0) {
-      errors.value.push("Feed requires at least one ingredient.");
-      return;
-    }
+const ingredientTypes = [
+  "Pick one",
+  "Chaff",
+  "Nuts",
+  "Extra",
+  "Suppliments",
+  "Other",
+];
 
-    // add new feed to db
-    const { data, error } = await client
-      .from("feeds")
-      .insert({
+const errors = ref([]);
+
+const addIngredient = () => {
+  errors.value = [];
+
+  if (newIngredient.value.name === "") {
+    errors.value.push("Please enter a name");
+  }
+
+  if (newIngredient.value.quantity === 0) {
+    errors.value.push("Please enter a quantity");
+  }
+
+  if (newIngredient.value.metric === "") {
+    errors.value.push("Please enter a metric");
+  }
+
+  if (newIngredient.value.type === 0) {
+    errors.value.push("Please select a type");
+  }
+
+  if (errors.value.length > 0) {
+    return;
+  }
+
+  ingredients.value.push(newIngredient.value);
+
+  // success!
+  addingIngredient.value = false;
+};
+
+const handleCreateFeed = async () => {
+  // error - no ingredients
+  if (ingredients.value.length == 0) {
+    errors.value.push("Feed requires at least one ingredient.");
+    return;
+  }
+
+  // add new feed to db
+  const { data, error } = await client
+    .from("feeds")
+    .insert({
+      yard_id: selectedYard.value,
+      horse_id: selectedHorseId.value,
+      created_by: user.value.id,
+      instructions: instructions.value,
+      condition: condition.value,
+    })
+    .select()
+    .single();
+
+  // error - feed supabase db
+  if (error) {
+    errors.value.push(createError.message + createError.hint);
+    return;
+  }
+
+  // add ingredients to db
+  const { data: ingredientsData, error: ingredientsError } = await client
+    .from("ingredients")
+    .insert(
+      ingredients.value.map((ingredient) => ({
+        feed_id: data.id,
         horse_id: selectedHorseId.value,
-        created_by: user.value.id,
-        instructions: instructions.value,
-        condition: condition.value,
-      })
-      .select()
-      .single();
+        name: ingredient.name,
+        quantity: ingredient.quantity,
+        metric: ingredient.metric,
+        type: ingredient.type,
+      }))
+    );
 
-    // error - feed supabase db
-    if (error) {
-      errors.value.push(createError.message + createError.hint);
-      return;
-    }
+  // error - ingredients supabase db
+  if (ingredientsError) {
+    errors.value.push(ingredientsError.message + ingredientsError.hint);
+    return;
+  }
 
-    // add ingredients to db
-    const { data: ingredientsData, error: ingredientsError } = await client
-      .from("ingredients")
-      .insert(
-        ingredients.value.map((ingredient) => ({
-          feed_id: data.id,
-          horse_id: selectedHorseId.value,
-          name: ingredient.name,
-          quantity: ingredient.quantity,
-          metric: ingredient.metric,
-          type: ingredient.type,
-        }))
-      );
+  // add feed to local state
+  if (feeds.value) {
+    data.ingredients = ingredients.value;
+    feeds.value.push(data);
+  } else {
+    feeds.value = [data];
+  }
 
-    // error - ingredients supabase db
-    if (ingredientsError) {
-      errors.value.push(ingredientsError.message + ingredientsError.hint);
-      return;
-    }
-
-    // add feed to local state
-    if (feeds.value) {
-      data.ingredients = ingredients.value;
-      feeds.value.push(data);
-    } else {
-      feeds.value = [data];
-    }
-
-    // cleanup
-    resetModal();
-    emits("close");
-  };
+  // cleanup
+  resetModal();
+  emits("close");
+};
 </script>
 
 <template>
