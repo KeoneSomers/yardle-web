@@ -76,14 +76,7 @@ watch(addingIngredient, (newValue) => {
   errors.value = [];
 });
 
-const ingredientTypes = [
-  "Pick one",
-  "Chaff",
-  "Nuts",
-  "Extra",
-  "Suppliments",
-  "Other",
-];
+const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
 
 const errors = ref([]);
 

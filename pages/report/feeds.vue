@@ -1,7 +1,11 @@
 <script setup>
 import BasicModal from "@/components/BasicModal.vue";
 import { DialogTitle } from "@headlessui/vue";
-import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+  ClockIcon,
+} from "@heroicons/vue/24/outline/index.js";
 import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 
 definePageMeta({
@@ -16,14 +20,7 @@ const deleteModalOpen = ref(false);
 const selectedFeedId = ref(0);
 const editModalOpen = ref(false);
 
-const ingredientTypes = [
-  "Pick one",
-  "Chaff",
-  "Nuts",
-  "Extra",
-  "Suppliments",
-  "Other",
-];
+const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
 
 // TODO: this need to use the feeds state
 // fetch feeds
@@ -178,12 +175,6 @@ const handleEdit = (feedId) => {
                   <th
                     scope="col"
                     class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-6"
-                  >
-                    Other
-                  </th>
-                  <th
-                    scope="col"
-                    class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-6"
                   ></th>
                 </tr>
               </thead>
@@ -197,7 +188,7 @@ const handleEdit = (feedId) => {
                     class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
                   >
                     <div class="flex space-x-5">
-                      <div class="flex items-center">
+                      <div class="flex">
                         <SupabaseImage
                           v-if="feed.horse.avatar_url"
                           class="h-12 w-12 rounded-full overflow-hidden"
@@ -212,9 +203,27 @@ const handleEdit = (feedId) => {
                         </div>
                       </div>
                       <div>
-                        <p class="text-xl font-bold">{{ feed.horse.name }}</p>
-                        <p>Instructions: {{ feed.instructions }}</p>
-                        <p>Conditions: {{ feed.condition }}</p>
+                        <p class="text-2xl font-bold">{{ feed.horse.name }}</p>
+                        <div
+                          v-if="feed.instructions"
+                          class="flex items-center mt-1"
+                        >
+                          <InformationCircleIcon
+                            class="h-6 w-6 mr-2 text-gray-600"
+                          />
+                          <span class="text-blue-500 font-bold">{{
+                            feed.instructions
+                          }}</span>
+                        </div>
+                        <div
+                          v-if="feed.condition"
+                          class="flex items-center mt-1"
+                        >
+                          <ClockIcon class="h-6 w-6 mr-2 text-gray-600" />
+                          <span class="text-purple-500 font-bold">{{
+                            feed.condition
+                          }}</span>
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -228,12 +237,8 @@ const handleEdit = (feedId) => {
                         class="inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700 mr-3 mb-2"
                       >
                         {{
-                          `${ingredient.name} (${
-                            ingredientTypes[ingredient.type]
-                          })
-                                                     - ${ingredient.quantity} ${
-                            ingredient.metric
-                          }`
+                          `${ingredient.name}
+                                                     - ${ingredient.quantity} ${ingredient.metric}`
                         }}
                       </span>
                     </div>
@@ -248,12 +253,8 @@ const handleEdit = (feedId) => {
                         class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700 mr-3 mb-2"
                       >
                         {{
-                          `${ingredient.name} (${
-                            ingredientTypes[ingredient.type]
-                          })
-                                                     - ${ingredient.quantity} ${
-                            ingredient.metric
-                          }`
+                          `${ingredient.name}
+                                                     - ${ingredient.quantity} ${ingredient.metric}`
                         }}
                       </span>
                     </div>
@@ -270,12 +271,8 @@ const handleEdit = (feedId) => {
                         class="inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700 mr-3 mb-2"
                       >
                         {{
-                          `${ingredient.name} (${
-                            ingredientTypes[ingredient.type]
-                          })
-                                                     - ${ingredient.quantity} ${
-                            ingredient.metric
-                          }`
+                          `${ingredient.name}
+                                                     - ${ingredient.quantity} ${ingredient.metric}`
                         }}
                       </span>
                     </div>
@@ -292,50 +289,24 @@ const handleEdit = (feedId) => {
                         class="inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700 mr-3 mb-2"
                       >
                         {{
-                          `${ingredient.name} (${
-                            ingredientTypes[ingredient.type]
-                          })
-                                                     - ${ingredient.quantity} ${
-                            ingredient.metric
-                          }`
+                          `${ingredient.name}
+                                                     - ${ingredient.quantity} ${ingredient.metric}`
                         }}
                       </span>
                     </div>
                   </td>
                   <td
-                    class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
-                  >
-                    <div class="flex flex-wrap mb-3">
-                      <span
-                        v-for="ingredient in feed.ingredients.filter(
-                          (i) => i.type === 5
-                        )"
-                        :key="ingredient.id"
-                        class="inline-flex items-center rounded-full bg-green-100 py-0.5 px-2 text-xs font-medium text-green-700 mr-3 mb-2"
-                      >
-                        {{
-                          `${ingredient.name} (${
-                            ingredientTypes[ingredient.type]
-                          })
-                                                     - ${ingredient.quantity} ${
-                            ingredient.metric
-                          }`
-                        }}
-                      </span>
-                    </div>
-                  </td>
-                  <td
-                    class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
+                    class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
                   >
                     <button
                       @click="handleEdit(feed.id)"
-                      class="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                      class="text-indigo-600 hover:text-indigo-900 mr-5"
                     >
                       Edit
                     </button>
                     <button
                       @click="handleModalOpen(feed.id)"
-                      class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                      class="text-red-600 hover:text-red-900"
                     >
                       Delete
                     </button>
