@@ -8,6 +8,13 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "Yardle - Equestrian Yard Management",
+      script: [
+        {
+          id: "cookieyes",
+          type: "text/javascript",
+          src: "https://cdn-cookieyes.com/client_data/8c30fb1d750709f9ef9d0730/script.js",
+        },
+      ],
       meta: [
         {
           name: "description",
