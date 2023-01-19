@@ -121,6 +121,49 @@ const handleEdit = (feedId) => {
   selectedFeedId.value = feedId;
   editModalOpen.value = true;
 };
+
+const scrollAmount = ref(0);
+const edgeShadowLeft = ref(null);
+const edgeShadowLeftShow = ref(false);
+const edgeShadowRight = ref(null);
+const edgeShadowRightShow = ref(false);
+const weatherWrapper = ref(null);
+const weatherWrapperOutter = ref(null);
+
+onMounted(() => {
+  setShadow();
+});
+
+const setShadow = (event) => {
+  if (event) {
+    scrollAmount.value = event.target.scrollLeft;
+  }
+
+  const maxScroll =
+    weatherWrapper.value.clientWidth - weatherWrapperOutter.value.clientWidth;
+  var scrollPercent = (scrollAmount.value / maxScroll) * 100;
+
+  const scrollViewport = weatherWrapperOutter.value.clientWidth;
+  const scrollContent = weatherWrapper.value.clientWidth;
+
+  // content is bigger than scroll viewport
+  if (scrollContent > scrollViewport) {
+    if (scrollPercent > 0) {
+      edgeShadowLeftShow.value = true;
+    } else {
+      edgeShadowLeftShow.value = false;
+    }
+
+    if (scrollPercent < 100) {
+      edgeShadowRightShow.value = true;
+    } else {
+      edgeShadowRightShow.value = false;
+    }
+  } else {
+    edgeShadowLeftShow.value = false;
+    edgeShadowRightShow.value = false;
+  }
+};
 </script>
 
 <template>
@@ -143,53 +186,65 @@ const handleEdit = (feedId) => {
       </div>
     </div>
 
-    <div
-      class="mt-5 relative overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
-    >
-      <table class="min-w-full divide-y divide-gray-300">
-        <thead class="bg-gray-50">
-          <tr class="divide-x divide-gray-200">
-            <th
-              scope="col"
-              class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-            ></th>
-            <th
-              scope="col"
-              class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
+    <div class="relative">
+      <div
+        ref="edgeShadowLeft"
+        v-if="edgeShadowLeftShow"
+        class="w-6 z-50 h-full bg-gradient-to-r from-stone-200 absolute left-0 top-0 pointer-events-none border-l rounded"
+      ></div>
+      <div
+        ref="edgeShadowRight"
+        v-if="edgeShadowRightShow"
+        class="w-6 z-50 h-full bg-gradient-to-l from-stone-200 absolute right-0 top-0 pointer-events-none border-r rounded"
+      ></div>
+      <div
+        :onscroll="setShadow"
+        ref="weatherWrapperOutter"
+        class="mt-5 relative overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
+      >
+        <table ref="weatherWrapper" class="min-w-full divide-y divide-gray-300">
+          <thead class="bg-gray-50">
+            <tr class="divide-x divide-gray-200">
+              <th
+                scope="col"
+                class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+              ></th>
+              <th
+                scope="col"
+                class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
+              >
+                Chaff
+              </th>
+              <th
+                scope="col"
+                class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
+              >
+                Nuts
+              </th>
+              <th
+                scope="col"
+                class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-6"
+              >
+                Extra
+              </th>
+              <th
+                scope="col"
+                class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-6"
+              >
+                Suppliments
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 bg-white">
+            <tr
+              v-for="feed in feeds"
+              :key="feed.id"
+              class="divide-x divide-gray-200"
             >
-              Chaff
-            </th>
-            <th
-              scope="col"
-              class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
-            >
-              Nuts
-            </th>
-            <th
-              scope="col"
-              class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-6"
-            >
-              Extra
-            </th>
-            <th
-              scope="col"
-              class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-6"
-            >
-              Suppliments
-            </th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200 bg-white">
-          <tr
-            v-for="feed in feeds"
-            :key="feed.id"
-            class="divide-x divide-gray-200"
-          >
-            <td
-              class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
-            >
-              <div class="w-80">
-                <div>
+              <td
+                class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
+              >
+                <div class="min-w-80">
                   <div class="flex items-center space-x-2">
                     <SupabaseImage
                       v-if="feed.horse.avatar_url"
@@ -209,9 +264,12 @@ const handleEdit = (feedId) => {
                     </div>
                   </div>
 
-                  <div v-if="feed.instructions" class="flex items-center mt-3">
+                  <div
+                    v-if="feed.instructions"
+                    class="flex items-center mt-3 bg-yellow-100 p-1 rounded-lg"
+                  >
                     <InformationCircleIcon class="h-5 w-5 mr-2 text-gray-600" />
-                    <span class="text-blue-500 font-bold">{{
+                    <span class="text-yellow-700 font-bold">{{
                       feed.instructions
                     }}</span>
                   </div>
@@ -221,7 +279,7 @@ const handleEdit = (feedId) => {
                       feed.condition
                     }}</span>
                   </div>
-                  <div class="mt-2 flex justify-end">
+                  <div class="mt-2 flex justify-end w-full">
                     <button
                       @click="handleEdit(feed.id)"
                       class="text-indigo-600 hover:text-indigo-900 bg-indigo-100 py-1 px-2 rounded mr-2"
@@ -236,79 +294,76 @@ const handleEdit = (feedId) => {
                     </button>
                   </div>
                 </div>
-              </div>
-            </td>
-            <td class="whitespace-nowrap p-4 text-sm text-gray-500">
-              <div class="flex flex-wrap mb-3">
-                <span
+              </td>
+              <td class="whitespace-nowrap p-4 text-sm text-gray-500">
+                <div
                   v-for="ingredient in feed.ingredients.filter(
                     (i) => i.type === 1
                   )"
                   :key="ingredient.id"
-                  class="inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700 mr-3 mb-2"
                 >
-                  {{
-                    `${ingredient.name}
-                                                     - ${ingredient.quantity} ${ingredient.metric}`
-                  }}
-                </span>
-              </div>
-            </td>
-            <td class="whitespace-nowrap p-4 text-sm text-gray-500">
-              <div class="flex flex-wrap mb-3">
-                <span
-                  v-for="ingredient in feed.ingredients.filter(
-                    (i) => i.type === 2
-                  )"
-                  :key="ingredient.id"
-                  class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700 mr-3 mb-2"
-                >
-                  {{
-                    `${ingredient.name}
-                                                     - ${ingredient.quantity} ${ingredient.metric}`
-                  }}
-                </span>
-              </div>
-            </td>
-            <td
-              class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
-            >
-              <div class="flex flex-wrap mb-3">
-                <span
-                  v-for="ingredient in feed.ingredients.filter(
-                    (i) => i.type === 3
-                  )"
-                  :key="ingredient.id"
-                  class="inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700 mr-3 mb-2"
-                >
-                  {{
-                    `${ingredient.name}
-                                                     - ${ingredient.quantity} ${ingredient.metric}`
-                  }}
-                </span>
-              </div>
-            </td>
-            <td
-              class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
-            >
-              <div class="flex flex-wrap mb-3">
-                <span
-                  v-for="ingredient in feed.ingredients.filter(
-                    (i) => i.type === 4
-                  )"
-                  :key="ingredient.id"
-                  class="inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700 mr-3 mb-2"
-                >
-                  {{
-                    `${ingredient.name}
-                                                     - ${ingredient.quantity} ${ingredient.metric}`
-                  }}
-                </span>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                  <span
+                    class="inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700 mr-3 mb-2"
+                  >
+                    {{
+                      `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                    }}
+                  </span>
+                </div>
+              </td>
+              <td class="whitespace-nowrap p-4 text-sm text-gray-500">
+                <div class="flex flex-wrap mb-3">
+                  <span
+                    v-for="ingredient in feed.ingredients.filter(
+                      (i) => i.type === 2
+                    )"
+                    :key="ingredient.id"
+                    class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700 mr-3 mb-2"
+                  >
+                    {{
+                      `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                    }}
+                  </span>
+                </div>
+              </td>
+              <td
+                class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
+              >
+                <div class="flex flex-wrap mb-3">
+                  <span
+                    v-for="ingredient in feed.ingredients.filter(
+                      (i) => i.type === 3
+                    )"
+                    :key="ingredient.id"
+                    class="inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700 mr-3 mb-2"
+                  >
+                    {{
+                      `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                    }}
+                  </span>
+                </div>
+              </td>
+              <td
+                class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
+              >
+                <div class="flex flex-wrap mb-3">
+                  <span
+                    v-for="ingredient in feed.ingredients.filter(
+                      (i) => i.type === 4
+                    )"
+                    :key="ingredient.id"
+                    class="inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700 mr-3 mb-2"
+                  >
+                    {{
+                      `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                    }}
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
