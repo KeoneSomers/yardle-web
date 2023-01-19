@@ -1,68 +1,68 @@
 <script setup>
-  import CreateYardModal from "@/components/modals/CreateYardModal.vue";
-  import DeleteYardModal from "@/components/modals/DeleteYardModal.vue";
+import CreateYardModal from "@/components/modals/CreateYardModal.vue";
+import DeleteYardModal from "@/components/modals/DeleteYardModal.vue";
 
-  definePageMeta({
-    guards: ["requireAuth", "requireNoYard"],
-  });
+definePageMeta({
+  guards: ["requireAuth", "requireNoYard"],
+});
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
+const client = useSupabaseClient();
+const user = useSupabaseUser();
 
-  const isOpen = ref(false);
-  const deleteYardModalOpen = ref(false);
+const isOpen = ref(false);
+const deleteYardModalOpen = ref(false);
 
-  const yardToDelete = ref(0);
+const yardToDelete = ref(0);
 
-  // get the logged in users yards
-  const yards = useState("yards");
+// get the logged in users yards
+const yards = useState("yards");
 
-  // this is not ssr - needs to be cleaned up
-  onMounted(async () => {
-    const { data, error } = await client
-      .from("profiles")
-      .select("yards!profiles_yards(*)")
-      .eq("id", user.value.id)
-      .order("created_at", {
-        foreignTable: "yards",
-        ascending: false,
-      })
-      .single();
+// this is not ssr - needs to be cleaned up
+onMounted(async () => {
+  const { data, error } = await client
+    .from("profiles")
+    .select("yards!profiles_yards(*)")
+    .eq("id", user.value.id) // TODO: Error here: Cannot read properties of null (reading 'id') - happens when creating a new user
+    .order("created_at", {
+      foreignTable: "yards",
+      ascending: false,
+    })
+    .single();
 
-    yards.value = data.yards;
-  });
+  yards.value = data.yards;
+});
 
-  const handleDeleteYard = (yardId) => {
-    yardToDelete.value = yardId;
-    deleteYardModalOpen.value = true;
-  };
+const handleDeleteYard = (yardId) => {
+  yardToDelete.value = yardId;
+  deleteYardModalOpen.value = true;
+};
 
-  const handleSelectYard = async (yardId) => {
-    // TODO: Check the yard still exists and that you're still and unbanned member of it
+const handleSelectYard = async (yardId) => {
+  // TODO: Check the yard still exists and that you're still and unbanned member of it
 
-    // update user in db (realtime will navigate them to the /horses page automatically)
-    await client
-      .from("profiles")
-      .update({ selected_yard: yardId })
-      .eq("id", user.value.id);
-  };
+  // update user in db (realtime will navigate them to the /horses page automatically)
+  await client
+    .from("profiles")
+    .update({ selected_yard: yardId })
+    .eq("id", user.value.id);
+};
 
-  // Todo - Need a warning modal
-  const handleLeaveYard = async (yardId) => {
-    const { error } = await client
-      .from("profiles_yards")
-      .delete()
-      .eq("profile_id", user.value.id)
-      .eq("yard_id", yardId);
+// Todo - Need a warning modal
+const handleLeaveYard = async (yardId) => {
+  const { error } = await client
+    .from("profiles_yards")
+    .delete()
+    .eq("profile_id", user.value.id)
+    .eq("yard_id", yardId);
 
-    if (!error) {
-      // success! - now remove the yard from the webpage
-      const i = yards.value.map((e) => e.id).indexOf(yardId);
-      yards.value.splice(i, 1);
-    } else {
-      console.log(error);
-    }
-  };
+  if (!error) {
+    // success! - now remove the yard from the webpage
+    const i = yards.value.map((e) => e.id).indexOf(yardId);
+    yards.value.splice(i, 1);
+  } else {
+    console.log(error);
+  }
+};
 </script>
 
 <template>
