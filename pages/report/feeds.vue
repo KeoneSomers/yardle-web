@@ -183,6 +183,7 @@ const setShadow = (event) => {
         >
           Add user
         </button> -->
+        <DownloadFeedReport />
       </div>
     </div>
 
@@ -202,7 +203,11 @@ const setShadow = (event) => {
         ref="weatherWrapperOutter"
         class="mt-5 relative overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
       >
-        <table ref="weatherWrapper" class="min-w-full divide-y divide-gray-300">
+        <table
+          id="feed-report"
+          ref="weatherWrapper"
+          class="min-w-full divide-y divide-gray-300"
+        >
           <thead class="bg-gray-50">
             <tr class="divide-x divide-gray-200">
               <th

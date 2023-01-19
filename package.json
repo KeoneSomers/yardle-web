@@ -16,7 +16,9 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.7",
     "@heroicons/vue": "^2.0.13",
+    "downloadjs": "^1.4.7",
     "floating-vue": "^2.0.0-beta.20",
+    "html-to-image": "^1.11.4",
     "luxon": "^3.2.1",
     "print-js": "^1.6.0"
   }
