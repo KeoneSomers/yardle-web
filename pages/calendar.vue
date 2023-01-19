@@ -139,6 +139,19 @@ const goToCurrentMonth = () => {
   dt.value = DateTime.now().plus({ months: offset.value });
   setDays();
 };
+
+const selDay = useState("selDay", () => null);
+const createEvent = (e, day) => {
+  if (e.target.classList.contains("create-event")) {
+    if (day) {
+      selDay.value = day;
+      createModalOpen.value = true;
+    } else {
+      selDay.value = null;
+      createModalOpen.value = true;
+    }
+  }
+};
 </script>
 
 <template>
@@ -266,9 +279,9 @@ const goToCurrentMonth = () => {
                     </Menu> -->
             <!-- <div class="ml-6 h-6 w-px bg-gray-300" /> -->
             <button
-              @click="() => (createModalOpen = true)"
+              @click="createEvent"
               type="button"
-              class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              class="create-event ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Add event
             </button>
@@ -296,10 +309,10 @@ const goToCurrentMonth = () => {
                 <div class="py-1">
                   <MenuItem v-slot="{ active }">
                     <a
-                      href="#"
+                      @click="createEvent"
                       :class="[
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm',
+                        'block px-4 py-2 text-sm create-event',
                       ]"
                       >Create event</a
                     >
@@ -390,11 +403,12 @@ const goToCurrentMonth = () => {
             class="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px"
           >
             <div
+              @click="(e) => createEvent(e, day.ts)"
               v-for="day in days"
               :key="day"
               :class="[
                 day.month == dt.month ? 'bg-white' : 'bg-gray-50 text-gray-500',
-                'relative py-2 px-3',
+                'create-event relative py-2 px-3 hover:opacity-75 cursor-pointer',
               ]"
             >
               <time

@@ -1,151 +1,161 @@
 <script setup>
-  import {
-    Combobox,
-    ComboboxInput,
-    ComboboxButton,
-    ComboboxOptions,
-    ComboboxOption,
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { DateTime } from "luxon";
-  import {
-    CheckIcon,
-    ChevronUpDownIcon,
-  } from "@heroicons/vue/20/solid/index.js";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxButton,
+  ComboboxOptions,
+  ComboboxOption,
+  ComboboxLabel,
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { DateTime } from "luxon";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid/index.js";
 
-  const props = defineProps(["isOpen"]);
-  const emits = defineEmits(["close"]);
+const props = defineProps(["isOpen"]);
+const emits = defineEmits(["close"]);
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
-  const selectedYard = useState("selectedYard");
-  const events = useState("events");
-  const yard = useState("yard");
-  const horses = useState("horses");
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const selectedYard = useState("selectedYard");
+const events = useState("events");
+const yard = useState("yard");
+const horses = useState("horses");
+const selDay = useState("selDay");
 
-  await useAsyncData("horses", async () => {
-    const { data } = await client
-      .from("horses")
-      .select()
-      .eq("yard_id", selectedYard.value)
-      .order("name", { ascending: true });
+await useAsyncData("horses", async () => {
+  const { data } = await client
+    .from("horses")
+    .select()
+    .eq("yard_id", selectedYard.value)
+    .order("name", { ascending: true });
 
-    horses.value = data;
-  });
+  horses.value = data;
+});
 
-  // horse combobox refs
-  const query = ref("");
-  const selectedHorse = ref(null);
-  const filteredHorses = computed(() =>
-    query.value === ""
-      ? horses.value
-      : horses.value.filter((horse) => {
-          return horse.name.toLowerCase().includes(query.value.toLowerCase());
-        })
-  );
-  const selectedHorses = ref([]);
-
-  // watch for combobox value changed
-  watchEffect(() => {
-    if (selectedHorse.value) {
-      // if not already added
-      if (!selectedHorses.value.includes(selectedHorse.value)) {
-        selectedHorses.value.push(selectedHorse.value);
-      }
-    }
-  });
-
-  const { data: eventTypes, error: eventTypesError } = await client
-    .from("calendar_event_types")
-    .select();
-
-  const title = ref("");
-  const date = ref("");
-  const time = ref("09:00");
-  const notes = ref("");
-  const all_day = ref(false);
-  const event_type = ref(1);
-
-  const error = ref("");
-
-  const handleSubmit = async () => {
-    // build date
-    let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
-
-    // build time
-    if (time.value && !all_day.value) {
-      const h = time.value.split(":")[0];
-      const m = time.value.split(":")[1];
-
-      formattedDateTime = formattedDateTime.plus({
-        hours: h,
-        minutes: m,
-      });
-    }
-
-    // step 1: create the event in the database
-    const { data: newEvent, error: createError } = await client
-      .from("calendar_events")
-      .insert({
-        created_by: user.value.id,
-        title: title.value,
-        date_time: formattedDateTime,
-        notes: notes.value,
-        all_day: all_day.value,
-        type: event_type.value,
-        yard_id: yard.value.id,
+// horse combobox refs
+const query = ref("");
+const selectedHorse = ref(null);
+const filteredHorses = computed(() =>
+  query.value === ""
+    ? horses.value
+    : horses.value.filter((horse) => {
+        return horse.name.toLowerCase().includes(query.value.toLowerCase());
       })
-      .select()
-      .single();
+);
+const selectedHorses = ref([]);
 
-    if (!createError) {
-      // step 2: create horses relationships
-      const { error: horseRelError } = await client
-        .from("calendar_events_horses")
-        .insert(
-          selectedHorses.value.map(({ id }) => ({
-            horse_id: id,
-            calendar_event_id: newEvent.id,
-          }))
-        );
+// watch for combobox value changed
+watchEffect(() => {
+  if (selectedHorse.value) {
+    // if not already added
+    if (!selectedHorses.value.includes(selectedHorse.value)) {
+      selectedHorses.value.push(selectedHorse.value);
+    }
+  }
+});
 
-      // step 3: update local state
-      if (events.value) {
-        events.value.push(newEvent);
-      } else {
-        events.value = [newEvent];
-      }
+const { data: eventTypes, error: eventTypesError } = await client
+  .from("calendar_event_types")
+  .select();
 
-      // clear form
-      title.value = "";
-      date.value = "";
-      time.value = "09:00";
-      notes.value = "";
-      all_day.value = false;
+const title = ref("");
+const date = ref("");
+const time = ref("09:00");
+const notes = ref("");
+const all_day = ref(false);
+const event_type = ref(1);
 
-      emits("close");
+// handle open and close
+watch(
+  () => props.isOpen,
+  (isOpen) => {
+    if (selDay.value > 0) {
+      // 2023-01-19
+      date.value = String(DateTime.fromMillis(selDay.value)).substring(0, 10);
+    }
+  }
+);
+
+const error = ref("");
+
+const handleSubmit = async () => {
+  // build date
+  let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
+
+  // build time
+  if (time.value && !all_day.value) {
+    const h = time.value.split(":")[0];
+    const m = time.value.split(":")[1];
+
+    formattedDateTime = formattedDateTime.plus({
+      hours: h,
+      minutes: m,
+    });
+  }
+
+  // step 1: create the event in the database
+  const { data: newEvent, error: createError } = await client
+    .from("calendar_events")
+    .insert({
+      created_by: user.value.id,
+      title: title.value,
+      date_time: formattedDateTime,
+      notes: notes.value,
+      all_day: all_day.value,
+      type: event_type.value,
+      yard_id: yard.value.id,
+    })
+    .select()
+    .single();
+
+  if (!createError) {
+    // step 2: create horses relationships
+    const { error: horseRelError } = await client
+      .from("calendar_events_horses")
+      .insert(
+        selectedHorses.value.map(({ id }) => ({
+          horse_id: id,
+          calendar_event_id: newEvent.id,
+        }))
+      );
+
+    // step 3: update local state
+    if (events.value) {
+      events.value.push(newEvent);
     } else {
-      error.value = createError.message + createError.hint;
+      events.value = [newEvent];
     }
-  };
 
-  // reset fields on open
-  watchEffect(() => {
-    if (props.isOpen) {
-      selectedHorses.value = [];
-      selectedHorse.value = null;
-      title.value = "";
-      date.value = "";
-      time.value = "09:00";
-      notes.value = "";
-      all_day.value = false;
-      event_type.value = 1;
-    }
-  });
+    // clear form
+    title.value = "";
+    date.value = "";
+    time.value = "09:00";
+    notes.value = "";
+    all_day.value = false;
+
+    emits("close");
+  } else {
+    error.value = createError.message + createError.hint;
+  }
+};
+
+// reset fields on open
+watchEffect(() => {
+  if (props.isOpen) {
+    selectedHorses.value = [];
+    selectedHorse.value = null;
+    title.value = "";
+    date.value = "";
+    time.value = "09:00";
+    notes.value = "";
+    all_day.value = false;
+    event_type.value = 1;
+  }
+});
 </script>
 
 <template>
@@ -183,7 +193,7 @@
                 as="h3"
                 class="text-lg font-medium leading-6 text-gray-900"
               >
-                Add an event
+                Add an event {{ date }}
               </DialogTitle>
               <form
                 @submit.prevent="handleSubmit"

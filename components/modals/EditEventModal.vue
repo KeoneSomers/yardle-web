@@ -1,148 +1,146 @@
 <script setup>
-  import {
-    Combobox,
-    ComboboxInput,
-    ComboboxButton,
-    ComboboxOptions,
-    ComboboxOption,
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { DateTime } from "luxon";
-  import {
-    CheckIcon,
-    ChevronUpDownIcon,
-  } from "@heroicons/vue/20/solid/index.js";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxButton,
+  ComboboxOptions,
+  ComboboxOption,
+  TransitionRoot,
+  TransitionChild,
+  ComboboxLabel,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { DateTime } from "luxon";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid/index.js";
 
-  const props = defineProps(["isOpen", "event"]);
-  const { event } = toRefs(props);
-  const emits = defineEmits(["close"]);
+const props = defineProps(["isOpen", "event"]);
+const { event } = toRefs(props);
+const emits = defineEmits(["close"]);
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
-  const selectedYard = useState("selectedYard");
-  const events = useState("events");
-  const horses = useState("horses");
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const selectedYard = useState("selectedYard");
+const events = useState("events");
+const horses = useState("horses");
 
-  const date = ref("");
-  const time = ref("");
+const date = ref("");
+const time = ref("");
 
-  await useAsyncData("horses", async () => {
-    const { data } = await client
-      .from("horses")
-      .select()
-      .eq("yard_id", selectedYard.value)
-      .order("name", { ascending: true });
+await useAsyncData("horses", async () => {
+  const { data } = await client
+    .from("horses")
+    .select()
+    .eq("yard_id", selectedYard.value)
+    .order("name", { ascending: true });
 
-    horses.value = data;
-  });
+  horses.value = data;
+});
 
-  // horse combobox refs
-  const query = ref("");
-  const selectedHorse = ref(null);
-  const filteredHorses = computed(() =>
-    query.value === ""
-      ? horses.value
-      : horses.value.filter((horse) => {
-          return horse.name.toLowerCase().includes(query.value.toLowerCase());
-        })
-  );
-  const selectedHorses = ref([]);
-
-  watchEffect(async () => {
-    if (props.isOpen) {
-      date.value = event.value.date_time.substring(0, 10);
-      time.value = event.value.date_time.substring(11, 16);
-
-      const { data } = await client
-        .from("calendar_events_horses")
-        .select("horses(*)")
-        .eq("calendar_event_id", event.value.id);
-
-      selectedHorses.value = data.map((e) => {
-        return e.horses;
-      });
-    }
-  });
-
-  // watch for combobox value changed
-  watchEffect(() => {
-    if (selectedHorse.value) {
-      // if not already added
-      console.log(selectedHorse.value);
-      console.log(selectedHorses.value);
-      console.log(!selectedHorses.value.includes(selectedHorse.value));
-      if (!selectedHorses.value.find((e) => e.id == selectedHorse.value.id)) {
-        selectedHorses.value.push(selectedHorse.value);
-      }
-    }
-  });
-
-  const { data: eventTypes, error: eventTypesError } = await client
-    .from("calendar_event_types")
-    .select();
-
-  const error = ref("");
-
-  const handleSubmit = async () => {
-    // build date
-    let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
-
-    // build time
-    if (time.value && !event.value.all_day) {
-      const h = time.value.split(":")[0];
-      const m = time.value.split(":")[1];
-
-      formattedDateTime = formattedDateTime.plus({
-        hours: h,
-        minutes: m,
-      });
-    }
-
-    // step 1: create the event in the database
-    const { error: createError } = await client
-      .from("calendar_events")
-      .update({
-        title: event.value.title,
-        date_time: formattedDateTime,
-        notes: event.value.notes,
-        all_day: event.value.all_day,
-        type: event.value.type,
+// horse combobox refs
+const query = ref("");
+const selectedHorse = ref(null);
+const filteredHorses = computed(() =>
+  query.value === ""
+    ? horses.value
+    : horses.value.filter((horse) => {
+        return horse.name.toLowerCase().includes(query.value.toLowerCase());
       })
-      .eq("id", event.value.id);
+);
+const selectedHorses = ref([]);
 
-    if (!createError) {
-      // step 2a: TODO: delete horses that we dont have seletced anymore
-      // Shortcut for mvp: just delete all the relations for this event
-      const { error: delError } = await client
-        .from("calendar_events_horses")
-        .delete()
-        .eq("calendar_event_id", event.value.id);
+watchEffect(async () => {
+  if (props.isOpen) {
+    date.value = event.value.date_time.substring(0, 10);
+    time.value = event.value.date_time.substring(11, 16);
 
-      // step 2b: create horses relationships
-      if (!delError) {
-        const { error: horseRelError } = await client
-          .from("calendar_events_horses")
-          .upsert(
-            selectedHorses.value.map(({ id }) => ({
-              horse_id: id,
-              calendar_event_id: event.value.id,
-            }))
-          );
-      }
+    const { data } = await client
+      .from("calendar_events_horses")
+      .select("horses(*)")
+      .eq("calendar_event_id", event.value.id);
 
-      // step 3: update local state
-      const i = events.value.map((e) => e.id).indexOf(event.value.id);
-      events.value[i] = { ...event.value, date_time: formattedDateTime };
+    selectedHorses.value = data.map((e) => {
+      return e.horses;
+    });
+  }
+});
 
-      emits("close");
-    } else {
-      error.value = createError.message + createError.hint;
+// watch for combobox value changed
+watchEffect(() => {
+  if (selectedHorse.value) {
+    // if not already added
+    console.log(selectedHorse.value);
+    console.log(selectedHorses.value);
+    console.log(!selectedHorses.value.includes(selectedHorse.value));
+    if (!selectedHorses.value.find((e) => e.id == selectedHorse.value.id)) {
+      selectedHorses.value.push(selectedHorse.value);
     }
-  };
+  }
+});
+
+const { data: eventTypes, error: eventTypesError } = await client
+  .from("calendar_event_types")
+  .select();
+
+const error = ref("");
+
+const handleSubmit = async () => {
+  // build date
+  let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
+
+  // build time
+  if (time.value && !event.value.all_day) {
+    const h = time.value.split(":")[0];
+    const m = time.value.split(":")[1];
+
+    formattedDateTime = formattedDateTime.plus({
+      hours: h,
+      minutes: m,
+    });
+  }
+
+  // step 1: create the event in the database
+  const { error: createError } = await client
+    .from("calendar_events")
+    .update({
+      title: event.value.title,
+      date_time: formattedDateTime,
+      notes: event.value.notes,
+      all_day: event.value.all_day,
+      type: event.value.type,
+    })
+    .eq("id", event.value.id);
+
+  if (!createError) {
+    // step 2a: TODO: delete horses that we dont have seletced anymore
+    // Shortcut for mvp: just delete all the relations for this event
+    const { error: delError } = await client
+      .from("calendar_events_horses")
+      .delete()
+      .eq("calendar_event_id", event.value.id);
+
+    // step 2b: create horses relationships
+    if (!delError) {
+      const { error: horseRelError } = await client
+        .from("calendar_events_horses")
+        .upsert(
+          selectedHorses.value.map(({ id }) => ({
+            horse_id: id,
+            calendar_event_id: event.value.id,
+          }))
+        );
+    }
+
+    // step 3: update local state
+    const i = events.value.map((e) => e.id).indexOf(event.value.id);
+    events.value[i] = { ...event.value, date_time: formattedDateTime };
+
+    emits("close");
+  } else {
+    error.value = createError.message + createError.hint;
+  }
+};
 </script>
 
 <template>
