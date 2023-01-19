@@ -1,12 +1,8 @@
 <script setup>
+import { PlusIcon } from "@heroicons/vue/20/solid/index.js";
 import BasicModal from "@/components/BasicModal.vue";
-import {
-  DialogTitle,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from "@headlessui/vue";
+import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
+import { DialogTitle } from "@headlessui/vue";
 import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
@@ -22,11 +18,10 @@ const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
 const feeds = useState("feeds");
 
+const createModalOpen = ref(false);
+const editModalOpen = ref(false);
 const deleteModalOpen = ref(false);
 const selectedFeedId = ref(0);
-const editModalOpen = ref(false);
-
-const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
 
 // TODO: this need to use the feeds state
 // fetch feeds
@@ -34,7 +29,8 @@ await useAsyncData("all_feeds", async () => {
   const { data, error } = await client
     .from("feeds")
     .select()
-    .eq("yard_id", selectedYard.value);
+    .eq("yard_id", selectedYard.value)
+    .order("horse_id", { ascending: false });
 
   if (error) {
     console.log(error);
@@ -175,13 +171,15 @@ const setShadow = (event) => {
           ingredients, instructions and conditions.
         </p>
       </div>
-      <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-        <!-- <button
+      <div class="mt-4 sm:mt-0 sm:ml-16 flex">
+        <button
+          @click="() => (createModalOpen = true)"
           type="button"
-          class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+          class="inline-flex mr-2 items-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
-          Add user
-        </button> -->
+          <PlusIcon class="-ml-1 mr-3 h-5 w-5" aria-hidden="true" />
+          Create a feed
+        </button>
         <DownloadFeedReport />
       </div>
     </div>
@@ -241,9 +239,10 @@ const setShadow = (event) => {
           </thead>
           <tbody class="divide-y divide-gray-200 bg-white">
             <tr
-              v-for="feed in feeds"
+              v-for="(feed, index) in feeds"
               :key="feed.id"
               class="divide-x divide-gray-200"
+              :class="index % 2 === 0 ? undefined : 'bg-gray-50'"
             >
               <td
                 class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
@@ -302,7 +301,7 @@ const setShadow = (event) => {
                   </div>
                 </div>
               </td>
-              <td class="whitespace-nowrap p-4 text-sm text-gray-500">
+              <td class="whitespace-nowrap p-4 text-sm text-gray-500 w-1/5">
                 <div
                   v-for="ingredient in feed.ingredients.filter(
                     (i) => i.type === 1
@@ -318,7 +317,7 @@ const setShadow = (event) => {
                   </span>
                 </div>
               </td>
-              <td class="whitespace-nowrap p-4 text-sm text-gray-500">
+              <td class="whitespace-nowrap p-4 text-sm text-gray-500 w-1/5">
                 <div class="flex flex-wrap mb-3">
                   <span
                     v-for="ingredient in feed.ingredients.filter(
@@ -334,7 +333,7 @@ const setShadow = (event) => {
                 </div>
               </td>
               <td
-                class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
+                class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6 w-1/5"
               >
                 <div class="flex flex-wrap mb-3">
                   <span
@@ -351,7 +350,7 @@ const setShadow = (event) => {
                 </div>
               </td>
               <td
-                class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
+                class="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6 w-1/5"
               >
                 <div class="flex flex-wrap mb-3">
                   <span
@@ -374,6 +373,12 @@ const setShadow = (event) => {
     </div>
   </div>
 
+  <!-- Create Feed Modal -->
+  <CreateFeedModal
+    :is-open="createModalOpen"
+    :feed-id="selectedFeedId"
+    @close="createModalOpen = false"
+  />
   <!-- Edit Feed Modal -->
   <EditFeedModal
     :is-open="editModalOpen"

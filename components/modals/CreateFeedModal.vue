@@ -12,11 +12,15 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const feeds = useState("feeds");
+const horses = useState("horses");
 const selectedHorseId = useState("selectedHorseId");
 const selectedYard = useState("selectedYard");
+const route = useRoute();
+const mustManualSelectedHorse = ref(route.path == "/report/feeds");
 
 const ingredients = ref([]);
 
+const horseId = ref(0);
 const instructions = ref("");
 const condition = ref("");
 
@@ -38,9 +42,12 @@ const resetModal = () => {
 };
 
 // handle open and close
-watch(props, (newValue) => {
-  resetModal();
-});
+watch(
+  () => props.isOpen,
+  (isOpen) => {
+    resetModal();
+  }
+);
 
 // reset values on change
 watch(addingIngredient, (newValue) => {
@@ -93,12 +100,19 @@ const handleCreateFeed = async () => {
     return;
   }
 
+  if (horseId.value == 0 && mustManualSelectedHorse.value) {
+    errors.value.push("Please select a horse.");
+    return;
+  }
+
   // add new feed to db
   const { data, error } = await client
     .from("feeds")
     .insert({
       yard_id: selectedYard.value,
-      horse_id: selectedHorseId.value,
+      horse_id: mustManualSelectedHorse.value
+        ? horseId.value
+        : selectedHorseId.value,
       created_by: user.value.id,
       instructions: instructions.value,
       condition: condition.value,
@@ -118,7 +132,9 @@ const handleCreateFeed = async () => {
     .insert(
       ingredients.value.map((ingredient) => ({
         feed_id: data.id,
-        horse_id: selectedHorseId.value,
+        horse_id: mustManualSelectedHorse.value
+          ? horseId.value
+          : selectedHorseId.value,
         name: ingredient.name,
         quantity: ingredient.quantity,
         metric: ingredient.metric,
@@ -133,8 +149,9 @@ const handleCreateFeed = async () => {
   }
 
   // add feed to local state
+  data.ingredients = ingredients.value;
+  data.horse = horses.value.find((h) => h.id == data.horse_id);
   if (feeds.value) {
-    data.ingredients = ingredients.value;
     feeds.value.push(data);
   } else {
     feeds.value = [data];
@@ -237,6 +254,28 @@ const handleCreateFeed = async () => {
                         @submit.prevent="handleCreateFeed"
                         class="flex flex-col space-y-4"
                       >
+                        <div v-if="mustManualSelectedHorse" class="col-span-12">
+                          <label
+                            for="location"
+                            class="block text-sm font-medium text-gray-700"
+                            >Horse</label
+                          >
+                          <select
+                            id="location"
+                            name="location"
+                            v-model="horseId"
+                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                          >
+                            <option value="0">Pick one</option>
+                            <option
+                              v-for="horse in horses"
+                              :key="horse.id"
+                              :value="horse.id"
+                            >
+                              {{ horse.name }}
+                            </option>
+                          </select>
+                        </div>
                         <div>
                           <label class="block text-sm font-medium text-gray-700"
                             >Preparation Instructions (optional)</label
