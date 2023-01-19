@@ -4,8 +4,20 @@ import { toPng } from "html-to-image";
 import download from "downloadjs";
 
 const downloadReportImage = () => {
-  toPng(document.getElementById("feed-report")).then(function (dataUrl) {
+  const report = document.getElementById("feed-report");
+
+  const NodesToRemove = report.querySelectorAll("#feed-report-actions");
+
+  NodesToRemove.forEach((node) => {
+    node.style.display = "none";
+  });
+
+  toPng(report).then(function (dataUrl) {
     download(dataUrl, "feed-report.png");
+
+    NodesToRemove.forEach((node) => {
+      node.style.display = "";
+    });
   });
 };
 </script>

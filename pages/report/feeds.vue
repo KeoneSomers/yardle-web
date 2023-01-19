@@ -284,7 +284,10 @@ const setShadow = (event) => {
                       feed.condition
                     }}</span>
                   </div>
-                  <div class="mt-2 flex justify-end w-full">
+                  <div
+                    id="feed-report-actions"
+                    class="mt-2 flex justify-end w-full"
+                  >
                     <button
                       @click="handleEdit(feed.id)"
                       class="text-indigo-600 hover:text-indigo-900 bg-indigo-100 py-1 px-2 rounded mr-2"
