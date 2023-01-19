@@ -1,12 +1,11 @@
 <script setup>
-  import DeleteUserAccountModal from "@/components/modals/DeleteUserAccountModal.vue";
+import DeleteUserAccountModal from "@/components/modals/DeleteUserAccountModal.vue";
 
-  definePageMeta({
-    guards: ["requireAuth"],
-  });
+definePageMeta({
+  guards: ["requireAuth"],
+});
 
-  const deleteUserAccountModalOpen = ref(false);
-  const user = useSupabaseUser();
+const deleteUserAccountModalOpen = ref(false);
 </script>
 
 <template>
@@ -84,7 +83,6 @@
   <!-- Modals -->
   <DeleteUserAccountModal
     :is-open="deleteUserAccountModalOpen"
-    :user-id="user.id"
     @close="deleteUserAccountModalOpen = false"
   />
 </template>

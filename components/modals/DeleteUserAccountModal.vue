@@ -1,30 +1,51 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
-  const props = defineProps(["isOpen", "userId"]);
-  const emits = defineEmits(["close"]);
+const props = defineProps(["isOpen"]);
+const emits = defineEmits(["close"]);
 
-  const handleSubmit = async () => {
-    // TODO: first delete all the users data
+const supabase = useSupabaseClient();
+const supabaseAuth = useSupabaseAuthClient();
+const user = useSupabaseUser();
 
-    // calendar_events + calendar_events_horses
-    // horses + Feeds + rugs + medications
-    // profile + profiles_yards
-    // yards (If they are the owner of any yards)
+const handleSubmit = async () => {
+  // remove connection from users to profiles
+  if (user.value) {
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        username: "deletedUser",
+        avatar_url: null,
+        selected_yard: null,
+        email: null,
+      })
+      .eq("id", user.value.id);
 
-    // ... finally remove their account
+    if (error) {
+      console.log("error", error);
+      return;
+    }
+
+    // Remove auth/user account
     const { result } = await $fetch("/api/deleteUserAccount", {
       method: "post",
-      body: { userId: props.userId },
+      body: { userId: user.value.id },
     });
-  };
+
+    if (result === "success") {
+      await supabaseAuth.auth.signOut();
+    }
+
+    // TODO: in future - do a proper cleanup of the user's data
+  }
+};
 </script>
 
 <template>
