@@ -7,7 +7,6 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/vue";
-import { EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
 import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
