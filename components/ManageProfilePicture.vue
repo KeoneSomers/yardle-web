@@ -6,7 +6,8 @@ const emit = defineEmits(["update:path"]);
 
 const supabase = useSupabaseClient();
 
-const uploading = ref(false);
+const isLoading = useState("isLoading", () => false);
+
 const src = ref("");
 const files = ref();
 
@@ -30,7 +31,7 @@ const downloadImage = async () => {
 const uploadAvatar = async (evt) => {
   files.value = evt.target.files;
   try {
-    uploading.value = true;
+    isLoading.value = true;
 
     if (!files.value || files.value.length === 0) {
       throw new Error("You must select an image to upload.");
@@ -63,7 +64,7 @@ const uploadAvatar = async (evt) => {
   } catch (error) {
     alert(error.message);
   } finally {
-    uploading.value = false;
+    isLoading.value = false;
   }
 };
 
@@ -113,7 +114,7 @@ watch(path, () => {
           id="single"
           accept="image/*"
           @change="uploadAvatar"
-          :disabled="uploading"
+          :disabled="isLoading"
         />
       </div>
     </div>

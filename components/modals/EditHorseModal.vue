@@ -15,6 +15,7 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const horses = useState("horses");
+const isLoading = useState("isLoading");
 
 const error = ref("");
 
@@ -172,10 +173,18 @@ const handleSubmit = async () => {
 
                 <div class="mt-4 flex justify-end space-x-2">
                   <button
+                    v-if="!isLoading"
                     type="submit"
                     class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
                   >
                     Save
+                  </button>
+                  <button
+                    v-else
+                    type="button"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-gray-600 px-4 py-2 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 sm:text-sm"
+                  >
+                    Loading...
                   </button>
                 </div>
               </form>
