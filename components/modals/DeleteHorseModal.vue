@@ -1,60 +1,76 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
-  const props = defineProps(["isOpen", "horseId"]);
-  const emits = defineEmits(["close"]);
+const props = defineProps(["isOpen", "horseId"]);
+const emits = defineEmits(["close"]);
 
-  const client = useSupabaseClient();
+const client = useSupabaseClient();
 
-  const selectedHorseId = useState("selectedHorseId");
-  const horses = useState("horses");
+const selectedHorseId = useState("selectedHorseId");
+const horses = useState("horses");
 
-  const handleDelete = async () => {
-    // first delete horses rugs, feeds, medications and image
-    await client.from("rugs").delete().eq("horse_id", props.horseId);
-    await client.from("feeds").delete().eq("horse_id", props.horseId);
-    await client.from("medications").delete().eq("horse_id", props.horseId);
+const handleDelete = async () => {
+  // delete horse image
+  const index = horses.value.map((e) => e.id).indexOf(props.horseId);
 
-    // second, delete horse from calendar events
-    const { error: delError } = await client
-      .from("calendar_events_horses")
-      .delete()
-      .eq("horse_id", props.horseId);
+  if (horses.value[index].avatar_url) {
+    const { error } = await client.storage
+      .from("horse-avatars")
+      .remove([horses.value[index].avatar_url]);
 
-    if (!delError) {
-      const { error: horseDeleteError } = await client
-        .from("horses")
-        .delete()
-        .eq("id", props.horseId)
-        .select();
-
-      if (!horseDeleteError) {
-        // success! - now handle cleanup on frontend
-        const index = horses.value.map((e) => e.id).indexOf(props.horseId);
-        horses.value.splice(index, 1);
-
-        // change selected horse
-        if (horses.value.length > 0) {
-          selectedHorseId.value = horses.value[0].id;
-        } else {
-          selectedHorseId.value = 0;
-        }
-
-        // close the modal
-        emits("close");
-      } else {
-        console.log("error deleting horse");
-        console.log(horseDeleteError);
-      }
+    if (error) {
+      console.log(error);
+      return;
     }
-  };
+  }
+
+  // first delete horses rugs, feeds, medications and image
+  await client.from("rugs").delete().eq("horse_id", props.horseId);
+  await client.from("ingredients").delete().eq("horse_id", props.horseId);
+  await client.from("feeds").delete().eq("horse_id", props.horseId);
+  await client.from("medications").delete().eq("horse_id", props.horseId);
+
+  // second, delete horse from calendar events
+  const { error: delError } = await client
+    .from("calendar_events_horses")
+    .delete()
+    .eq("horse_id", props.horseId);
+
+  if (delError) {
+    return;
+  }
+
+  const { error: horseDeleteError } = await client
+    .from("horses")
+    .delete()
+    .eq("id", props.horseId)
+    .select();
+
+  if (!horseDeleteError) {
+    // success! - now handle cleanup on frontend
+    horses.value.splice(index, 1);
+
+    // change selected horse
+    if (horses.value.length > 0) {
+      selectedHorseId.value = horses.value[0].id;
+    } else {
+      selectedHorseId.value = 0;
+    }
+
+    // close the modal
+    emits("close");
+  } else {
+    console.log("error deleting horse");
+    console.log(horseDeleteError);
+  }
+};
 </script>
 
 <template>
