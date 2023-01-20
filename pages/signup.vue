@@ -1,58 +1,58 @@
 <script setup>
-  definePageMeta({
-    guards: ["requireNoAuth"],
-    layout: "blank",
-  });
+definePageMeta({
+  guards: ["requireNoAuth"],
+  layout: "blank",
+});
 
-  const router = useRouter();
-  // invite code if there is one (could also be undefined or null)
-  const { invite_code } = router.currentRoute.value.query;
+const router = useRouter();
+// invite code if there is one (could also be undefined or null)
+const { invite_code } = router.currentRoute.value.query;
 
-  const supabaseAuthClient = useSupabaseAuthClient();
+const supabaseAuthClient = useSupabaseAuthClient();
 
-  const username = ref("");
-  const email = ref("");
-  const password = ref("");
-  const passwordConfirm = ref("");
-  const errorMessage = ref("");
+const username = ref("");
+const email = ref("");
+const password = ref("");
+const passwordConfirm = ref("");
+const errorMessage = ref("");
 
-  const handleSignup = async () => {
-    console.log(email.value);
-    console.log(password.value);
-    if (password.value == passwordConfirm.value) {
-      if (password.value != "" && email.value != "") {
-        if (username.value != "") {
-          const { data, error } = await supabaseAuthClient.auth.signUp({
-            email: email.value,
-            password: password.value,
-            options: {
-              data: {
-                username: username.value,
-              },
+const handleSignup = async () => {
+  console.log(email.value);
+  console.log(password.value);
+  if (password.value == passwordConfirm.value) {
+    if (password.value != "" && email.value != "") {
+      if (username.value != "") {
+        const { data, error } = await supabaseAuthClient.auth.signUp({
+          email: email.value,
+          password: password.value,
+          options: {
+            data: {
+              username: username.value,
             },
-          });
+          },
+        });
 
-          if (!error) {
-            // success! redirect the user
-            if (!invite_code) {
-              navigateTo("/yards");
-            } else {
-              // navigate user back to joining a yard
-              navigateTo("/join/" + invite_code);
-            }
+        if (!error) {
+          // success! redirect the user
+          if (!invite_code) {
+            navigateTo("/yards");
           } else {
-            console.log(error);
-            errorMessage.value = error.message;
+            // navigate user back to joining a yard
+            navigateTo("/join/" + invite_code);
           }
         } else {
-          console.log("Please enter a username");
-          errorMessage.value = "Please enter a username of your choice";
+          console.log(error);
+          errorMessage.value = error.message;
         }
+      } else {
+        console.log("Please enter a username");
+        errorMessage.value = "Please enter a username of your choice";
       }
-    } else {
-      errorMessage.value = "Passwords do not match!";
     }
-  };
+  } else {
+    errorMessage.value = "Passwords do not match!";
+  }
+};
 </script>
 
 <template>
@@ -189,6 +189,17 @@
             </button>
           </div>
         </form>
+
+        <div class="mt-4">
+          <p>
+            Already have an account?
+            <NuxtLink
+              to="/login"
+              class="text-pink-500 hover:underline cursor-pointer"
+              >Sign in</NuxtLink
+            >
+          </p>
+        </div>
 
         <div
           class="text-red-500 bg-red-50 rounded-lg border-red-100 border p-2 mt-4"

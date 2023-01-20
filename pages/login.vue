@@ -1,52 +1,52 @@
 <script setup>
-  import RequestPasswordResetModal from "@/components/modals/RequestPasswordResetModal.vue";
+import RequestPasswordResetModal from "@/components/modals/RequestPasswordResetModal.vue";
 
-  definePageMeta({
-    guards: ["requireNoAuth"],
-    layout: "blank",
-  });
+definePageMeta({
+  guards: ["requireNoAuth"],
+  layout: "blank",
+});
 
-  const router = useRouter();
+const router = useRouter();
 
-  // invite code if there is one (could also be undefined or null)
-  const { invite_code } = router.currentRoute.value.query;
+// invite code if there is one (could also be undefined or null)
+const { invite_code } = router.currentRoute.value.query;
 
-  const supabaseAuthClient = useSupabaseAuthClient();
-  const user = useSupabaseUser();
-  const selectedYard = useState("selectedYard");
+const supabaseAuthClient = useSupabaseAuthClient();
+const user = useSupabaseUser();
+const selectedYard = useState("selectedYard");
 
-  const email = ref("");
-  const password = ref("");
+const email = ref("");
+const password = ref("");
 
-  const requestPasswordResetModalOpen = ref(false);
+const requestPasswordResetModalOpen = ref(false);
 
-  const errorMessage = ref("");
+const errorMessage = ref("");
 
-  watchEffect(() => {
-    // TODO: this will likely not work since it's being handled in useRoueManager.ts now
-    if (user.value) {
-      if (invite_code) {
-        // navigate user back to joining a yard
-        navigateTo("/join/" + invite_code);
-        return;
-      }
+watchEffect(() => {
+  // TODO: this will likely not work since it's being handled in useRoueManager.ts now
+  if (user.value) {
+    if (invite_code) {
+      // navigate user back to joining a yard
+      navigateTo("/join/" + invite_code);
+      return;
     }
-  });
+  }
+});
 
-  const handleLogin = async () => {
-    if (email.value && password.value) {
-      const { data, error } = await supabaseAuthClient.auth.signInWithPassword({
-        email: email.value,
-        password: password.value,
-      });
+const handleLogin = async () => {
+  if (email.value && password.value) {
+    const { data, error } = await supabaseAuthClient.auth.signInWithPassword({
+      email: email.value,
+      password: password.value,
+    });
 
-      if (error) {
-        errorMessage.value = error.message;
-        console.log(error);
-        return;
-      }
+    if (error) {
+      errorMessage.value = error.message;
+      console.log(error);
+      return;
     }
-  };
+  }
+};
 </script>
 
 <template>
@@ -143,6 +143,17 @@
             </button>
           </div>
         </form>
+
+        <div class="mt-4">
+          <p>
+            Don't have an account?
+            <NuxtLink
+              to="/signup"
+              class="text-pink-500 hover:underline cursor-pointer"
+              >Sign up</NuxtLink
+            >
+          </p>
+        </div>
 
         <div
           class="text-red-500 bg-red-50 rounded-lg border-red-100 border p-2 mt-4"
