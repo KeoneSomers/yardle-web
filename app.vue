@@ -82,7 +82,7 @@ watchEffect(() => {
 
 <template>
   <div>
-    <div class="hidden xl:block">
+    <div>
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
@@ -98,14 +98,6 @@ watchEffect(() => {
         :is-open="feedbackModalOpen"
         @close="feedbackModalOpen = false"
       />
-    </div>
-    <div class="xl:hidden flex justify-center items-center h-screen">
-      <div>
-        <p class="font-mono text-center">
-          Yardle is currently only supported on bigger screens.<br />
-          Mobile app is in development!
-        </p>
-      </div>
     </div>
   </div>
 </template>

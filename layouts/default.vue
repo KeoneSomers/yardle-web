@@ -80,7 +80,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex h-screen">
+  <div class="h-screen hidden xl:flex">
     <!-- Mobile Sidebar -->
     <MobileSidebar />
 
@@ -93,6 +93,14 @@ onMounted(async () => {
 
       <!-- Page Content -->
       <slot />
+    </div>
+  </div>
+  <div class="xl:hidden flex justify-center items-center h-screen">
+    <div>
+      <p class="font-mono text-center">
+        Yardle is currently only supported on bigger screens.<br />
+        Mobile app is in development!
+      </p>
     </div>
   </div>
 </template>
