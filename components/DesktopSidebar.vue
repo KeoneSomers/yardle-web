@@ -31,7 +31,6 @@ const navigation = [
     name: "Field Groups",
     to: "/fields",
     icon: RectangleGroupIcon,
-    hint: "Soon",
   },
   {
     name: "Rugs",
