@@ -1,56 +1,56 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { DateTime } from "luxon";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { DateTime } from "luxon";
 
-  const props = defineProps(["isOpen", "horse"]);
-  const { horse } = toRefs(props);
-  const emits = defineEmits(["close"]);
+const props = defineProps(["isOpen", "horse"]);
+const { horse } = toRefs(props);
+const emits = defineEmits(["close"]);
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
-  const horses = useState("horses");
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const horses = useState("horses");
 
-  const error = ref("");
+const error = ref("");
 
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const handleSubmit = async () => {
+  // step 1: create the horse in the database
+  const { data: newHorse, error: createError } = await client
+    .from("horses")
+    .update({
+      name: capitalizeFirstLetter(horse.value.name),
+      breed: horse.value.breed,
+      about: horse.value.about,
+      color_markings: horse.value.color_markings,
+      dob: horse.value.dob ? new Date(horse.value.dob).toISOString() : null,
+      updated_by: user.value.id,
+      updated_at: new Date().toISOString(),
+      avatar_url: horse.value.avatar_url,
+    })
+    .eq("id", horse.value.id)
+    .select()
+    .single();
+
+  // step 2: update local state
+  if (!createError) {
+    const index = horses.value.map((e) => e.id).indexOf(horse.value.id);
+    horses.value[index].name = horse.value.name;
+    horses.value[index].avatar_url = horse.value.avatar_url;
+    horses.value[index].updated_at = DateTime.now();
+    emits("close");
+  } else {
+    error.value = createError.message + createError.hint;
   }
-
-  const handleSubmit = async () => {
-    // step 1: create the horse in the database
-    const { data: newHorse, error: createError } = await client
-      .from("horses")
-      .update({
-        name: capitalizeFirstLetter(horse.value.name),
-        breed: horse.value.breed,
-        about: horse.value.about,
-        color_markings: horse.value.color_markings,
-        dob: new Date(horse.value.dob).toISOString(),
-        updated_by: user.value.id,
-        updated_at: new Date().toISOString(),
-        avatar_url: horse.value.avatar_url,
-      })
-      .eq("id", horse.value.id)
-      .select()
-      .single();
-
-    // step 2: update local state
-    if (!createError) {
-      const index = horses.value.map((e) => e.id).indexOf(horse.value.id);
-      horses.value[index].name = horse.value.name;
-      horses.value[index].avatar_url = horse.value.avatar_url;
-      horses.value[index].updated_at = DateTime.now();
-      emits("close");
-    } else {
-      error.value = createError.message + createError.hint;
-    }
-  };
+};
 </script>
 
 <template>

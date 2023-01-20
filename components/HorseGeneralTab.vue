@@ -326,7 +326,7 @@ watchEffect(async () => {
 
       <!-- Breed -->
       <div class="sm:col-span-1">
-        <dt class="text-sm font-medium text-gray-500">Date of Birth</dt>
+        <dt class="text-sm font-medium text-gray-500">Breed</dt>
         <dd class="mt-1 text-sm text-gray-900">
           <span v-if="horse.breed">{{ horse.breed }}</span>
           <span v-else>--</span>
@@ -335,7 +335,7 @@ watchEffect(async () => {
 
       <!-- Color & Markings -->
       <div class="sm:col-span-1">
-        <dt class="text-sm font-medium text-gray-500">Date of Birth</dt>
+        <dt class="text-sm font-medium text-gray-500">Colour and Markings</dt>
         <dd class="mt-1 text-sm text-gray-900">
           <span v-if="horse.color_markings">{{ horse.color_markings }}</span>
           <span v-else>--</span>
