@@ -31,16 +31,33 @@ const uploadAvatar = async (evt) => {
   files.value = evt.target.files;
   try {
     uploading.value = true;
+
     if (!files.value || files.value.length === 0) {
       throw new Error("You must select an image to upload.");
     }
+
     const file = files.value[0];
     const fileExt = file.name.split(".").pop();
     const fileName = `${Math.random()}.${fileExt}`;
     const filePath = `${fileName}`;
+
+    // first delete the old image
+    if (path.value) {
+      const { error } = await supabase.storage
+        .from("horse-avatars")
+        .remove([path.value]);
+
+      if (error) {
+        console.error("Error removing old image: ", error.message);
+        return;
+      }
+    }
+
+    // upload new image
     let { error: uploadError } = await supabase.storage
       .from("horse-avatars")
       .upload(filePath, file);
+
     if (uploadError) throw uploadError;
     emit("update:path", filePath);
   } catch (error) {
@@ -62,22 +79,6 @@ watch(path, () => {
 </script>
 
 <template>
-  <!-- <div class="m-4 border p-4 inline-block bg-gray-100">
-        <img v-if="src" :src="src" alt="Avatar" class="avatar image w-5 h-5" />
-
-        <div style="width: 10em; position: relative">
-            <label class="button primary block" for="single">
-                {{ uploading ? "Uploading ..." : "Upload" }}
-            </label>
-            <input
-                type="file"
-                id="single"
-                accept="image/*"
-                @change="uploadAvatar"
-                :disabled="uploading"
-            />
-        </div>
-    </div> -->
   <div>
     <label for="photo" class="block text-sm font-medium text-gray-700"
       >Photo</label
