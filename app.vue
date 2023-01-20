@@ -89,7 +89,7 @@ watchEffect(() => {
       <button
         @click="feedbackModalOpen = true"
         type="button"
-        class="fixed bottom-5 right-5 inline-flex items-center shadow-lg shadow-indigo-400 rounded-full border border-transparent bg-indigo-600 p-3 pr-4 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        class="fixed bottom-3 right-20 inline-flex items-center shadow-lg shadow-indigo-400 rounded-full border border-transparent bg-indigo-600 p-3 pr-4 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
         <PaperAirplaneIcon class="h-6 w-6 mr-3" aria-hidden="true" />
         Send Feedback
