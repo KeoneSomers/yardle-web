@@ -23,21 +23,21 @@ const navigation = [
   { name: "Members", to: "/members", icon: UserGroupIcon, hint: "" },
   { name: "Calendar", to: "/calendar", icon: CalendarIcon, hint: "" },
   {
+    name: "Feeds",
+    to: "/report/feeds",
+    icon: ClipboardDocumentListIcon,
+  },
+  {
     name: "Field Groups",
     to: "/fields",
     icon: RectangleGroupIcon,
     hint: "Soon",
   },
   {
-    name: "Rug Report",
+    name: "Rugs",
     to: "/report/rugs",
     icon: ClipboardDocumentListIcon,
     hint: "Soon",
-  },
-  {
-    name: "Feed Report",
-    to: "/report/feeds",
-    icon: ClipboardDocumentListIcon,
   },
 ];
 
