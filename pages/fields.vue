@@ -2,6 +2,7 @@
 import draggable from "vuedraggable";
 import CreateFieldModal from "@/components/modals/CreateFieldModal.vue";
 import EditFieldModal from "@/components/modals/EditFieldModal.vue";
+import DeleteFieldModal from "@/components/modals/DeleteFieldModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
 // import { TaskCard } from "~~/.nuxt/components";
@@ -214,6 +215,11 @@ const handleFieldChange = async (e) => {
     :is-open="editModalOpen"
     :field="selectedField"
     @close="editModalOpen = false"
+  />
+  <DeleteFieldModal
+    :is-open="deleteModalOpen"
+    :field="selectedField"
+    @close="deleteModalOpen = false"
   />
 </template>
 
