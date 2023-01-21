@@ -75,13 +75,30 @@ const handleRoleChange = async (memberId, roleId) => {
     .eq("profile_id", memberId)
     .eq("yard_id", yard.value.id);
 
-  if (!error) {
-    // now update local members role
-    const index = members.value.map((e) => e.profile.id).indexOf(memberId);
-    members.value[index].role = roleId;
-  } else {
+  if (error) {
     console.log(error);
+    return;
   }
+
+  // check if the member currently has this yard selected and then update their profiles/active_role if so
+  const { data } = await client
+    .from("profiles")
+    .select("selected_yard")
+    .eq("id", memberId)
+    .single();
+  console.log(data.selected_yard);
+  if (data.selected_yard) {
+    if (data.selected_yard == yard.value.id) {
+      await client
+        .from("profiles")
+        .update({ active_role: roleId })
+        .eq("id", memberId);
+    }
+  }
+
+  // now update local members role
+  const index = members.value.map((e) => e.profile.id).indexOf(memberId);
+  members.value[index].role = roleId;
 };
 </script>
 
