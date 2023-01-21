@@ -288,13 +288,13 @@ const setShadow = (event) => {
                   >
                     <button
                       @click="handleEdit(feed.id)"
-                      class="text-indigo-600 hover:text-indigo-900 bg-indigo-100 py-1 px-2 rounded mr-2"
+                      class="text-gray-600 hover:text-gray-900 bg-gray-100 py-1 px-2 rounded mr-2"
                     >
                       Edit
                     </button>
                     <button
                       @click="handleModalOpen(feed.id)"
-                      class="text-red-600 hover:text-red-900 bg-red-100 py-1 px-2 rounded"
+                      class="text-gray-600 hover:text-gray-900 bg-gray-100 py-1 px-2 rounded"
                     >
                       Delete
                     </button>

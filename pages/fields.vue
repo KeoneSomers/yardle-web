@@ -67,7 +67,9 @@ const getFields = async () => {
   });
 };
 
-await getFields();
+if (fields.value.length < 2) {
+  await getFields();
+}
 
 const handleFieldChange = async (e) => {
   const horseId = e.item.id;
