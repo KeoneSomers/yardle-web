@@ -1,44 +1,50 @@
 <script setup>
-  definePageMeta({
-    guards: ["requireAuth"],
-    layout: "blank",
+definePageMeta({
+  guards: [],
+  layout: "blank",
+});
+
+const user = useSupabaseUser();
+const client = useSupabaseClient();
+const selectedYard = useState("selectedYard");
+
+const errors = ref([]);
+
+const password = ref("");
+const confirmPassword = ref("");
+
+const handleChangePassword = async () => {
+  errors.value = [];
+
+  if (password.value.length < 7) {
+    errors.value.push("Password must be at least 6 characters long.");
+    return;
+  }
+
+  if (password.value != confirmPassword.value) {
+    errors.value.push("Passwords do not match.");
+    return;
+  }
+
+  // update password
+  const { error } = await client.auth.updateUser({
+    password: password.value,
   });
 
-  const user = useSupabaseUser();
-  const client = useSupabaseClient();
-  const selectedYard = useState("selectedYard");
+  if (error) {
+    errors.value.push(error.message);
+    return;
+  } else {
+    console.log("Password updated!");
+  }
 
-  const errorMessage = ref();
-
-  const password = ref("");
-  const confirmPassword = ref("");
-
-  const handleChangePassword = async () => {
-    errorMessage.value = "";
-    if (password.value.length > 6) {
-      if (password.value == confirmPassword.value) {
-        // update password
-        const { data, error } = await client.auth.updateUser({
-          password: password.value,
-        });
-
-        if (!error) {
-          // success!
-          if (selectedYard.value) {
-            navigateTo("/horses");
-          } else {
-            navigateTo("/yards");
-          }
-        } else {
-          errorMessage.value = error.message;
-        }
-      } else {
-        errorMessage.value = "Passwords do not match.";
-      }
-    } else {
-      errorMessage.value = "Password must be at least 6 characters long.";
-    }
-  };
+  // success!
+  if (selectedYard.value) {
+    navigateTo("/horses");
+  } else {
+    navigateTo("/yards");
+  }
+};
 </script>
 
 <template>
@@ -111,10 +117,14 @@
         </form>
 
         <div
-          class="text-red-500 bg-red-50 rounded-lg border-red-100 border p-2 mt-4"
-          v-if="errorMessage"
+          v-if="errors.length > 0"
+          class="p-4 my-2 bg-red-100 text-red-500 rounded-lg"
         >
-          {{ errorMessage }}
+          <ul class="list-disc list-inside">
+            <li v-for="error in errors" :key="error">
+              {{ error }}
+            </li>
+          </ul>
         </div>
       </div>
     </div>

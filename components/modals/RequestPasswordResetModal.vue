@@ -1,44 +1,49 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { KeyIcon } from "@heroicons/vue/24/outline/index.js";
-  import { EnvelopeIcon } from "@heroicons/vue/20/solid/index.js";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { KeyIcon } from "@heroicons/vue/24/outline/index.js";
+import { EnvelopeIcon } from "@heroicons/vue/20/solid/index.js";
 
-  const props = defineProps(["isOpen"]);
-  const emits = defineEmits(["close"]);
+const props = defineProps(["isOpen"]);
+const emits = defineEmits(["close"]);
 
-  const loading = ref(false);
-  const email = ref("");
-  const errorMessage = ref("");
-  const successMessage = ref("");
+const loading = ref(false);
+const email = ref("");
+const errorMessage = ref("");
+const successMessage = ref("");
 
-  const client = useSupabaseClient();
-
-  const handleResetPassword = async () => {
-    loading.value = true;
-    errorMessage.value = "";
+watchEffect(async () => {
+  if (props.isOpen) {
+    email.value = "";
     successMessage.value = "";
+    successMessage.value = "";
+  }
+});
 
-    const { data, error } = await client.auth.resetPasswordForEmail(
-      email.value,
-      {
-        redirectTo: `${window.location.origin}/resetpassword`,
-      }
-    );
+const client = useSupabaseClient();
 
-    if (!error) {
-      successMessage.value = "Success! Please check your email.";
-      loading.value = false;
-    } else {
-      errorMessage.value = error.message;
-      loading.value = false;
-    }
-  };
+const handleResetPassword = async () => {
+  loading.value = true;
+  errorMessage.value = "";
+  successMessage.value = "";
+
+  const { data, error } = await client.auth.resetPasswordForEmail(email.value, {
+    redirectTo: `${window.location.origin}/resetpassword`,
+  });
+
+  if (!error) {
+    successMessage.value = "Success! Please check your email.";
+    loading.value = false;
+  } else {
+    errorMessage.value = error.message;
+    loading.value = false;
+  }
+};
 </script>
 
 <template>
@@ -128,7 +133,10 @@
                     </div>
                   </div>
                 </div>
-                <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <div
+                  v-if="!successMessage"
+                  class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse"
+                >
                   <button
                     :disabled="loading"
                     type="submit"
