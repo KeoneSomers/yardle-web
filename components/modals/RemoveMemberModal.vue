@@ -1,48 +1,44 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
-  const props = defineProps(["isOpen", "memberId"]);
-  const emits = defineEmits(["close"]);
-  const client = useSupabaseClient();
-  const members = useState("members");
-  const yard = useState("yard");
+const props = defineProps(["isOpen", "memberId"]);
+const emits = defineEmits(["close"]);
+const client = useSupabaseClient();
+const members = useState("members");
+const yard = useState("yard");
 
-  const handleRemoveMember = async () => {
-    // const { result } = await $fetch("/api/removeUsersSelectedYard", {
-    //     method: "post",
-    //     body: { memberId: props.memberId },
-    // });
-    await client
-      .from("profiles")
-      .update({ selected_yard: null })
-      .eq("id", props.memberId);
+const handleRemoveMember = async () => {
+  await client
+    .from("profiles")
+    .update({ selected_yard: null, active_role: null })
+    .eq("id", props.memberId);
 
-    const { error } = await client
-      .from("profiles_yards")
-      .delete()
-      .eq("profile_id", props.memberId)
-      .eq("yard_id", yard.value.id);
+  const { error } = await client
+    .from("profiles_yards")
+    .delete()
+    .eq("profile_id", props.memberId)
+    .eq("yard_id", yard.value.id);
 
-    if (!error) {
-      // success! - now remove the member from the webpage
-      const index = members.value
-        .map((e) => e.profile.id)
-        .indexOf(props.memberId);
-      members.value.splice(index, 1);
+  if (!error) {
+    // success! - now remove the member from the webpage
+    const index = members.value
+      .map((e) => e.profile.id)
+      .indexOf(props.memberId);
+    members.value.splice(index, 1);
 
-      // close the modal
-      emits("close");
-    } else {
-      console.log(error);
-    }
-  };
+    // close the modal
+    emits("close");
+  } else {
+    console.log(error);
+  }
+};
 </script>
 
 <template>

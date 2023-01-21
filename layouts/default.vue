@@ -4,31 +4,6 @@ const user = useSupabaseUser();
 const selectedYard = useState("selectedYard");
 const yard = useState("yard", () => null);
 const profile = useState("profile", () => null);
-const role = useState("role", () => 0);
-
-const getMemberRole = async () => {
-  if (yard.value) {
-    await useAsyncData("role", async () => {
-      const { data: roleData, error: roleError } = await supabaseClient
-        .from("profiles_yards")
-        .select("role")
-        .eq("profile_id", user.value.id)
-        .eq("yard_id", yard.value.id)
-        .single();
-
-      // todo get role name value (not just the id)
-
-      role.value = roleData.role;
-    });
-  }
-};
-
-// Get users role
-watchEffect(async () => {
-  if (yard.value) {
-    await getMemberRole();
-  }
-});
 
 const setProfile = async () => {
   const { data: _profile } = await useAsyncData("profile", async () => {
@@ -54,8 +29,6 @@ const getSelectedYardData = async () => {
 
       if (!error) {
         yard.value = data;
-        // also get users role in this yard
-        await getMemberRole();
       }
     });
   } else {
@@ -89,7 +62,7 @@ onMounted(async () => {
 
     <div class="flex min-w-0 flex-1 flex-col overflow-auto">
       <!-- Mobile Navbar -->
-      <MobileNavbar />
+      <!-- <MobileNavbar /> -->
 
       <!-- Page Content -->
       <slot />

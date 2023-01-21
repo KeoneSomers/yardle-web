@@ -18,7 +18,7 @@ const handleSubmit = async () => {
   // set profiles selected yard to null
   await client
     .from("profiles")
-    .update({ selected_yard: null })
+    .update({ selected_yard: null, active_role: null })
     .eq("selected_yard", props.yardId);
 
   // first: get all horse id's

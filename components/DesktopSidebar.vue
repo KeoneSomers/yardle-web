@@ -50,8 +50,7 @@ const router = useRouter();
 const user = useSupabaseUser();
 const selectedYard = useState("selectedYard");
 const yard = useState("yard");
-const role = useState("role");
-const profile = useState("profile");
+const profile = useState("profile"); // TODO: this is not set if you're just loggin in and therefore the profile widget is not shown
 // TODO: this should pull from db
 const roles = [
   { id: 1, name: "Owner" },
@@ -73,7 +72,7 @@ const handleUnselectYard = async () => {
 
   const { error } = await supabaseClient
     .from("profiles")
-    .update({ selected_yard: null })
+    .update({ selected_yard: null, active_role: null })
     .eq("id", user.value.id);
 };
 
@@ -104,8 +103,11 @@ const handleSignout = async () => {
                 <p class="text-md font-bold text-gray-600">
                   {{ yard.name }}
                 </p>
-                <p v-if="role" class="text-xs text-gray-500">
-                  {{ roles[role - 1].name }}
+                <p
+                  v-if="profile && profile.active_role"
+                  class="text-xs text-gray-500"
+                >
+                  {{ roles[profile.active_role - 1].name }}
                 </p>
               </div>
               <div class="flex items-center">
@@ -183,13 +185,13 @@ const handleSignout = async () => {
                 class="flex flex-1 justify-center items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
               >
                 <LinkIcon class="h-5 w-5 mr-2" />
-                Invite member
+                Invite
               </button>
             </div>
           </nav>
         </div>
         <div
-          v-if="profile"
+          v-if="profile && profile.username"
           class="flex flex-shrink-0 border-t border-gray-200 p-4"
         >
           <NuxtLink class="group block w-full flex-shrink-0">
@@ -278,6 +280,7 @@ const handleSignout = async () => {
       </div>
     </div>
     <InviteLinkModal
+      v-if="yard"
       :is-open="inviteLinkModalOpen"
       @close="inviteLinkModalOpen = false"
     />

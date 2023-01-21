@@ -24,6 +24,7 @@ const handleSubmit = async () => {
         username: "deletedUser",
         avatar_url: null,
         selected_yard: null,
+        active_role: null,
         email: null,
       })
       .eq("id", user.value.id);

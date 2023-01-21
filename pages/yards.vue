@@ -40,10 +40,28 @@ const handleDeleteYard = (yardId) => {
 const handleSelectYard = async (yardId) => {
   // TODO: Check the yard still exists and that you're still and unbanned member of it
 
+  // get role of user in yard
+  const { data: profile_yard, error: profile_yard_error } = await client
+    .from("profiles_yards")
+    .select("*")
+    .eq("profile_id", user.value.id)
+    .eq("yard_id", yardId)
+    .single();
+
+  if (profile_yard_error) {
+    console.log(profile_yard_error);
+    return;
+  }
+
+  if (profile_yard.is_banned) {
+    console.log("Your banned from this yard"); // TODO: Show an error message to the user
+    return;
+  }
+
   // update user in db (realtime will navigate them to the /horses page automatically)
   await client
     .from("profiles")
-    .update({ selected_yard: yardId })
+    .update({ selected_yard: yardId, active_role: profile_yard.role })
     .eq("id", user.value.id);
 };
 

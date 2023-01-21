@@ -9,11 +9,15 @@ const feedbackModalOpen = ref(false);
 
 const user = useSupabaseUser();
 const client = useSupabaseClient();
+
 let realtimeChannel: RealtimeChannel;
+
 const selectedYard = useState<number | undefined>(
   "selectedYard",
   () => undefined
 );
+
+const profile = useState<any>("profile");
 
 // TODO - Subscribe when user logs in and not just on mounted
 
@@ -24,11 +28,17 @@ const { refresh: refreshSeletcedYard } = await useAsyncData(
     if (user.value) {
       const { data } = await client
         .from("profiles")
-        .select("selected_yard")
+        .select("selected_yard, active_role")
         .eq("id", user.value?.id)
         .single();
 
-      selectedYard.value = data?.selected_yard;
+      if (data) {
+        selectedYard.value = data.selected_yard;
+
+        if (profile.value) {
+          profile.value.active_role = data.active_role;
+        }
+      }
     }
   }
 );

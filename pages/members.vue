@@ -44,7 +44,7 @@ const client = useSupabaseClient();
 const user = useSupabaseUser();
 const yard = useState("yard");
 const members = useState("members");
-const role = useState("role");
+const profile = useState("profile");
 const selectedYard = useState("selectedYard");
 
 const inviteLinkModalOpen = ref(false);
@@ -157,7 +157,13 @@ const handleRoleChange = async (memberId, roleId) => {
                   <td class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6">
                     <div class="flex justify-end items-center">
                       <!-- Only show this button if user is admin or owner and member.role is > role -->
-                      <div v-if="role && role < 3 && member.role > role">
+                      <div
+                        v-if="
+                          profile &&
+                          profile.active_role < 3 &&
+                          member.role > profile.active_role
+                        "
+                      >
                         <button
                           @click="handleRemoveMember(member.profile.id)"
                           class="mr-3 inline-flex items-center rounded-md bg-red-500 p-2 px-3 font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50"
@@ -229,7 +235,7 @@ const handleRoleChange = async (memberId, roleId) => {
                                     {
                                       // Can't change someones role if you're not owner or admin
                                       'opacity-20 pointer-events-none':
-                                        role > 2,
+                                        profile.active_role > 2,
                                     },
                                     {
                                       // Can't promote a member to owner

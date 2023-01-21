@@ -1,77 +1,76 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-  } from "@headlessui/vue";
-  import {
-    CalendarIcon,
-    HomeIcon,
-    MagnifyingGlassCircleIcon,
-    UserGroupIcon,
-    XMarkIcon,
-    RectangleGroupIcon,
-    ClipboardDocumentListIcon,
-  } from "@heroicons/vue/24/outline/index.js";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+} from "@headlessui/vue";
+import {
+  CalendarIcon,
+  HomeIcon,
+  MagnifyingGlassCircleIcon,
+  UserGroupIcon,
+  XMarkIcon,
+  RectangleGroupIcon,
+  ClipboardDocumentListIcon,
+} from "@heroicons/vue/24/outline/index.js";
 
-  const navigation = [
-    { name: "Dashboard", to: "/dashboard", icon: HomeIcon, hint: "Soon" },
-    {
-      name: "Horses",
-      to: "/horses",
-      icon: MagnifyingGlassCircleIcon,
-      hint: "",
-    },
-    { name: "Members", to: "/members", icon: UserGroupIcon, hint: "" },
-    { name: "Calendar", to: "/calendar", icon: CalendarIcon, hint: "" },
-    {
-      name: "Field Groups",
-      to: "/fields",
-      icon: RectangleGroupIcon,
-      hint: "Soon",
-    },
-    {
-      name: "Rug Report",
-      to: "/report/rugs",
-      icon: ClipboardDocumentListIcon,
-      hint: "Soon",
-    },
-    {
-      name: "Feed Report",
-      to: "/report/feeds",
-      icon: ClipboardDocumentListIcon,
-      hint: "Soon",
-    },
-  ];
+const navigation = [
+  { name: "Dashboard", to: "/dashboard", icon: HomeIcon, hint: "Soon" },
+  {
+    name: "Horses",
+    to: "/horses",
+    icon: MagnifyingGlassCircleIcon,
+    hint: "",
+  },
+  { name: "Members", to: "/members", icon: UserGroupIcon, hint: "" },
+  { name: "Calendar", to: "/calendar", icon: CalendarIcon, hint: "" },
+  {
+    name: "Field Groups",
+    to: "/fields",
+    icon: RectangleGroupIcon,
+    hint: "Soon",
+  },
+  {
+    name: "Rug Report",
+    to: "/report/rugs",
+    icon: ClipboardDocumentListIcon,
+    hint: "Soon",
+  },
+  {
+    name: "Feed Report",
+    to: "/report/feeds",
+    icon: ClipboardDocumentListIcon,
+    hint: "Soon",
+  },
+];
 
-  const sidebarOpen = useState("sidebarOpen", () => false);
-  const supabaseAuthClient = useSupabaseAuthClient();
-  const supabaseClient = useSupabaseClient();
-  const router = useRouter();
-  const user = useSupabaseUser();
-  const selectedYard = useState("selectedYard");
-  const yard = useState("yard", () => null);
-  const role = useState("role");
-  const profile = useState("profile");
-  // TODO: this should pull from db
-  const roles = [
-    { id: 1, name: "Owner" },
-    { id: 2, name: "Admin" },
-    { id: 3, name: "Member" },
-    { id: 4, name: "Guest" },
-  ];
+const sidebarOpen = useState("sidebarOpen", () => false);
+const supabaseAuthClient = useSupabaseAuthClient();
+const supabaseClient = useSupabaseClient();
+const router = useRouter();
+const user = useSupabaseUser();
+const selectedYard = useState("selectedYard");
+const yard = useState("yard", () => null);
+const profile = useState("profile");
+// TODO: this should pull from db
+const roles = [
+  { id: 1, name: "Owner" },
+  { id: 2, name: "Admin" },
+  { id: 3, name: "Member" },
+  { id: 4, name: "Guest" },
+];
 
-  const handleUnselectYard = async () => {
-    const { error } = await supabaseClient
-      .from("profiles")
-      .update({ selected_yard: null })
-      .eq("id", user.value.id);
-  };
+const handleUnselectYard = async () => {
+  const { error } = await supabaseClient
+    .from("profiles")
+    .update({ selected_yard: null, active_role: null })
+    .eq("id", user.value.id);
+};
 
-  const handleSignout = async () => {
-    supabaseAuthClient.auth.signOut();
-  };
+const handleSignout = async () => {
+  supabaseAuthClient.auth.signOut();
+};
 </script>
 
 <template>
