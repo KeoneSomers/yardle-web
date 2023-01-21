@@ -75,7 +75,9 @@ watch(
   (isOpen) => {
     if (selDay.value > 0) {
       // 2023-01-19
-      date.value = String(DateTime.fromMillis(selDay.value)).substring(0, 10);
+      if (date.value === "") {
+        date.value = String(DateTime.fromMillis(selDay.value)).substring(0, 10);
+      }
     }
   }
 );

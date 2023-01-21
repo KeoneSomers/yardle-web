@@ -34,8 +34,6 @@ const handleSubmit = async () => {
     .select()
     .single();
 
-  console.log(data);
-
   if (error) {
     console.log(error);
     return;
