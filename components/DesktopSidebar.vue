@@ -57,6 +57,16 @@ const roles = [
 ];
 
 const handleUnselectYard = async () => {
+  const fields = useState("fields");
+
+  fields.value = [
+    {
+      id: 0,
+      name: "Unsorted",
+      horses: [],
+    },
+  ];
+
   const { error } = await supabaseClient
     .from("profiles")
     .update({ selected_yard: null })
