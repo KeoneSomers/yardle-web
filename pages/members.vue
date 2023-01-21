@@ -1,88 +1,88 @@
 <script setup>
-  import {
-    Listbox,
-    ListboxLabel,
-    ListboxButton,
-    ListboxOptions,
-    ListboxOption,
-  } from "@headlessui/vue";
-  import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
-  import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
-  import { CheckIcon, ChevronDownIcon } from "@heroicons/vue/20/solid/index.js";
+import {
+  Listbox,
+  ListboxLabel,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+} from "@headlessui/vue";
+import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
+import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
+import { CheckIcon, ChevronDownIcon } from "@heroicons/vue/20/solid/index.js";
 
-  definePageMeta({
-    guards: ["requireAuth", "requireYard"],
-  });
+definePageMeta({
+  guards: ["requireAuth", "requireYard"],
+});
 
-  const roles = [
-    {
-      id: 1,
-      name: "Owner",
-      description: "The owner has all permissions within this yard.",
-    },
-    {
-      id: 2,
-      name: "Admin",
-      description:
-        "Admins may create, edit and delete any horses in the yard. They can also manage members.",
-    },
-    {
-      id: 3,
-      name: "Member",
-      description: "Members may create, edit and delete their own horses.",
-    },
-    {
-      id: 4,
-      name: "Guest",
-      description: "Guests can only view information, but not edit or create.",
-    },
-  ];
+const roles = [
+  {
+    id: 1,
+    name: "Owner",
+    description: "The owner has all permissions within this yard.",
+  },
+  {
+    id: 2,
+    name: "Admin",
+    description:
+      "Admins may create, edit and delete any horses in the yard. They can also manage members.",
+  },
+  {
+    id: 3,
+    name: "Member",
+    description: "Members may create, edit and delete their own horses.",
+  },
+  {
+    id: 4,
+    name: "Guest",
+    description: "Guests can only view information, but not edit or create.",
+  },
+];
 
-  const client = useSupabaseClient();
+const client = useSupabaseClient();
 
-  // since I just need the uid I can use this even though it's not in state
-  const user = useSupabaseUser();
-  const yard = useState("yard");
-  const members = useState("members");
-  const role = useState("role");
-  const selectedYard = useState("selectedYard");
+// since I just need the uid I can use this even though it's not in state
+const user = useSupabaseUser();
+const yard = useState("yard");
+const members = useState("members");
+const role = useState("role");
+const selectedYard = useState("selectedYard");
 
-  const inviteLinkModalOpen = ref(false);
-  const removeMemberModalOpen = ref(false);
-  const memberToRemove = ref(0);
+const inviteLinkModalOpen = ref(false);
+const removeMemberModalOpen = ref(false);
+const memberToRemove = ref(0);
 
-  const handleRemoveMember = (memberId) => {
-    memberToRemove.value = memberId;
-    removeMemberModalOpen.value = true;
-  };
+const handleRemoveMember = (memberId) => {
+  memberToRemove.value = memberId;
+  removeMemberModalOpen.value = true;
+};
 
-  // correct way to get joined data
-  await useAsyncData("members", async () => {
-    const { data, error } = await client
-      .from("profiles_yards")
-      .select("profile:profiles(*), role")
-      .eq("yard_id", selectedYard.value)
-      .order("role", { ascending: true });
+// correct way to get joined data
+await useAsyncData("members", async () => {
+  const { data, error } = await client
+    .from("profiles_yards")
+    .select("profile:profiles(*), role")
+    .eq("yard_id", selectedYard.value)
+    .order("role", { ascending: true });
 
-    members.value = data;
-  });
+  members.value = data;
+});
 
-  const handleRoleChange = async (memberId, roleId) => {
-    // TODO: if roleId == 1 then also need to set old owner as admin
-    const { error } = await client
-      .from("profiles_yards")
-      .update({ role: roleId })
-      .eq("profile_id", memberId)
-      .eq("yard_id", yard.value.id);
+const handleRoleChange = async (memberId, roleId) => {
+  // TODO: if roleId == 1 then also need to set old owner as admin
+  const { error } = await client
+    .from("profiles_yards")
+    .update({ role: roleId })
+    .eq("profile_id", memberId)
+    .eq("yard_id", yard.value.id);
 
-    if (!error) {
-      // now update local members role
-      const index = members.value.map((e) => e.profile.id).indexOf(memberId);
-      members.value[index].role = roleId;
-    } else {
-      console.log(error);
-    }
-  };
+  if (!error) {
+    // now update local members role
+    const index = members.value.map((e) => e.profile.id).indexOf(memberId);
+    members.value[index].role = roleId;
+  } else {
+    console.log(error);
+  }
+};
 </script>
 
 <template>

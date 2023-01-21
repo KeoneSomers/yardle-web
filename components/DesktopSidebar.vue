@@ -1,4 +1,5 @@
 <script setup>
+import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import {
   CalendarIcon,
@@ -9,8 +10,11 @@ import {
   RectangleStackIcon,
   RectangleGroupIcon,
   ClipboardDocumentListIcon,
+  LinkIcon,
 } from "@heroicons/vue/24/outline/index.js";
 import { EllipsisHorizontalIcon } from "@heroicons/vue/20/solid/index.js";
+
+const inviteLinkModalOpen = ref(false);
 
 const navigation = [
   { name: "Dashboard", to: "/dashboard", icon: HomeIcon, hint: "Soon" },
@@ -172,6 +176,16 @@ const handleSignout = async () => {
                 >
               </NuxtLink>
             </div>
+            <div class="w-full p-4 flex">
+              <button
+                @click="() => (inviteLinkModalOpen = true)"
+                type="button"
+                class="flex flex-1 justify-center items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+              >
+                <LinkIcon class="h-5 w-5 mr-2" />
+                Invite member
+              </button>
+            </div>
           </nav>
         </div>
         <div
@@ -263,5 +277,9 @@ const handleSignout = async () => {
         </div>
       </div>
     </div>
+    <InviteLinkModal
+      :is-open="inviteLinkModalOpen"
+      @close="inviteLinkModalOpen = false"
+    />
   </div>
 </template>
