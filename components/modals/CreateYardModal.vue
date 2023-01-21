@@ -1,67 +1,65 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  defineProps(["isOpen"]);
-  const emits = defineEmits(["close"]);
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+defineProps(["isOpen"]);
+const emits = defineEmits(["close"]);
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
-  const yards = useState("yards");
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const yards = useState("yards");
+const yardName = ref("");
+const error = ref("");
 
-  const yardName = ref("");
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
-  const error = ref("");
+const handleSubmit = async () => {
+  // step 1: create the yard in the database
+  const { data: newYard, error: createError } = await client
+    .from("yards")
+    .insert({
+      created_by: user.value.id,
+      name: capitalizeFirstLetter(yardName.value),
+      invite_code:
+        Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15),
+    })
+    .select()
+    .single();
 
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+  if (!createError) {
+    // step 2: create the user/yard relationship
+    const { error: relError } = await client.from("profiles_yards").insert([
+      {
+        profile_id: user.value.id,
+        yard_id: newYard.id,
+        role: 1,
+      },
+    ]);
 
-  const handleSubmit = async () => {
-    // step 1: create the yard in the database
-    const { data: newYard, error: createError } = await client
-      .from("yards")
-      .insert({
-        created_by: user.value.id,
-        name: capitalizeFirstLetter(yardName.value),
-        invite_code:
-          Math.random().toString(36).substring(2, 15) +
-          Math.random().toString(36).substring(2, 15),
-      })
-      .select()
-      .single();
-
-    if (!createError) {
-      // step 2: create the user/yard relationship
-      const { error: relError } = await client.from("profiles_yards").insert([
-        {
-          profile_id: user.value.id,
-          yard_id: newYard.id,
-          role: 1,
-        },
-      ]);
-
-      // step 3: update local state
-      if (!relError) {
-        if (yards.value) {
-          yards.value.unshift(newYard);
-        } else {
-          yards.value = [newYard];
-        }
-
-        // now close the modal
-        emits("close");
+    // step 3: update local state
+    if (!relError) {
+      if (yards.value) {
+        yards.value.unshift(newYard);
       } else {
-        error.value = relError.message + relError.hint;
+        yards.value = [newYard];
       }
+
+      // now close the modal
+      emits("close");
     } else {
-      error.value = createError.message + createError.hint;
+      error.value = relError.message + relError.hint;
     }
-  };
+  } else {
+    error.value = createError.message + createError.hint;
+  }
+};
 </script>
 
 <template>

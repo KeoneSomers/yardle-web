@@ -1,76 +1,78 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
-  const props = defineProps(["isOpen", "yardId"]);
-  const emits = defineEmits(["close"]);
+const props = defineProps(["isOpen", "yardId"]);
+const emits = defineEmits(["close"]);
 
-  const client = useSupabaseClient();
-  const yards = useState("yards");
+const client = useSupabaseClient();
+const yards = useState("yards");
 
-  const handleSubmit = async () => {
-    // set profiles selected yard to null
+const handleSubmit = async () => {
+  // set profiles selected yard to null
+  await client
+    .from("profiles")
+    .update({ selected_yard: null })
+    .eq("selected_yard", props.yardId);
+
+  // first: get all horse id's
+  const { data: _horseIds } = await client
+    .from("horses")
+    .select("id")
+    .eq("yard_id", props.yardId);
+
+  const horseIds = _horseIds.map((e) => e.id);
+
+  // delete calendar_events_horses
+  if (horseIds.length > 0) {
     await client
-      .from("profiles")
-      .update({ selected_yard: null })
-      .eq("selected_yard", props.yardId);
+      .from("calendar_events_horses")
+      .delete()
+      .filter("horse_id", "in", `(${horseIds})`);
+  }
 
-    // first: get all horse id's
-    const { data: _horseIds } = await client
-      .from("horses")
-      .select("id")
-      .eq("yard_id", props.yardId);
+  // delete calendar_events
+  await client.from("calendar_events").delete().eq("yard_id", props.yardId);
 
-    const horseIds = _horseIds.map((e) => e.id);
+  if (horseIds.length > 0) {
+    // delete rugs, medications, feeds
+    await client
+      .from("rugs")
+      .delete()
+      .filter("horse_id", "in", `(${horseIds})`);
 
-    // delete calendar_events_horses
-    if (horseIds.length > 0) {
-      await client
-        .from("calendar_events_horses")
-        .delete()
-        .filter("horse_id", "in", `(${horseIds})`);
-    }
+    await client
+      .from("medications")
+      .delete()
+      .filter("horse_id", "in", `(${horseIds})`);
 
-    // delete calendar_events
-    await client.from("calendar_events").delete().eq("yard_id", props.yardId);
+    await client
+      .from("feeds")
+      .delete()
+      .filter("horse_id", "in", `(${horseIds})`);
 
-    if (horseIds.length > 0) {
-      // delete rugs, medications, feeds
-      await client
-        .from("rugs")
-        .delete()
-        .filter("horse_id", "in", `(${horseIds})`);
+    // delete all the yard horses
+    await client.from("horses").delete().eq("yard_id", props.yardId);
+  }
 
-      await client
-        .from("medications")
-        .delete()
-        .filter("horse_id", "in", `(${horseIds})`);
+  await client.from("fields").delete().eq("yard_id", props.yardId);
 
-      await client
-        .from("feeds")
-        .delete()
-        .filter("horse_id", "in", `(${horseIds})`);
+  // delete all the yard members
+  await client.from("profiles_yards").delete().eq("yard_id", props.yardId);
 
-      // delete all the yard horses
-      await client.from("horses").delete().eq("yard_id", props.yardId);
-    }
+  // delete the yard
+  await client.from("yards").delete().eq("id", props.yardId);
 
-    // delete all the yard members
-    await client.from("profiles_yards").delete().eq("yard_id", props.yardId);
-
-    // delete the yard
-    await client.from("yards").delete().eq("id", props.yardId);
-
-    // success! - now remove the yard from the webpage
-    const i = yards.value.map((e) => e.id).indexOf(props.yardId);
-    yards.value.splice(i, 1);
-  };
+  // success! - now remove the yard from the webpage
+  const i = yards.value.map((e) => e.id).indexOf(props.yardId);
+  yards.value.splice(i, 1);
+};
 </script>
 
 <template>
