@@ -75,6 +75,8 @@ const handleJoinYard = async () => {
   });
 
   navigateTo("/yards");
+
+  // TODO: navigate user back to here after they've logged in or signed up
 };
 </script>
 

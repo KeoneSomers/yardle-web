@@ -178,7 +178,7 @@ const handleSignout = async () => {
                 >
               </NuxtLink>
             </div>
-            <div class="w-full p-4 flex">
+            <div v-if="yard" class="w-full p-4 flex">
               <button
                 @click="() => (inviteLinkModalOpen = true)"
                 type="button"

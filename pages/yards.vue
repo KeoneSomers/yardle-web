@@ -38,8 +38,6 @@ const handleDeleteYard = (yardId) => {
 };
 
 const handleSelectYard = async (yardId) => {
-  // TODO: Check the yard still exists and that you're still and unbanned member of it
-
   // get role of user in yard
   const { data: profile_yard, error: profile_yard_error } = await client
     .from("profiles_yards")

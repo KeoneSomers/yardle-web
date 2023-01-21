@@ -4,9 +4,8 @@ definePageMeta({
   layout: "blank",
 });
 
-const router = useRouter();
-// invite code if there is one (could also be undefined or null)
-const { invite_code } = router.currentRoute.value.query;
+const route = useRoute();
+const { invite_code } = route.query;
 
 const supabaseAuthClient = useSupabaseAuthClient();
 
@@ -17,12 +16,10 @@ const passwordConfirm = ref("");
 const errorMessage = ref("");
 
 const handleSignup = async () => {
-  console.log(email.value);
-  console.log(password.value);
   if (password.value == passwordConfirm.value) {
     if (password.value != "" && email.value != "") {
       if (username.value != "") {
-        const { data, error } = await supabaseAuthClient.auth.signUp({
+        const { error } = await supabaseAuthClient.auth.signUp({
           email: email.value,
           password: password.value,
           options: {
@@ -34,12 +31,12 @@ const handleSignup = async () => {
 
         if (!error) {
           // success! redirect the user
-          if (!invite_code) {
-            navigateTo("/yards");
-          } else {
-            // navigate user back to joining a yard
-            navigateTo("/join/" + invite_code);
-          }
+          // if (!invite_code) {
+          //   navigateTo("/yards");
+          // } else {
+          //   // navigate user back to joining a yard
+          //   navigateTo("/join/" + invite_code);
+          // }
         } else {
           console.log(error);
           errorMessage.value = error.message;
@@ -194,7 +191,9 @@ const handleSignup = async () => {
           <p>
             Already have an account?
             <NuxtLink
-              to="/login"
+              :to="
+                !invite_code ? '/login' : '/login?invite_code=' + invite_code
+              "
               class="text-pink-500 hover:underline cursor-pointer"
               >Sign in</NuxtLink
             >

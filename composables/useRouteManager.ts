@@ -22,8 +22,10 @@ export function useRouteManager() {
 
   const route = useRoute();
   const selectedYard = useState("selectedYard");
+  // invite code if there is one (could also be undefined or null)
 
   watchEffect(() => {
+    const { invite_code } = route.query;
     const requireAuth = route.meta.guards.includes("requireAuth");
     const requireNoAuth = route.meta.guards.includes("requireNoAuth");
     const requireYard = route.meta.guards.includes("requireYard");
@@ -39,6 +41,11 @@ export function useRouteManager() {
 
     // Then, it checks the value of requireNoAuth. If it's true, it checks if there's a selectedYard and navigates to the appropriate page.
     if (requireNoAuth) {
+      if (invite_code) {
+        navigateTo("/join/" + invite_code);
+        return;
+      }
+
       if (selectedYard.value) {
         navigateTo("/horses");
       } else {
