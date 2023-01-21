@@ -4,7 +4,13 @@ definePageMeta({
   layout: "blank",
 });
 
-const user = useSupabaseUser();
+const user = ref(null);
+
+// temp fix for vercel
+onMounted(() => {
+  user.value = useSupabaseUser();
+});
+
 const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
 
