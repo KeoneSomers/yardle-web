@@ -9,6 +9,7 @@ const user = useSupabaseUser();
 const yard = ref(null);
 const client = useSupabaseClient();
 const error = ref("");
+const profile = useState("profile");
 
 // first get some basic info about the yard from the db
 const getBasicYardData = async () => {
@@ -72,6 +73,8 @@ const handleJoinYard = async () => {
       .update({ selected_yard: yard.value.id, active_role: 3 })
       .eq("id", user.value.id);
   });
+
+  navigateTo("/yards");
 };
 </script>
 
