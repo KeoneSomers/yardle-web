@@ -16,12 +16,13 @@ const yardToDelete = ref(0);
 
 // get the logged in users yards
 const yards = useState("yards");
+const selectedYard = useState("selectedYard");
 
 // this is not ssr - needs to be cleaned up
 onMounted(async () => {
-  const { data, error } = await client
+  const { data: profile, error } = await client
     .from("profiles")
-    .select("yards!profiles_yards(*)")
+    .select("selected_yard, yards!profiles_yards(*)")
     .eq("id", user.value.id) // TODO: Error here: Cannot read properties of null (reading 'id') - happens when creating a new user
     .order("created_at", {
       foreignTable: "yards",
@@ -29,7 +30,12 @@ onMounted(async () => {
     })
     .single();
 
-  yards.value = data.yards;
+  // check if user has a selected yard already from a previous session
+  if (profile && profile.selected_yard) {
+    await handleSelectYard(profile.selected_yard);
+  }
+
+  yards.value = profile.yards;
 });
 
 const handleDeleteYard = (yardId) => {
@@ -57,11 +63,29 @@ const handleSelectYard = async (yardId) => {
   }
 
   // update user in db (realtime will navigate them to the /horses page automatically)
-  await client
+  const { error: updateProfileError } = await client
     .from("profiles")
     .update({ selected_yard: yardId, active_role: profile_yard.role })
     .eq("id", user.value.id);
+
+  if (updateProfileError) {
+    console.log(profile_yard.updateProfileError);
+    return;
+  }
+
+  selectedYard.value = yardId;
+  // navigateTo("/horses");
 };
+
+// const profile = useState("profile");
+
+// watchEffect(() => {
+//   if (profile.value) {
+//     if (profile.value.selected_yard) {
+//       navigateTo("/horses");
+//     }
+//   }
+// });
 
 // Todo - Need a warning modal
 const handleLeaveYard = async (yardId) => {

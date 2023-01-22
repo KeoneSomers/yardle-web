@@ -74,6 +74,13 @@ const handleUnselectYard = async () => {
     .from("profiles")
     .update({ selected_yard: null, active_role: null })
     .eq("id", user.value.id);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  selectedYard.value = null;
 };
 
 const handleSignout = async () => {
