@@ -25,10 +25,12 @@ const getBasicYardData = async () => {
 };
 
 onMounted(async () => {
-  await getBasicYardData();
+  if (user.value) {
+    await getBasicYardData();
+  }
 
   watchEffect(async () => {
-    if (invite_code && yard.value == null) {
+    if (invite_code && yard.value == null && user.value) {
       await getBasicYardData();
     }
   });
@@ -82,8 +84,8 @@ const handleJoinYard = async () => {
 
 <template>
   <div class="flex items-center justify-center h-screen text-center">
-    <div v-if="yard" class="border p-5 rounded-lg m-5">
-      <div class="text-2xl mb-3">
+    <div class="border p-5 rounded-lg m-5">
+      <div v-if="yard" class="text-2xl mb-3">
         You've been invited to join<br /><span class="font-bold">{{
           yard.name
         }}</span>
@@ -104,7 +106,10 @@ const handleJoinYard = async () => {
       </div>
       <div v-else>
         <div>
-          <p>You'll need to create an account or login before you can join.</p>
+          <p>
+            You'll need to create an account or login before you can join this
+            yard.
+          </p>
         </div>
 
         <div class="flex space-x-2 jusify-center mt-4">
