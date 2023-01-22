@@ -90,11 +90,12 @@ const handleSignout = async () => {
       >
         <div class="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
           <div class="flex flex-shrink-0 items-center px-4">
-            <img
+            <!-- <img
               class="h-8 w-auto"
               src="https://tailwindui.com/img/logos/mark.svg?color=pink&shade=500"
               alt="Your Company"
-            />
+            /> -->
+            <Logo class="h-8 w-8" />
           </div>
           <nav class="mt-3 flex-1" aria-label="Sidebar">
             <!-- yard widget -->

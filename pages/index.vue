@@ -1,60 +1,60 @@
 <script setup lang="ts">
-  import { TransitionRoot, Dialog, DialogPanel } from "@headlessui/vue";
-  import {
-    Bars3Icon,
-    XMarkIcon,
-    CheckIcon,
-  } from "@heroicons/vue/24/outline/index.js";
+import { TransitionRoot, Dialog, DialogPanel } from "@headlessui/vue";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  CheckIcon,
+} from "@heroicons/vue/24/outline/index.js";
 
-  definePageMeta({
-    layout: "blank",
-    guards: ["requireNoAuth"],
-  });
+definePageMeta({
+  layout: "blank",
+  guards: ["requireNoAuth"],
+});
 
-  const mobileMenuOpen = ref(false);
+const mobileMenuOpen = ref(false);
 
-  const features = [
-    {
-      name: "Invite Team Members",
-      description:
-        "Members of your yard can join you on Yardle where they can view and contribute to yard information.",
-    },
-    {
-      name: "Horses Details",
-      description:
-        "Keep track of every detail of all your horses with ease. Yardle gives you insights based of the data provided.",
-    },
-    {
-      name: "Multiple Yards",
-      description:
-        "Yardle is the only Yard Management System to support full multi-yard functionality.",
-    },
-    {
-      name: "Calendar",
-      description:
-        "View important events like horse Farrier visits and upcoming Vaccinations in the calendar section.",
-    },
-    {
-      name: "Always In-Sync",
-      description:
-        "With all your data in one place, all staff members are on the same page and the information they see is always up to date.",
-    },
-    {
-      name: "Field Groups (Soon)",
-      description:
-        "Create fields then, drag and drop horses into the fields they should be in. Simple but useful!",
-    },
-    {
-      name: "Dashboard Overview (Soon)",
-      description:
-        "Get up to date at a glance with the dashboard view that'll give you all the most important information you need.",
-    },
-    {
-      name: "Team Roles",
-      description:
-        "Members of your yard can be assigned roles. This gives you control over what members can do and see on the platform.",
-    },
-  ];
+const features = [
+  {
+    name: "Invite Team Members",
+    description:
+      "Members of your yard can join you on Yardle where they can view and contribute to yard information.",
+  },
+  {
+    name: "Horses Details",
+    description:
+      "Keep track of every detail of all your horses with ease. Yardle gives you insights based of the data provided.",
+  },
+  {
+    name: "Multiple Yards",
+    description:
+      "Yardle is the only Yard Management System to support full multi-yard functionality.",
+  },
+  {
+    name: "Calendar",
+    description:
+      "View important events like horse Farrier visits and upcoming Vaccinations in the calendar section.",
+  },
+  {
+    name: "Always In-Sync",
+    description:
+      "With all your data in one place, all staff members are on the same page and the information they see is always up to date.",
+  },
+  {
+    name: "Field Groups (Soon)",
+    description:
+      "Create fields then, drag and drop horses into the fields they should be in. Simple but useful!",
+  },
+  {
+    name: "Dashboard Overview (Soon)",
+    description:
+      "Get up to date at a glance with the dashboard view that'll give you all the most important information you need.",
+  },
+  {
+    name: "Team Roles",
+    description:
+      "Members of your yard can be assigned roles. This gives you control over what members can do and see on the platform.",
+  },
+];
 </script>
 
 <template>
@@ -98,11 +98,7 @@
             <div class="flex lg:min-w-0 lg:flex-1" aria-label="Global">
               <NuxtLink to="/" class="-m-1.5 p-1.5">
                 <span class="sr-only">Your Company</span>
-                <img
-                  class="h-8"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt=""
-                />
+                <Logo class="h-8 w-8" />
               </NuxtLink>
             </div>
             <div class="flex lg:hidden">
