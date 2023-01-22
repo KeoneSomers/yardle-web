@@ -32,7 +32,7 @@ const features = [
   {
     name: "Calendar",
     description:
-      "View important events like horse Farrier visits and upcoming Vaccinations in the calendar section.",
+      "View important events like Farrier visits and upcoming Vaccinations in the calendar section.",
   },
   {
     name: "Always In-Sync",
@@ -40,14 +40,14 @@ const features = [
       "With all your data in one place, all staff members are on the same page and the information they see is always up to date.",
   },
   {
-    name: "Field Groups (Soon)",
+    name: "Field Groups",
     description:
-      "Create fields then, drag and drop horses into the fields they should be in. Simple but useful!",
+      "Create fields then drag and drop horses into the fields that they should be in.",
   },
   {
     name: "Dashboard Overview (Soon)",
     description:
-      "Get up to date at a glance with the dashboard view that'll give you all the most important information you need.",
+      "Get up to date at a glance with the dashboard view that will give you all the important information you need.",
   },
   {
     name: "Team Roles",
@@ -267,7 +267,7 @@ const features = [
           </h2>
           <p class="mx-auto mt-4 max-w-xl text-lg leading-8 text-gray-600">
             Yardle saves you time by providing a single location for your yards
-            information and generating usfull insights.
+            information and generating useful insights.
           </p>
         </div>
         <dl
