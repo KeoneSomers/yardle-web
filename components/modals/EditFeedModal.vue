@@ -359,7 +359,7 @@ const handleUpdateFeed = async () => {
                           >
                           <input
                             type="text"
-                            placeholder="i.e: Kg, Scoops, Lbs"
+                            placeholder="i.e: scoops, clear cup, sachet, kg"
                             class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             v-model="newIngredient.metric"
                             required

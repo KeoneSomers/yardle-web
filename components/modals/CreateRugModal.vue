@@ -1,54 +1,54 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  defineProps(["isOpen"]);
-  const emits = defineEmits(["close"]);
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+defineProps(["isOpen"]);
+const emits = defineEmits(["close"]);
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
-  const rugs = useState("rugs");
-  const selectedHorseId = useState("selectedHorseId");
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const rugs = useState("rugs");
+const selectedHorseId = useState("selectedHorseId");
 
-  const type = ref("");
-  const description = ref("");
+const type = ref("");
+const description = ref("");
 
-  const error = ref("");
+const error = ref("");
 
-  const handleSubmit = async () => {
-    // step 1: create the horse in the database
-    const { data: newRug, error: createError } = await client
-      .from("rugs")
-      .insert({
-        horse_id: selectedHorseId.value,
-        created_by: user.value.id,
-        type: type.value,
-        description: description.value,
-      })
-      .select()
-      .single();
+const handleSubmit = async () => {
+  // step 1: create the horse in the database
+  const { data: newRug, error: createError } = await client
+    .from("rugs")
+    .insert({
+      horse_id: selectedHorseId.value,
+      created_by: user.value.id,
+      type: type.value,
+      description: description.value,
+    })
+    .select()
+    .single();
 
-    // step 2: update local state
-    if (!createError) {
-      if (rugs.value) {
-        rugs.value.push(newRug);
-      } else {
-        rugs.value = [newRug];
-      }
-
-      // clear form
-      type.value = "";
-      description.value = "";
-
-      emits("close");
+  // step 2: update local state
+  if (!createError) {
+    if (rugs.value) {
+      rugs.value.push(newRug);
     } else {
-      error.value = createError.message + createError.hint;
+      rugs.value = [newRug];
     }
-  };
+
+    // clear form
+    type.value = "";
+    description.value = "";
+
+    emits("close");
+  } else {
+    error.value = createError.message + createError.hint;
+  }
+};
 </script>
 
 <template>
@@ -99,6 +99,7 @@
                   <div class="mt-1">
                     <input
                       type="text"
+                      placeholder="e.g: lightweight, heavyweight, rain sheet"
                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       v-model="type"
                       required
@@ -113,6 +114,7 @@
                   <div class="mt-1">
                     <input
                       type="text"
+                      placeholder="e.g: Blue amigo with red trim"
                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       v-model="description"
                       required

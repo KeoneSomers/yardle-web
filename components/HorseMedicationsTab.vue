@@ -1,36 +1,36 @@
 <script setup>
-  // imports
-  import CreateMedicationModal from "@/components/modals/CreateMedicationModal.vue";
-  import DeleteMedicationModal from "@/components/modals/DeleteMedicationModal.vue";
+// imports
+import CreateMedicationModal from "@/components/modals/CreateMedicationModal.vue";
+import DeleteMedicationModal from "@/components/modals/DeleteMedicationModal.vue";
 
-  // modal toggles
-  const createModalOpen = ref(false);
-  const deleteModalOpen = ref(false);
+// modal toggles
+const createModalOpen = ref(false);
+const deleteModalOpen = ref(false);
 
-  // supabase
-  const client = useSupabaseClient();
+// supabase
+const client = useSupabaseClient();
 
-  // states
-  const medications = useState("medications");
-  const selectedHorseId = useState("selectedHorseId");
+// states
+const medications = useState("medications");
+const selectedHorseId = useState("selectedHorseId");
 
-  // refs
-  const medicationToDelete = ref(0);
+// refs
+const medicationToDelete = ref(0);
 
-  await useAsyncData("medications", async () => {
-    const { data } = await client
-      .from("medications")
-      .select()
-      .eq("horse_id", selectedHorseId.value);
+await useAsyncData("medications", async () => {
+  const { data } = await client
+    .from("medications")
+    .select()
+    .eq("horse_id", selectedHorseId.value);
 
-    medications.value = data;
-  });
+  medications.value = data;
+});
 
-  // functions
-  const handleDelete = (medicationId) => {
-    medicationToDelete.value = medicationId;
-    deleteModalOpen.value = true;
-  };
+// functions
+const handleDelete = (medicationId) => {
+  medicationToDelete.value = medicationId;
+  deleteModalOpen.value = true;
+};
 </script>
 
 <template>
@@ -40,7 +40,7 @@
         <h1 class="text-xl font-semibold text-gray-900">Medications</h1>
         <p class="mt-2 text-sm text-gray-700">
           A list of all the medications that belong to this horse including
-          their description, type, weight and age.
+          their name and instructions.
         </p>
       </div>
       <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">

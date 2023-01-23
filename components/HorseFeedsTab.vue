@@ -76,7 +76,7 @@ const ingredientTypes = [
         <h1 class="text-xl font-semibold text-gray-900">Feeds</h1>
         <p class="mt-2 text-sm text-gray-700">
           A list of all the feeds that belong to this horse including their
-          description, type, weight and age.
+          condition, instructions and ingredients.
         </p>
       </div>
       <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -102,7 +102,7 @@ const ingredientTypes = [
                     scope="col"
                     class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Ingredients
+                    Condition
                   </th>
                   <th
                     scope="col"
@@ -114,7 +114,7 @@ const ingredientTypes = [
                     scope="col"
                     class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Condition
+                    Ingredients
                   </th>
                   <th
                     scope="col"
@@ -128,6 +128,17 @@ const ingredientTypes = [
                   :key="feed.id"
                   class="divide-x divide-gray-200 grid grid-cols-4"
                 >
+                  <td class="p-4 text-sm text-gray-500 break-all">
+                    <span v-if="feed.condition">{{ feed.condition }}</span>
+                    <span v-else>--</span>
+                  </td>
+                  <td class="p-4 text-sm text-gray-500 break-all">
+                    <span v-if="feed.instructions">{{
+                      feed.instructions
+                    }}</span>
+                    <span v-else>--</span>
+                  </td>
+
                   <td class="p-4 text-sm text-gray-500 break-all">
                     <div class="flex flex-wrap mb-3">
                       <span
@@ -145,16 +156,6 @@ const ingredientTypes = [
                         }}
                       </span>
                     </div>
-                  </td>
-                  <td class="p-4 text-sm text-gray-500 break-all">
-                    <span v-if="feed.instructions">{{
-                      feed.instructions
-                    }}</span>
-                    <span v-else>--</span>
-                  </td>
-                  <td class="p-4 text-sm text-gray-500 break-all">
-                    <span v-if="feed.condition">{{ feed.condition }}</span>
-                    <span v-else>--</span>
                   </td>
                   <td
                     class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6 break-all"

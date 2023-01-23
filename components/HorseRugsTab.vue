@@ -1,35 +1,35 @@
 <script setup>
-  // imports
-  import CreateRugModal from "@/components/modals/CreateRugModal.vue";
-  import DeleteRugModal from "@/components/modals/DeleteRugModal.vue";
+// imports
+import CreateRugModal from "@/components/modals/CreateRugModal.vue";
+import DeleteRugModal from "@/components/modals/DeleteRugModal.vue";
 
-  // modal toggles
-  const createModalOpen = ref(false);
-  const deleteModalOpen = ref(false);
+// modal toggles
+const createModalOpen = ref(false);
+const deleteModalOpen = ref(false);
 
-  // supabase
-  const client = useSupabaseClient();
+// supabase
+const client = useSupabaseClient();
 
-  // states
-  const rugs = useState("rugs");
-  const selectedHorseId = useState("selectedHorseId");
+// states
+const rugs = useState("rugs");
+const selectedHorseId = useState("selectedHorseId");
 
-  // refs
-  const rugToDelete = ref(0);
+// refs
+const rugToDelete = ref(0);
 
-  // functions
-  await useAsyncData("rugs", async () => {
-    const { data } = await client
-      .from("rugs")
-      .select()
-      .eq("horse_id", selectedHorseId.value);
-    rugs.value = data;
-  });
+// functions
+await useAsyncData("rugs", async () => {
+  const { data } = await client
+    .from("rugs")
+    .select()
+    .eq("horse_id", selectedHorseId.value);
+  rugs.value = data;
+});
 
-  const handleDelete = (rugId) => {
-    rugToDelete.value = rugId;
-    deleteModalOpen.value = true;
-  };
+const handleDelete = (rugId) => {
+  rugToDelete.value = rugId;
+  deleteModalOpen.value = true;
+};
 </script>
 
 <template>
@@ -38,8 +38,8 @@
       <div class="sm:flex-auto">
         <h1 class="text-xl font-semibold text-gray-900">Rugs</h1>
         <p class="mt-2 text-sm text-gray-700">
-          A list of all the rugs that belong to this horse including their
-          description, type, weight and age.
+          A list of all the rugs that belong to this horse including their type
+          and description.
         </p>
       </div>
       <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
