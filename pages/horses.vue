@@ -1,86 +1,86 @@
 <script setup>
-  import { MagnifyingGlassIcon } from "@heroicons/vue/20/solid/index.js";
-  import CreateHorseModal from "@/components/modals/CreateHorseModal.vue";
-  import { DateTime } from "luxon";
+import { MagnifyingGlassIcon } from "@heroicons/vue/20/solid/index.js";
+import CreateHorseModal from "@/components/modals/CreateHorseModal.vue";
+import { DateTime } from "luxon";
 
-  definePageMeta({
-    guards: ["requireAuth", "requireYard"],
-  });
+definePageMeta({
+  guards: ["requireAuth", "requireYard"],
+});
 
-  const client = useSupabaseClient();
-  const selectedYard = useState("selectedYard");
-  const isOpen = ref(false);
-  const searchString = ref("");
-  const selectedHorseId = useState("selectedHorseId", () => 0);
-  const horses = useState("horses");
+const client = useSupabaseClient();
+const selectedYard = useState("selectedYard");
+const isOpen = ref(false);
+const searchString = ref("");
+const selectedHorseId = useState("selectedHorseId", () => 0);
+const horses = useState("horses");
 
-  await useAsyncData("horses", async () => {
-    const { data } = await client
-      .from("horses")
-      .select()
-      .eq("yard_id", selectedYard.value)
-      .order("name", { ascending: true });
+await useAsyncData("horses", async () => {
+  const { data } = await client
+    .from("horses")
+    .select()
+    .eq("yard_id", selectedYard.value)
+    .order("name", { ascending: true });
 
-    horses.value = data;
-  });
+  horses.value = data;
+});
 
-  // auto select first horse if there is one
-  onMounted(() => {
-    if (horses.value.length > 0) {
-      selectedHorseId.value = horses.value[0].id;
-    } else {
-      selectedHorseId.value = 0;
-    }
-  });
+// auto select first horse if there is one
+onMounted(() => {
+  if (horses.value && horses.value.length > 0) {
+    selectedHorseId.value = horses.value[0].id;
+  } else {
+    selectedHorseId.value = 0;
+  }
+});
 
-  const groupByFirstLetter = (input, key) => {
-    if (input) {
-      return input.reduce((acc, currentValue) => {
-        let groupKey = currentValue[key][0].toUpperCase();
-        if (!acc[groupKey]) {
-          acc[groupKey] = [];
-        }
-        acc[groupKey].push(currentValue);
-        return acc;
-      }, {});
-    }
-    return {};
-  };
+const groupByFirstLetter = (input, key) => {
+  if (input) {
+    return input.reduce((acc, currentValue) => {
+      let groupKey = currentValue[key][0].toUpperCase();
+      if (!acc[groupKey]) {
+        acc[groupKey] = [];
+      }
+      acc[groupKey].push(currentValue);
+      return acc;
+    }, {});
+  }
+  return {};
+};
 
-  const groupedHorses = ref(groupByFirstLetter(horses.value, "name"));
+const groupedHorses = ref(groupByFirstLetter(horses.value, "name"));
 
-  // Local horse search (no db hits)
-  const handleSearch = () => {
-    if (searchString.value) {
-      // filter the grouped horses
-      const filteredHorses = horses.value.filter((horse) =>
-        horse.name.toLowerCase().includes(searchString.value.toLowerCase())
-      );
-      groupedHorses.value = groupByFirstLetter(filteredHorses, "name");
-    } else {
-      // return all horses
-      groupedHorses.value = groupByFirstLetter(horses.value, "name");
-    }
-  };
+// Local horse search (no db hits)
+const handleSearch = () => {
+  if (searchString.value) {
+    // filter the grouped horses
+    const filteredHorses = horses.value.filter((horse) =>
+      horse.name.toLowerCase().includes(searchString.value.toLowerCase())
+    );
+    groupedHorses.value = groupByFirstLetter(filteredHorses, "name");
+  } else {
+    // return all horses
+    groupedHorses.value = groupByFirstLetter(horses.value, "name");
+  }
+};
 
-  // keep grouped list up to date
-  watchEffect(() => {
-    if (horses.value) {
-      groupedHorses.value = groupByFirstLetter(horses.value, "name");
-    }
-  });
+// keep grouped list up to date
+watchEffect(() => {
+  if (horses.value) {
+    groupedHorses.value = groupByFirstLetter(horses.value, "name");
+  }
+});
 
-  // horse states
-  const rugs = useState("rugs");
-  const horseTab = useState("horseTab");
+// horse states
+const rugs = useState("rugs");
+const horseTab = useState("horseTab");
 
-  // clear states of previously selected horse
-  watchEffect(() => {
-    if (selectedHorseId.value) {
-      rugs.value = null;
-      horseTab.value = 0;
-    }
-  });
+// clear states of previously selected horse
+watchEffect(() => {
+  if (selectedHorseId.value) {
+    rugs.value = null;
+    horseTab.value = 0;
+  }
+});
 </script>
 
 <template>
