@@ -13,6 +13,9 @@ const client = useSupabaseClient();
 const feeds = useState("feeds");
 const selectedHorseId = useState("selectedHorseId");
 const ingredients = ref([]);
+const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
+
+const errors = ref([]);
 
 const instructions = ref("");
 const condition = ref("");
@@ -22,6 +25,7 @@ const addingIngredient = ref(false);
 const newIngredient = ref({});
 
 const resetModal = () => {
+  errors.value = [];
   addingIngredient.value = false;
   ingredients.value = [];
   instructions.value = "";
@@ -76,10 +80,6 @@ watch(addingIngredient, (newValue) => {
   errors.value = [];
 });
 
-const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
-
-const errors = ref([]);
-
 const addIngredient = () => {
   errors.value = [];
 
@@ -87,7 +87,10 @@ const addIngredient = () => {
     errors.value.push("Please enter a name");
   }
 
-  if (newIngredient.value.quantity === 0) {
+  if (
+    newIngredient.value.quantity === 0 ||
+    newIngredient.value.quantity === ""
+  ) {
     errors.value.push("Please enter a quantity");
   }
 
@@ -278,6 +281,9 @@ const handleUpdateFeed = async () => {
                               v-model="condition"
                             />
                           </div>
+                          <p class="mt-2 text-sm text-gray-500">
+                            When should this feed be given?
+                          </p>
                         </div>
 
                         <div

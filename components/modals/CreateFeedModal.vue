@@ -19,6 +19,9 @@ const route = useRoute();
 const mustManualSelectedHorse = ref(route.path == "/report/feeds");
 
 const ingredients = ref([]);
+const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
+
+const errors = ref([]);
 
 const horseId = ref(0);
 const instructions = ref("");
@@ -29,6 +32,7 @@ const addingIngredient = ref(false);
 const newIngredient = ref({});
 
 const resetModal = () => {
+  errors.value = [];
   addingIngredient.value = false;
   ingredients.value = [];
   instructions.value = "";
@@ -60,10 +64,6 @@ watch(addingIngredient, (newValue) => {
   errors.value = [];
 });
 
-const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
-
-const errors = ref([]);
-
 const addIngredient = () => {
   errors.value = [];
 
@@ -71,7 +71,10 @@ const addIngredient = () => {
     errors.value.push("Please enter a name");
   }
 
-  if (newIngredient.value.quantity === 0) {
+  if (
+    newIngredient.value.quantity === 0 ||
+    newIngredient.value.quantity === ""
+  ) {
     errors.value.push("Please enter a quantity");
   }
 
@@ -302,6 +305,9 @@ const handleCreateFeed = async () => {
                               v-model="condition"
                             />
                           </div>
+                          <p class="mt-2 text-sm text-gray-500">
+                            When should this feed be given?
+                          </p>
                         </div>
 
                         <div
