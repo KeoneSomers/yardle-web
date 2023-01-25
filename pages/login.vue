@@ -37,7 +37,7 @@ const handleLogin = async () => {
 <template>
   <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <Logo class="h-12 w-12 mx-auto" />
+      <Logo class="h-10 w-12 mx-auto" />
       <h2
         class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900"
       >
