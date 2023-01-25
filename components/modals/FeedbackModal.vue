@@ -12,6 +12,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const user = useSupabaseUser();
+const route = useRoute();
 const message = ref("");
 const showThankYou = ref(false);
 
@@ -27,6 +28,7 @@ const handleSubmit = async () => {
   const { error } = await client.from("feedback").insert({
     user_id: user.value ? user.value.id : null,
     message: message.value,
+    route: route.fullPath,
   });
 
   if (!error) {
