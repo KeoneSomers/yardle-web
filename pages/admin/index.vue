@@ -46,17 +46,24 @@ const handleDelete = async (id) => {
 </script>
 
 <template>
-  <div class="m-5 text-xl font-fold">Super Admin Page</div>
-  <div
-    v-for="(item, index) in feedback"
-    :key="item.id"
-    class="flex items-center p-2 border my-2 mx-5"
-  >
-    <div class="flex-1">{{ index + 1 }} - {{ item.message }}</div>
-    <div>
-      <button @click="handleDelete(item.id)">
-        <TrashIcon class="h-4 w-4" />
-      </button>
+  <div class="py-20 px-10">
+    <div class="m-5 text-4xl font-fold">Feedback</div>
+    <div
+      v-for="(item, index) in feedback"
+      :key="item.id"
+      class="flex items-center border my-2 mx-5 hover:bg-gray-100"
+    >
+      <div class="flex-1 border-r">
+        <p class="p-2">{{ index + 1 }} - {{ item.message }}</p>
+        <p v-if="item.route" class="font-mono p-1 border-t text-xs bg-gray-50">
+          {{ item.route }}
+        </p>
+      </div>
+      <div class="p-2">
+        <button @click="handleDelete(item.id)">
+          <TrashIcon class="h-4 w-4" />
+        </button>
+      </div>
     </div>
   </div>
 </template>
