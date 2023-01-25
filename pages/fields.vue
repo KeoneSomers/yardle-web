@@ -66,9 +66,15 @@ const getFields = async () => {
 };
 
 onMounted(async () => {
-  if (fields.value.length < 2) {
-    await getFields();
-  }
+  fields.value = [
+    {
+      id: 0,
+      name: "Unsorted",
+      horses: [],
+    },
+  ];
+
+  await getFields();
 });
 
 const handleFieldChange = async (e) => {

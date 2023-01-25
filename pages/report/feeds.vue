@@ -267,17 +267,18 @@ const setShadow = (event) => {
                 </div>
 
                 <div
-                  v-if="feed.instructions"
-                  class="flex mt-3 bg-yellow-100 p-1 rounded-lg text-yellow-700 max-w-96"
-                >
-                  <p class="break-words">{{ feed.instructions }}</p>
-                </div>
-                <div
                   v-if="feed.condition"
-                  class="flex items-center mt-1 max-w-96 text-purple-700 bg-purple-100 p-1"
+                  class="flex items-center mt-3 max-w-96 text-purple-700 rounded-lg bg-purple-100 p-2"
                 >
                   <p class="break-words">{{ feed.condition }}</p>
                 </div>
+                <div
+                  v-if="feed.instructions"
+                  class="flex mt-1 bg-yellow-100 p-2 rounded-lg text-yellow-700 max-w-96"
+                >
+                  <p class="break-words">{{ feed.instructions }}</p>
+                </div>
+
                 <div
                   id="feed-report-actions"
                   class="mt-2 flex justify-end w-full"
