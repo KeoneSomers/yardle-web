@@ -18,6 +18,8 @@ const setProfile = async () => {
   profile.value = _profile.value;
 };
 
+await setProfile();
+
 const getSelectedYardData = async () => {
   if (user.value && selectedYard.value) {
     await useAsyncData("yard", async () => {
@@ -39,8 +41,6 @@ const getSelectedYardData = async () => {
 await getSelectedYardData();
 
 onMounted(async () => {
-  await setProfile();
-
   watchEffect(async () => {
     if (user.value && selectedYard.value) {
       await getSelectedYardData();

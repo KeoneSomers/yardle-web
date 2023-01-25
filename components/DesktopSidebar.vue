@@ -50,7 +50,8 @@ const router = useRouter();
 const user = useSupabaseUser();
 const selectedYard = useState("selectedYard");
 const yard = useState("yard");
-const profile = useState("profile"); // TODO: this is not set if you're just loggin in and therefore the profile widget is not shown
+const profile = useState("profile");
+
 // TODO: this should pull from db
 const roles = [
   { id: 1, name: "Owner" },
