@@ -5,14 +5,12 @@ import EditFieldModal from "@/components/modals/EditFieldModal.vue";
 import DeleteFieldModal from "@/components/modals/DeleteFieldModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { EllipsisVerticalIcon } from "@heroicons/vue/20/solid/index.js";
-// import { TaskCard } from "~~/.nuxt/components";
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
 });
 
 const client = useSupabaseClient();
-
 const createModalOpen = ref(false);
 const selectedField = ref(null);
 const editModalOpen = ref(false);
@@ -67,9 +65,11 @@ const getFields = async () => {
   });
 };
 
-if (fields.value.length < 2) {
-  await getFields();
-}
+onMounted(async () => {
+  if (fields.value.length < 2) {
+    await getFields();
+  }
+});
 
 const handleFieldChange = async (e) => {
   const horseId = e.item.id;

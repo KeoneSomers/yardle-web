@@ -85,12 +85,7 @@ watchEffect(() => {
 
 <template>
   <div class="relative z-0 flex flex-1 overflow-hidden">
-    <!-- New component - HorseDetails.vue -->
-    <HorseDetails v-if="selectedHorseId > 0" />
-    <!-- New component - HorseList.vue -->
-    <aside
-      class="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col"
-    >
+    <div class="w-96 flex-shrink-0 border-r border-gray-200">
       <div class="px-4 pt-6 pb-4">
         <h2 class="text-lg font-medium text-gray-900">Horses</h2>
         <p v-if="horses" class="mt-1 text-sm text-gray-600">
@@ -206,7 +201,8 @@ watchEffect(() => {
           </ul>
         </div>
       </nav>
-    </aside>
+    </div>
+    <HorseDetails v-if="selectedHorseId > 0" />
   </div>
 
   <!-- Modals -->
