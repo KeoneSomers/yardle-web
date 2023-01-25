@@ -95,7 +95,7 @@ const { data: horses } = await useAsyncData(String(event.id), async () => {
           {{ horse.name }}</span
         >
       </div>
-      <p v-if="event.notes" class="pt-4 border-t border-dashed mt-4">
+      <p v-if="event.notes" class="pt-4 border-t border-dashed mt-4 break-all">
         {{ event.notes }}
       </p>
     </div>

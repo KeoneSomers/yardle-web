@@ -209,7 +209,7 @@ const setShadow = (event) => {
             <tr class="divide-x divide-gray-200">
               <th
                 scope="col"
-                class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6 w-1/5"
               ></th>
               <th
                 scope="col"
@@ -245,60 +245,55 @@ const setShadow = (event) => {
               :class="index % 2 === 0 ? undefined : 'bg-gray-50'"
             >
               <td
-                class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
+                class="py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
               >
-                <div class="min-w-80">
-                  <div class="flex items-center space-x-2">
-                    <SupabaseImage
-                      v-if="feed.horse.avatar_url"
-                      class="h-8 w-8 rounded-full overflow-hidden"
-                      id="horse-avatars"
-                      v-model:path="feed.horse.avatar_url"
-                    />
-                    <div
-                      v-else
-                      class="bg-pink-500 rounded-full h-8 w-8 text-white flex items-center justify-center"
-                    >
-                      {{ feed.horse.name[0].toUpperCase() }}
-                    </div>
-
-                    <div>
-                      <p class="text-2xl font-bold">{{ feed.horse.name }}</p>
-                    </div>
+                <div class="flex items-center space-x-2">
+                  <SupabaseImage
+                    v-if="feed.horse.avatar_url"
+                    class="h-8 w-8 rounded-full overflow-hidden"
+                    id="horse-avatars"
+                    v-model:path="feed.horse.avatar_url"
+                  />
+                  <div
+                    v-else
+                    class="bg-pink-500 rounded-full h-8 w-8 text-white flex items-center justify-center"
+                  >
+                    {{ feed.horse.name[0].toUpperCase() }}
                   </div>
 
-                  <div
-                    v-if="feed.instructions"
-                    class="flex items-center mt-3 bg-yellow-100 p-1 rounded-lg"
+                  <div>
+                    <p class="text-2xl font-bold">{{ feed.horse.name }}</p>
+                  </div>
+                </div>
+
+                <div
+                  v-if="feed.instructions"
+                  class="flex mt-3 bg-yellow-100 p-1 rounded-lg text-yellow-700 max-w-96"
+                >
+                  <p class="break-words">{{ feed.instructions }}</p>
+                </div>
+                <div
+                  v-if="feed.condition"
+                  class="flex items-center mt-1 max-w-96 text-purple-700 bg-purple-100 p-1"
+                >
+                  <p class="break-words">{{ feed.condition }}</p>
+                </div>
+                <div
+                  id="feed-report-actions"
+                  class="mt-2 flex justify-end w-full"
+                >
+                  <button
+                    @click="handleEdit(feed.id)"
+                    class="text-gray-600 hover:text-gray-900 bg-gray-100 py-1 px-2 rounded mr-2"
                   >
-                    <InformationCircleIcon class="h-5 w-5 mr-2 text-gray-600" />
-                    <span class="text-yellow-700 font-bold">{{
-                      feed.instructions
-                    }}</span>
-                  </div>
-                  <div v-if="feed.condition" class="flex items-center mt-1">
-                    <ClockIcon class="h-5 w-5 mr-2 text-gray-600" />
-                    <span class="text-purple-500 font-bold">{{
-                      feed.condition
-                    }}</span>
-                  </div>
-                  <div
-                    id="feed-report-actions"
-                    class="mt-2 flex justify-end w-full"
+                    Edit
+                  </button>
+                  <button
+                    @click="handleModalOpen(feed.id)"
+                    class="text-gray-600 hover:text-gray-900 bg-gray-100 py-1 px-2 rounded"
                   >
-                    <button
-                      @click="handleEdit(feed.id)"
-                      class="text-gray-600 hover:text-gray-900 bg-gray-100 py-1 px-2 rounded mr-2"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      @click="handleModalOpen(feed.id)"
-                      class="text-gray-600 hover:text-gray-900 bg-gray-100 py-1 px-2 rounded"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                    Delete
+                  </button>
                 </div>
               </td>
               <td class="whitespace-nowrap p-4 text-sm text-gray-500 w-1/5">
