@@ -16,38 +16,44 @@ const passwordConfirm = ref("");
 const errorMessage = ref("");
 
 const handleSignup = async () => {
-  if (password.value == passwordConfirm.value) {
-    if (password.value != "" && email.value != "") {
-      if (username.value != "") {
-        const { error } = await supabaseAuthClient.auth.signUp({
-          email: email.value,
-          password: password.value,
-          options: {
-            data: {
-              username: username.value,
-            },
-          },
-        });
-
-        if (!error) {
-          // success! redirect the user
-          // if (!invite_code) {
-          //   navigateTo("/yards");
-          // } else {
-          //   // navigate user back to joining a yard
-          //   navigateTo("/join/" + invite_code);
-          // }
-        } else {
-          console.log(error);
-          errorMessage.value = error.message;
-        }
-      } else {
-        console.log("Please enter a username");
-        errorMessage.value = "Please enter a username of your choice";
-      }
-    }
-  } else {
+  if (password.value != passwordConfirm.value) {
     errorMessage.value = "Passwords do not match!";
+    return;
+  }
+
+  if (email.value == "") {
+    errorMessage.value = "Please enter your email address";
+    return;
+  }
+
+  if (password.value == "") {
+    errorMessage.value = "Please enter a password";
+    return;
+  }
+
+  if (username.value == "") {
+    errorMessage.value = "Please enter a username";
+    return;
+  }
+
+  if (username.value.length < 3) {
+    errorMessage.value = "Username too short";
+    return;
+  }
+
+  const { error } = await supabaseAuthClient.auth.signUp({
+    email: email.value,
+    password: password.value,
+    options: {
+      data: {
+        username: username.value,
+      },
+    },
+  });
+
+  if (error) {
+    console.log(error);
+    errorMessage.value = error.message;
   }
 };
 </script>
