@@ -42,6 +42,7 @@ const handleSubmit = async () => {
 
     if (result === "success") {
       await supabaseAuth.auth.signOut();
+      await navigateTo("/");
     }
 
     // TODO: in future - do a proper cleanup of the user's data

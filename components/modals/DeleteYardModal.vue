@@ -14,8 +14,9 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const yards = useState("yards");
 
-const handleSubmit = async () => {
-  // set profiles selected yard to null
+const deleteYard = async () => {
+  // TODO: need proper error handling here and everywhere
+  // set all members profiles "selected_yard" to and "active_role" null
   await client
     .from("profiles")
     .update({ selected_yard: null, active_role: null })
@@ -70,8 +71,9 @@ const handleSubmit = async () => {
   await client.from("yards").delete().eq("id", props.yardId);
 
   // success! - now remove the yard from the webpage
-  const i = yards.value.map((e) => e.id).indexOf(props.yardId);
-  yards.value.splice(i, 1);
+  const yardIndex = yards.value.map((e) => e.id).indexOf(props.yardId);
+  yards.value.splice(yardIndex, 1);
+  emits("close");
 };
 </script>
 
@@ -135,7 +137,7 @@ const handleSubmit = async () => {
                 <button
                   type="button"
                   class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                  @click="handleSubmit"
+                  @click="deleteYard"
                 >
                   Delete
                 </button>
