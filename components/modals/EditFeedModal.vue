@@ -110,6 +110,9 @@ const addIngredient = () => {
 };
 
 const handleUpdateFeed = async () => {
+  // TODO: handle errors like this everywhere - with the error array and resets
+  errors.value = [];
+
   // error - no ingredients
   if (ingredients.value.length == 0) {
     errors.value.push("Feed requires at least one ingredient.");

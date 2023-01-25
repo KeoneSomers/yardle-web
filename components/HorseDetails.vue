@@ -1,59 +1,59 @@
 <script setup>
-  import {
-    ChevronLeftIcon,
-    PencilSquareIcon,
-    TrashIcon,
-  } from "@heroicons/vue/20/solid/index.js";
-  import EditHorseModal from "@/components/modals/EditHorseModal.vue";
-  import DeleteHorseModal from "@/components/modals/DeleteHorseModal.vue";
+import {
+  ChevronLeftIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/vue/20/solid/index.js";
+import EditHorseModal from "@/components/modals/EditHorseModal.vue";
+import DeleteHorseModal from "@/components/modals/DeleteHorseModal.vue";
 
-  import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
-  import HorseRugsTab from "@/components/HorseRugsTab.vue";
-  import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
-  import HorseMedicationsTab from "@/components/HorseMedicationsTab.vue";
+import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
+import HorseRugsTab from "@/components/HorseRugsTab.vue";
+import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
+import HorseMedicationsTab from "@/components/HorseMedicationsTab.vue";
 
-  const selectedTab = useState("horseTab", () => 0);
-  const tabs = [
-    { name: "General", component: HorseGeneralTab },
-    { name: "Rugs", component: HorseRugsTab },
-    { name: "Feeds", component: HorseFeedsTab },
-    { name: "Medications", component: HorseMedicationsTab },
-  ];
+const selectedTab = useState("horseTab", () => 0);
+const tabs = [
+  { name: "General", component: HorseGeneralTab },
+  { name: "Rugs", component: HorseRugsTab },
+  { name: "Feeds", component: HorseFeedsTab },
+  { name: "Medications", component: HorseMedicationsTab },
+];
 
-  // supabase
-  const client = useSupabaseClient();
+// supabase
+const client = useSupabaseClient();
 
-  const selectedHorseId = useState("selectedHorseId");
-  const horse = useState("horse");
-  const deleteModalOpen = ref(false);
-  const editModalOpen = ref(false);
+const selectedHorseId = useState("selectedHorseId");
+const horse = useState("horse");
+const deleteModalOpen = ref(false);
+const editModalOpen = ref(false);
 
-  // initial fetch
-  await useAsyncData("horseDetails", async () => {
-    const { data } = await client
-      .from("horses")
-      .select()
-      .eq("id", selectedHorseId.value)
-      .single();
+// initial fetch
+await useAsyncData("horseDetails", async () => {
+  const { data } = await client
+    .from("horses")
+    .select()
+    .eq("id", selectedHorseId.value)
+    .single();
 
-    horse.value = data;
-  });
+  horse.value = data;
+});
 
-  // watchers
-  watchEffect(async () => {
-    // Subsiquent Fetching when horse id changes
-    if (selectedHorseId.value) {
-      await useAsyncData("horseDetails", async () => {
-        const { data } = await client
-          .from("horses")
-          .select()
-          .eq("id", selectedHorseId.value)
-          .single();
+// watchers
+watchEffect(async () => {
+  // Subsiquent Fetching when horse id changes
+  if (selectedHorseId.value) {
+    await useAsyncData("horseDetails", async () => {
+      const { data } = await client
+        .from("horses")
+        .select()
+        .eq("id", selectedHorseId.value)
+        .single();
 
-        horse.value = data;
-      });
-    }
-  });
+      horse.value = data;
+    });
+  }
+});
 </script>
 
 <template>

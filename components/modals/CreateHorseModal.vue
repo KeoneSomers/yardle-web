@@ -1,29 +1,33 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  defineProps(["isOpen"]);
-  const emits = defineEmits(["close"]);
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+defineProps(["isOpen"]);
+const emits = defineEmits(["close"]);
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
-  const selectedYard = useState("selectedYard");
-  const horses = useState("horses");
-  const selectedHorseId = useState("selectedHorseId");
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const selectedYard = useState("selectedYard");
+const horses = useState("horses");
+const selectedHorseId = useState("selectedHorseId");
 
-  const name = ref("");
+const name = ref("");
 
-  const error = ref("");
+const error = ref("");
 
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
-  const handleSubmit = async () => {
+const loading = ref(false);
+
+const handleSubmit = async () => {
+  if (loading.value === false) {
+    loading.value = true;
     // step 1: create the horse in the database
     const { data: newHorse, error: createError } = await client
       .from("horses")
@@ -40,11 +44,15 @@
       horses.value.push(newHorse);
       name.value = "";
       selectedHorseId.value = newHorse.id;
+
+      loading.value = true;
       emits("close");
     } else {
+      loading.value = true;
       error.value = createError.message + createError.hint;
     }
-  };
+  }
+};
 </script>
 
 <template>

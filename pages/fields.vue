@@ -66,6 +66,7 @@ const getFields = async () => {
 };
 
 onMounted(async () => {
+  // TODO: this is quite in efficient to do every time from scratch
   fields.value = [
     {
       id: 0,
