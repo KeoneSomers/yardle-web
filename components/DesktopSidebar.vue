@@ -286,6 +286,7 @@ const handleSignout = async () => {
             </div>
           </NuxtLink>
         </div>
+        <SidebarFooter />
       </div>
     </div>
     <InviteLinkModal
