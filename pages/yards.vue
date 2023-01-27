@@ -17,10 +17,10 @@ const selectedYard = useState("selectedYard");
 // this is not ssr - needs to be cleaned up
 onMounted(async () => {
   // set profiles selected yard to null
-  await client
-    .from("profiles")
-    .update({ selected_yard: null, active_role: null })
-    .eq("id", user.value.id);
+  // await client
+  //   .from("profiles")
+  //   .update({ selected_yard: null, active_role: null })
+  //   .eq("id", user.value.id);
 
   // get yards
   const { data: profile, error } = await client
