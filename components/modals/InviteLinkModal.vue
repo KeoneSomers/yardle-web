@@ -1,29 +1,30 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-  } from "@headlessui/vue";
-  const props = defineProps(["isOpen"]);
-  const emits = defineEmits(["close"]);
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+} from "@headlessui/vue";
 
-  const yard = useState("yard");
-  const copyButtonText = ref("Copy");
-  const link = ref("");
+const props = defineProps(["isOpen"]);
+const emits = defineEmits(["close"]);
 
-  onMounted(() => {
-    link.value = `${window.location.origin}/join/${yard.value.invite_code}`;
-  });
+const yard = useState("yard");
+const copyButtonText = ref("Copy");
+const link = ref("");
 
-  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+onMounted(() => {
+  link.value = `${window.location.origin}/join/${yard.value.invite_code}`;
+});
 
-  const copyLinkToClipboard = async () => {
-    await navigator.clipboard.writeText(link.value);
-    copyButtonText.value = "Copied!";
-    await delay(2000);
-    copyButtonText.value = "Copy";
-  };
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+const copyLinkToClipboard = async () => {
+  await navigator.clipboard.writeText(link.value);
+  copyButtonText.value = "Copied!";
+  await delay(2000);
+  copyButtonText.value = "Copy";
+};
 </script>
 
 <template>

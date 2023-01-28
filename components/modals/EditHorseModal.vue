@@ -8,6 +8,8 @@ import {
 } from "@headlessui/vue";
 import { DateTime } from "luxon";
 
+const loading = ref(false);
+
 const props = defineProps(["isOpen", "horse"]);
 const { horse } = toRefs(props);
 const emits = defineEmits(["close"]);

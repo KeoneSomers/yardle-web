@@ -8,6 +8,8 @@ import {
 } from "@headlessui/vue";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
+const loading = ref(false);
+
 const props = defineProps(["isOpen", "yardId"]);
 const emits = defineEmits(["close"]);
 

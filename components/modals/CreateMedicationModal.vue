@@ -1,54 +1,57 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  defineProps(["isOpen"]);
-  const emits = defineEmits(["close"]);
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
 
-  const client = useSupabaseClient();
-  const user = useSupabaseUser();
-  const medications = useState("medications");
-  const selectedHorseId = useState("selectedHorseId");
+const loading = ref(false);
 
-  const name = ref("");
-  const instructions = ref("");
+defineProps(["isOpen"]);
+const emits = defineEmits(["close"]);
 
-  const error = ref("");
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const medications = useState("medications");
+const selectedHorseId = useState("selectedHorseId");
 
-  const handleSubmit = async () => {
-    // step 1: create the horse in the database
-    const { data: newMedication, error: createError } = await client
-      .from("medications")
-      .insert({
-        horse_id: selectedHorseId.value,
-        created_by: user.value.id,
-        name: name.value,
-        instructions: instructions.value,
-      })
-      .select()
-      .single();
+const name = ref("");
+const instructions = ref("");
 
-    // step 2: update local state
-    if (!createError) {
-      if (medications.value) {
-        medications.value.push(newMedication);
-      } else {
-        medications.value = [newMedication];
-      }
+const error = ref("");
 
-      // clear form
-      name.value = "";
-      instructions.value = "";
+const handleSubmit = async () => {
+  // step 1: create the horse in the database
+  const { data: newMedication, error: createError } = await client
+    .from("medications")
+    .insert({
+      horse_id: selectedHorseId.value,
+      created_by: user.value.id,
+      name: name.value,
+      instructions: instructions.value,
+    })
+    .select()
+    .single();
 
-      emits("close");
+  // step 2: update local state
+  if (!createError) {
+    if (medications.value) {
+      medications.value.push(newMedication);
     } else {
-      error.value = createError.message + createError.hint;
+      medications.value = [newMedication];
     }
-  };
+
+    // clear form
+    name.value = "";
+    instructions.value = "";
+
+    emits("close");
+  } else {
+    error.value = createError.message + createError.hint;
+  }
+};
 </script>
 
 <template>

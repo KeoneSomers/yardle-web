@@ -7,6 +7,8 @@ import {
   DialogTitle,
 } from "@headlessui/vue";
 
+const loading = ref(false);
+
 const props = defineProps(["isOpen"]);
 const emits = defineEmits(["close"]);
 

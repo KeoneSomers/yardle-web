@@ -9,10 +9,11 @@ import {
 import { KeyIcon } from "@heroicons/vue/24/outline/index.js";
 import { EnvelopeIcon } from "@heroicons/vue/20/solid/index.js";
 
+const loading = ref(false);
+
 const props = defineProps(["isOpen"]);
 const emits = defineEmits(["close"]);
 
-const loading = ref(false);
 const email = ref("");
 const errorMessage = ref("");
 const successMessage = ref("");

@@ -6,6 +6,9 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
+
+const loading = ref(false);
+
 const props = defineProps(["isOpen", "feedId"]);
 const emits = defineEmits(["close"]);
 

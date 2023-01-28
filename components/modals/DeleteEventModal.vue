@@ -1,47 +1,49 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
-  const props = defineProps(["isOpen", "eventId"]);
-  const emits = defineEmits(["close"]);
+const loading = ref(false);
 
-  const client = useSupabaseClient();
-  const events = useState("events");
+const props = defineProps(["isOpen", "eventId"]);
+const emits = defineEmits(["close"]);
 
-  const handleDelete = async () => {
-    // first delete the horses
-    const { error: delError } = await client
-      .from("calendar_events_horses")
-      .delete()
-      .eq("calendar_event_id", props.eventId);
+const client = useSupabaseClient();
+const events = useState("events");
 
-    // now delete the event itself
-    const { data, error } = await client
-      .from("calendar_events")
-      .delete()
-      .eq("id", props.eventId)
-      .select();
+const handleDelete = async () => {
+  // first delete the horses
+  const { error: delError } = await client
+    .from("calendar_events_horses")
+    .delete()
+    .eq("calendar_event_id", props.eventId);
 
-    if (data) {
-      // success! - now remove the deleted feed from the webpage
-      const index = events.value.map((e) => e.id).indexOf(props.eventId);
-      events.value.splice(index, 1);
+  // now delete the event itself
+  const { data, error } = await client
+    .from("calendar_events")
+    .delete()
+    .eq("id", props.eventId)
+    .select();
 
-      // close the modal
-      emits("close");
-    }
+  if (data) {
+    // success! - now remove the deleted feed from the webpage
+    const index = events.value.map((e) => e.id).indexOf(props.eventId);
+    events.value.splice(index, 1);
 
-    if (error) {
-      // somthing went wrong!
-      console.log(error);
-    }
-  };
+    // close the modal
+    emits("close");
+  }
+
+  if (error) {
+    // somthing went wrong!
+    console.log(error);
+  }
+};
 </script>
 
 <template>

@@ -1,42 +1,44 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
-  const props = defineProps(["isOpen", "rugId"]);
-  const emits = defineEmits(["close"]);
+const loading = ref(false);
 
-  const client = useSupabaseClient();
+const props = defineProps(["isOpen", "rugId"]);
+const emits = defineEmits(["close"]);
 
-  // todo - this should be using props and not state (same for delete horse modal)
-  const rugs = useState("rugs");
+const client = useSupabaseClient();
 
-  const handleDelete = async () => {
-    const { data, error } = await client
-      .from("rugs")
-      .delete()
-      .eq("id", props.rugId)
-      .select();
+// todo - this should be using props and not state (same for delete horse modal)
+const rugs = useState("rugs");
 
-    if (data) {
-      // success! - now remove the deleted rug from the webpage
-      const index = rugs.value.map((e) => e.id).indexOf(props.rugId);
-      rugs.value.splice(index, 1);
+const handleDelete = async () => {
+  const { data, error } = await client
+    .from("rugs")
+    .delete()
+    .eq("id", props.rugId)
+    .select();
 
-      // close the modal
-      emits("close");
-    }
+  if (data) {
+    // success! - now remove the deleted rug from the webpage
+    const index = rugs.value.map((e) => e.id).indexOf(props.rugId);
+    rugs.value.splice(index, 1);
 
-    if (error) {
-      // somthing went wrong!
-      console.log(error);
-    }
-  };
+    // close the modal
+    emits("close");
+  }
+
+  if (error) {
+    // somthing went wrong!
+    console.log(error);
+  }
+};
 </script>
 
 <template>

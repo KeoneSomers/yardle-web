@@ -1,42 +1,44 @@
 <script setup>
-  import {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-  } from "@headlessui/vue";
-  import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
 
-  const props = defineProps(["isOpen", "medicationId"]);
-  const emits = defineEmits(["close"]);
+const loading = ref(false);
 
-  const client = useSupabaseClient();
-  const medications = useState("medications");
+const props = defineProps(["isOpen", "medicationId"]);
+const emits = defineEmits(["close"]);
 
-  const handleDelete = async () => {
-    const { data, error } = await client
-      .from("medications")
-      .delete()
-      .eq("id", props.medicationId)
-      .select();
+const client = useSupabaseClient();
+const medications = useState("medications");
 
-    if (data) {
-      // success! - now remove the deleted medication from the webpage
-      const index = medications.value
-        .map((e) => e.id)
-        .indexOf(props.medicationId);
-      medications.value.splice(index, 1);
+const handleDelete = async () => {
+  const { data, error } = await client
+    .from("medications")
+    .delete()
+    .eq("id", props.medicationId)
+    .select();
 
-      // close the modal
-      emits("close");
-    }
+  if (data) {
+    // success! - now remove the deleted medication from the webpage
+    const index = medications.value
+      .map((e) => e.id)
+      .indexOf(props.medicationId);
+    medications.value.splice(index, 1);
 
-    if (error) {
-      // somthing went wrong!
-      console.log(error);
-    }
-  };
+    // close the modal
+    emits("close");
+  }
+
+  if (error) {
+    // somthing went wrong!
+    console.log(error);
+  }
+};
 </script>
 
 <template>

@@ -6,6 +6,9 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
+
+const loading = ref(false);
+
 defineProps(["isOpen"]);
 const emits = defineEmits(["close"]);
 
@@ -22,8 +25,6 @@ const error = ref("");
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-const loading = ref(false);
 
 const handleSubmit = async () => {
   if (loading.value === false) {
