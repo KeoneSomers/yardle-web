@@ -6,6 +6,8 @@ definePageMeta({
   layout: "blank",
 });
 
+const loading = ref(false);
+
 const route = useRoute();
 const { invite_code } = route.query;
 
@@ -19,18 +21,27 @@ const requestPasswordResetModalOpen = ref(false);
 const errorMessage = ref("");
 
 const handleLogin = async () => {
-  if (email.value && password.value) {
-    const { error } = await supabaseAuthClient.auth.signInWithPassword({
-      email: email.value,
-      password: password.value,
-    });
+  loading.value = true;
 
-    if (error) {
-      errorMessage.value = error.message;
-      console.log(error);
-      return;
-    }
+  if (!email.value || !password.value) {
+    errorMessage.value = "Please enter your email and password";
+    loading.value = false;
+    return;
   }
+
+  const { error } = await supabaseAuthClient.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  });
+
+  if (error) {
+    errorMessage.value = error.message;
+    console.log(error);
+    loading.value = false;
+    return;
+  }
+
+  loading.value = false;
 };
 </script>
 
@@ -117,11 +128,13 @@ const handleLogin = async () => {
 
           <div>
             <button
+              v-if="!loading"
               type="submit"
               class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Sign in
             </button>
+            <LoadingButtonWide v-else />
           </div>
         </form>
 
