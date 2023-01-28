@@ -87,36 +87,45 @@ watch(
 const error = ref("");
 
 const handleSubmit = async () => {
-  // build date
-  let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
+  if (loading.value === false) {
+    // start loading
+    loading.value = true;
 
-  // build time
-  if (time.value && !all_day.value) {
-    const h = time.value.split(":")[0];
-    const m = time.value.split(":")[1];
+    // build date value
+    let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
 
-    formattedDateTime = formattedDateTime.plus({
-      hours: h,
-      minutes: m,
-    });
-  }
+    // build time value
+    if (time.value && !all_day.value) {
+      const h = time.value.split(":")[0];
+      const m = time.value.split(":")[1];
 
-  // step 1: create the event in the database
-  const { data: newEvent, error: createError } = await client
-    .from("calendar_events")
-    .insert({
-      created_by: user.value.id,
-      title: title.value,
-      date_time: formattedDateTime,
-      notes: notes.value,
-      all_day: all_day.value,
-      type: event_type.value,
-      yard_id: yard.value.id,
-    })
-    .select()
-    .single();
+      formattedDateTime = formattedDateTime.plus({
+        hours: h,
+        minutes: m,
+      });
+    }
 
-  if (!createError) {
+    // step 1: create the event in the database
+    const { data: newEvent, error: createError } = await client
+      .from("calendar_events")
+      .insert({
+        created_by: user.value.id,
+        title: title.value,
+        date_time: formattedDateTime,
+        notes: notes.value,
+        all_day: all_day.value,
+        type: event_type.value,
+        yard_id: yard.value.id,
+      })
+      .select()
+      .single();
+
+    if (createError) {
+      error.value = createError.message + createError.hint;
+      loading.value = false;
+      return;
+    }
+
     // step 2: create horses relationships
     const { error: horseRelError } = await client
       .from("calendar_events_horses")
@@ -126,6 +135,12 @@ const handleSubmit = async () => {
           calendar_event_id: newEvent.id,
         }))
       );
+
+    if (horseRelError) {
+      error.value = horseRelError.message + horseRelError.hint;
+      loading.value = false;
+      return;
+    }
 
     // step 3: update local state
     if (events.value) {
@@ -141,9 +156,8 @@ const handleSubmit = async () => {
     notes.value = "";
     all_day.value = false;
 
+    loading.value = false;
     emits("close");
-  } else {
-    error.value = createError.message + createError.hint;
   }
 };
 
@@ -410,11 +424,13 @@ watchEffect(() => {
 
                 <div class="mt-4 flex justify-end space-x-2">
                   <button
+                    v-if="!loading"
                     type="submit"
                     class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
                   >
                     Add
                   </button>
+                  <LoadingButton v-else />
                 </div>
               </form>
             </DialogPanel>
