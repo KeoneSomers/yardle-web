@@ -4,6 +4,8 @@ definePageMeta({
   layout: "blank",
 });
 
+const loading = ref(false);
+
 const route = useRoute();
 const { invite_code } = route.query;
 
@@ -16,28 +18,34 @@ const passwordConfirm = ref("");
 const errorMessage = ref("");
 
 const handleSignup = async () => {
+  loading.value = true;
   if (password.value != passwordConfirm.value) {
     errorMessage.value = "Passwords do not match!";
+    loading.value = false;
     return;
   }
 
   if (email.value == "") {
     errorMessage.value = "Please enter your email address";
+    loading.value = false;
     return;
   }
 
   if (password.value == "") {
     errorMessage.value = "Please enter a password";
+    loading.value = false;
     return;
   }
 
   if (username.value == "") {
     errorMessage.value = "Please enter a username";
+    loading.value = false;
     return;
   }
 
   if (username.value.length < 3) {
     errorMessage.value = "Username too short";
+    loading.value = false;
     return;
   }
 
@@ -55,6 +63,8 @@ const handleSignup = async () => {
     console.log(error);
     errorMessage.value = error.message;
   }
+
+  loading.value = false;
 };
 </script>
 
@@ -181,11 +191,13 @@ const handleSignup = async () => {
 
           <div>
             <button
+              v-if="!loading"
               type="submit"
               class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Sign up
             </button>
+            <LoadingButtonWide v-else />
           </div>
         </form>
 
