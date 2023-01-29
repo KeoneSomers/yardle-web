@@ -87,77 +87,78 @@ watch(
 const error = ref("");
 
 const handleSubmit = async () => {
-  if (loading.value === false) {
-    // start loading
-    loading.value = true;
+  try {
+    if (loading.value === false) {
+      // start loading
+      loading.value = true;
 
-    // build date value
-    let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
+      // build date value
+      let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
 
-    // build time value
-    if (time.value && !all_day.value) {
-      const h = time.value.split(":")[0];
-      const m = time.value.split(":")[1];
+      // build time value
+      if (time.value && !all_day.value) {
+        const h = time.value.split(":")[0];
+        const m = time.value.split(":")[1];
 
-      formattedDateTime = formattedDateTime.plus({
-        hours: h,
-        minutes: m,
-      });
+        formattedDateTime = formattedDateTime.plus({
+          hours: h,
+          minutes: m,
+        });
+      }
+
+      // step 1: create the event in the database
+      const { data: newEvent, error: createError } = await client
+        .from("calendar_events")
+        .insert({
+          created_by: user.value.id,
+          title: title.value,
+          date_time: formattedDateTime,
+          notes: notes.value,
+          all_day: all_day.value,
+          type: event_type.value,
+          yard_id: yard.value.id,
+        })
+        .select()
+        .single();
+
+      if (createError) {
+        throw new Error(createError.message);
+      }
+
+      // step 2: create horses relationships
+      const { error: horseRelError } = await client
+        .from("calendar_events_horses")
+        .insert(
+          selectedHorses.value.map(({ id }) => ({
+            horse_id: id,
+            calendar_event_id: newEvent.id,
+          }))
+        );
+
+      if (horseRelError) {
+        throw new Error(horseRelError.message);
+      }
+
+      // step 3: update local state
+      if (events.value) {
+        events.value.push(newEvent);
+      } else {
+        events.value = [newEvent];
+      }
+
+      // clear form
+      title.value = "";
+      date.value = "";
+      time.value = "09:00";
+      notes.value = "";
+      all_day.value = false;
+
+      emits("close");
     }
-
-    // step 1: create the event in the database
-    const { data: newEvent, error: createError } = await client
-      .from("calendar_events")
-      .insert({
-        created_by: user.value.id,
-        title: title.value,
-        date_time: formattedDateTime,
-        notes: notes.value,
-        all_day: all_day.value,
-        type: event_type.value,
-        yard_id: yard.value.id,
-      })
-      .select()
-      .single();
-
-    if (createError) {
-      error.value = createError.message + createError.hint;
-      loading.value = false;
-      return;
-    }
-
-    // step 2: create horses relationships
-    const { error: horseRelError } = await client
-      .from("calendar_events_horses")
-      .insert(
-        selectedHorses.value.map(({ id }) => ({
-          horse_id: id,
-          calendar_event_id: newEvent.id,
-        }))
-      );
-
-    if (horseRelError) {
-      error.value = horseRelError.message + horseRelError.hint;
-      loading.value = false;
-      return;
-    }
-
-    // step 3: update local state
-    if (events.value) {
-      events.value.push(newEvent);
-    } else {
-      events.value = [newEvent];
-    }
-
-    // clear form
-    title.value = "";
-    date.value = "";
-    time.value = "09:00";
-    notes.value = "";
-    all_day.value = false;
-
+  } catch (err) {
+    console.error(err);
+  } finally {
     loading.value = false;
-    emits("close");
   }
 };
 
