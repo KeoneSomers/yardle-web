@@ -174,9 +174,10 @@ watchEffect(async () => {
       <div class="sm:col-span-2">
         <dt class="text-sm font-medium text-gray-500">About</dt>
         <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
-          <p>
+          <p v-if="horse.about">
             {{ horse.about }}
           </p>
+          <p v-else>--</p>
         </dd>
       </div>
 
