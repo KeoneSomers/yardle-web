@@ -432,11 +432,13 @@ const handleCreateFeed = async () => {
                         </div>
                         <div class="col-span-6">
                           <button
+                            v-if="!loading"
                             @click="addIngredient"
                             class="w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
                           >
                             Add
                           </button>
+                          <LoadingButton v-else />
                         </div>
                       </div>
                     </div>

@@ -4,6 +4,8 @@ definePageMeta({
   guards: [],
 });
 
+const loading = ref(false);
+
 const { invite_code } = useRoute().params;
 const user = useSupabaseUser();
 const yard = ref(null);
@@ -92,11 +94,13 @@ const handleJoinYard = async () => {
       </div>
       <div v-if="user">
         <button
+          v-if="!loading"
           @click="handleJoinYard"
           class="bg-indigo-500 hover:bg-indigo-600 p-4 rounded text-white w-full"
         >
           Join
         </button>
+        <LoadingButton v-else />
         <div
           v-if="error"
           class="text-red-500 bg-red-50 mt-3 p-2 border rounded-lg border-red-100"

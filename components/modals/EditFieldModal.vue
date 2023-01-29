@@ -102,11 +102,13 @@ const handleSubmit = async () => {
 
                 <div class="mt-4 flex justify-end space-x-2">
                   <button
+                    v-if="!loading"
                     type="submit"
                     class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
                   >
                     Save
                   </button>
+                  <LoadingButton v-else />
                 </div>
               </form>
             </DialogPanel>
