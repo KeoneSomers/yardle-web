@@ -170,6 +170,54 @@ watchEffect(async () => {
 <template>
   <div class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
     <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+      <!-- About -->
+      <div class="sm:col-span-2">
+        <dt class="text-sm font-medium text-gray-500">About</dt>
+        <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+          <p>
+            {{ horse.about }}
+          </p>
+        </dd>
+      </div>
+
+      <!-- Breed -->
+      <div class="sm:col-span-1">
+        <dt class="text-sm font-medium text-gray-500">Breed</dt>
+        <dd class="mt-1 text-sm text-gray-900">
+          <span v-if="horse.breed">{{ horse.breed }}</span>
+          <span v-else>--</span>
+        </dd>
+      </div>
+
+      <!-- Color & Markings -->
+      <div class="sm:col-span-1">
+        <dt class="text-sm font-medium text-gray-500">Colour and Markings</dt>
+        <dd class="mt-1 text-sm text-gray-900">
+          <span v-if="horse.color_markings">{{ horse.color_markings }}</span>
+          <span v-else>--</span>
+        </dd>
+      </div>
+
+      <!-- DoB -->
+      <div class="sm:col-span-1">
+        <dt class="text-sm font-medium text-gray-500">Date of Birth</dt>
+        <dd class="mt-1 text-sm text-gray-900">
+          <span v-if="horse.dob">{{
+            DateTime.fromISO(horse.dob).toLocaleString(DateTime.DATE_MED)
+          }}</span>
+          <span v-else>--</span>
+        </dd>
+      </div>
+    </dl>
+
+    <p class="mt-10">Calendar Events</p>
+    <p class="text-xs text-gray-600">
+      Events you create in the calendar that include this horse will appear
+      here.
+    </p>
+    <dl
+      class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 border rounded-xl mt-3 p-4"
+    >
       <!-- Farrier -->
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Last Farrier Visit</dt>
@@ -321,44 +369,6 @@ watchEffect(async () => {
                           ).toRelativeCalendar()})`
           }}</span>
           <span v-else>--</span>
-        </dd>
-      </div>
-
-      <!-- Breed -->
-      <div class="sm:col-span-1">
-        <dt class="text-sm font-medium text-gray-500">Breed</dt>
-        <dd class="mt-1 text-sm text-gray-900">
-          <span v-if="horse.breed">{{ horse.breed }}</span>
-          <span v-else>--</span>
-        </dd>
-      </div>
-
-      <!-- Color & Markings -->
-      <div class="sm:col-span-1">
-        <dt class="text-sm font-medium text-gray-500">Colour and Markings</dt>
-        <dd class="mt-1 text-sm text-gray-900">
-          <span v-if="horse.color_markings">{{ horse.color_markings }}</span>
-          <span v-else>--</span>
-        </dd>
-      </div>
-
-      <!-- DoB -->
-      <div class="sm:col-span-1">
-        <dt class="text-sm font-medium text-gray-500">Date of Birth</dt>
-        <dd class="mt-1 text-sm text-gray-900">
-          <span v-if="horse.dob">{{
-            DateTime.fromISO(horse.dob).toLocaleString(DateTime.DATE_MED)
-          }}</span>
-          <span v-else>--</span>
-        </dd>
-      </div>
-
-      <div class="sm:col-span-2">
-        <dt class="text-sm font-medium text-gray-500">About</dt>
-        <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
-          <p>
-            {{ horse.about }}
-          </p>
         </dd>
       </div>
     </dl>
