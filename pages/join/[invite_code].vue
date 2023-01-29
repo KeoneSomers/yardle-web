@@ -39,48 +39,58 @@ onMounted(async () => {
 });
 
 const handleJoinYard = async () => {
-  await useAsyncData("existingMember", async () => {
-    // TODO: currently this will show an error in the browser console if you are not a member since it will fail to find a result for the query. This is fine but would be nice to clean up one day
-    const { data: existingMember } = await client
-      .from("profiles_yards")
-      .select()
-      .eq("yard_id", yard.value.id)
-      .eq("profile_id", user.value.id)
-      .single();
+  try {
+    if (loading.value === false) {
+      loading.value = true;
 
-    if (existingMember) {
-      if (existingMember.is_banned == true) {
-        error.value = "You have been banned from this yard.";
-      } else {
-        error.value = "You are already a member of this yard.";
-      }
-      return;
+      await useAsyncData("existingMember", async () => {
+        // TODO: currently this will show an error in the browser console if you are not a member since it will fail to find a result for the query. This is fine but would be nice to clean up one day
+        const { data: existingMember } = await client
+          .from("profiles_yards")
+          .select()
+          .eq("yard_id", yard.value.id)
+          .eq("profile_id", user.value.id)
+          .single();
+
+        if (existingMember) {
+          if (existingMember.is_banned == true) {
+            throw new Error("You have been banned from this yard.");
+          } else {
+            throw new Error("You are already a member of this yard.");
+          }
+        }
+
+        //create the user/yard relationship
+        const { error: relError } = await client.from("profiles_yards").insert([
+          {
+            profile_id: user.value.id,
+            yard_id: yard.value.id,
+            role: 3, // role = member
+          },
+        ]);
+
+        if (relError) {
+          throw new Error(relError.message);
+        }
+
+        // set selected yard
+        const { error: setError } = await client
+          .from("profiles")
+          .update({ selected_yard: yard.value.id, active_role: 3 })
+          .eq("id", user.value.id);
+
+        if (setError) {
+          throw new Error(setError.message);
+        }
+      });
+
+      loading.value = false;
+      await navigateTo("/yards");
     }
-
-    //create the user/yard relationship
-    const { error: relError } = await client.from("profiles_yards").insert([
-      {
-        profile_id: user.value.id,
-        yard_id: yard.value.id,
-        role: 3, // role = member
-      },
-    ]);
-
-    if (relError) {
-      console.log(relError);
-      return;
-    }
-
-    // set selected yard
-    await client
-      .from("profiles")
-      .update({ selected_yard: yard.value.id, active_role: 3 })
-      .eq("id", user.value.id);
-  });
-
-  navigateTo("/yards");
-
-  // TODO: navigate user back to here after they've logged in or signed up
+  } catch (err) {
+    loading.value = false;
+    error.value = err.message;
+  }
 };
 </script>
 

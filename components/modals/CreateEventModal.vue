@@ -153,12 +153,12 @@ const handleSubmit = async () => {
       notes.value = "";
       all_day.value = false;
 
+      loading.value = false;
       emits("close");
     }
   } catch (err) {
-    console.error(err);
-  } finally {
     loading.value = false;
+    error.value = err.message;
   }
 };
 
