@@ -25,7 +25,7 @@ onMounted(async () => {
   const { data, error } = await supabase
     .from("feedback")
     .select()
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error);
@@ -55,7 +55,7 @@ const handleDelete = async (id) => {
     >
       <div class="flex-1 border-r">
         <p class="p-2">{{ index + 1 }} - {{ item.message }}</p>
-        <p v-if="item.route" class="font-mono p-1 border-t text-xs bg-gray-50">
+        <p v-if="item.route" class="font-mono p-1 border-t text-xs bg-blue-50">
           {{ item.route }}
         </p>
       </div>
