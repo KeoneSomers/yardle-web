@@ -1,7 +1,7 @@
 <script setup>
 import CreateYardModal from "@/components/modals/CreateYardModal.vue";
 import DeleteYardModal from "@/components/modals/DeleteYardModal.vue";
-import { PlusIcon } from "@heroicons/vue/20/solid";
+import { PlusIcon } from "@heroicons/vue/20/solid/index.js";
 
 definePageMeta({
   guards: ["requireAuth", "requireNoYard"],
