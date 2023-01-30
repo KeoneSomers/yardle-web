@@ -1,5 +1,5 @@
 <script setup>
-import { CheckIcon } from "@heroicons/vue/20/solid";
+import { CheckIcon } from "@heroicons/vue/20/solid/index.js";
 
 const features = [
   {
@@ -63,9 +63,8 @@ const features = [
             All-in-one platform
           </p>
           <p class="mt-6 text-base leading-7 text-gray-600">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores
-            impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis
-            ratione.
+            Yardle saves you time by providing a single location for your yards
+            information and generating useful insights.
           </p>
         </div>
         <dl
