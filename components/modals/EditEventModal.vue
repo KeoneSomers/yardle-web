@@ -143,6 +143,11 @@ const handleSubmit = async () => {
     error.value = createError.message + createError.hint;
   }
 };
+
+const removeSelectedHorse = (i) => {
+  selectedHorse.value = null;
+  selectedHorses.value.splice(i, 1);
+};
 </script>
 
 <template>
@@ -351,7 +356,7 @@ const handleSubmit = async () => {
                     >
                       {{ horse.name }}
                       <button
-                        @click="() => selectedHorses.splice(index, 1)"
+                        @click="removeSelectedHorse(index)"
                         type="button"
                         class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:bg-indigo-500 focus:text-white focus:outline-none"
                       >
