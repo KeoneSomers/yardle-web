@@ -175,6 +175,11 @@ watchEffect(() => {
     event_type.value = 1;
   }
 });
+
+const removeSelectedHorse = (i) => {
+  selectedHorse.value = null;
+  selectedHorses.value.splice(i, 1);
+};
 </script>
 
 <template>
@@ -212,7 +217,7 @@ watchEffect(() => {
                 as="h3"
                 class="text-lg font-medium leading-6 text-gray-900"
               >
-                Add an event {{ date }}
+                Add an event
               </DialogTitle>
               <form
                 @submit.prevent="handleSubmit"
@@ -378,16 +383,32 @@ watchEffect(() => {
                       </ComboboxOptions>
                     </div>
                   </Combobox>
-                  <div class="flex flex-wrap">
-                    <div
-                      v-if="selectedHorses"
+                  <div v-if="selectedHorses" class="flex flex-wrap">
+                    <span
                       v-for="(horse, index) in selectedHorses"
                       :key="horse.id"
-                      class="inline-flex mr-1 mb-1 items-center rounded-full bg-indigo-100 py-0.5 pl-2.5 pr-1 text-sm font-medium text-indigo-700"
-                    >
+                      class="inline-flex mr-1 mb-1 items-center rounded-full bg-gray-100 pl-0.5 py-0.5 pr-3 text-sm font-medium"
+                      ><div class="h-7 w-7 rounded-full overflow-hidden mr-2">
+                        <SupabaseImage
+                          v-if="horse.avatar_url"
+                          id="horse-avatars"
+                          :path="horse.avatar_url"
+                        />
+                        <div
+                          v-else
+                          class="flex items-center justify-center text-white font-bold w-full h-full"
+                          :class="
+                            horse.avatar_background
+                              ? horse.avatar_background
+                              : 'bg-pink-500'
+                          "
+                        >
+                          {{ horse.name[0].toUpperCase() }}
+                        </div>
+                      </div>
                       {{ horse.name }}
                       <button
-                        @click="() => selectedHorses.splice(index, 1)"
+                        @click="removeSelectedHorse(index)"
                         type="button"
                         class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:bg-indigo-500 focus:text-white focus:outline-none"
                       >
@@ -402,9 +423,8 @@ watchEffect(() => {
                             stroke-width="1.5"
                             d="M1 1l6 6m0-6L1 7"
                           />
-                        </svg>
-                      </button>
-                    </div>
+                        </svg></button
+                    ></span>
                   </div>
                 </div>
 
