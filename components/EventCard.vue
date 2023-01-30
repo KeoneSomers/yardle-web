@@ -18,7 +18,7 @@ const { data: eventTypes, error: eventTypesError } = await client
 const { data: horses } = await useAsyncData(String(event.id), async () => {
   const { data, error } = await client
     .from("calendar_events_horses")
-    .select("horse:horses(id, name, avatar_url)")
+    .select("horse:horses(id, name, avatar_url, avatar_background)")
     .eq("calendar_event_id", event.id);
 
   if (!error) {
@@ -78,7 +78,7 @@ const { data: horses } = await useAsyncData(String(event.id), async () => {
         <span
           v-for="horse in horses"
           :key="horse.id"
-          class="inline-flex mr-1 mb-1 items-center rounded-full bg-pink-100 pl-0.5 py-0.5 pr-2 text-sm font-medium text-pink-800"
+          class="inline-flex mr-1 mb-1 items-center rounded-full bg-gray-100 pl-0.5 py-0.5 pr-3 text-sm font-medium"
           ><div class="h-7 w-7 rounded-full overflow-hidden mr-2">
             <SupabaseImage
               v-if="horse.avatar_url"
@@ -87,7 +87,12 @@ const { data: horses } = await useAsyncData(String(event.id), async () => {
             />
             <div
               v-else
-              class="flex items-center justify-center bg-white text-indigo-500 font-bold w-full h-full"
+              class="flex items-center justify-center text-white font-bold w-full h-full"
+              :class="
+                horse.avatar_background
+                  ? horse.avatar_background
+                  : 'bg-pink-500'
+              "
             >
               {{ horse.name[0].toUpperCase() }}
             </div>
