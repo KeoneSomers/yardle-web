@@ -27,31 +27,34 @@ function capitalizeFirstLetter(string) {
 }
 
 const handleSubmit = async () => {
-  if (loading.value === false) {
-    loading.value = true;
-    // step 1: create the horse in the database
-    const { data: newHorse, error: createError } = await client
-      .from("horses")
-      .insert({
-        name: capitalizeFirstLetter(name.value),
-        yard_id: selectedYard.value,
-        created_by: user.value.id,
-      })
-      .select()
-      .single();
+  try {
+    if (loading.value === false) {
+      loading.value = true;
+      // step 1: create the horse in the database
+      const { data: newHorse, error: createError } = await client
+        .from("horses")
+        .insert({
+          name: capitalizeFirstLetter(name.value),
+          yard_id: selectedYard.value,
+          created_by: user.value.id,
+        })
+        .select()
+        .single();
 
-    // step 2: update local state
-    if (!createError) {
+      // step 2: update local state
+      if (!createError) {
+        throw new Error("Error adding new horse");
+      }
       horses.value.push(newHorse);
       name.value = "";
       selectedHorseId.value = newHorse.id;
 
-      loading.value = true;
+      loading.value = false;
       emits("close");
-    } else {
-      loading.value = true;
-      error.value = createError.message + createError.hint;
     }
+  } catch (err) {
+    error.value = err.message;
+    loading.value = false;
   }
 };
 </script>

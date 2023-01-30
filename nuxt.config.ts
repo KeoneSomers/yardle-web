@@ -19,12 +19,12 @@ export default defineNuxtConfig({
         {
           name: "description",
           content:
-            "Digital horse yard management tool - Join multiple yards, manage horses, their feeds, rugs and medications.",
+            "Horse yard management tool - Join multiple yards, manage horses, their feeds, rugs and medications.",
         },
         {
           name: "keywords",
           content:
-            "horse livery, yard managment, horse tool, equestrian yard management",
+            "horse livery, yard managment, horse tool, equestrian yard management, equestrian",
         },
         { name: "author", content: "Yardle" },
       ],
