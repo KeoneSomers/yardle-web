@@ -172,7 +172,12 @@ watchEffect(() => {
                   />
                   <div
                     v-else
-                    class="bg-pink-500 rounded-full h-10 w-10 text-white flex items-center justify-center"
+                    class="rounded-full h-10 w-10 text-white flex items-center justify-center"
+                    :class="
+                      horse.avatar_background
+                        ? horse.avatar_background
+                        : 'bg-pink-500'
+                    "
                   >
                     {{ horse.name[0].toUpperCase() }}
                   </div>

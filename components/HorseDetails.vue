@@ -100,7 +100,12 @@ watchEffect(async () => {
                 />
                 <div
                   v-else
-                  class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 flex items-center justify-center bg-pink-500 text-white text-6xl"
+                  class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 flex items-center justify-center text-white text-6xl"
+                  :class="
+                    horse.avatar_background
+                      ? horse.avatar_background
+                      : 'bg-pink-500'
+                  "
                 >
                   {{ horse.name[0].toUpperCase() }}
                 </div>

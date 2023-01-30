@@ -22,6 +22,17 @@ const name = ref("");
 
 const error = ref("");
 
+const backgrounds = [
+  "bg-pink-500",
+  "bg-green-500",
+  "bg-orange-500",
+  "bg-indigo-500",
+  "bg-yellow-500",
+  "bg-purple-500",
+  "bg-blue-500",
+  "bg-cyan-500",
+];
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -37,6 +48,8 @@ const handleSubmit = async () => {
           name: capitalizeFirstLetter(name.value),
           yard_id: selectedYard.value,
           created_by: user.value.id,
+          avatar_background:
+            backgrounds[Math.floor(Math.random() * backgrounds.length)],
         })
         .select()
         .single();
