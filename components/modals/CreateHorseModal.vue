@@ -42,9 +42,10 @@ const handleSubmit = async () => {
         .single();
 
       // step 2: update local state
-      if (!createError) {
+      if (createError) {
         throw new Error("Error adding new horse");
       }
+
       horses.value.push(newHorse);
       name.value = "";
       selectedHorseId.value = newHorse.id;
