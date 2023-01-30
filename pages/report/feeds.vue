@@ -41,7 +41,7 @@ await useAsyncData("all_feeds", async () => {
   const mappedFeeds = data.map(async (feed) => {
     const { data: horse, error: horseError } = await client
       .from("horses")
-      .select("name, id, avatar_url")
+      .select("name, id, avatar_url, avatar_background")
       .eq("id", feed.horse_id)
       .single();
 
@@ -256,7 +256,12 @@ const setShadow = (event) => {
                   />
                   <div
                     v-else
-                    class="bg-pink-500 rounded-full h-8 w-8 text-white flex items-center justify-center"
+                    class="rounded-full h-8 w-8 text-white flex items-center justify-center"
+                    :class="
+                      feed.horse.avatar_background
+                        ? feed.horse.avatar_background
+                        : 'bg-pink-500'
+                    "
                   >
                     {{ feed.horse.name[0].toUpperCase() }}
                   </div>
