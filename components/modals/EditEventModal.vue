@@ -319,7 +319,12 @@ const removeSelectedHorse = (i) => {
                               />
                               <div
                                 v-else
-                                class="h-6 w-6 bg-indigo-500 rounded-full flex items-center justify-center text-white"
+                                class="h-6 w-6 rounded-full flex items-center justify-center text-white"
+                                :class="
+                                  horse.avatar_background
+                                    ? horse.avatar_background
+                                    : 'bg-pink-500'
+                                "
                               >
                                 {{ horse.name[0].toUpperCase() }}
                               </div>
@@ -347,13 +352,29 @@ const removeSelectedHorse = (i) => {
                       </ComboboxOptions>
                     </div>
                   </Combobox>
-                  <div class="flex flex-wrap">
-                    <div
-                      v-if="selectedHorses"
+                  <div v-if="selectedHorses" class="flex flex-wrap">
+                    <span
                       v-for="(horse, index) in selectedHorses"
                       :key="horse.id"
-                      class="inline-flex mr-1 mb-1 items-center rounded-full bg-indigo-100 py-0.5 pl-2.5 pr-1 text-sm font-medium text-indigo-700"
-                    >
+                      class="inline-flex mr-1 mb-1 items-center rounded-full bg-gray-100 pl-0.5 py-0.5 pr-3 text-sm font-medium"
+                      ><div class="h-7 w-7 rounded-full overflow-hidden mr-2">
+                        <SupabaseImage
+                          v-if="horse.avatar_url"
+                          id="horse-avatars"
+                          :path="horse.avatar_url"
+                        />
+                        <div
+                          v-else
+                          class="flex items-center justify-center text-white font-bold w-full h-full"
+                          :class="
+                            horse.avatar_background
+                              ? horse.avatar_background
+                              : 'bg-pink-500'
+                          "
+                        >
+                          {{ horse.name[0].toUpperCase() }}
+                        </div>
+                      </div>
                       {{ horse.name }}
                       <button
                         @click="removeSelectedHorse(index)"
@@ -371,9 +392,8 @@ const removeSelectedHorse = (i) => {
                             stroke-width="1.5"
                             d="M1 1l6 6m0-6L1 7"
                           />
-                        </svg>
-                      </button>
-                    </div>
+                        </svg></button
+                    ></span>
                   </div>
                 </div>
 
