@@ -17,37 +17,84 @@ const supabase = useSupabaseClient();
 const supabaseAuth = useSupabaseAuthClient();
 const user = useSupabaseUser();
 
+// TODO: if a user has any images in storage then the delete user account will fail (I think)
+
 const handleSubmit = async () => {
-  // remove connection from users to profiles
-  if (user.value) {
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        username: "deletedUser",
-        avatar_url: null,
-        selected_yard: null,
-        active_role: null,
-        email: null,
-      })
-      .eq("id", user.value.id);
+  try {
+    if (loading.value === false) {
+      if (user.value) {
+        // update profile
+        const { error: updateProfileError } = await supabase
+          .from("profiles")
+          .update({
+            username: "deletedUser",
+            avatar_url: null,
+            selected_yard: null,
+            active_role: null,
+            email: null,
+          })
+          .eq("id", user.value.id);
 
-    if (error) {
-      console.log("error", error);
-      return;
+        if (updateProfileError) {
+          throw new Error(updateProfileError.message);
+        }
+
+        // TODO TEMP: for each horse that the user has created, delete the avatar if they have one
+        const { data: usersHorses, error: usersHorsesError } = await supabase
+          .from("horses")
+          .select("avatar_url")
+          .eq("created_by", user.value.id);
+
+        if (usersHorsesError) {
+          throw new Error(usersHorsesError.message);
+        }
+
+        for (let index = 0; index < usersHorses.length; index++) {
+          const horse = usersHorses[index];
+
+          if (horse.avatar_url) {
+            // remove avatar link from row in db
+            const { error: removeAvatarUrlError } = await supabase
+              .from("horses")
+              .update({ avatar_url: null })
+              .eq("avatar_url", horse.avatar_url);
+
+            if (removeAvatarUrlError) {
+              throw new Error(removeAvatarUrlError.message);
+            }
+
+            // Delete image from storage bucket
+            // TODO: this could be done in a batch (single request)
+            const { error: deleteHorseAvatarError } = await supabase.storage
+              .from("horse-avatars")
+              .remove([horse.avatar_url]);
+
+            if (deleteHorseAvatarError) {
+              throw new Error(deleteHorseAvatarError.message);
+            }
+          }
+        }
+
+        // TODO: in future - do a proper cleanup of the user's data
+
+        // remove auth account
+        const { result } = await $fetch("/api/deleteUserAccount", {
+          method: "post",
+          body: { userId: user.value.id },
+        });
+
+        if (result === "success") {
+          loading.value = false;
+          await supabaseAuth.auth.signOut();
+          await navigateTo("/");
+        } else {
+          throw new Error("Error deleting user account");
+        }
+      }
     }
-
-    // Remove auth/user account
-    const { result } = await $fetch("/api/deleteUserAccount", {
-      method: "post",
-      body: { userId: user.value.id },
-    });
-
-    if (result === "success") {
-      await supabaseAuth.auth.signOut();
-      await navigateTo("/");
-    }
-
-    // TODO: in future - do a proper cleanup of the user's data
+  } catch (err) {
+    loading.value = false;
+    console.log("error", err.message);
   }
 };
 </script>
