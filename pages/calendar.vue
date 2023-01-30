@@ -4,7 +4,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   EllipsisHorizontalIcon,
-} from "@heroicons/vue/20/solid/index.js";
+} from "@heroicons/vue/20/solid";
 import { DateTime } from "luxon";
 import CreateEventModal from "@/components/modals/CreateEventModal.vue";
 import EditEventModal from "@/components/modals/EditEventModal.vue";

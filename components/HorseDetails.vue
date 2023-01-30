@@ -3,7 +3,7 @@ import {
   ChevronLeftIcon,
   PencilSquareIcon,
   TrashIcon,
-} from "@heroicons/vue/20/solid/index.js";
+} from "@heroicons/vue/20/solid";
 import EditHorseModal from "@/components/modals/EditHorseModal.vue";
 import DeleteHorseModal from "@/components/modals/DeleteHorseModal.vue";
 

@@ -6,7 +6,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
-import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline/index.js";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 
 const loading = ref(false);
 

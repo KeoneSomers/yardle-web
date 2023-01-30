@@ -1,7 +1,7 @@
 <script setup>
 // imports
 import { DateTime } from "luxon";
-import { PencilIcon, TrashIcon } from "@heroicons/vue/24/outline/index.js";
+import { PencilIcon, TrashIcon } from "@heroicons/vue/24/outline";
 
 // refs
 const { event } = defineProps(["event"]);

@@ -3,7 +3,7 @@
 import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
 import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 import DeleteFeedModal from "@/components/modals/DeleteFeedModal.vue";
-import { PlusIcon } from "@heroicons/vue/20/solid/index.js";
+import { PlusIcon } from "@heroicons/vue/20/solid";
 
 // modal toggles
 const createModalOpen = ref(false);

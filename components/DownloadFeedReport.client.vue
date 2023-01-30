@@ -1,5 +1,5 @@
 <script setup>
-import { CloudArrowDownIcon } from "@heroicons/vue/20/solid/index.js";
+import { CloudArrowDownIcon } from "@heroicons/vue/20/solid";
 // import * as htmlToImage from "html-to-image";
 import { toPng } from "html-to-image";
 import download from "downloadjs";

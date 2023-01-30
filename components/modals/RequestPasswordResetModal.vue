@@ -6,8 +6,8 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
-import { KeyIcon } from "@heroicons/vue/24/outline/index.js";
-import { EnvelopeIcon } from "@heroicons/vue/20/solid/index.js";
+import { KeyIcon } from "@heroicons/vue/24/outline";
+import { EnvelopeIcon } from "@heroicons/vue/20/solid";
 
 const loading = ref(false);
 

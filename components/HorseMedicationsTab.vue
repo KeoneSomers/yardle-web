@@ -2,7 +2,7 @@
 // imports
 import CreateMedicationModal from "@/components/modals/CreateMedicationModal.vue";
 import DeleteMedicationModal from "@/components/modals/DeleteMedicationModal.vue";
-import { PlusIcon } from "@heroicons/vue/20/solid/index.js";
+import { PlusIcon } from "@heroicons/vue/20/solid";
 
 // modal toggles
 const createModalOpen = ref(false);

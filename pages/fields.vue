@@ -4,7 +4,7 @@ import CreateFieldModal from "@/components/modals/CreateFieldModal.vue";
 import EditFieldModal from "@/components/modals/EditFieldModal.vue";
 import DeleteFieldModal from "@/components/modals/DeleteFieldModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { EllipsisVerticalIcon } from "@heroicons/vue/20/solid/index.js";
+import { EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],

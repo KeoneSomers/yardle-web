@@ -1,8 +1,5 @@
 <script setup>
-import {
-  MagnifyingGlassIcon,
-  PlusIcon,
-} from "@heroicons/vue/20/solid/index.js";
+import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/vue/20/solid";
 import CreateHorseModal from "@/components/modals/CreateHorseModal.vue";
 import { DateTime } from "luxon";
 

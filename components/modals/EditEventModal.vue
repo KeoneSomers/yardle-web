@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@headlessui/vue";
 import { DateTime } from "luxon";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid/index.js";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 
 const loading = ref(false);
 

@@ -1,5 +1,5 @@
 <script setup>
-import { CheckIcon } from "@heroicons/vue/20/solid/index.js";
+import { CheckIcon } from "@heroicons/vue/20/solid";
 
 const features = [
   {

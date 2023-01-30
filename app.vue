@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import { PaperAirplaneIcon } from "@heroicons/vue/24/outline/index.js";
+import { PaperAirplaneIcon } from "@heroicons/vue/24/outline";
 import FeedbackModal from "@/components/modals/FeedbackModal.vue";
 
 useRouteManager();

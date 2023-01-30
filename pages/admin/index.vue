@@ -1,6 +1,6 @@
 <script setup>
 // super admin page
-import { TrashIcon } from "@heroicons/vue/24/outline/index.js";
+import { TrashIcon } from "@heroicons/vue/24/outline";
 
 definePageMeta({
   layout: "blank",

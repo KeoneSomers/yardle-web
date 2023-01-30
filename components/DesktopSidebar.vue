@@ -11,8 +11,8 @@ import {
   RectangleGroupIcon,
   ClipboardDocumentListIcon,
   LinkIcon,
-} from "@heroicons/vue/24/outline/index.js";
-import { EllipsisHorizontalIcon } from "@heroicons/vue/20/solid/index.js";
+} from "@heroicons/vue/24/outline";
+import { EllipsisHorizontalIcon } from "@heroicons/vue/20/solid";
 
 const inviteLinkModalOpen = ref(false);
 

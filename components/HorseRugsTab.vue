@@ -2,7 +2,7 @@
 // imports
 import CreateRugModal from "@/components/modals/CreateRugModal.vue";
 import DeleteRugModal from "@/components/modals/DeleteRugModal.vue";
-import { PlusIcon } from "@heroicons/vue/20/solid/index.js";
+import { PlusIcon } from "@heroicons/vue/20/solid";
 
 // modal toggles
 const createModalOpen = ref(false);

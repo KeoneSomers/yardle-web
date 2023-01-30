@@ -8,7 +8,7 @@ import {
 } from "@headlessui/vue";
 import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
 import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/vue/20/solid/index.js";
+import { CheckIcon, ChevronDownIcon } from "@heroicons/vue/20/solid";
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
