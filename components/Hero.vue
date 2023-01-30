@@ -35,7 +35,11 @@ import { ChevronRightIcon } from "@heroicons/vue/20/solid/index.js";
       >
         <Logo class="h-11 w-12" />
         <div class="mt-24 sm:mt-32 lg:mt-16">
-          <a href="#" class="inline-flex space-x-6">
+          <a
+            href="https://vagabond-gander-621.notion.site/Yardle-V1-0-38737fb5f72e47cdaa45d2371f98da64"
+            target="_blank"
+            class="inline-flex space-x-6"
+          >
             <span
               class="rounded-full bg-indigo-600/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-600 ring-1 ring-inset ring-indigo-600/10"
               >What's new</span
