@@ -115,7 +115,7 @@ const handleDelete = (rugId) => {
         </div>
       </div>
     </div>
-    <div v-else class="flex w-full mt-20 justify-center items-center">
+    <div v-else class="flex w-full my-20 justify-center items-center">
       <div class="text-center">
         <svg
           class="mx-auto h-12 w-12 text-gray-400"
@@ -133,7 +133,7 @@ const handleDelete = (rugId) => {
           />
         </svg>
         <h3 class="mt-2 text-sm font-medium text-gray-900">No Rugs</h3>
-        <p class="mt-1 text-sm text-gray-500">
+        <p class="mt-1 text-sm text-gray-500 px-10">
           Rugs that belong to your horses will be shown here.
         </p>
         <div class="mt-6">
