@@ -122,7 +122,7 @@ const handleFieldChange = async (e) => {
         :key="field.id"
         class="bg-gray-100 rounded-lg px-3 py-3 w-80 min-w-max mr-4 overflow-y-auto flex flex-col"
       >
-        <div class="flex items-center w-48 md:w-full">
+        <div class="flex items-center w-48 md:w-80">
           <div class="flex-1">
             <p
               class="text-gray-700 font-semibold font-sans tracking-wide text-sm"
