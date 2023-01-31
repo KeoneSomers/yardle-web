@@ -62,7 +62,7 @@ onMounted(async () => {
 
       <!-- page content -->
       <div
-        class="flex min-w-0 flex-1 flex-col overflow-hidden pt-16 pb-28 md:pt-0 md:pb-0"
+        class="flex min-w-0 flex-1 flex-col overflow-hidden pt-16 pb-28 lg:pt-0 lg:pb-0"
       >
         <MobileNavbar />
         <slot />
