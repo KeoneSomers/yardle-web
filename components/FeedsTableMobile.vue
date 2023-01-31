@@ -26,12 +26,39 @@ const props = defineProps(["feeds"]);
             <td
               class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-6"
             >
-              {{ feed.horse.name }}
+              <div class="flex justify-between mb-3">
+                <div class="flex items-center space-x-2">
+                  <SupabaseImage
+                    v-if="feed.horse.avatar_url"
+                    class="h-6 w-6 rounded-full overflow-hidden"
+                    id="horse-avatars"
+                    v-model:path="feed.horse.avatar_url"
+                  />
+                  <div
+                    v-else
+                    class="rounded-full h-6 w-6 text-white flex items-center justify-center"
+                    :class="
+                      feed.horse.avatar_background
+                        ? feed.horse.avatar_background
+                        : 'bg-pink-500'
+                    "
+                  >
+                    {{ feed.horse.name[0].toUpperCase() }}
+                  </div>
+
+                  <div>
+                    <p>{{ feed.horse.name }}</p>
+                  </div>
+                </div>
+                <div>--</div>
+              </div>
+
               <dl class="font-normal lg:hidden">
                 <dd class="mt-1 truncate text-gray-700" v-if="feed.condition">
                   <div
                     class="bg-purple-50 p-0.5 rounded border-purple-100 text-purple-800 whitespace-pre-wrap"
                   >
+                    Condition:
                     {{ feed.condition }}
                   </div>
                 </dd>
@@ -40,8 +67,9 @@ const props = defineProps(["feeds"]);
                   v-if="feed.instructions"
                 >
                   <div
-                    class="bg-orange-50 p-0.5 rounded border-orange-100 text-orange-800 whitespace-pre-wrap"
+                    class="bg-yellow-50 p-0.5 rounded border-yellow-100 text-yellow-700 whitespace-pre-wrap"
                   >
+                    Instructions:
                     {{ feed.instructions }}
                   </div>
                 </dd>
