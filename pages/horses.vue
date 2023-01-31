@@ -90,7 +90,7 @@ const selectHorse = (horseId) => {
 </script>
 
 <template>
-  <div class="relative z-0 flex flex-1 overflow-hidden">
+  <div class="relative z-0 flex flex-1 h-full">
     <!-- TODO: HorseDirectory.vue Component -->
     <div
       v-if="horses.length > 0"
