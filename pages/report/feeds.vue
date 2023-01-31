@@ -158,8 +158,8 @@ const setShadow = (event) => {
 </script>
 
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 h-full flex flex-col">
-    <div class="sm:flex sm:items-center my-16">
+  <div class="px-0 sm:px-6 lg:px-8 h-full flex flex-col">
+    <div class="sm:flex sm:items-center md:my-16 p-4 md:p-0">
       <div class="sm:flex-auto">
         <h1 class="text-xl font-semibold text-gray-900">Feed Report</h1>
         <p class="mt-2 text-sm text-gray-700">
@@ -171,7 +171,7 @@ const setShadow = (event) => {
         <button
           @click="() => (createModalOpen = true)"
           type="button"
-          class="inline-flex mr-2 items-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          class="inline-flex w-full md:w-fit justify-center md:mr-2 items-center rounded-md border border-transparent bg-indigo-600 md:px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           <PlusIcon class="-ml-1 mr-3 h-5 w-5" aria-hidden="true" />
           Create a feed
@@ -184,12 +184,12 @@ const setShadow = (event) => {
       <div
         ref="edgeShadowLeft"
         v-if="edgeShadowLeftShow"
-        class="w-6 z-50 h-full bg-gradient-to-r from-stone-200 absolute left-0 top-0 pointer-events-none border-l rounded"
+        class="hidden md:block w-6 z-50 h-full bg-gradient-to-r from-stone-200 absolute left-0 top-0 pointer-events-none border-l rounded"
       ></div>
       <div
         ref="edgeShadowRight"
         v-if="edgeShadowRightShow"
-        class="w-6 z-50 h-full bg-gradient-to-l from-stone-200 absolute right-0 top-0 pointer-events-none border-r rounded"
+        class="hidden md:block w-6 z-50 h-full bg-gradient-to-l from-stone-200 absolute right-0 top-0 pointer-events-none border-r rounded"
       ></div>
       <div
         :onscroll="setShadow"
