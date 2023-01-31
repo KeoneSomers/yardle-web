@@ -17,6 +17,7 @@ const client = useSupabaseClient();
 
 const selectedHorseId = useState("selectedHorseId");
 const horses = useState("horses");
+const viewingHorse = useState("viewingHorse");
 
 const handleDelete = async () => {
   // delete horse image
@@ -67,6 +68,7 @@ const handleDelete = async () => {
     }
 
     // close the modal
+    viewingHorse.value = false;
     emits("close");
   } else {
     console.log("error deleting horse");
