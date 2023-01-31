@@ -96,7 +96,7 @@ const handleFieldChange = async (e) => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col">
+  <div class="h-full flex flex-col overflow-y-auto">
     <div class="flex md:items-center md:justify-between p-4 md:p-12 pb-0">
       <div class="min-w-0 flex-1">
         <h2

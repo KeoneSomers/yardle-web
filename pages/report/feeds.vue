@@ -158,7 +158,7 @@ const setShadow = (event) => {
 </script>
 
 <template>
-  <div class="px-0 sm:px-6 lg:px-8 h-full flex flex-col">
+  <div class="px-0 sm:px-6 lg:px-8 h-full flex flex-col overflow-y-auto">
     <!-- Page Heading -->
     <div class="sm:flex sm:items-center md:my-16 p-4 md:p-0">
       <div class="sm:flex-auto">
