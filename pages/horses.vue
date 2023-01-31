@@ -13,6 +13,7 @@ const isOpen = ref(false);
 const searchString = ref("");
 const selectedHorseId = useState("selectedHorseId", () => 0);
 const horses = useState("horses");
+const viewingHorse = useState("viewingHorse", () => false);
 
 await useAsyncData("horses", async () => {
   const { data } = await client
@@ -81,13 +82,20 @@ watchEffect(() => {
     horseTab.value = 0;
   }
 });
+
+const selectHorse = (horseId) => {
+  selectedHorseId.value = horseId;
+  viewingHorse.value = true;
+};
 </script>
 
 <template>
   <div class="relative z-0 flex flex-1 overflow-hidden">
+    <!-- TODO: HorseDirectory.vue Component -->
     <div
       v-if="horses.length > 0"
-      class="w-96 flex-shrink-0 border-r border-gray-200 overflow-y-auto"
+      :class="{ hidden: viewingHorse }"
+      class="w-full md:block md:w-96 flex-shrink-0 border-r border-gray-200 overflow-y-auto"
     >
       <div class="px-4 pt-6 pb-4">
         <h2 class="text-lg font-medium text-gray-900">Horses</h2>
@@ -148,7 +156,7 @@ watchEffect(() => {
           </div>
           <ul role="list" class="relative z-0 divide-y divide-gray-200">
             <li
-              @click="() => (selectedHorseId = horse.id)"
+              @click="() => selectHorse(horse.id)"
               v-for="horse in groupedHorses[letter]"
               :key="horse.id"
             >
@@ -210,7 +218,10 @@ watchEffect(() => {
         </div>
       </nav>
     </div>
+
     <HorseDetails v-if="selectedHorseId > 0" />
+
+    <!-- Empty State -->
     <div
       v-if="horses.length == 0"
       class="flex h-full justify-center items-center w-full"

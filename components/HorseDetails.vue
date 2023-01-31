@@ -11,6 +11,7 @@ import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
 import HorseRugsTab from "@/components/HorseRugsTab.vue";
 import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
 import HorseMedicationsTab from "@/components/HorseMedicationsTab.vue";
+const viewingHorse = useState("viewingHorse");
 
 const selectedTab = useState("horseTab", () => 0);
 const tabs = [
@@ -58,16 +59,17 @@ watchEffect(async () => {
 
 <template>
   <div
-    class="relative z-0 flex-1 overflow-y-auto focus:outline-none xl:order-last"
+    class="relative md:block z-0 flex-1 overflow-y-auto focus:outline-none xl:order-last"
+    :class="{ hidden: !viewingHorse }"
   >
     <main v-if="horse">
       <!-- Breadcrumb -->
       <nav
-        class="flex items-start px-4 py-3 sm:px-6 lg:px-8 xl:hidden"
+        class="flex items-start px-4 py-3 sm:px-6 lg:px-8 md:hidden"
         aria-label="Breadcrumb"
       >
         <a
-          href="#"
+          @click="() => (viewingHorse = false)"
           class="inline-flex items-center space-x-3 text-sm font-medium text-gray-900"
         >
           <ChevronLeftIcon
