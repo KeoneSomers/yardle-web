@@ -159,9 +159,9 @@ const createEvent = (e, day) => {
     <div
       class="lg:hidden flex justify-center items-center w-full h-screen text-center"
     >
-      <p>
+      <p class="p-10 font-mono">
         The calendar is only viewable on larger screens.<br />
-        Yardle is working on a mobile app for smaller screens.
+        We're currently working on adding support for smaller screens.
       </p>
     </div>
     <div class="hidden lg:flex lg:h-screen lg:flex-col">

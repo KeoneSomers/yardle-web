@@ -24,7 +24,7 @@ const downloadReportImage = () => {
 </script>
 
 <template>
-  <div>
+  <div class="hidden lg:block">
     <button
       @click="downloadReportImage"
       type="button"

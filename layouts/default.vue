@@ -69,12 +69,4 @@ onMounted(async () => {
       </div>
     </div>
   </div>
-  <!-- <div class="hidden justify-center items-center h-screen">
-    <div>
-      <p class="font-mono text-center">
-        Yardle is currently only supported on bigger screens.<br />
-        Mobile app is in development!
-      </p>
-    </div>
-  </div> -->
 </template>

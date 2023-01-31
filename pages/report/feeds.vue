@@ -3,11 +3,7 @@ import { PlusIcon } from "@heroicons/vue/20/solid";
 import BasicModal from "@/components/BasicModal.vue";
 import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
 import { DialogTitle } from "@headlessui/vue";
-import {
-  ExclamationTriangleIcon,
-  InformationCircleIcon,
-  ClockIcon,
-} from "@heroicons/vue/24/outline";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 
 definePageMeta({
