@@ -159,9 +159,10 @@ const setShadow = (event) => {
 
 <template>
   <div class="px-0 sm:px-6 lg:px-8 h-full flex flex-col">
+    <!-- Page Heading -->
     <div class="sm:flex sm:items-center md:my-16 p-4 md:p-0">
       <div class="sm:flex-auto">
-        <h1 class="text-xl font-semibold text-gray-900">Feed Report</h1>
+        <h1 class="text-xl font-semibold text-gray-900">All Feeds</h1>
         <p class="mt-2 text-sm text-gray-700">
           A list of all the feeds for the horses in this yard including their
           ingredients, instructions and conditions.
@@ -174,13 +175,17 @@ const setShadow = (event) => {
           class="inline-flex w-full md:w-fit justify-center md:mr-2 items-center rounded-md border border-transparent bg-indigo-600 md:px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           <PlusIcon class="-ml-1 mr-3 h-5 w-5" aria-hidden="true" />
-          Create a feed
+          Add a feed
         </button>
         <DownloadFeedReport />
       </div>
     </div>
 
-    <div v-show="feeds.length > 0" class="relative flex-1 overflow-y-auto">
+    <!-- Desktop Table -->
+    <div
+      v-show="feeds.length > 0"
+      class="hidden sm:block relative flex-1 overflow-y-auto"
+    >
       <div
         ref="edgeShadowLeft"
         v-if="edgeShadowLeftShow"
@@ -368,6 +373,11 @@ const setShadow = (event) => {
         </table>
       </div>
     </div>
+
+    <!-- Mobile Table -->
+    <FeedsTableMobile v-show="feeds.length > 0" :feeds="feeds" />
+
+    <!-- Empty State -->
     <div
       v-show="feeds.length == 0"
       class="flex w-full flex-1 justify-center items-center"
