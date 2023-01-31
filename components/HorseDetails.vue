@@ -11,6 +11,8 @@ import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
 import HorseRugsTab from "@/components/HorseRugsTab.vue";
 import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
 import HorseMedicationsTab from "@/components/HorseMedicationsTab.vue";
+import { useScroll } from "@vueuse/core";
+
 const viewingHorse = useState("viewingHorse");
 
 const selectedTab = useState("horseTab", () => 0);
@@ -29,6 +31,9 @@ const horse = useState("horse");
 const deleteModalOpen = ref(false);
 const editModalOpen = ref(false);
 
+const horseDetailsElement = ref(null);
+const { x, y } = useScroll(horseDetailsElement);
+
 // initial fetch
 await useAsyncData("horseDetails", async () => {
   const { data } = await client
@@ -44,6 +49,9 @@ await useAsyncData("horseDetails", async () => {
 watchEffect(async () => {
   // Subsiquent Fetching when horse id changes
   if (selectedHorseId.value) {
+    y.value = 0;
+    console.log("scrolling to top");
+
     await useAsyncData("horseDetails", async () => {
       const { data } = await client
         .from("horses")
@@ -55,11 +63,18 @@ watchEffect(async () => {
     });
   }
 });
+
+watchEffect(async () => {
+  if (!viewingHorse.value) {
+    y.value = 0;
+    console.log("scrolling to top");
+  }
+});
 </script>
 
 <template>
   <div
-    class="relative md:block z-0 flex-1 overflow-y-auto focus:outline-none xl:order-last"
+    class="relative md:block z-0 flex-1 focus:outline-none xl:order-last"
     :class="{ hidden: !viewingHorse }"
   >
     <main v-if="horse" class="flex flex-col h-full">
@@ -82,7 +97,7 @@ watchEffect(async () => {
         </nav>
       </div>
 
-      <div class="overflow-y-auto">
+      <div ref="horseDetailsElement" class="overflow-y-auto">
         <article>
           <!-- Profile header -->
           <div>
