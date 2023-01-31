@@ -73,7 +73,7 @@ onMounted(async () => {
   <MobileSidebar />
 </template>
 
-<style>
+<style scoped>
 body {
   overflow: hidden;
 }
