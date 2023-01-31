@@ -54,7 +54,7 @@ onMounted(async () => {
 
 <template>
   <MobileNavbar />
-  <div class="flex overflow-hidden inset-0 fixed mt-16 md:mt-0">
+  <div class="h-screen flex overflow-hidden">
     <!-- desktop sidebar -->
     <div class="hidden lg:flex lg:flex-shrink-0">
       <div class="flex w-64 flex-col">
@@ -62,9 +62,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div
-      class="flex min-w-0 flex-1 flex-col overflow-y-scroll md:overflow-y-auto"
-    >
+    <div class="flex min-w-0 flex-1 flex-col md:overflow-y-auto">
       <slot />
     </div>
   </div>
