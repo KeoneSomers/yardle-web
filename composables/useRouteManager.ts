@@ -2,6 +2,7 @@ export function useRouteManager() {
   // Watch for changes (user)
   const user = useSupabaseUser();
   const authClient = useSupabaseAuthClient();
+  const sidebarOpen = useState("sidebarOpen");
   authClient.auth.onAuthStateChange((event, session) => {
     if (session) {
       // console.log("Logged in");
@@ -30,6 +31,9 @@ export function useRouteManager() {
     const requireNoAuth = route.meta.guards.includes("requireNoAuth");
     const requireYard = route.meta.guards.includes("requireYard");
     const requireNoYard = route.meta.guards.includes("requireNoYard");
+
+    console.log("Route changed");
+    sidebarOpen.value = false;
 
     // This code first checks if the user is not authenticated, and if they are not and requireAuth is true, it navigates to the homepage and exits the function.
     if (!user.value) {
