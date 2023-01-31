@@ -116,7 +116,7 @@ const handleFieldChange = async (e) => {
         </button>
       </div>
     </div>
-    <div class="flex flex-1 overflow-x-scroll p-4 md:p-8">
+    <div class="flex flex-1 overflow-x-scroll p-4 md:pt-0 md:px-8">
       <div
         v-for="field in fields"
         :key="field.id"
@@ -207,6 +207,15 @@ const handleFieldChange = async (e) => {
             <!-- </transition-group> -->
           </draggable>
         </div>
+      </div>
+      <div>
+        <button
+          @click="createModalOpen = true"
+          type="button"
+          class="hidden ml-3 lg:inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none whitespace-nowrap"
+        >
+          Add a field
+        </button>
       </div>
     </div>
   </div>
