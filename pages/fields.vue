@@ -97,7 +97,7 @@ const handleFieldChange = async (e) => {
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="md:flex md:items-center md:justify-between p-12 pb-0">
+    <div class="flex md:items-center md:justify-between p-4 md:p-12 pb-0">
       <div class="min-w-0 flex-1">
         <h2
           class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
@@ -105,13 +105,8 @@ const handleFieldChange = async (e) => {
           Field Groups
         </h2>
       </div>
-      <div class="mt-4 flex md:mt-0 md:ml-4">
-        <!-- <button
-          type="button"
-          class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          Edit
-        </button> -->
+
+      <div>
         <button
           @click="createModalOpen = true"
           type="button"
@@ -121,13 +116,13 @@ const handleFieldChange = async (e) => {
         </button>
       </div>
     </div>
-    <div class="flex flex-1 overflow-x-scroll p-12">
+    <div class="flex flex-1 overflow-x-scroll p-4 md:p-8">
       <div
         v-for="field in fields"
         :key="field.id"
-        class="bg-gray-100 rounded-lg px-3 py-3 column-width mr-4 overflow-y-auto flex flex-col"
+        class="bg-gray-100 rounded-lg px-3 py-3 w-80 min-w-max mr-4 overflow-y-auto flex flex-col"
       >
-        <div class="flex items-center">
+        <div class="flex items-center w-48 md:w-full">
           <div class="flex-1">
             <p
               class="text-gray-700 font-semibold font-sans tracking-wide text-sm"
@@ -233,12 +228,6 @@ const handleFieldChange = async (e) => {
 </template>
 
 <style scoped>
-.column-width {
-  min-width: 320px;
-  width: 320px;
-}
-/* Unfortunately @apply cannot be setup in codesandbox, 
-but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
 .ghost-card {
   opacity: 0.5;
   background: #f7fafc;
