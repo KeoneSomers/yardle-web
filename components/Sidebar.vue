@@ -51,6 +51,7 @@ const user = useSupabaseUser();
 const selectedYard = useState("selectedYard");
 const yard = useState("yard");
 const profile = useState("profile");
+const sidebarOpen = useState("sidebarOpen");
 
 // TODO: this should pull from db
 const roles = [
@@ -85,6 +86,7 @@ const handleUnselectYard = async () => {
 };
 
 const handleSignout = async () => {
+  sidebarOpen.value = false;
   supabaseAuthClient.auth.signOut();
 };
 </script>
