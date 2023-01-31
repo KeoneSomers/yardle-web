@@ -53,27 +53,28 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="h-screen hidden xl:flex">
-    <!-- Mobile Sidebar -->
-    <MobileSidebar />
+  <div class="flex h-screen flex-col">
+    <MobileNavbar />
+    <div class="flex h-full">
+      <MobileSidebar />
 
-    <!-- Desktop Sidebar -->
-    <DesktopSidebar />
+      <div class="hidden lg:flex lg:flex-shrink-0">
+        <div class="flex w-64 flex-col">
+          <Sidebar />
+        </div>
+      </div>
 
-    <div class="flex min-w-0 flex-1 flex-col overflow-auto">
-      <!-- Mobile Navbar -->
-      <!-- <MobileNavbar /> -->
-
-      <!-- Page Content -->
-      <slot />
+      <div class="flex min-w-0 flex-1 flex-col overflow-auto">
+        <slot />
+      </div>
     </div>
   </div>
-  <div class="xl:hidden flex justify-center items-center h-screen">
+  <!-- <div class="hidden justify-center items-center h-screen">
     <div>
       <p class="font-mono text-center">
         Yardle is currently only supported on bigger screens.<br />
         Mobile app is in development!
       </p>
     </div>
-  </div>
+  </div> -->
 </template>

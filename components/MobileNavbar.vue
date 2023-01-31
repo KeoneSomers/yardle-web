@@ -10,11 +10,7 @@ const sidebarOpen = useState("sidebarOpen");
       class="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-1.5"
     >
       <div>
-        <img
-          class="h-8 w-auto"
-          src="https://tailwindui.com/img/logos/mark.svg?color=pink&shade=500"
-          alt="Your Company"
-        />
+        <Logo class="h-6 w-8" />
       </div>
       <div>
         <button
