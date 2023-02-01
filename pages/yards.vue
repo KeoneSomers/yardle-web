@@ -1,7 +1,8 @@
 <script setup>
 import CreateYardModal from "@/components/modals/CreateYardModal.vue";
 import DeleteYardModal from "@/components/modals/DeleteYardModal.vue";
-import { PlusIcon } from "@heroicons/vue/20/solid";
+import { PlusIcon, EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 definePageMeta({
   guards: ["requireAuth", "requireNoYard"],
@@ -136,7 +137,7 @@ const handleLeaveYard = async (yardId) => {
           <div
             v-for="yard in yards"
             :key="yard.id"
-            class="border my-3 rounded-xl bg-gray-50 overflow-hidden flex items-center"
+            class="border my-3 rounded-xl bg-gray-50 flex items-center"
           >
             <div
               @click="handleSelectYard(yard.id)"
@@ -145,22 +146,61 @@ const handleLeaveYard = async (yardId) => {
               {{ yard.name }}
             </div>
             <!-- TODO: this should be based off role and not created_by -->
-            <div v-if="yard.created_by != user.id">
-              <button
-                @click="handleLeaveYard(yard.id)"
-                class="bg-red-500 mr-4 text-white rounded py-2 px-3"
+            <Menu as="div" class="relative inline-block text-left mr-5">
+              <div>
+                <MenuButton
+                  class="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                >
+                  <span class="sr-only">Open options</span>
+                  <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
+                </MenuButton>
+              </div>
+
+              <transition
+                enter-active-class="transition ease-out duration-100"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-75"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
               >
-                Leave
-              </button>
-            </div>
-            <div v-else>
-              <button
-                @click="handleDeleteYard(yard.id)"
-                class="bg-red-500 mr-4 text-white rounded py-2 px-3"
-              >
-                Delete
-              </button>
-            </div>
+                <MenuItems
+                  class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                >
+                  <div class="py-1">
+                    <MenuItem
+                      v-if="yard.created_by != user.id"
+                      v-slot="{ active }"
+                    >
+                      <button
+                        @click="handleLeaveYard(yard.id)"
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'block px-4 py-2 text-sm w-full text-left',
+                        ]"
+                      >
+                        Leave
+                      </button>
+                    </MenuItem>
+                    <MenuItem v-else v-slot="{ active }">
+                      <button
+                        @click="handleDeleteYard(yard.id)"
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'block px-4 py-2 text-sm w-full text-left',
+                        ]"
+                      >
+                        Delete
+                      </button>
+                    </MenuItem>
+                  </div>
+                </MenuItems>
+              </transition>
+            </Menu>
           </div>
         </div>
         <div v-else>
