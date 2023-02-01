@@ -53,7 +53,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen overflow-hidden pt-16 lg:pt-0">
+  <div class="flex flex-col min-h-full overflow-hidden pt-16 lg:pt-0">
     <div class="flex h-full overflow-hidden">
       <!-- desktop sidebar -->
       <div class="hidden lg:flex lg:flex-shrink-0 w-64 flex-col">
@@ -72,7 +72,11 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+html {
+  height: 100%;
+}
+
 body {
-  overflow: hidden;
+  height: 100%;
 }
 </style>
