@@ -66,6 +66,7 @@ await useAsyncData("all_feeds", async () => {
   feeds.value = await Promise.all(mappedFeeds);
 });
 
+// TODO: why is this here and not handled in the modal?
 const handleDelete = async () => {
   // delete the feeds ingredients
   const { error: ingredientsError } = await client
@@ -103,12 +104,12 @@ const handleDelete = async () => {
 };
 
 // delete modal
-const handleModalOpen = (feedId) => {
+const handleDeleteFeed = (feedId) => {
   selectedFeedId.value = feedId;
   deleteModalOpen.value = true;
 };
 
-const handleEdit = (feedId) => {
+const handleEditFeed = (feedId) => {
   selectedFeedId.value = feedId;
   editModalOpen.value = true;
 };
@@ -290,13 +291,13 @@ const setShadow = (event) => {
                   class="mt-2 flex justify-end w-full"
                 >
                   <button
-                    @click="handleEdit(feed.id)"
+                    @click="handleEditFeed(feed.id)"
                     class="text-gray-600 hover:text-gray-900 bg-gray-100 py-1 px-2 rounded mr-2"
                   >
                     Edit
                   </button>
                   <button
-                    @click="handleModalOpen(feed.id)"
+                    @click="handleDeleteFeed(feed.id)"
                     class="text-gray-600 hover:text-gray-900 bg-gray-100 py-1 px-2 rounded"
                   >
                     Delete
@@ -375,7 +376,12 @@ const setShadow = (event) => {
     </div>
 
     <!-- Mobile Table -->
-    <FeedsTableMobile v-show="feeds.length > 0" :feeds="feeds" />
+    <FeedsTableMobile
+      v-show="feeds.length > 0"
+      :feeds="feeds"
+      @editFeed="(id) => handleEditFeed(id)"
+      @deleteFeed="(id) => handleDeleteFeed(id)"
+    />
 
     <!-- Empty State -->
     <div
