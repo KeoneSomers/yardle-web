@@ -54,7 +54,7 @@ onMounted(async () => {
 
 <template>
   <div
-    class="flex flex-col min-h-full lg:h-screen overflow-hidden pt-16 lg:pt-0"
+    class="flex flex-col min-h-full md:h-screen overflow-hidden pt-16 lg:pt-0"
   >
     <div class="flex h-full overflow-hidden">
       <!-- desktop sidebar -->
