@@ -56,11 +56,17 @@ const deleteYard = async () => {
       .filter("horse_id", "in", `(${horseIds})`);
 
     await client
+      .from("ingredients")
+      .delete()
+      .filter("horse_id", "in", `(${horseIds})`);
+
+    await client
       .from("feeds")
       .delete()
       .filter("horse_id", "in", `(${horseIds})`);
 
     // delete all the yard horses
+    // TODO: Error here: need to delete feeds first!!
     await client.from("horses").delete().eq("yard_id", props.yardId);
   }
 
