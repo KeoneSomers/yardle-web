@@ -9,7 +9,7 @@ import {
 
 const loading = ref(false);
 
-defineProps(["isOpen"]);
+const props = defineProps(["isOpen"]);
 const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
@@ -18,12 +18,22 @@ const yards = useState("yards");
 const yardName = ref("");
 const error = ref("");
 
+watch(
+  () => props.isOpen,
+  async (isOpen) => {
+    if (isOpen) {
+      yardName.value = "";
+      error.value = "";
+      loading.value = false;
+    }
+  }
+);
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const handleSubmit = async () => {
-  // step 1: create the yard in the database
+const createYard = async () => {
   const { data: newYard, error: createError } = await client
     .from("yards")
     .insert({
@@ -61,6 +71,18 @@ const handleSubmit = async () => {
     }
   } else {
     error.value = createError.message + createError.hint;
+  }
+};
+
+const handleSubmit = async () => {
+  if (loading.value === false) {
+    try {
+      loading.value = true;
+      await createYard();
+    } catch (e) {
+      error.value = e.message;
+      loading.value = false;
+    }
   }
 };
 </script>

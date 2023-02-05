@@ -16,72 +16,89 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const yards = useState("yards");
 
+watch(
+  () => props.isOpen,
+  async (isOpen) => {
+    if (isOpen) {
+      loading.value = false;
+    }
+  }
+);
+
 const deleteYard = async () => {
-  // TODO: need proper error handling here and everywhere
-  // set all members profiles "selected_yard" to and "active_role" null
-  await client
-    .from("profiles")
-    .update({ selected_yard: null, active_role: null })
-    .eq("selected_yard", props.yardId);
+  if (loading.value === false) {
+    try {
+      loading.value = true;
+      // TODO: need proper error handling here and everywhere
+      // set all members profiles "selected_yard" to and "active_role" null
+      await client
+        .from("profiles")
+        .update({ selected_yard: null, active_role: null })
+        .eq("selected_yard", props.yardId);
 
-  // first: get all horse id's
-  const { data: _horseIds } = await client
-    .from("horses")
-    .select("id")
-    .eq("yard_id", props.yardId);
+      // first: get all horse id's
+      const { data: _horseIds } = await client
+        .from("horses")
+        .select("id")
+        .eq("yard_id", props.yardId);
 
-  const horseIds = _horseIds.map((e) => e.id);
+      const horseIds = _horseIds.map((e) => e.id);
 
-  // delete calendar_events_horses
-  if (horseIds.length > 0) {
-    await client
-      .from("calendar_events_horses")
-      .delete()
-      .filter("horse_id", "in", `(${horseIds})`);
+      // delete calendar_events_horses
+      if (horseIds.length > 0) {
+        await client
+          .from("calendar_events_horses")
+          .delete()
+          .filter("horse_id", "in", `(${horseIds})`);
+      }
+
+      // delete calendar_events
+      await client.from("calendar_events").delete().eq("yard_id", props.yardId);
+
+      if (horseIds.length > 0) {
+        // delete rugs, medications, feeds
+        await client
+          .from("rugs")
+          .delete()
+          .filter("horse_id", "in", `(${horseIds})`);
+
+        await client
+          .from("medications")
+          .delete()
+          .filter("horse_id", "in", `(${horseIds})`);
+
+        await client
+          .from("ingredients")
+          .delete()
+          .filter("horse_id", "in", `(${horseIds})`);
+
+        await client
+          .from("feeds")
+          .delete()
+          .filter("horse_id", "in", `(${horseIds})`);
+
+        // delete all the yard horses
+        // TODO: Error here: need to delete feeds first!!
+        await client.from("horses").delete().eq("yard_id", props.yardId);
+      }
+
+      await client.from("fields").delete().eq("yard_id", props.yardId);
+
+      // delete all the yard members
+      await client.from("profiles_yards").delete().eq("yard_id", props.yardId);
+
+      // delete the yard
+      await client.from("yards").delete().eq("id", props.yardId);
+
+      // success! - now remove the yard from the webpage
+      const yardIndex = yards.value.map((e) => e.id).indexOf(props.yardId);
+      yards.value.splice(yardIndex, 1);
+      emits("close");
+    } catch (err) {
+      loading.value = false;
+      console.log(err);
+    }
   }
-
-  // delete calendar_events
-  await client.from("calendar_events").delete().eq("yard_id", props.yardId);
-
-  if (horseIds.length > 0) {
-    // delete rugs, medications, feeds
-    await client
-      .from("rugs")
-      .delete()
-      .filter("horse_id", "in", `(${horseIds})`);
-
-    await client
-      .from("medications")
-      .delete()
-      .filter("horse_id", "in", `(${horseIds})`);
-
-    await client
-      .from("ingredients")
-      .delete()
-      .filter("horse_id", "in", `(${horseIds})`);
-
-    await client
-      .from("feeds")
-      .delete()
-      .filter("horse_id", "in", `(${horseIds})`);
-
-    // delete all the yard horses
-    // TODO: Error here: need to delete feeds first!!
-    await client.from("horses").delete().eq("yard_id", props.yardId);
-  }
-
-  await client.from("fields").delete().eq("yard_id", props.yardId);
-
-  // delete all the yard members
-  await client.from("profiles_yards").delete().eq("yard_id", props.yardId);
-
-  // delete the yard
-  await client.from("yards").delete().eq("id", props.yardId);
-
-  // success! - now remove the yard from the webpage
-  const yardIndex = yards.value.map((e) => e.id).indexOf(props.yardId);
-  yards.value.splice(yardIndex, 1);
-  emits("close");
 };
 </script>
 
@@ -145,7 +162,7 @@ const deleteYard = async () => {
                 <button
                   v-if="!loading"
                   type="button"
-                  class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                  class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto sm:text-sm"
                   @click="deleteYard"
                 >
                   Delete
@@ -153,7 +170,7 @@ const deleteYard = async () => {
                 <LoadingButton v-else />
                 <button
                   type="button"
-                  class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                  class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 sm:mr-3 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
                   @click="$emit('close')"
                   ref="cancelButtonRef"
                 >
