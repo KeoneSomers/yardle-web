@@ -10,5 +10,6 @@ definePageMeta({
     <Hero />
     <Cta />
     <Features />
+    <Faq />
   </div>
 </template>
