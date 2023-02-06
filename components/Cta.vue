@@ -12,7 +12,7 @@
         src="@/assets/cta_banner.webp"
         alt=""
       />
-      <!-- <svg
+      <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 926 676"
         aria-hidden="true"
@@ -36,7 +36,7 @@
             <stop offset="1" stop-color="#FF4694" />
           </linearGradient>
         </defs>
-      </svg> -->
+      </svg>
     </div>
     <div class="relative mx-auto max-w-7xl py-24 sm:py-32 lg:py-40 lg:px-8">
       <div
@@ -59,13 +59,13 @@
           making it easy for experienced yard managers or new horse owners to
           keep their yard running smoothly and their horses healthy.
         </p>
-        <!-- <div class="mt-8">
-          <a
-            href="#"
+        <div class="mt-8">
+          <NuxtLink
+            to="/signup"
             class="inline-flex rounded-md bg-white/10 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            >Visit the help center</a
+            >Get started</NuxtLink
           >
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
