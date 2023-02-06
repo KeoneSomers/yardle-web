@@ -5,7 +5,7 @@ const features = [
   {
     name: "Invite Team Members",
     description:
-      "Members of your yard can join you on Yardle where they can view and contribute to yard information.",
+      "Add members to your yard and work together in managing your horses. This makes it easier to collaborate on horse care and ensure that all details are kept up to date",
   },
   {
     name: "Horses Details",
