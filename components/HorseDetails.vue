@@ -102,7 +102,7 @@ watchEffect(async () => {
             <div>
               <img
                 class="h-32 w-full object-cover lg:h-48"
-                src="~/assets/banner.jpeg"
+                src="~/assets/banner.webp"
                 alt=""
               />
             </div>
