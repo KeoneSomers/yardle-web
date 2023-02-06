@@ -24,7 +24,7 @@ export default defineNuxtConfig({
         {
           name: "keywords",
           content:
-            "horse livery, yard managment, horse tool, equestrian yard management, equestrian",
+            "horse livery, yard managment, horse tool, equestrian yard management, equestrian, horse management website, horse, equestrian yard manager",
         },
         { name: "author", content: "Yardle" },
       ],

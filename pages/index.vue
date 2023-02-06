@@ -8,6 +8,7 @@ definePageMeta({
 <template>
   <div>
     <Hero />
+    <Cta />
     <Features />
   </div>
 </template>
