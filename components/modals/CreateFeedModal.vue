@@ -19,7 +19,7 @@ const horses = useState("horses");
 const selectedHorseId = useState("selectedHorseId");
 const selectedYard = useState("selectedYard");
 const route = useRoute();
-const mustManualSelectedHorse = ref(route.path == "/report/feeds");
+const mustManualSelectedHorse = ref(route.path == "/yard/feeds");
 
 const ingredients = ref([]);
 const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];

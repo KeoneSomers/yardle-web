@@ -62,7 +62,7 @@ const handleSelectYard = async (yardId) => {
     return;
   }
 
-  // update user in db (realtime will navigate them to the /horses page automatically)
+  // update user in db (realtime will navigate them to the /yard/horses page automatically)
   const { error: updateProfileError } = await client
     .from("profiles")
     .update({ selected_yard: yardId, active_role: profile_yard.role })
@@ -74,18 +74,7 @@ const handleSelectYard = async (yardId) => {
   }
 
   selectedYard.value = yardId;
-  // navigateTo("/horses");
 };
-
-// const profile = useState("profile");
-
-// watchEffect(() => {
-//   if (profile.value) {
-//     if (profile.value.selected_yard) {
-//       navigateTo("/horses");
-//     }
-//   }
-// });
 
 // Todo - Need a warning modal
 const handleLeaveYard = async (yardId) => {

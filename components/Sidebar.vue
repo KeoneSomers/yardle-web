@@ -17,28 +17,28 @@ import { EllipsisHorizontalIcon } from "@heroicons/vue/20/solid";
 const inviteLinkModalOpen = ref(false);
 
 const navigation = [
-  { name: "Dashboard", to: "/dashboard", icon: HomeIcon, hint: "Soon" },
+  { name: "Dashboard", to: "/yard/dashboard", icon: HomeIcon, hint: "Soon" },
   {
     name: "Horses",
-    to: "/horses",
+    to: "/yard/horses",
     icon: MagnifyingGlassCircleIcon,
     hint: "",
   },
-  { name: "Members", to: "/members", icon: UserGroupIcon, hint: "" },
-  { name: "Calendar", to: "/calendar", icon: CalendarIcon, hint: "" },
+  { name: "Members", to: "/yard/members", icon: UserGroupIcon, hint: "" },
+  { name: "Calendar", to: "/yard/calendar", icon: CalendarIcon, hint: "" },
   {
     name: "Feeds",
-    to: "/report/feeds",
+    to: "/yard/feeds",
     icon: ClipboardDocumentListIcon,
   },
   {
     name: "Field Groups",
-    to: "/fields",
+    to: "/yard/fields",
     icon: RectangleGroupIcon,
   },
   {
     name: "Rugs",
-    to: "/report/rugs",
+    to: "/yard/rugs",
     icon: ClipboardDocumentListIcon,
     hint: "Soon",
   },

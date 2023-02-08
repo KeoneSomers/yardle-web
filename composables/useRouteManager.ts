@@ -50,7 +50,7 @@ export function useRouteManager() {
       }
 
       if (selectedYard.value) {
-        navigateTo("/horses");
+        navigateTo("/yard/horses");
       } else {
         navigateTo("/yards");
       }
@@ -68,7 +68,7 @@ export function useRouteManager() {
     // Then, it checks the value of requireNoYard. If it's true, it checks if there's a selectedYard and navigates to the appropriate page.
     if (requireNoYard) {
       if (selectedYard.value) {
-        navigateTo("/horses");
+        navigateTo("/yard/horses");
       }
       return;
     }
