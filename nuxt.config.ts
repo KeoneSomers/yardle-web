@@ -25,7 +25,7 @@ export default defineNuxtConfig({
         {
           name: "keywords",
           content:
-            "horseback riding, horse breeding, Equine Veterinarian, horse boarding near me, horse stables near me, Horse Training, Leasing, horse rescue, horse blanket, stable management app, liberty horse training, horse training app, horse apps, equilab, ridely, secretary, equestfile, horse livery, yard managment, horse tool, equestrian yard management, equestrian, horse management website, horse, equestrian yard manager",
+            "horse management app, horseback riding, horse breeding, Equine Veterinarian, horse boarding near me, horse stables near me, Horse Training, Leasing, horse rescue, horse blanket, stable management app, liberty horse training, horse training app, horse apps, equilab, ridely, secretary, equestfile, horse livery, yard managment, horse tool, equestrian yard management, equestrian, horse management website, horse, equestrian yard manager",
         },
         { name: "author", content: "Yardle" },
       ],
