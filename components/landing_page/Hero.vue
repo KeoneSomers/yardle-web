@@ -61,8 +61,8 @@ import { ChevronRightIcon } from "@heroicons/vue/20/solid";
           The yard management platform
         </h1>
         <p class="mt-6 text-lg leading-8 text-gray-600">
-          Yardle gives you all the tools you and your team need to help you run
-          your equestrian yard. Manage yards, horses, events and much more.
+          Whether you're a horse owner, breeder, trainer, or a yard owner,
+          Yardle is the perfect tool for you.
         </p>
         <div class="mt-10 flex items-center gap-x-6">
           <NuxtLink
