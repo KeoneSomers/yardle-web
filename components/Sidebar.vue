@@ -83,6 +83,7 @@ const handleUnselectYard = async () => {
   }
 
   selectedYard.value = null;
+  navigateTo("/yards");
 };
 
 const handleSignout = async () => {

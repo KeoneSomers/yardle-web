@@ -12,10 +12,7 @@ const client = useSupabaseClient();
 
 let realtimeChannel: RealtimeChannel;
 
-const selectedYard = useState<number | undefined>(
-  "selectedYard",
-  () => undefined
-);
+const selectedYard = useState("selectedYard", () => undefined);
 
 const profile = useState<any>("profile");
 

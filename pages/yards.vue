@@ -74,6 +74,7 @@ const handleSelectYard = async (yardId) => {
   }
 
   selectedYard.value = yardId;
+  navigateTo("/yard/horses");
 };
 
 // Todo - Need a warning modal

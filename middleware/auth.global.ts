@@ -1,61 +1,73 @@
-// Due to Vercel serverless function crashing - i've decided to disable the middleware at this time
+export default defineNuxtRouteMiddleware(async (to, _from) => {
+  const supabase = useSupabaseClient();
+  const user = useSupabaseUser();
+  const selectedYardId = useState<number | undefined>("selectedYard", () => 0);
+  const isFirstLoad = useState<boolean>("firstLoad", () => true);
 
-export default defineNuxtRouteMiddleware(async (to) => {
-  // const user = useSupabaseUser();
-  // const client = useSupabaseClient();
-  // const selectedYard = useState("selectedYard");
-  // // on cold page load - get the users selected yard directly from the db since it will be undefined in the store at this point.
-  // if (user.value && !selectedYard.value) {
-  //     const { data } = await client
-  //         .from("profiles")
-  //         .select("selected_yard")
-  //         .eq("id", user.value?.id)
-  //         .single();
-  //     if (data) {
-  //         selectedYard.value = data.selected_yard;
-  //     }
-  // }
-  // // TODO: middleware overhaul. split-out into multiple files and then define each middleware on each page
-  // if (
-  //     to.path != `/join/${to.params.invite_code}` &&
-  //     to.path != "/resetpassword"
-  // ) {
-  //     // variables
-  //     const hasSelectedYard = selectedYard.value;
-  //     const nonProtectedPages = ["/", "/login", "/signup"];
-  //     // visiter is trying to access NON-AUTH pages
-  //     if (nonProtectedPages.includes(to.path)) {
-  //         if (user.value) {
-  //             if (hasSelectedYard) {
-  //                 navigateTo("/horses");
-  //             } else {
-  //                 navigateTo("/yards");
-  //             }
-  //         }
-  //     }
-  //     // visiter is trying to access AUTH pages
-  //     if (!nonProtectedPages.includes(to.path)) {
-  //         if (!user.value) navigateTo("/");
-  //         if (user.value) {
-  //             // already have selected yard
-  //             if (hasSelectedYard) {
-  //                 if (to.path == "/yards") navigateTo("/horses");
-  //             }
-  //             // have not selected a yard
-  //             if (!hasSelectedYard) {
-  //                 const yardProtectedPages = [
-  //                     "/dashboard",
-  //                     "/horses",
-  //                     "/members",
-  //                     "/yard/calendar",
-  //                     "/fields",
-  //                     "/yard/rugs",
-  //                     "/yard/feeds",
-  //                 ];
-  //                 if (yardProtectedPages.includes(to.path))
-  //                     navigateTo("/yards");
-  //             }
-  //         }
-  //     }
-  // }
+  const getYard = async () => {
+    if (user.value) {
+      const { data } = await supabase
+        .from("profiles")
+        .select("selected_yard, active_role")
+        .eq("id", user.value?.id)
+        .single();
+
+      if (data) {
+        return data.selected_yard;
+      } else {
+        return 0;
+      }
+    }
+  };
+
+  // only run this once on first load on the server
+  if (isFirstLoad.value === true) {
+    selectedYardId.value = await getYard();
+    isFirstLoad.value = false;
+  }
+
+  const guards = {
+    requireAuth: to.meta.guards
+      ? to.meta.guards.includes("requireAuth")
+      : false,
+    requireNoAuth: to.meta.guards
+      ? to.meta.guards.includes("requireNoAuth")
+      : false,
+    requireYard: to.meta.guards
+      ? to.meta.guards.includes("requireYard")
+      : false,
+    requireNoYard: to.meta.guards
+      ? to.meta.guards.includes("requireNoYard")
+      : false,
+  };
+
+  // Logged out
+  if (!user.value) {
+    console.log("User logged out, Redirecting to login page");
+    if (guards.requireAuth) return navigateTo("/login");
+  }
+
+  // Logged in
+  if (user.value) {
+    if (guards.requireNoAuth) {
+      console.log(
+        "User logged in but trying to access an NoAuth page, Redirecting to yards page"
+      );
+      return navigateTo("/yards");
+    }
+
+    // ...without a yard
+    if (!selectedYardId.value || selectedYardId.value === 0) {
+      console.log("User logged in without a yard, Redirecting to yards page");
+      if (guards.requireYard) return navigateTo("/yards");
+    }
+
+    // ...with a yard
+    if (selectedYardId.value && selectedYardId.value > 0) {
+      if (guards.requireNoYard && to.path !== "/yard/horses") {
+        console.log("User logged in with a yard, Redirecting to horses page");
+        return navigateTo("/yard/horses");
+      }
+    }
+  }
 });
