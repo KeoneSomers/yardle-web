@@ -28,6 +28,18 @@ const handleDeleteField = (field) => {
 
 const selectedYardId = useState("selectedYard");
 const horses = useState("horses");
+const getHorses = async () => {
+  await useAsyncData("horses", async () => {
+    const { data } = await client
+      .from("horses")
+      .select()
+      .eq("yard_id", selectedYardId.value)
+      .order("name", { ascending: true });
+
+    horses.value = data;
+  });
+};
+
 const fields = useState("fields", () => [
   {
     id: 0,
@@ -65,6 +77,8 @@ const getFields = async () => {
   });
 };
 
+await getHorses();
+
 onMounted(async () => {
   // TODO: this is quite in efficient to do every time from scratch
   fields.value = [
@@ -75,6 +89,7 @@ onMounted(async () => {
     },
   ];
 
+  console.log(horses.value);
   await getFields();
 });
 
