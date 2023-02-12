@@ -11,7 +11,6 @@ const user = useSupabaseUser();
 const yard = ref(null);
 const client = useSupabaseClient();
 const error = ref("");
-const profile = useState("profile");
 
 // first get some basic info about the yard from the db
 const getBasicYardData = async () => {

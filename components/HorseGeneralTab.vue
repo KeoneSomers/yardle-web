@@ -1,5 +1,6 @@
 <script setup>
 import { DateTime } from "luxon";
+import { CalendarDaysIcon, ArrowRightIcon } from "@heroicons/vue/24/outline";
 
 const horse = useState("horse");
 const yard = useState("yard");
@@ -211,11 +212,29 @@ watchEffect(async () => {
       </div>
     </dl>
 
-    <p class="mt-10">Calendar Events</p>
-    <p class="text-xs text-gray-600">
-      Events you create in the calendar that include this horse will appear
-      here.
-    </p>
+    <div class="flex mt-10">
+      <div>
+        <div class="p-2 bg-blue-100 rounded-xl mt-1 mr-3">
+          <CalendarDaysIcon class="h-5 w-5 text-blue-700" />
+        </div>
+      </div>
+      <div class="flex-1">
+        <p>Calendar Events</p>
+        <p class="text-xs text-gray-600">
+          Events you create in the calendar that include this horse will appear
+          here.
+        </p>
+      </div>
+      <div>
+        <NuxtLink
+          to="/yard/calendar"
+          class="p-2 bg-blue-500 hover:bg-blue-600 rounded-xl mt-1 block cursor-pointer ml-3"
+        >
+          <ArrowRightIcon class="h-5 w-5 text-white" />
+        </NuxtLink>
+      </div>
+    </div>
+
     <dl
       class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 border rounded-xl mt-3 p-4"
     >
