@@ -5,7 +5,6 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
     "@nuxt/image-edge",
-    "nuxt-delay-hydration",
   ],
   plugins: [{ src: "~/plugins/vercel.ts", mode: "client" }],
   typescript: {
