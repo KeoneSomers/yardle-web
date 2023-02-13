@@ -97,7 +97,7 @@ onUnmounted(() => {
       <button
         @click="feedbackModalOpen = true"
         type="button"
-        class="hidden md:inline-flex fixed bottom-5 right-24 items-center rounded-full border border-transparent bg-indigo-600 p-3 pr-4 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        class="hidden md:inline-flex fixed bottom-5 right-24 items-center rounded-full border border-transparent bg-indigo-600 p-4 pr-4 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
         <PaperAirplaneIcon class="h-6 w-6 mr-3" aria-hidden="true" />
         Send Feedback
