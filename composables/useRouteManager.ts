@@ -9,13 +9,11 @@ export function useRouteManager() {
     }
   });
 
-  const router = useRouter();
   const route = useRoute();
   const selectedYard = useState("selectedYard");
   // invite code if there is one (could also be undefined or null)
 
   watchEffect(async () => {
-    console.log(route.fullPath);
     sidebarOpen.value = false;
 
     const { invite_code } = route.query;

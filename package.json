@@ -18,6 +18,7 @@
     "@headlessui/vue": "^1.7.9",
     "@heroicons/vue": "^2.0.15",
     "@pinia/nuxt": "^0.4.6",
+    "@tawk.to/tawk-messenger-vue-3": "^1.0.1",
     "@vercel/analytics": "^0.1.8",
     "@vueuse/core": "^9.12.0",
     "downloadjs": "^1.4.7",
