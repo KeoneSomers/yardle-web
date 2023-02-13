@@ -14,6 +14,9 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "Yardle - Equestrian Yard Management",
+      htmlAttrs: {
+        lang: "en",
+      },
       script: [
         {
           id: "cookieyes",
