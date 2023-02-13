@@ -7,9 +7,10 @@
     <div
       class="relative h-80 overflow-hidden bg-indigo-600 md:absolute md:left-0 md:h-full md:w-1/3 lg:w-1/2"
     >
-      <img
+      <nuxt-img
+        quality="20"
         class="h-full w-full object-cover"
-        src="@/assets/cta_banner.webp"
+        src="/cta_banner.webp"
         alt=""
       />
       <svg

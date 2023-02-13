@@ -100,10 +100,10 @@ watchEffect(async () => {
           <!-- Profile header -->
           <div>
             <div>
-              <img
+              <nuxt-img
+                quality="20"
                 class="h-32 w-full object-cover lg:h-48"
-                src="~/assets/banner.webp"
-                alt=""
+                src="/banner.webp"
               />
             </div>
             <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
