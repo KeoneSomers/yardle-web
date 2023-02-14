@@ -100,11 +100,6 @@ watchEffect(async () => {
           <!-- Profile header -->
           <div>
             <div>
-              <p
-                class="fixed top-0 right-0 text-xs bg-black opacity-50 text-white"
-              >
-                SVGBackgrounds.com
-              </p>
               <div class="h-32 w-full object-cover lg:h-48 banner-svg"></div>
             </div>
             <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
