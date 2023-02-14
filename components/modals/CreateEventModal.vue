@@ -153,14 +153,6 @@ const handleSubmit = async () => {
       notes.value = "";
       all_day.value = false;
 
-      // send sms
-      // const { result } = await $fetch("/api/SendSms", {
-      //   method: "post",
-      //   body: { userId: user.value.id },
-      // });
-
-      // console.log(result);
-
       loading.value = false;
       emits("close");
     }
