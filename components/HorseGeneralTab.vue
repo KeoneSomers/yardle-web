@@ -5,6 +5,9 @@ import { CalendarDaysIcon, ArrowRightIcon } from "@heroicons/vue/24/outline";
 const horse = useState("horse");
 const yard = useState("yard");
 const client = useSupabaseClient();
+const todaysDateString = DateTime.fromMillis(DateTime.now().ts)
+  .toISO()
+  .slice(0, 10);
 
 // const getAge = (dateString) => {
 //     var today = new Date();
@@ -256,15 +259,34 @@ watchEffect(async () => {
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Next Farrier Visit</dt>
         <dd class="mt-1 text-sm text-gray-900">
-          <span v-if="farrierLastAndNext.nextDate">{{
-            `${DateTime.fromISO(
-              farrierLastAndNext.nextDate.date_time
-            ).toLocaleString(DateTime.DATE_MED)}
+          <span
+            v-if="farrierLastAndNext.nextDate"
+            class="text-green-700"
+            :class="[
+              {
+                'text-orange-500':
+                  DateTime.fromISO(farrierLastAndNext.nextDate.date_time)
+                    .diff(DateTime.fromISO(todaysDateString), 'days')
+                    .toObject().days === 1,
+              },
+              {
+                'text-red-700':
+                  DateTime.fromISO(farrierLastAndNext.nextDate.date_time)
+                    .diff(DateTime.fromISO(todaysDateString), 'days')
+                    .toObject().days === 0,
+              },
+            ]"
+            >{{
+              `${DateTime.fromISO(
+                farrierLastAndNext.nextDate.date_time
+              ).toLocaleString(DateTime.DATE_MED)}
                           (${DateTime.fromISO(
                             farrierLastAndNext.nextDate.date_time
                           ).toRelativeCalendar()})`
-          }}</span>
+            }}</span
+          >
           <span v-else>--</span>
+          <p v-if="farrierLastAndNext.nextDate"></p>
         </dd>
       </div>
 
@@ -286,14 +308,32 @@ watchEffect(async () => {
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Next Dentist Visit</dt>
         <dd class="mt-1 text-sm text-gray-900">
-          <span v-if="dentistLastAndNext.nextDate">{{
-            `${DateTime.fromISO(
-              dentistLastAndNext.nextDate.date_time
-            ).toLocaleString(DateTime.DATE_MED)}
+          <span
+            v-if="dentistLastAndNext.nextDate"
+            class="text-green-700"
+            :class="[
+              {
+                'text-orange-500':
+                  DateTime.fromISO(dentistLastAndNext.nextDate.date_time)
+                    .diff(DateTime.fromISO(todaysDateString), 'days')
+                    .toObject().days === 1,
+              },
+              {
+                'text-red-700':
+                  DateTime.fromISO(dentistLastAndNext.nextDate.date_time)
+                    .diff(DateTime.fromISO(todaysDateString), 'days')
+                    .toObject().days === 0,
+              },
+            ]"
+            >{{
+              `${DateTime.fromISO(
+                dentistLastAndNext.nextDate.date_time
+              ).toLocaleString(DateTime.DATE_MED)}
                           (${DateTime.fromISO(
                             dentistLastAndNext.nextDate.date_time
                           ).toRelativeCalendar()})`
-          }}</span>
+            }}</span
+          >
           <span v-else>--</span>
         </dd>
       </div>
@@ -316,14 +356,32 @@ watchEffect(async () => {
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Next Worming</dt>
         <dd class="mt-1 text-sm text-gray-900">
-          <span v-if="wormingLastAndNext.nextDate">{{
-            `${DateTime.fromISO(
-              wormingLastAndNext.nextDate.date_time
-            ).toLocaleString(DateTime.DATE_MED)}
+          <span
+            v-if="wormingLastAndNext.nextDate"
+            class="text-green-700"
+            :class="[
+              {
+                'text-orange-500':
+                  DateTime.fromISO(wormingLastAndNext.nextDate.date_time)
+                    .diff(DateTime.fromISO(todaysDateString), 'days')
+                    .toObject().days === 1,
+              },
+              {
+                'text-red-700':
+                  DateTime.fromISO(wormingLastAndNext.nextDate.date_time)
+                    .diff(DateTime.fromISO(todaysDateString), 'days')
+                    .toObject().days === 0,
+              },
+            ]"
+            >{{
+              `${DateTime.fromISO(
+                wormingLastAndNext.nextDate.date_time
+              ).toLocaleString(DateTime.DATE_MED)}
                           (${DateTime.fromISO(
                             wormingLastAndNext.nextDate.date_time
                           ).toRelativeCalendar()})`
-          }}</span>
+            }}</span
+          >
           <span v-else>--</span>
         </dd>
       </div>
@@ -346,14 +404,32 @@ watchEffect(async () => {
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Next Vaccinations</dt>
         <dd class="mt-1 text-sm text-gray-900">
-          <span v-if="vaccinationsLastAndNext.nextDate">{{
-            `${DateTime.fromISO(
-              vaccinationsLastAndNext.nextDate.date_time
-            ).toLocaleString(DateTime.DATE_MED)}
+          <span
+            v-if="vaccinationsLastAndNext.nextDate"
+            class="text-green-700"
+            :class="[
+              {
+                'text-orange-500':
+                  DateTime.fromISO(vaccinationsLastAndNext.nextDate.date_time)
+                    .diff(DateTime.fromISO(todaysDateString), 'days')
+                    .toObject().days === 1,
+              },
+              {
+                'text-red-700':
+                  DateTime.fromISO(vaccinationsLastAndNext.nextDate.date_time)
+                    .diff(DateTime.fromISO(todaysDateString), 'days')
+                    .toObject().days === 0,
+              },
+            ]"
+            >{{
+              `${DateTime.fromISO(
+                vaccinationsLastAndNext.nextDate.date_time
+              ).toLocaleString(DateTime.DATE_MED)}
                           (${DateTime.fromISO(
                             vaccinationsLastAndNext.nextDate.date_time
                           ).toRelativeCalendar()})`
-          }}</span>
+            }}</span
+          >
           <span v-else>--</span>
         </dd>
       </div>
@@ -380,14 +456,32 @@ watchEffect(async () => {
           Next Chiropractor Visit
         </dt>
         <dd class="mt-1 text-sm text-gray-900">
-          <span v-if="chiropractorLastAndNext.nextDate">{{
-            `${DateTime.fromISO(
-              chiropractorLastAndNext.nextDate.date_time
-            ).toLocaleString(DateTime.DATE_MED)}
+          <span
+            v-if="chiropractorLastAndNext.nextDate"
+            class="text-green-700"
+            :class="[
+              {
+                'text-orange-500':
+                  DateTime.fromISO(chiropractorLastAndNext.nextDate.date_time)
+                    .diff(DateTime.fromISO(todaysDateString), 'days')
+                    .toObject().days === 1,
+              },
+              {
+                'text-red-700':
+                  DateTime.fromISO(chiropractorLastAndNext.nextDate.date_time)
+                    .diff(DateTime.fromISO(todaysDateString), 'days')
+                    .toObject().days === 0,
+              },
+            ]"
+            >{{
+              `${DateTime.fromISO(
+                chiropractorLastAndNext.nextDate.date_time
+              ).toLocaleString(DateTime.DATE_MED)}
                           (${DateTime.fromISO(
                             chiropractorLastAndNext.nextDate.date_time
                           ).toRelativeCalendar()})`
-          }}</span>
+            }}</span
+          >
           <span v-else>--</span>
         </dd>
       </div>
