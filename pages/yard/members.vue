@@ -103,7 +103,7 @@ const handleRoleChange = async (memberId, roleId) => {
 </script>
 
 <template>
-  <div class="p-4 sm:p-6 lg:p-8 overflow-y-auto">
+  <div class="p-4 sm:p-6 lg:p-8 overflow-y-auto h-full">
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
         <h1 class="text-xl font-semibold text-gray-900">Members</h1>
