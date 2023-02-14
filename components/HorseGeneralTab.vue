@@ -265,13 +265,17 @@ watchEffect(async () => {
             :class="[
               {
                 'text-orange-500':
-                  DateTime.fromISO(farrierLastAndNext.nextDate.date_time)
+                  DateTime.fromISO(
+                    farrierLastAndNext.nextDate.date_time.slice(0, 10)
+                  )
                     .diff(DateTime.fromISO(todaysDateString), 'days')
                     .toObject().days === 1,
               },
               {
                 'text-red-700':
-                  DateTime.fromISO(farrierLastAndNext.nextDate.date_time)
+                  DateTime.fromISO(
+                    farrierLastAndNext.nextDate.date_time.slice(0, 10)
+                  )
                     .diff(DateTime.fromISO(todaysDateString), 'days')
                     .toObject().days === 0,
               },
@@ -310,17 +314,21 @@ watchEffect(async () => {
         <dd class="mt-1 text-sm text-gray-900">
           <span
             v-if="dentistLastAndNext.nextDate"
-            class="text-green-700"
             :class="[
+              'text-green-700',
               {
                 'text-orange-500':
-                  DateTime.fromISO(dentistLastAndNext.nextDate.date_time)
+                  DateTime.fromISO(
+                    dentistLastAndNext.nextDate.date_time.slice(0, 10)
+                  )
                     .diff(DateTime.fromISO(todaysDateString), 'days')
                     .toObject().days === 1,
               },
               {
                 'text-red-700':
-                  DateTime.fromISO(dentistLastAndNext.nextDate.date_time)
+                  DateTime.fromISO(
+                    dentistLastAndNext.nextDate.date_time.slice(0, 10)
+                  )
                     .diff(DateTime.fromISO(todaysDateString), 'days')
                     .toObject().days === 0,
               },
@@ -362,13 +370,17 @@ watchEffect(async () => {
             :class="[
               {
                 'text-orange-500':
-                  DateTime.fromISO(wormingLastAndNext.nextDate.date_time)
+                  DateTime.fromISO(
+                    wormingLastAndNext.nextDate.date_time.slice(0, 10)
+                  )
                     .diff(DateTime.fromISO(todaysDateString), 'days')
                     .toObject().days === 1,
               },
               {
                 'text-red-700':
-                  DateTime.fromISO(wormingLastAndNext.nextDate.date_time)
+                  DateTime.fromISO(
+                    wormingLastAndNext.nextDate.date_time.slice(0, 10)
+                  )
                     .diff(DateTime.fromISO(todaysDateString), 'days')
                     .toObject().days === 0,
               },
@@ -410,13 +422,17 @@ watchEffect(async () => {
             :class="[
               {
                 'text-orange-500':
-                  DateTime.fromISO(vaccinationsLastAndNext.nextDate.date_time)
+                  DateTime.fromISO(
+                    vaccinationsLastAndNext.nextDate.date_time.slice(0, 10)
+                  )
                     .diff(DateTime.fromISO(todaysDateString), 'days')
                     .toObject().days === 1,
               },
               {
                 'text-red-700':
-                  DateTime.fromISO(vaccinationsLastAndNext.nextDate.date_time)
+                  DateTime.fromISO(
+                    vaccinationsLastAndNext.nextDate.date_time.slice(0, 10)
+                  )
                     .diff(DateTime.fromISO(todaysDateString), 'days')
                     .toObject().days === 0,
               },
@@ -462,13 +478,17 @@ watchEffect(async () => {
             :class="[
               {
                 'text-orange-500':
-                  DateTime.fromISO(chiropractorLastAndNext.nextDate.date_time)
+                  DateTime.fromISO(
+                    chiropractorLastAndNext.nextDate.date_time.slice(0, 10)
+                  )
                     .diff(DateTime.fromISO(todaysDateString), 'days')
                     .toObject().days === 1,
               },
               {
                 'text-red-700':
-                  DateTime.fromISO(chiropractorLastAndNext.nextDate.date_time)
+                  DateTime.fromISO(
+                    chiropractorLastAndNext.nextDate.date_time.slice(0, 10)
+                  )
                     .diff(DateTime.fromISO(todaysDateString), 'days')
                     .toObject().days === 0,
               },
