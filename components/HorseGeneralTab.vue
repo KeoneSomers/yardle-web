@@ -261,8 +261,8 @@ watchEffect(async () => {
         <dd class="mt-1 text-sm text-gray-900">
           <span
             v-if="farrierLastAndNext.nextDate"
-            class="text-green-700"
             :class="[
+              'text-green-700',
               {
                 'text-orange-500':
                   DateTime.fromISO(
@@ -366,8 +366,8 @@ watchEffect(async () => {
         <dd class="mt-1 text-sm text-gray-900">
           <span
             v-if="wormingLastAndNext.nextDate"
-            class="text-green-700"
             :class="[
+              'text-green-700',
               {
                 'text-orange-500':
                   DateTime.fromISO(
@@ -418,8 +418,8 @@ watchEffect(async () => {
         <dd class="mt-1 text-sm text-gray-900">
           <span
             v-if="vaccinationsLastAndNext.nextDate"
-            class="text-green-700"
             :class="[
+              'text-green-700',
               {
                 'text-orange-500':
                   DateTime.fromISO(
@@ -474,8 +474,8 @@ watchEffect(async () => {
         <dd class="mt-1 text-sm text-gray-900">
           <span
             v-if="chiropractorLastAndNext.nextDate"
-            class="text-green-700"
             :class="[
+              'text-green-700',
               {
                 'text-orange-500':
                   DateTime.fromISO(
