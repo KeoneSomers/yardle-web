@@ -4,7 +4,7 @@ import CreateFieldModal from "@/components/modals/CreateFieldModal.vue";
 import EditFieldModal from "@/components/modals/EditFieldModal.vue";
 import DeleteFieldModal from "@/components/modals/DeleteFieldModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
+import { EllipsisVerticalIcon, PlusIcon } from "@heroicons/vue/20/solid";
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
@@ -223,14 +223,11 @@ const handleFieldChange = async (e) => {
           </draggable>
         </div>
       </div>
-      <div>
-        <button
-          @click="createModalOpen = true"
-          type="button"
-          class="hidden ml-3 lg:inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none whitespace-nowrap"
-        >
-          Add a field
-        </button>
+      <div
+        @click="createModalOpen = true"
+        class="w-80 border-2 border-dashed rounded-lg text-gray-100 hover:bg-gray-50 hover:text-white hover:cursor-pointer flex justify-center items-center"
+      >
+        <PlusIcon class="h-24 w-24" />
       </div>
     </div>
   </div>
