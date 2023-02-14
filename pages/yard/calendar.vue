@@ -15,7 +15,6 @@ definePageMeta({
 });
 
 const client = useSupabaseClient();
-const user = useSupabaseUser();
 const selectedYard = useState("selectedYard");
 
 const createModalOpen = ref(false);

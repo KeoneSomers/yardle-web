@@ -118,6 +118,7 @@ const handleSignout = async () => {
           <div class="flex items-center">
             <button
               @click="handleUnselectYard"
+              v-tooltip="'Switch Yard'"
               class="block p-2 text-sm text-gray-500 w-full text-left border rounded-full"
             >
               <ArrowsRightLeftIcon class="h-5 w-5" />
@@ -215,17 +216,25 @@ const handleSignout = async () => {
               {{ profile.username[0].toUpperCase() }}
             </div>
           </div>
-          <div class="ml-3 flex-1">
-            <p
-              class="text-sm font-medium text-gray-700 group-hover:text-gray-900"
-            >
-              {{ profile.username }}
-            </p>
-            <p
+          <div class="ml-3 flex-1 flex items-center">
+            <div class="w-28 truncate flex items-center">
+              <p
+                class="text-sm font-medium text-gray-700 group-hover:text-gray-900 truncate"
+              >
+                {{ profile.username }}
+              </p>
+              <VerifiedTick
+                v-if="profile.is_early_adopter"
+                class="h-4 w-4 ml-2"
+                v-tooltip="'Early Adopter'"
+              />
+            </div>
+
+            <!-- <p
               class="text-xs font-medium text-gray-500 group-hover:text-gray-700"
             >
-              <!-- View profile -->
-            </p>
+              View profile
+            </p> -->
           </div>
           <div>
             <Menu as="div" class="relative ml-3">
