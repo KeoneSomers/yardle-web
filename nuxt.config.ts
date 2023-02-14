@@ -22,6 +22,7 @@ export default defineNuxtConfig({
           id: "cookieyes",
           type: "text/javascript",
           src: "https://cdn-cookieyes.com/client_data/8c30fb1d750709f9ef9d0730/script.js",
+          defer: true,
         },
       ],
       meta: [
