@@ -73,14 +73,14 @@ const handleJoinYard = async () => {
         }
 
         // set selected yard
-        const { error: setError } = await client
-          .from("profiles")
-          .update({ selected_yard: yard.value.id, active_role: 3 })
-          .eq("id", user.value.id);
+        // const { error: setError } = await client
+        //   .from("profiles")
+        //   .update({ selected_yard: yard.value.id, active_role: 3 })
+        //   .eq("id", user.value.id);
 
-        if (setError) {
-          throw new Error(setError.message);
-        }
+        // if (setError) {
+        //   throw new Error(setError.message);
+        // }
       });
 
       loading.value = false;
