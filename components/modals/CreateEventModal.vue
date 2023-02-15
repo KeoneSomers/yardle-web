@@ -92,19 +92,19 @@ const handleSubmit = async () => {
       // start loading
       loading.value = true;
 
-      // build date value
+      // // build date value
       let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
 
       // build time value
-      if (time.value && !all_day.value) {
-        const h = time.value.split(":")[0];
-        const m = time.value.split(":")[1];
+      const h = time.value.split(":")[0];
+      const m = time.value.split(":")[1];
 
-        formattedDateTime = formattedDateTime.plus({
-          hours: h,
-          minutes: m,
-        });
-      }
+      formattedDateTime =
+        time.value && !all_day.value
+          ? formattedDateTime.set({ hour: h, minute: m })
+          : formattedDateTime;
+
+      console.log(formattedDateTime);
 
       // step 1: create the event in the database
       const { data: newEvent, error: createError } = await client
