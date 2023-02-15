@@ -1,7 +1,9 @@
 <script setup>
 import { DateTime } from "luxon";
 import { CalendarDaysIcon, ArrowRightIcon } from "@heroicons/vue/24/outline";
+import { EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
 import AssignHorseOwnerModal from "@/components/modals/AssignHorseOwnerModal.vue";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 const horse = useState("horse");
 const yard = useState("yard");
@@ -162,6 +164,17 @@ watchEffect(async () => {
     }
   });
 });
+
+const handleUnassignOwner = async () => {
+  const { data, error } = await client
+    .from("horses")
+    .update({ owner: null })
+    .eq("id", horse.value.id);
+
+  if (!error) {
+    horse.value.owner = null;
+  }
+};
 </script>
 
 <template>
@@ -184,27 +197,65 @@ watchEffect(async () => {
         </div>
       </div>
     </div>
-    <div
-      v-else
-      class="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 mb-4"
-    >
+    <div v-else class="grid gap-4 grid-cols-1 lg:grid-cols-2 mb-4">
       <div
-        class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-stone-50 px-6 py-5 shadow-sm"
+        class="relative flex items-center rounded-lg border border-gray-300 bg-stone-50 px-6 py-5 shadow-sm"
       >
-        <div class="flex-shrink-0">
-          <div
-            class="rounded-full h-10 w-10 text-white flex items-center justify-center bg-pink-500"
-          >
-            {{ horse.owner.username[0].toUpperCase() }}
+        <div class="flex-1 flex space-x-3">
+          <div class="flex-shrink-0">
+            <div
+              class="rounded-full h-10 w-10 text-white flex items-center justify-center bg-pink-500"
+            >
+              {{ horse.owner.username[0].toUpperCase() }}
+            </div>
+          </div>
+          <div class="min-w-0 flex-1">
+            <span class="absolute inset-0" aria-hidden="true" />
+            <p class="text-sm font-medium text-gray-900">
+              {{ horse.owner.username }}
+            </p>
+            <p class="truncate text-sm text-gray-500">Owns this horse</p>
           </div>
         </div>
-        <div class="min-w-0 flex-1">
-          <span class="absolute inset-0" aria-hidden="true" />
-          <p class="text-sm font-medium text-gray-900">
-            {{ horse.owner.username }}
-          </p>
-          <p class="truncate text-sm text-gray-500">Owns this horse</p>
-        </div>
+
+        <Menu
+          v-if="profile.active_role < 3 || profile.id === horse.owner.id"
+          as="div"
+          class="relative inline-block text-left"
+        >
+          <div>
+            <MenuButton
+              class="flex items-center p-2 rounded-full text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+            >
+              <span class="sr-only">Open options</span>
+              <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
+            </MenuButton>
+          </div>
+
+          <transition
+            enter-active-class="transition ease-out duration-100"
+            enter-from-class="transform opacity-0 scale-95"
+            enter-to-class="transform opacity-100 scale-100"
+            leave-active-class="transition ease-in duration-75"
+            leave-from-class="transform opacity-100 scale-100"
+            leave-to-class="transform opacity-0 scale-95"
+          >
+            <MenuItems
+              class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            >
+              <div class="py-1">
+                <MenuItem>
+                  <button
+                    @click="handleUnassignOwner()"
+                    class="block px-4 py-2 text-sm w-full text-left text-gray-600 hover:bg-gray-100"
+                  >
+                    Unassign Horse Owner
+                  </button>
+                </MenuItem>
+              </div>
+            </MenuItems>
+          </transition>
+        </Menu>
       </div>
     </div>
     <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">

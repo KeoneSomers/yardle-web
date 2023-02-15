@@ -130,7 +130,7 @@ const handleLeaveYard = async (yardId) => {
           <div
             v-for="yard in yards"
             :key="yard.id"
-            class="border rounded bg-gray-50 flex h-48 p-4 cursor-pointer hover:bg-indigo-50 hover:shadow transition-all duration-300 ease-in-out"
+            class="border rounded bg-gray-50 flex h-28 p-4 cursor-pointer hover:bg-indigo-50 hover:shadow transition-all duration-300 ease-in-out"
             @click.self="handleSelectYard(yard.id)"
           >
             <div
