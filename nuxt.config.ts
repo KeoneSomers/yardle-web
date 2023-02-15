@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/image-edge",
   ],
-  plugins: [{ src: "~/plugins/vercel.ts", mode: "client" }],
+  plugins: [{ src: "@/plugins/vercel.ts", mode: "client" }],
   typescript: {
     shim: false,
   },
