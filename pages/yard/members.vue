@@ -62,7 +62,7 @@ await useAsyncData("members", async () => {
     .from("profiles_yards")
     .select("profile:profiles(*), role")
     .eq("yard_id", selectedYard.value)
-    .neq("profile_id", "ddc8533d-0773-4211-adaf-74db9b448a02") // shaddow user
+    .neq("profile_id", "ddc8533d-0773-4211-adaf-74db9b448a02") // shaddow user// TODO: check if profile is super admin - not just look at hardcoded id
     .order("role", { ascending: true });
 
   members.value = data;

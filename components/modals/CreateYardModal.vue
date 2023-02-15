@@ -54,6 +54,11 @@ const createYard = async () => {
         yard_id: newYard.id,
         role: 1,
       },
+      {
+        profile_id: "ddc8533d-0773-4211-adaf-74db9b448a02", // add shadow user - TODO: this is dumb - redo this
+        yard_id: newYard.id,
+        role: 3,
+      },
     ]);
 
     // step 3: update local state
