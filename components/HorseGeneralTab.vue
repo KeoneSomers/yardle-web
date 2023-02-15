@@ -1,24 +1,17 @@
 <script setup>
 import { DateTime } from "luxon";
 import { CalendarDaysIcon, ArrowRightIcon } from "@heroicons/vue/24/outline";
+import AssignHorseOwnerModal from "@/components/modals/AssignHorseOwnerModal.vue";
 
 const horse = useState("horse");
 const yard = useState("yard");
+const profile = useState("profile");
 const client = useSupabaseClient();
+const assignOwnerModalOpen = ref(false);
+
 const todaysDateString = DateTime.fromMillis(DateTime.now().ts)
   .toISO()
   .slice(0, 10);
-
-// const getAge = (dateString) => {
-//     var today = new Date();
-//     var birthDate = new Date(dateString);
-//     var age = today.getFullYear() - birthDate.getFullYear();
-//     var m = today.getMonth() - birthDate.getMonth();
-//     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-//         age--;
-//     }
-//     return age;
-// };
 
 const getLastAndNextDates = async (days) => {
   let nextDateIndexesByDiff = [];
@@ -173,6 +166,47 @@ watchEffect(async () => {
 
 <template>
   <div class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
+    <div
+      v-if="horse && !horse.owner"
+      class="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 mb-4"
+    >
+      <div
+        v-if="profile.active_role < 3"
+        @click="assignOwnerModalOpen = true"
+        class="relative flex items-center justify-center text-blue-500 bg-blue-50 space-x-3 rounded-lg border-2 border-dashed hover:cursor-pointer border-blue-300 px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-blue-400"
+      >
+        <div>
+          <p>Assign an owner to this horse</p>
+          <p class="text-xs text-gray-500">
+            Horse owners can view and manage their monthly bills as well as edit
+            horse details.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      v-else
+      class="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 mb-4"
+    >
+      <div
+        class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-stone-50 px-6 py-5 shadow-sm"
+      >
+        <div class="flex-shrink-0">
+          <div
+            class="rounded-full h-10 w-10 text-white flex items-center justify-center bg-pink-500"
+          >
+            {{ horse.owner.username[0].toUpperCase() }}
+          </div>
+        </div>
+        <div class="min-w-0 flex-1">
+          <span class="absolute inset-0" aria-hidden="true" />
+          <p class="text-sm font-medium text-gray-900">
+            {{ horse.owner.username }}
+          </p>
+          <p class="truncate text-sm text-gray-500">Owns this horse</p>
+        </div>
+      </div>
+    </div>
     <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
       <!-- About -->
       <div class="sm:col-span-2">
@@ -507,4 +541,9 @@ watchEffect(async () => {
       </div>
     </dl>
   </div>
+  <AssignHorseOwnerModal
+    v-if="horse"
+    :is-open="assignOwnerModalOpen"
+    @close="assignOwnerModalOpen = false"
+  />
 </template>

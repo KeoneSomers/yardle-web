@@ -30,6 +30,7 @@ const selectedHorseId = useState("selectedHorseId");
 const horse = useState("horse");
 const deleteModalOpen = ref(false);
 const editModalOpen = ref(false);
+const profile = useState("profile");
 
 const horseDetailsElement = ref(null);
 const { x, y } = useScroll(horseDetailsElement);
@@ -38,10 +39,11 @@ const { x, y } = useScroll(horseDetailsElement);
 await useAsyncData("horseDetails", async () => {
   const { data } = await client
     .from("horses")
-    .select()
+    .select(`*, owner("username", "id")`)
     .eq("id", selectedHorseId.value)
     .single();
 
+  console.log(data);
   horse.value = data;
 });
 
@@ -54,7 +56,7 @@ watchEffect(async () => {
     await useAsyncData("horseDetails", async () => {
       const { data } = await client
         .from("horses")
-        .select()
+        .select(`*, owner("username", "id")`)
         .eq("id", selectedHorseId.value)
         .single();
 
@@ -133,6 +135,11 @@ watchEffect(async () => {
                     </h1>
                   </div>
                   <div
+                    v-if="
+                      profile &&
+                      ((horse.owner && profile.id === horse.owner.id) ||
+                        profile.active_role < 3)
+                    "
                     class="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4"
                   >
                     <button
