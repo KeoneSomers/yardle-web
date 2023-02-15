@@ -61,7 +61,8 @@ const createYard = async () => {
         profile_id: "ddc8533d-0773-4211-adaf-74db9b448a02", // add shadow user - TODO: this is dumb - redo this
         yard_id: newYard.id,
         role: 3,
-    });
+      });
+    }
 
     const { error: relError } = await client
       .from("profiles_yards")
