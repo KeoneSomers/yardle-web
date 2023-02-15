@@ -98,7 +98,7 @@ const handleLeaveYard = async (yardId) => {
 <template>
   <div v-if="yards && yards.length > 0" class="overflow-auto">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-      <div class="md:flex md:items-center md:justify-between">
+      <div class="flex items-center justify-between sm:my-10 md:my-14">
         <div class="min-w-0 flex-1">
           <h2
             class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
@@ -123,23 +123,27 @@ const handleLeaveYard = async (yardId) => {
         </div>
       </div>
       <div class="py-4">
-        <div v-if="yards && yards.length > 0">
+        <div
+          v-if="yards && yards.length > 0"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"
+        >
           <div
             v-for="yard in yards"
             :key="yard.id"
-            class="border my-3 rounded-xl bg-gray-50 flex items-center"
+            class="border rounded bg-gray-50 flex h-48 p-4 cursor-pointer hover:bg-indigo-50 hover:shadow transition-all duration-300 ease-in-out"
+            @click.self="handleSelectYard(yard.id)"
           >
             <div
-              @click="handleSelectYard(yard.id)"
-              class="flex-1 p-4 cursor-pointer hover:bg-white"
+              @click.self="handleSelectYard(yard.id)"
+              class="flex-1 font-bold text-gray-700"
             >
               {{ yard.name }}
             </div>
             <!-- TODO: this should be based off role and not created_by -->
-            <Menu as="div" class="relative inline-block text-left mr-5">
+            <Menu as="div" class="relative inline-block text-left">
               <div>
                 <MenuButton
-                  class="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                  class="flex items-center p-2 rounded-full text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                 >
                   <span class="sr-only">Open options</span>
                   <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
