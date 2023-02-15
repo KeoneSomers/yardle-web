@@ -89,7 +89,7 @@ const error = ref("");
 
 const handleSubmit = async () => {
   // build date
-  let formattedDateTime = DateTime.fromJSDate(new Date(date.value)).toUTC();
+  let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
 
   // build time
   if (time.value && !event.value.all_day) {
@@ -107,7 +107,7 @@ const handleSubmit = async () => {
     .from("calendar_events")
     .update({
       title: event.value.title,
-      date_time: formattedDateTime,
+      date_time: formattedDateTime.toUTC(),
       notes: event.value.notes,
       all_day: event.value.all_day,
       type: event.value.type,

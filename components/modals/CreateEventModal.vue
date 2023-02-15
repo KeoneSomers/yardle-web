@@ -93,7 +93,7 @@ const handleSubmit = async () => {
       loading.value = true;
 
       // build date value
-      let formattedDateTime = DateTime.fromJSDate(new Date(date.value)).toUTC();
+      let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
 
       // build time value
       if (time.value && !all_day.value) {
@@ -112,7 +112,7 @@ const handleSubmit = async () => {
         .insert({
           created_by: user.value.id,
           title: title.value,
-          date_time: formattedDateTime,
+          date_time: formattedDateTime.toUTC(),
           notes: notes.value,
           all_day: all_day.value,
           type: event_type.value,
