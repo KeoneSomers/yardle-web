@@ -62,6 +62,7 @@ await useAsyncData("members", async () => {
     .from("profiles_yards")
     .select("profile:profiles(*), role")
     .eq("yard_id", selectedYard.value)
+    .neq("profile_id", "ddc8533d-0773-4211-adaf-74db9b448a02") // shaddow user
     .order("role", { ascending: true });
 
   members.value = data;
