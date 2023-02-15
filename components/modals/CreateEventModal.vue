@@ -93,7 +93,7 @@ const handleSubmit = async () => {
       loading.value = true;
 
       // build date value
-      let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
+      let formattedDateTime = DateTime.fromJSDate(new Date(date.value)).toUTC();
 
       // build time value
       if (time.value && !all_day.value) {
