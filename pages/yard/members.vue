@@ -18,23 +18,20 @@ const roles = [
   {
     id: 1,
     name: "Owner",
-    description: "The owner has all permissions within this yard.",
+    description:
+      "The owner of the yard can preform all actions within this yard",
   },
   {
     id: 2,
     name: "Admin",
     description:
-      "Admins may create, edit and delete any horses in the yard. They can also manage members.",
+      "Admins can do everything an owner can do except delete the yard and demote the yard owner.",
   },
   {
     id: 3,
     name: "Member",
-    description: "Members may create, edit and delete their own horses.",
-  },
-  {
-    id: 4,
-    name: "Guest",
-    description: "Guests can only view information, but not edit or create.",
+    description:
+      "Members can only view the yards information (excluding billing infomation), Owners and Admins may set members as horse owners - which allows them to preform actions on that horse as well as view the horses billing information.",
   },
 ];
 

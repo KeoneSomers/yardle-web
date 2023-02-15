@@ -14,6 +14,7 @@ const searchString = ref("");
 const selectedHorseId = useState("selectedHorseId", () => 0);
 const horses = useState("horses");
 const viewingHorse = useState("viewingHorse", () => false);
+const profile = useState("profile");
 
 await useAsyncData("horses", async () => {
   const { data } = await client
@@ -129,6 +130,7 @@ const selectHorse = (horseId) => {
             </div>
           </div>
           <button
+            v-if="profile.active_role == 1 || profile.active_role == 2"
             @click="() => (isOpen = true)"
             type="submit"
             class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
@@ -226,7 +228,10 @@ const selectHorse = (horseId) => {
       v-if="horses.length == 0"
       class="flex h-full justify-center items-center w-full"
     >
-      <div class="text-center">
+      <div
+        v-if="profile.active_role == 1 || profile.active_role == 2"
+        class="text-center"
+      >
         <svg
           class="mx-auto h-12 w-12 text-gray-400"
           fill="none"
@@ -261,5 +266,9 @@ const selectHorse = (horseId) => {
   </div>
 
   <!-- Modals -->
-  <CreateHorseModal :is-open="isOpen" @close="isOpen = false" />
+  <CreateHorseModal
+    v-if="profile.active_role == 1 || profile.active_role == 2"
+    :is-open="isOpen"
+    @close="isOpen = false"
+  />
 </template>
