@@ -52,15 +52,14 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   // TODO: this if statement is a hack, need to find a better way to do this (just for yard settings page)
   if (to.path === "/yard/settings") {
     if (!user.value || !selectedYardId.value || selectedYardId.value === 0) {
-      console.log("aaaa");
       return abortNavigation();
     }
-
     await getYard();
     if (role.value !== 1) {
       return abortNavigation();
     }
   }
+  // end of hack
 
   // Logged in
   if (user.value) {

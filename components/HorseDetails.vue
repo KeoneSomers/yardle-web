@@ -22,7 +22,7 @@ const tabs = [
   { name: "Rugs", component: HorseRugsTab },
   { name: "Feeds", component: HorseFeedsTab },
   { name: "Medications", component: HorseMedicationsTab },
-  // { name: "Services", component: HorseServicesTab },
+  { name: "Services", component: HorseServicesTab },
 ];
 
 // supabase
