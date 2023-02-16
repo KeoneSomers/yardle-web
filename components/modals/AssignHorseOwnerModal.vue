@@ -43,8 +43,6 @@ await useAsyncData("members", async () => {
   }
 });
 
-console.log(members.value);
-
 let filteredMembers = computed(() =>
   query.value === ""
     ? members.value

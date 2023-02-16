@@ -11,6 +11,7 @@ import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
 import HorseRugsTab from "@/components/HorseRugsTab.vue";
 import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
 import HorseMedicationsTab from "@/components/HorseMedicationsTab.vue";
+import HorseServicesTab from "@/components/HorseServicesTab.vue";
 import { useScroll } from "@vueuse/core";
 
 const viewingHorse = useState("viewingHorse");
@@ -21,6 +22,7 @@ const tabs = [
   { name: "Rugs", component: HorseRugsTab },
   { name: "Feeds", component: HorseFeedsTab },
   { name: "Medications", component: HorseMedicationsTab },
+  // { name: "Services", component: HorseServicesTab },
 ];
 
 // supabase
@@ -43,7 +45,6 @@ await useAsyncData("horseDetails", async () => {
     .eq("id", selectedHorseId.value)
     .single();
 
-  console.log(data);
   horse.value = data;
 });
 

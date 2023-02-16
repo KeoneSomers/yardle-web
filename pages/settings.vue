@@ -13,7 +13,7 @@ const deleteUserAccountModalOpen = ref(false);
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="flex flex-col space-y-10">
         <div class="pt-5">
-          <p class="text-4xl font-bold">Account Settings Page</p>
+          <p class="text-4xl font-bold mt-20">Account Settings Page</p>
         </div>
         <!-- 
                 <div class="bg-gray-50 rounded-xl p-5">
@@ -67,14 +67,27 @@ const deleteUserAccountModalOpen = ref(false);
                     </form>
                 </div> -->
 
-        <div class="bg-red-100 rounded-xl p-5">
-          <p class="text-xl font-bold mb-5">Danger Zone</p>
-          <button
-            @click="() => (deleteUserAccountModalOpen = true)"
-            class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded"
-          >
-            Delete Account
-          </button>
+        <div class="border-2 sm:rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">
+              Delete your account
+            </h3>
+            <div class="mt-2 max-w-xl text-sm text-gray-500">
+              <p>
+                Once you delete your account, you will lose all data associated
+                with it.
+              </p>
+            </div>
+            <div class="mt-5">
+              <button
+                @click="() => (deleteUserAccountModalOpen = true)"
+                type="button"
+                class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 font-medium text-red-700 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:text-sm"
+              >
+                Delete account
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

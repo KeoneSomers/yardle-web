@@ -11,6 +11,7 @@ import {
   RectangleGroupIcon,
   ClipboardDocumentListIcon,
   LinkIcon,
+  Cog8ToothIcon,
 } from "@heroicons/vue/24/outline";
 import { EllipsisHorizontalIcon } from "@heroicons/vue/20/solid";
 
@@ -41,6 +42,11 @@ const navigation = [
     to: "/yard/rugs",
     icon: ClipboardDocumentListIcon,
     hint: "Soon",
+  },
+  {
+    name: "Yard Settings",
+    to: "/yard/settings",
+    icon: Cog8ToothIcon,
   },
 ];
 
@@ -158,7 +164,14 @@ const handleSignout = async () => {
                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
               'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
               item.hint ? 'pointer-events-none' : '',
+              item.hint ? 'pointer-events-none' : '',
             ]"
+            v-show="
+              item.to != '/yard/settings' ||
+              (item.to == '/yard/settings' &&
+                profile &&
+                profile.active_role == 1)
+            "
           >
             <component
               :is="item.icon"

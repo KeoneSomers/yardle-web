@@ -3,6 +3,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   const user = useSupabaseUser();
   const selectedYardId = useState<number | undefined>("selectedYard", () => 0);
   const isFirstLoad = useState<boolean>("firstLoad", () => true);
+  const role = ref(4);
 
   const getYard = async () => {
     if (user.value) {
@@ -13,6 +14,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
         .single();
 
       if (data) {
+        role.value = data.active_role;
         return data.selected_yard;
       } else {
         return 0;
@@ -45,6 +47,19 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   if (!user.value) {
     console.log("User logged out, Redirecting to login page");
     if (guards.requireAuth) return navigateTo("/login");
+  }
+
+  // TODO: this if statement is a hack, need to find a better way to do this (just for yard settings page)
+  if (to.path === "/yard/settings") {
+    if (!user.value || !selectedYardId.value || selectedYardId.value === 0) {
+      console.log("aaaa");
+      return abortNavigation();
+    }
+
+    await getYard();
+    if (role.value !== 1) {
+      return abortNavigation();
+    }
   }
 
   // Logged in
