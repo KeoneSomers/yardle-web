@@ -74,6 +74,14 @@ const fetchServices = async () => {
 };
 
 await fetchServices();
+
+const billingPeriodOptions = ref({
+  every: 1,
+  period: 1,
+  onThe: 2,
+  day: "1",
+  startingFrom: new Date().toISOString().slice(0, 10),
+});
 </script>
 
 <template>
@@ -125,8 +133,43 @@ await fetchServices();
         settings.
       </p>
 
-      <p>Weekly: Every [4] week(s) on [m/t/w/t/f/s/s]</p>
-      <p>Monthly: Every [1] month(s) on the [last/first] [day/m/t/w/t/f/s/s]</p>
+      <p>Every</p>
+      <input type="number" v-model="billingPeriodOptions.every" />
+      <select v-model="billingPeriodOptions.period">
+        <option value="1">
+          Week<span v-if="billingPeriodOptions.every > 1">s</span>
+        </option>
+        <option value="2">
+          Month<span v-if="billingPeriodOptions.every > 1">s</span>
+        </option>
+      </select>
+      <div>
+        <p v-if="billingPeriodOptions.period == 1">On a</p>
+        <p v-if="billingPeriodOptions.period == 2">On the</p>
+        <select
+          v-model="billingPeriodOptions.onThe"
+          v-if="billingPeriodOptions.period == 2"
+        >
+          <option value="1">First</option>
+          <option value="2">Last</option>
+        </select>
+        <select v-model="billingPeriodOptions.day">
+          <option value="1" v-if="billingPeriodOptions.period == 2">Day</option>
+          <option value="2">Monday</option>
+          <option value="3">Tuesday</option>
+          <option value="4">Wednesday</option>
+          <option value="5">Thursday</option>
+          <option value="6">Friday</option>
+          <option value="7">Saturday</option>
+          <option value="8">Sunday</option>
+        </select>
+      </div>
+
+      <div v-if="billingPeriodOptions.every > 1">
+        <p>starting from</p>
+        <input v-model="billingPeriodOptions.startingFrom" type="date" />
+      </div>
+
       <div class="flex justify-end pt-8 mb-10">
         <div v-if="!done">
           <button
