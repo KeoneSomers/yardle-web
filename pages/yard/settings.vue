@@ -170,19 +170,14 @@ const billingPeriodOptions = ref({
 
       <div v-if="billingPeriodOptions.every > 1">
         <p>When is your next billing date?</p>
-        <input v-model="billingPeriodOptions.startingFrom" type="date" />
-      </div>
-
-      <div
-        v-if="billingPeriodOptions.every > 1"
-        class="flex space-x-2 flex-wrap py-4"
-      >
-        <div
-          v-for="item in 3"
-          :key="item"
-          class="px-3 py-2 border rounded-lg text-gray-500 cursor-pointer hover:bg-indigo-100"
-        >
-          {{ now.toISO().slice(0, 10) }}
+        <div class="flex space-x-2 flex-wrap">
+          <div
+            v-for="item in billingPeriodOptions.every"
+            :key="item"
+            class="px-3 py-2 border rounded-lg text-gray-500 cursor-pointer hover:bg-indigo-100"
+          >
+            {{ now.toISO().slice(0, 10) }}
+          </div>
         </div>
       </div>
 
