@@ -1,4 +1,5 @@
 <script setup>
+import { DateTime } from "luxon";
 import { PlusIcon, EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import CreateServiceModal from "@/components/modals/CreateServiceModal.vue";
@@ -8,6 +9,8 @@ import DeleteServiceModal from "@/components/modals/DeleteServiceModal.vue";
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
 });
+
+const now = ref(DateTime.now());
 
 const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
@@ -134,7 +137,7 @@ const billingPeriodOptions = ref({
       </p>
 
       <p>Every</p>
-      <input type="number" v-model="billingPeriodOptions.every" />
+      <input type="number" min="1" v-model="billingPeriodOptions.every" />
       <select v-model="billingPeriodOptions.period">
         <option value="1">
           Week<span v-if="billingPeriodOptions.every > 1">s</span>
@@ -166,8 +169,21 @@ const billingPeriodOptions = ref({
       </div>
 
       <div v-if="billingPeriodOptions.every > 1">
-        <p>starting from</p>
+        <p>When is your next billing date?</p>
         <input v-model="billingPeriodOptions.startingFrom" type="date" />
+      </div>
+
+      <div
+        v-if="billingPeriodOptions.every > 1"
+        class="flex space-x-2 flex-wrap py-4"
+      >
+        <div
+          v-for="item in 3"
+          :key="item"
+          class="px-3 py-2 border rounded-lg text-gray-500 cursor-pointer hover:bg-indigo-100"
+        >
+          {{ now.toISO().slice(0, 10) }}
+        </div>
       </div>
 
       <div class="flex justify-end pt-8 mb-10">
