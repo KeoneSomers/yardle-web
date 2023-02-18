@@ -80,7 +80,7 @@ await fetchServices();
 
 const billingPeriodOptions = ref({
   every: 1,
-  period: 1,
+  period: 2,
   onThe: 2,
   day: "1",
   startingFrom: new Date().toISOString().slice(0, 10),
@@ -88,7 +88,7 @@ const billingPeriodOptions = ref({
 </script>
 
 <template>
-  <div class="overflow-auto pb-20">
+  <div class="overflow-auto pb-20 px-4 md:px-0">
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="py-5">
         <p class="text-4xl font-bold mt-20">Yard Settings</p>
@@ -136,40 +136,75 @@ const billingPeriodOptions = ref({
         settings.
       </p>
 
-      <p>Every</p>
-      <input type="number" min="1" v-model="billingPeriodOptions.every" />
-      <select v-model="billingPeriodOptions.period">
-        <option value="1">
-          Week<span v-if="billingPeriodOptions.every > 1">s</span>
-        </option>
-        <option value="2">
-          Month<span v-if="billingPeriodOptions.every > 1">s</span>
-        </option>
-      </select>
-      <div>
-        <p v-if="billingPeriodOptions.period == 1">On a</p>
-        <p v-if="billingPeriodOptions.period == 2">On the</p>
-        <select
-          v-model="billingPeriodOptions.onThe"
-          v-if="billingPeriodOptions.period == 2"
-        >
-          <option value="1">First</option>
-          <option value="2">Last</option>
-        </select>
-        <select v-model="billingPeriodOptions.day">
-          <option value="1" v-if="billingPeriodOptions.period == 2">Day</option>
-          <option value="2">Monday</option>
-          <option value="3">Tuesday</option>
-          <option value="4">Wednesday</option>
-          <option value="5">Thursday</option>
-          <option value="6">Friday</option>
-          <option value="7">Saturday</option>
-          <option value="8">Sunday</option>
-        </select>
+      <p class="my-2">When would you like to bill your clients?</p>
+      <div class="w-full md:w-1/2">
+        <div class="flex items-center">
+          <div class="border bg-gray-100 p-2 w-28 rounded-l-lg">
+            <p>Every</p>
+          </div>
+          <div class="flex flex-1">
+            <div class="flex-1">
+              <input
+                type="number"
+                min="1"
+                v-model="billingPeriodOptions.every"
+                class="w-full border border-gray-300 border-l-0"
+              />
+            </div>
+            <div class="flex-1">
+              <select
+                v-model="billingPeriodOptions.period"
+                class="w-full rounded-r-lg border border-gray-300 border-l-0"
+              >
+                <option value="1">
+                  Week<span v-if="billingPeriodOptions.every > 1">s</span>
+                </option>
+                <option value="2">
+                  Month<span v-if="billingPeriodOptions.every > 1">s</span>
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-1 items-center mt-2">
+          <div class="border bg-gray-100 p-2 w-28 rounded-l-lg">
+            <p v-if="billingPeriodOptions.period == 1">On a</p>
+            <p v-if="billingPeriodOptions.period == 2">On the</p>
+          </div>
+          <div class="flex flex-1">
+            <div v-if="billingPeriodOptions.period == 2" class="flex-1">
+              <select
+                v-model="billingPeriodOptions.onThe"
+                class="w-full border border-gray-300 border-l-0"
+              >
+                <option value="1">First</option>
+                <option value="2">Last</option>
+              </select>
+            </div>
+            <div class="flex-1">
+              <select
+                v-model="billingPeriodOptions.day"
+                class="w-full rounded-r-lg border border-gray-300 border-l-0"
+              >
+                <option value="1" v-if="billingPeriodOptions.period == 2">
+                  Day
+                </option>
+                <option value="2">Monday</option>
+                <option value="3">Tuesday</option>
+                <option value="4">Wednesday</option>
+                <option value="5">Thursday</option>
+                <option value="6">Friday</option>
+                <option value="7">Saturday</option>
+                <option value="8">Sunday</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div v-if="billingPeriodOptions.every > 1">
-        <p>When is your next billing date?</p>
+      <div v-if="billingPeriodOptions.every > 1" class="mt-4">
+        <p class="mb-2">When is your next billing date?</p>
         <div class="flex space-x-2 flex-wrap">
           <div
             v-for="item in billingPeriodOptions.every"
