@@ -28,13 +28,6 @@ const selectedService = ref(null);
 const yardName = ref("");
 yardName.value = yard.value.name;
 
-const billingPeriod = {
-  type: "Weekly", // weekly or monthly
-  frequency: 2, // number of weeks or months
-  firstLast: "last", // Only for the monthly type
-  on: "day", // Mon, Tues, etc... can also be day if type is monthly
-};
-
 const updateYard = async () => {
   try {
     loading.value = true;
@@ -254,6 +247,49 @@ watch(billingPeriodOptions.value, (newValue) => {
         </div>
         <div v-else class="text-green-600 py-2">Changes Saved!</div>
       </div>
+
+      <!-- Billing info empty state -->
+      <!-- <div
+        class="flex w-full my-20 justify-center items-center border-2 border-dashed rounded-xl py-10 px-4"
+      >
+        <div class="text-center">
+          <svg
+            class="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              vector-effect="non-scaling-stroke"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+            />
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900">
+            No Billing Cycle Infomation
+          </h3>
+          <p class="mt-1 text-sm text-gray-500 px-10">
+            Tell Yardle how often you'd like to bill your clients. This
+            information will be used to calculate bill forcasts for your
+            clients.
+          </p>
+          <div class="mt-6">
+            <button
+              @click="() => (createModalOpen = true)"
+              type="button"
+              class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              New Rug
+            </button>
+          </div>
+        </div>
+      </div> -->
+
+      <hr class="my-5 border-dashed border-1" />
 
       <div v-if="services.length > 0">
         <div class="sm:flex sm:items-center">
