@@ -103,6 +103,24 @@ watch(billingPeriodOptions.value, (newValue) => {
     billingPeriodOptions.value.startingFrom = null;
   }
 });
+
+const possibleBillingDate = (item) => {
+  // (item is how often)
+  // weekly billing
+  if (billingPeriodOptions.value.period == 1) {
+    return DateTime.now()
+      .plus(
+        billingPeriodOptions.valueperiod == 1
+          ? { weeks: item }
+          : { months: item }
+      )
+      .set({ weekday: billingPeriodOptions.value.day - 1 })
+      .toFormat("EEEE, MMMM d, yyyy");
+  } else {
+    // monthly billing
+    return DateTime.now().toFormat("EEEE, MMMM d, yyyy");
+  }
+};
 </script>
 
 <template>
@@ -252,16 +270,7 @@ watch(billingPeriodOptions.value, (newValue) => {
                   .toISODate(),
             }"
           >
-            {{
-              now
-                .plus(
-                  billingPeriodOptions.period == 1
-                    ? { weeks: item }
-                    : { months: item }
-                )
-                .set({ weekday: billingPeriodOptions.day - 1 })
-                .toFormat("EEEE, MMMM d, yyyy")
-            }}
+            {{ possibleBillingDate(item) }}
           </div>
         </div>
       </div>
