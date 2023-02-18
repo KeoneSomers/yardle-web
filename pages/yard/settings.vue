@@ -114,11 +114,10 @@ const possibleBillingDate = (item) => {
           ? { weeks: item }
           : { months: item }
       )
-      .set({ weekday: billingPeriodOptions.value.day - 1 })
-      .toFormat("EEEE, MMMM d, yyyy");
+      .set({ weekday: billingPeriodOptions.value.day - 1 });
   } else {
     // monthly billing
-    return DateTime.now().toFormat("EEEE, MMMM d, yyyy");
+    return DateTime.now();
   }
 };
 </script>
@@ -247,30 +246,17 @@ const possibleBillingDate = (item) => {
             v-for="item in billingPeriodOptions.every"
             :key="item"
             @click="
-              billingPeriodOptions.startingFrom = now
-                .plus(
-                  billingPeriodOptions.period == 1
-                    ? { weeks: item }
-                    : { months: item }
-                )
-                .set({ weekday: billingPeriodOptions.day - 1 })
-                .toISODate()
+              billingPeriodOptions.startingFrom =
+                possibleBillingDate(item).toISODate()
             "
             class="px-3 py-2 border rounded-lg text-gray-500 cursor-pointer hover:bg-indigo-100"
             :class="{
               'bg-indigo-100':
                 billingPeriodOptions.startingFrom ==
-                now
-                  .plus(
-                    billingPeriodOptions.period == 1
-                      ? { weeks: item }
-                      : { months: item }
-                  )
-                  .set({ weekday: billingPeriodOptions.day - 1 })
-                  .toISODate(),
+                possibleBillingDate(item).toISODate(),
             }"
           >
-            {{ possibleBillingDate(item) }}
+            {{ possibleBillingDate(item).toFormat("EEEE, MMMM d, yyyy") }}
           </div>
         </div>
       </div>
