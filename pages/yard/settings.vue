@@ -116,15 +116,26 @@ const possibleBillingDate = (item) => {
     if (billingPeriodOptions.value.onThe == 1) {
       // first (x) on every month
 
-      // TODO: handle if "billingPeriodOptions.value.day" is day, mon, tue, wed, thu, fri, etc...
-      return DateTime.now().plus({ months: item }).startOf("month");
+      if (billingPeriodOptions.value.day == 1) {
+        return DateTime.now().plus({ months: item }).startOf("month");
+      } else {
+        // Working on!!!: handle if "billingPeriodOptions.value.day" is mon, tue, wed, thu, fri, etc...
+        return DateTime.now()
+          .plus({ months: item })
+          .set({ day: 1 })
+          .set({ weekday: billingPeriodOptions.value.day - 1 });
+      }
     } else {
       // last (x) on every month
       // (also need to correct the offset for monthly billing)
       item = item - 1;
 
-      // TODO: handle if "billingPeriodOptions.value.day" is day, mon, tue, wed, thu, fri, etc...
-      return DateTime.now().plus({ months: item }).endOf("month");
+      if (billingPeriodOptions.value.day == 1) {
+        return DateTime.now().plus({ months: item }).endOf("month");
+      } else {
+        // TODO: handle if "billingPeriodOptions.value.day" is mon, tue, wed, thu, fri, etc...
+        return DateTime.now().plus({ months: item }).endOf("month");
+      }
     }
   }
 };
