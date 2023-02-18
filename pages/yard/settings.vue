@@ -79,14 +79,19 @@ const billingPeriodOptions = ref({
   startingFrom: null,
 });
 
-watch(billingPeriodOptions.value, (newValue) => {
-  // auto pick "day" or "monday" on the billingPeriodOptions.day field
-  if (newValue.period == 1) {
-    billingPeriodOptions.value.day = 2;
-  } else {
-    billingPeriodOptions.value.day = 1;
+watch(
+  () => billingPeriodOptions.value.period,
+  (newValue) => {
+    // auto pick "day" or "monday" on the billingPeriodOptions.day field
+    if (newValue == 1) {
+      billingPeriodOptions.value.day = 2;
+    } else {
+      billingPeriodOptions.value.day = 1;
+    }
   }
+);
 
+watch(billingPeriodOptions.value, (newValue) => {
   // clear the starting from value
   // if the form changes
   if (
@@ -255,7 +260,7 @@ watch(billingPeriodOptions.value, (newValue) => {
                     : { months: item }
                 )
                 .set({ weekday: billingPeriodOptions.day - 1 })
-                .toISODate()
+                .toFormat("EEEE, MMMM d, yyyy")
             }}
           </div>
         </div>
