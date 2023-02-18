@@ -105,19 +105,23 @@ watch(billingPeriodOptions.value, (newValue) => {
 });
 
 const possibleBillingDate = (item) => {
-  // (item is how often)
+  // (item is how often: i.e: every [item] weeks / months)
   // weekly billing
   if (billingPeriodOptions.value.period == 1) {
     return DateTime.now()
-      .plus(
-        billingPeriodOptions.valueperiod == 1
-          ? { weeks: item }
-          : { months: item }
-      )
+      .plus({ weeks: item })
       .set({ weekday: billingPeriodOptions.value.day - 1 });
   } else {
     // monthly billing
-    return DateTime.now();
+    if (billingPeriodOptions.value.onThe == 1) {
+      // first (x) on every month
+      return DateTime.now().plus({ months: item }).startOf("month");
+    } else {
+      // last (x) on every month
+      // (also need to correct the offset for monthly billing)
+      item = item - 1;
+      return DateTime.now().plus({ months: item }).endOf("month");
+    }
   }
 };
 </script>
