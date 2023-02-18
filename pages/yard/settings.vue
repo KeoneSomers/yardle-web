@@ -85,6 +85,15 @@ const billingPeriodOptions = ref({
   day: "1",
   startingFrom: new Date().toISOString().slice(0, 10),
 });
+
+watch(billingPeriodOptions.value, (newValue) => {
+  // auto pick "day" or "monday" on the billingPeriodOptions.day field
+  if (newValue.period == 1) {
+    billingPeriodOptions.value.day = 2;
+  } else {
+    billingPeriodOptions.value.day = 1;
+  }
+});
 </script>
 
 <template>
@@ -184,6 +193,7 @@ const billingPeriodOptions = ref({
             </div>
             <div class="flex-1">
               <select
+                required
                 v-model="billingPeriodOptions.day"
                 class="w-full rounded-r-lg border border-gray-300 border-l-0"
               >
