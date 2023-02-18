@@ -176,7 +176,16 @@ const billingPeriodOptions = ref({
             :key="item"
             class="px-3 py-2 border rounded-lg text-gray-500 cursor-pointer hover:bg-indigo-100"
           >
-            {{ now.toISO().slice(0, 10) }}
+            {{
+              now
+                .plus(
+                  billingPeriodOptions.period == 1
+                    ? { weeks: item }
+                    : { months: item }
+                )
+                .set({ weekday: billingPeriodOptions.day - 1 })
+                .toISODate()
+            }}
           </div>
         </div>
       </div>
