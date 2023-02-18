@@ -76,7 +76,7 @@ const billingPeriodOptions = ref({
   period: 2,
   onThe: 2,
   day: "1",
-  startingFrom: new Date().toISOString().slice(0, 10),
+  startingFrom: null,
 });
 
 watch(billingPeriodOptions.value, (newValue) => {
@@ -85,6 +85,17 @@ watch(billingPeriodOptions.value, (newValue) => {
     billingPeriodOptions.value.day = 2;
   } else {
     billingPeriodOptions.value.day = 1;
+  }
+
+  // clear the starting from value
+  // if the form changes
+  if (
+    newValue.every != billingPeriodOptions.value.every ||
+    newValue.period != billingPeriodOptions.value.period ||
+    newValue.onThe != billingPeriodOptions.value.onThe ||
+    newValue.day != billingPeriodOptions.value.day
+  ) {
+    billingPeriodOptions.value.startingFrom = null;
   }
 });
 </script>
@@ -212,7 +223,29 @@ watch(billingPeriodOptions.value, (newValue) => {
           <div
             v-for="item in billingPeriodOptions.every"
             :key="item"
+            @click="
+              billingPeriodOptions.startingFrom = now
+                .plus(
+                  billingPeriodOptions.period == 1
+                    ? { weeks: item }
+                    : { months: item }
+                )
+                .set({ weekday: billingPeriodOptions.day - 1 })
+                .toISODate()
+            "
             class="px-3 py-2 border rounded-lg text-gray-500 cursor-pointer hover:bg-indigo-100"
+            :class="{
+              'bg-indigo-100':
+                billingPeriodOptions.startingFrom ==
+                now
+                  .plus(
+                    billingPeriodOptions.period == 1
+                      ? { weeks: item }
+                      : { months: item }
+                  )
+                  .set({ weekday: billingPeriodOptions.day - 1 })
+                  .toISODate(),
+            }"
           >
             {{
               now
@@ -230,13 +263,13 @@ watch(billingPeriodOptions.value, (newValue) => {
 
       <div class="flex justify-end pt-8 mb-10">
         <div v-if="!done">
-          <button
+          <!-- <button
             @click="yardName = yard.name"
             type="button"
             class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-blue-gray-900 shadow-sm hover:bg-blue-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Cancel
-          </button>
+          </button> -->
           <button
             @click="updateYard"
             type="submit"
