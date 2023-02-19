@@ -1,12 +1,6 @@
 <script setup>
 import { DateTime } from "luxon";
-import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/vue";
+import { PencilSquareIcon } from "@heroicons/vue/24/outline";
 
 const loading2 = ref(false);
 const done2 = ref(false);
@@ -296,8 +290,13 @@ const resetStartDate = () => {
     </div>
 
     <div v-if="billingPeriodOptions.every > 1" class="mt-4">
-      <p class="mb-2">When is your next billing date?</p>
-      <div class="flex flex-wrap">
+      <p v-if="billingPeriodOptions.starting_from === null" class="mb-2">
+        When is your next billing date?
+      </p>
+      <div
+        v-if="billingPeriodOptions.starting_from === null"
+        class="flex flex-wrap"
+      >
         <div
           v-for="item in billingPeriodOptions.every"
           :key="item"
@@ -313,6 +312,31 @@ const resetStartDate = () => {
           }"
         >
           {{ possibleBillingDate(item).toFormat("EEEE, MMMM d, yyyy") }}
+        </div>
+      </div>
+      <div v-else class="flex items-center">
+        <p class="text-gray-500">
+          Your billing cycle
+          <span
+            v-if="
+              billingPeriodOptions.starting_from > DateTime.now().toISODate()
+            "
+            >will start</span
+          ><span v-else>started</span> on
+          <span class="underline">
+            {{
+              DateTime.fromISO(billingPeriodOptions.starting_from).toFormat(
+                "EEEE, MMMM d, yyyy"
+              )
+            }}
+          </span>
+        </p>
+        <div
+          @click="billingPeriodOptions.starting_from = null"
+          class="ml-2 cursor-pointer"
+          v-tooltip="'Edit'"
+        >
+          <PencilSquareIcon class="h-5 w-5 text-blue-500" />
         </div>
       </div>
     </div>
