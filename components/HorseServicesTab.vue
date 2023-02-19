@@ -1,6 +1,7 @@
 <script setup>
 import { DateTime } from "luxon";
-import { TrashIcon } from "@heroicons/vue/24/outline";
+import { TrashIcon, LockClosedIcon } from "@heroicons/vue/24/outline";
+import { PlusIcon } from "@heroicons/vue/20/solid";
 
 const services = [
   {
@@ -52,6 +53,9 @@ const days = useState("weekdays", () => []);
 const events = useState("events", () => []);
 const selectedYard = useState("selectedYard");
 const client = useSupabaseClient();
+const user = useSupabaseUser();
+const profile = useState("profile");
+const horse = useState("horse");
 
 const getEvents = async () => {
   await useAsyncData("services", async () => {
@@ -121,7 +125,12 @@ const goToPreviousWeek = () => {
 </script>
 
 <template>
-  <div class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
+  <div
+    v-if="
+      (horse.owner && user.id === horse.owner.id) || profile.active_role < 3
+    "
+    class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8"
+  >
     <div class="sm:flex sm:items-center mb-5 border-b pb-5">
       <div class="sm:flex-auto">
         <h1 class="text-xl font-semibold text-gray-900">Your Services</h1>
@@ -231,6 +240,15 @@ const goToPreviousWeek = () => {
         </div>
         <div class="border-t"></div>
       </div>
+    </div>
+  </div>
+  <div v-else class="flex w-full my-20 justify-center items-center">
+    <div class="text-center">
+      <LockClosedIcon class="mx-auto h-12 w-12 text-gray-400" />
+      <h3 class="mt-2 text-sm font-medium text-gray-900">Private</h3>
+      <p class="mt-1 text-sm text-gray-500 px-10">
+        Only Yard owners, admins and the horse owner can view a horses services.
+      </p>
     </div>
   </div>
 </template>
