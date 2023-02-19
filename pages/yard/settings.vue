@@ -119,11 +119,25 @@ const possibleBillingDate = (item) => {
       if (billingPeriodOptions.value.day == 1) {
         return DateTime.now().plus({ months: item }).startOf("month");
       } else {
-        // Working on!!!: handle if "billingPeriodOptions.value.day" is mon, tue, wed, thu, fri, etc...
-        return DateTime.now()
+        // DONE!!!
+
+        // Get the date of the first day of next month
+        const firstDayOfNextMonth = DateTime.now()
           .plus({ months: item })
-          .set({ day: 1 })
-          .set({ weekday: billingPeriodOptions.value.day - 1 });
+          .startOf("month");
+        // Get the number of days until the next Wednesday
+        const daysUntilNextXWeekday =
+          (billingPeriodOptions.value.day -
+            1 -
+            firstDayOfNextMonth.weekday +
+            7) %
+          7;
+        // Get the date of the next first Wednesday
+        const nextFirstXWeekday = firstDayOfNextMonth.plus({
+          days: daysUntilNextXWeekday,
+        });
+
+        return nextFirstXWeekday;
       }
     } else {
       // last (x) on every month
