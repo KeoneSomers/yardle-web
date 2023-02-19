@@ -72,9 +72,9 @@ const fetchServices = async () => {
 await fetchServices();
 
 const billingPeriodOptions = ref({
-  every: 3,
+  every: 1,
   period: 2,
-  onThe: 1,
+  onThe: 2,
   day: "1",
   startingFrom: null,
 });
@@ -121,8 +121,6 @@ const getNextFirstXWeekdayInFuture = (xWeekday, item) => {
   let firstXDayOfMonth = firstDayOfMonth.plus({
     days: daysToAdd,
   });
-
-  console.log(firstXDayOfMonth.toFormat("EEEE, MMMM d, yyyy"));
 
   return firstXDayOfMonth;
 };
