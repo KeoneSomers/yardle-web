@@ -2,19 +2,12 @@
 import { DateTime } from "luxon";
 import { TrashIcon, LockClosedIcon } from "@heroicons/vue/24/outline";
 import { PlusIcon } from "@heroicons/vue/20/solid";
+import RequestServiceModal from "@/components/modals/RequestServiceModal.vue";
 
 const viewingHistory = ref(false);
+const createModalOpen = ref(false);
 
-const services = [
-  {
-    id: 1,
-    name: "Horse Boarding",
-    description: "Horse Boarding Description",
-    price: 100,
-    price_type: "per day",
-    is_active: true,
-  },
-];
+const serviceRequests = useState("service_requests", () => []);
 
 const months = [
   "January",
@@ -279,4 +272,9 @@ const goToPreviousWeek = () => {
       </p>
     </div>
   </div>
+
+  <RequestServiceModal
+    :is-open="createModalOpen"
+    @close="createModalOpen = false"
+  />
 </template>
