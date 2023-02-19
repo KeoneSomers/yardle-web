@@ -125,6 +125,25 @@ const getNextFirstXWeekdayInFuture = (xWeekday, item) => {
   return firstXDayOfMonth;
 };
 
+const getLastXWeekdayInFuture = (xWeekday, item) => {
+  const lastDayOfMonth = DateTime.now()
+    .plus({
+      months: item,
+    })
+    .endOf("month");
+
+  let daysToSubtract = lastDayOfMonth.weekday - xWeekday;
+  if (daysToSubtract < 0) {
+    daysToSubtract += 7;
+  }
+
+  let lastXDayOfMonth = lastDayOfMonth.minus({
+    days: daysToSubtract,
+  });
+
+  return lastXDayOfMonth;
+};
+
 const possibleBillingDate = (item) => {
   // (item is how often: i.e: every [item] weeks / months)
   // weekly billing
@@ -168,7 +187,21 @@ const possibleBillingDate = (item) => {
         return DateTime.now().plus({ months: item }).endOf("month");
       } else {
         // TODO: handle if "billingPeriodOptions.value.day" is mon, tue, wed, thu, fri, etc...
-        return DateTime.now().plus({ months: item }).endOf("month");
+        const startingValue = getLastXWeekdayInFuture(
+          billingPeriodOptions.value.day - 1,
+          1
+        );
+        if (startingValue < DateTime.now()) {
+          return getLastXWeekdayInFuture(
+            billingPeriodOptions.value.day - 1,
+            item + 1
+          );
+        } else {
+          return getLastXWeekdayInFuture(
+            billingPeriodOptions.value.day - 1,
+            item
+          );
+        }
       }
     }
   }
