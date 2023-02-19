@@ -16,7 +16,9 @@ const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
 const yard = useState("yard");
 const loading = ref(false);
+const loading2 = ref(false);
 const done = ref(false);
+const done2 = ref(false);
 const services = useState("services", () => []);
 
 const createModalOpen = ref(false);
@@ -71,13 +73,91 @@ const fetchServices = async () => {
 
 await fetchServices();
 
+// fallback / basic
 const billingPeriodOptions = ref({
+  yard_id: selectedYard.value,
   every: 1,
   period: 2,
-  onThe: 2,
-  day: "1",
-  startingFrom: null,
+  on_the: 2,
+  day: 1,
+  starting_from: null,
 });
+
+const fetchYardBillingCycles = async () => {
+  try {
+    const { data, error } = await client
+      .from("yard_billing_cycles")
+      .select()
+      .eq("yard_id", selectedYard.value)
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") {
+        console.log(
+          "No results found for this yard - will use fallback values"
+        );
+      } else {
+        throw error;
+      }
+    }
+
+    if (data) {
+      console.log(data);
+      billingPeriodOptions.value = data;
+      billingPeriodOptions.value.starting_from = DateTime.fromISO(
+        new Date(billingPeriodOptions.value.starting_from).toISOString()
+      ).toISODate();
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+onMounted(async () => {
+  await fetchYardBillingCycles();
+});
+
+const handleBillingCycleSave = async () => {
+  try {
+    loading2.value = true;
+    console.log(billingPeriodOptions.value.id);
+    if (billingPeriodOptions.value.id === undefined) {
+      const { data, error } = await client
+        .from("yard_billing_cycles")
+        .insert(billingPeriodOptions.value)
+        .eq("yard_id", selectedYard.value)
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      billingPeriodOptions.value.id = data.id;
+    } else {
+      const { data, error } = await client
+        .from("yard_billing_cycles")
+        .update(billingPeriodOptions.value)
+        .eq("yard_id", selectedYard.value);
+
+      console.log("here");
+
+      if (error) {
+        throw error;
+      }
+    }
+
+    loading2.value = false;
+    done2.value = true;
+    setTimeout(() => {
+      done2.value = false;
+    }, 1200);
+  } catch (err) {
+    loading2.value = false;
+    console.error(err);
+  }
+};
 
 watch(
   () => billingPeriodOptions.value.period,
@@ -90,19 +170,6 @@ watch(
     }
   }
 );
-
-watch(billingPeriodOptions.value, (newValue) => {
-  // clear the starting from value
-  // if the form changes
-  if (
-    newValue.every != billingPeriodOptions.value.every ||
-    newValue.period != billingPeriodOptions.value.period ||
-    newValue.onThe != billingPeriodOptions.value.onThe ||
-    newValue.day != billingPeriodOptions.value.day
-  ) {
-    billingPeriodOptions.value.startingFrom = null;
-  }
-});
 
 const getNextFirstXWeekdayInFuture = (xWeekday, item) => {
   item = item - 1;
@@ -153,7 +220,7 @@ const possibleBillingDate = (item) => {
       .set({ weekday: billingPeriodOptions.value.day - 1 });
   } else {
     // monthly billing
-    if (billingPeriodOptions.value.onThe == 1) {
+    if (billingPeriodOptions.value.on_the == 1) {
       // first (x) on every month
 
       if (billingPeriodOptions.value.day == 1) {
@@ -257,114 +324,116 @@ const possibleBillingDate = (item) => {
         settings.
       </p>
 
-      <p class="my-2">When would you like to bill your clients?</p>
-      <div class="w-full md:w-1/2">
-        <div class="flex items-center">
-          <div class="border bg-gray-100 p-2 w-28 rounded-l-lg">
-            <p>Every</p>
-          </div>
-          <div class="flex flex-1">
-            <div class="flex-1">
-              <input
-                type="number"
-                min="1"
-                v-model="billingPeriodOptions.every"
-                class="w-full border border-gray-300 border-l-0"
-              />
+      <div class="bg-gray-50 rounded-xl border p-4">
+        <p class="my-2">When would you like to bill your clients?</p>
+        <div class="w-full md:w-1/2">
+          <div class="flex items-center">
+            <div class="border bg-gray-100 p-2 w-28 rounded-l-lg">
+              <p>Every</p>
             </div>
-            <div class="flex-1">
-              <select
-                v-model="billingPeriodOptions.period"
-                class="w-full rounded-r-lg border border-gray-300 border-l-0"
-              >
-                <option value="1">
-                  Week<span v-if="billingPeriodOptions.every > 1">s</span>
-                </option>
-                <option value="2">
-                  Month<span v-if="billingPeriodOptions.every > 1">s</span>
-                </option>
-              </select>
+            <div class="flex flex-1">
+              <div class="flex-1">
+                <input
+                  type="number"
+                  min="1"
+                  v-model="billingPeriodOptions.every"
+                  class="w-full border border-gray-300 border-l-0"
+                />
+              </div>
+              <div class="flex-1">
+                <select
+                  v-model="billingPeriodOptions.period"
+                  class="w-full rounded-r-lg border border-gray-300 border-l-0"
+                >
+                  <option value="1">
+                    Week<span v-if="billingPeriodOptions.every > 1">s</span>
+                  </option>
+                  <option value="2" v-if="billingPeriodOptions">
+                    Month<span v-if="billingPeriodOptions.every > 1">s</span>
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-1 items-center mt-2">
+            <div class="border bg-gray-100 p-2 w-28 rounded-l-lg">
+              <p v-if="billingPeriodOptions.period == 1">On a</p>
+              <p v-if="billingPeriodOptions.period == 2">On the</p>
+            </div>
+            <div class="flex flex-1">
+              <div v-if="billingPeriodOptions.period == 2" class="flex-1">
+                <select
+                  v-model="billingPeriodOptions.on_the"
+                  class="w-full border border-gray-300 border-l-0"
+                >
+                  <option value="1">First</option>
+                  <option value="2">Last</option>
+                </select>
+              </div>
+              <div class="flex-1">
+                <select
+                  required
+                  v-model="billingPeriodOptions.day"
+                  class="w-full rounded-r-lg border border-gray-300 border-l-0"
+                >
+                  <option value="1" v-if="billingPeriodOptions.period == 2">
+                    Day
+                  </option>
+                  <option value="2">Monday</option>
+                  <option value="3">Tuesday</option>
+                  <option value="4">Wednesday</option>
+                  <option value="5">Thursday</option>
+                  <option value="6">Friday</option>
+                  <option value="7">Saturday</option>
+                  <option value="8">Sunday</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="flex flex-1 items-center mt-2">
-          <div class="border bg-gray-100 p-2 w-28 rounded-l-lg">
-            <p v-if="billingPeriodOptions.period == 1">On a</p>
-            <p v-if="billingPeriodOptions.period == 2">On the</p>
-          </div>
-          <div class="flex flex-1">
-            <div v-if="billingPeriodOptions.period == 2" class="flex-1">
-              <select
-                v-model="billingPeriodOptions.onThe"
-                class="w-full border border-gray-300 border-l-0"
-              >
-                <option value="1">First</option>
-                <option value="2">Last</option>
-              </select>
-            </div>
-            <div class="flex-1">
-              <select
-                required
-                v-model="billingPeriodOptions.day"
-                class="w-full rounded-r-lg border border-gray-300 border-l-0"
-              >
-                <option value="1" v-if="billingPeriodOptions.period == 2">
-                  Day
-                </option>
-                <option value="2">Monday</option>
-                <option value="3">Tuesday</option>
-                <option value="4">Wednesday</option>
-                <option value="5">Thursday</option>
-                <option value="6">Friday</option>
-                <option value="7">Saturday</option>
-                <option value="8">Sunday</option>
-              </select>
+        <div v-if="billingPeriodOptions.every > 1" class="mt-4">
+          <p class="mb-2">When is your next billing date?</p>
+          <div class="flex space-x-2 flex-wrap">
+            <div
+              v-for="item in billingPeriodOptions.every"
+              :key="item"
+              @click="
+                billingPeriodOptions.starting_from =
+                  possibleBillingDate(item).toISODate()
+              "
+              class="px-3 py-2 border rounded-lg text-gray-500 cursor-pointer hover:bg-indigo-100"
+              :class="{
+                'bg-indigo-100':
+                  billingPeriodOptions.starting_from ==
+                  possibleBillingDate(item).toISODate(),
+              }"
+            >
+              {{ possibleBillingDate(item).toFormat("EEEE, MMMM d, yyyy") }}
             </div>
           </div>
         </div>
-      </div>
 
-      <div v-if="billingPeriodOptions.every > 1" class="mt-4">
-        <p class="mb-2">When is your next billing date?</p>
-        <div class="flex space-x-2 flex-wrap">
-          <div
-            v-for="item in billingPeriodOptions.every"
-            :key="item"
-            @click="
-              billingPeriodOptions.startingFrom =
-                possibleBillingDate(item).toISODate()
-            "
-            class="px-3 py-2 border rounded-lg text-gray-500 cursor-pointer hover:bg-indigo-100"
-            :class="{
-              'bg-indigo-100':
-                billingPeriodOptions.startingFrom ==
-                possibleBillingDate(item).toISODate(),
-            }"
-          >
-            {{ possibleBillingDate(item).toFormat("EEEE, MMMM d, yyyy") }}
-          </div>
-        </div>
-      </div>
-
-      <div class="flex justify-end pt-8 mb-10">
-        <div v-if="!done">
-          <!-- <button
+        <div class="flex justify-end">
+          <div v-if="!done2">
+            <!-- <button
             @click="yardName = yard.name"
             type="button"
             class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-blue-gray-900 shadow-sm hover:bg-blue-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Cancel
           </button> -->
-          <button
-            @click="updateYard"
-            type="submit"
-            class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            Save
-          </button>
+            <button
+              @click="handleBillingCycleSave"
+              type="submit"
+              class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Save
+            </button>
+          </div>
+          <div v-else class="text-green-600 py-2">Changes Saved!</div>
         </div>
-        <div v-else class="text-green-600 py-2">Changes Saved!</div>
       </div>
 
       <!-- Billing info empty state -->
