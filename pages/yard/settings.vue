@@ -72,9 +72,9 @@ const fetchServices = async () => {
 await fetchServices();
 
 const billingPeriodOptions = ref({
-  every: 1,
+  every: 3,
   period: 2,
-  onThe: 2,
+  onThe: 1,
   day: "1",
   startingFrom: null,
 });
@@ -104,6 +104,29 @@ watch(billingPeriodOptions.value, (newValue) => {
   }
 });
 
+const getNextFirstXWeekdayInFuture = (xWeekday, item) => {
+  item = item - 1;
+
+  const firstDayOfMonth = DateTime.now()
+    .plus({
+      months: item,
+    })
+    .startOf("month");
+
+  let daysToAdd = xWeekday - firstDayOfMonth.weekday;
+  if (daysToAdd < 0) {
+    daysToAdd += 7;
+  }
+
+  let firstXDayOfMonth = firstDayOfMonth.plus({
+    days: daysToAdd,
+  });
+
+  console.log(firstXDayOfMonth.toFormat("EEEE, MMMM d, yyyy"));
+
+  return firstXDayOfMonth;
+};
+
 const possibleBillingDate = (item) => {
   // (item is how often: i.e: every [item] weeks / months)
   // weekly billing
@@ -119,25 +142,24 @@ const possibleBillingDate = (item) => {
       if (billingPeriodOptions.value.day == 1) {
         return DateTime.now().plus({ months: item }).startOf("month");
       } else {
-        // DONE!!!
+        // get the next first (x) day of the month
 
-        // Get the date of the first day of next month
-        const firstDayOfNextMonth = DateTime.now()
-          .plus({ months: item })
-          .startOf("month");
-        // Get the number of days until the next Wednesday
-        const daysUntilNextXWeekday =
-          (billingPeriodOptions.value.day -
-            1 -
-            firstDayOfNextMonth.weekday +
-            7) %
-          7;
-        // Get the date of the next first Wednesday
-        const nextFirstXWeekday = firstDayOfNextMonth.plus({
-          days: daysUntilNextXWeekday,
-        });
+        const startingValue = getNextFirstXWeekdayInFuture(
+          billingPeriodOptions.value.day - 1,
+          1
+        );
 
-        return nextFirstXWeekday;
+        if (startingValue < DateTime.now()) {
+          return getNextFirstXWeekdayInFuture(
+            billingPeriodOptions.value.day - 1,
+            item + 1
+          );
+        } else {
+          return getNextFirstXWeekdayInFuture(
+            billingPeriodOptions.value.day - 1,
+            item
+          );
+        }
       }
     } else {
       // last (x) on every month
