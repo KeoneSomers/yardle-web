@@ -45,7 +45,6 @@ const dt = ref(DateTime.now());
 const trueDateTime = DateTime.now();
 
 const days = useState("weekdays", () => []);
-const events = useState("events", () => []);
 const selectedYard = useState("selectedYard");
 const client = useSupabaseClient();
 const user = useSupabaseUser();
@@ -54,12 +53,14 @@ const horse = useState("horse");
 
 const getEvents = async () => {
   await useAsyncData("services", async () => {
-    const { data } = await client
-      .from("calendar_events")
-      .select()
-      .eq("yard_id", selectedYard.value);
+    const { data, error } = await client
+      .from("service_requests")
+      .select("*, livery_services(name, price)")
+      .eq("horse_id", horse.value.id);
 
-    events.value = data;
+    console.log(data);
+
+    serviceRequests.value = data;
   });
 };
 
@@ -77,12 +78,12 @@ const setDays = async () => {
   while (i < 7) {
     let day = firstDay.value.plus({ days: i });
 
-    // add  events from events array
+    // add  serviceRequests from serviceRequests array
     // TODO: This could be optimised I think.
-    if (events.value) {
-      day.events = events.value.filter((e) => {
+    if (serviceRequests.value) {
+      day.serviceRequests = serviceRequests.value.filter((e) => {
         return (
-          DateTime.fromISO(e.date_time).toLocaleString() == day.toLocaleString()
+          DateTime.fromISO(e.date).toLocaleString() == day.toLocaleString()
         );
       });
     }
@@ -93,11 +94,11 @@ const setDays = async () => {
   }
 };
 
-// watch for added events
+// watch for added serviceRequests
 // TODO: have days be stored in useState and add the event
 // directly to the day when it's created (big optimisation)
 watchEffect(() => {
-  if (events.value) {
+  if (serviceRequests.value) {
     setDays();
   }
 });
@@ -211,13 +212,20 @@ const goToPreviousWeek = () => {
               </div>
             </div>
 
-            <div v-if="day.events && day.events.length > 0" class="p-3">
+            <div
+              v-if="day.serviceRequests && day.serviceRequests.length > 0"
+              class="p-3"
+            >
               <div
-                v-for="event in day.events"
+                v-for="event in day.serviceRequests"
                 :key="event.id"
                 class="bg-gray-50 rounded mb-1 p-1 flex justify-between items-center"
               >
-                <div class="text-gray-600">{{ event.title }} - £4.30</div>
+                <div class="text-gray-600">
+                  {{ event.livery_services.name }} - £{{
+                    event.livery_services.price
+                  }}
+                </div>
                 <div>
                   <TrashIcon
                     v-tooltip="'Cancel Service'"

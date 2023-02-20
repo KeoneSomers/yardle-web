@@ -49,7 +49,7 @@ const handleSubmit = async () => {
     .insert({
       created_by: user.value.id,
       horse_id: horse.value.id,
-      service_id: selectedService.value.id,
+      service_id: selectedService.value,
       date: date.value,
     })
     .select()
