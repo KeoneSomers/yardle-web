@@ -97,9 +97,9 @@ const setDays = async () => {
 // watch for added serviceRequests
 // TODO: have days be stored in useState and add the event
 // directly to the day when it's created (big optimisation)
-watchEffect(() => {
+watchEffect(async () => {
   if (serviceRequests.value) {
-    setDays();
+    await setDays();
   }
 });
 

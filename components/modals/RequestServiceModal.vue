@@ -49,7 +49,7 @@ const handleSubmit = async () => {
     .insert({
       created_by: user.value.id,
       horse_id: horse.value.id,
-      service_id: selectedService.value,
+      service_id: selectedService.value.id,
       date: date.value,
     })
     .select()
@@ -61,7 +61,13 @@ const handleSubmit = async () => {
   }
 
   // update horseServices locally
-  serviceRequests.value.push(data);
+  serviceRequests.value.push({
+    ...data,
+    livery_services: {
+      name: selectedService.value.name,
+      price: selectedService.value.price,
+    },
+  });
 
   emits("close");
 };
@@ -120,7 +126,7 @@ const handleSubmit = async () => {
                     <option
                       v-for="item in liveryServices"
                       :key="item.id"
-                      :value="item.id"
+                      :value="item"
                     >
                       {{ item.name }} - £{{ item.price }}
                     </option>
