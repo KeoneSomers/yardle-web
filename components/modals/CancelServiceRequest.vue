@@ -17,6 +17,7 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const serviceRequests = useState("service_requests");
+const serviceRequestsLog = useState("service_requests_log");
 
 const errors = ref([]);
 
@@ -55,6 +56,13 @@ const handleDelete = async () => {
     .map((e) => e.id)
     .indexOf(props.service.id);
   serviceRequests.value.splice(index, 1);
+
+  // cancel the item in the log
+  const index2 = serviceRequestsLog.value
+    .map((e) => e.id)
+    .indexOf(props.service.id);
+  serviceRequests.value[index2].canceled_at = new Date();
+  serviceRequests.value[index2].canceled_by = user.value.id;
 
   // close the modal
   emits("close");

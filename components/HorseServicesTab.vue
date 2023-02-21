@@ -4,6 +4,7 @@ import { TrashIcon, LockClosedIcon } from "@heroicons/vue/24/outline";
 import { PlusIcon } from "@heroicons/vue/20/solid";
 import RequestServiceModal from "@/components/modals/RequestServiceModal.vue";
 import CancelServiceRequest from "@/components/modals/CancelServiceRequest.vue";
+import ServiceRequestLog from "@/components/ServiceRequestLog.vue";
 
 const viewingHistory = ref(false);
 const createModalOpen = ref(false);
@@ -11,6 +12,7 @@ const cancelModalOpen = ref(false);
 const selectedService = ref(null);
 
 const serviceRequests = useState("service_requests", () => []);
+const serviceRequestsLog = useState("service_requests_log", () => []);
 
 const months = [
   "January",
@@ -276,7 +278,7 @@ const goToPreviousWeek = () => {
           </button>
         </div>
       </div>
-      <hr />
+      <ServiceRequestLog />
     </div>
   </div>
   <div v-else class="flex w-full my-20 justify-center items-center">
