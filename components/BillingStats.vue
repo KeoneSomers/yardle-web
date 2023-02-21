@@ -19,7 +19,7 @@ const billingCycle = ref({
   period: 1, // weekly or monthly
   on_the: 2, // first or last - month only
   day: 5, // day, monday, tuesday, wednesday, etc.
-  starting_from: "2023-02-09", // the date the billing will start
+  starting_from: "2023-03-09", // the date the billing will start
 });
 
 // TODO: fetch billing cycle info for this yard from db
@@ -90,14 +90,19 @@ const getNextBillingDate = () => {
         .set({ weekday: weekday });
     }
     if (interval > 1) {
-      // need to take into account the starting date when calculating next billing date
       const start = DateTime.fromISO(startingDate);
 
-      const daysAgo = now.diff(start, ["days"]).days;
-      const weeksAgo = Math.ceil(daysAgo / 7);
-      const nextBillingDate = start.plus({ weeks: weeksAgo });
+      if (start < now) {
+        const daysAgo = now.diff(start, ["days"]).days;
+        const weeksAgo = Math.ceil(daysAgo / 7);
+        const nextBillingDate = start.plus({ weeks: weeksAgo });
 
-      return nextBillingDate;
+        return nextBillingDate;
+      }
+
+      if (start > now) {
+        return start;
+      }
     }
   }
 
