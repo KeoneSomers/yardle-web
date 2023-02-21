@@ -15,10 +15,10 @@ const nextBillingDate = ref(null);
 // init with fallback values
 const billingCycle = ref({
   yard_id: selectedYard.value,
-  every: 3, // interval
-  period: 1, // weekly or monthly
+  every: 1, // interval
+  period: 2, // weekly or monthly
   on_the: 2, // first or last - month only
-  day: 5, // day, monday, tuesday, wednesday, etc.
+  day: 2, // day, monday, tuesday, wednesday, etc.
   starting_from: "2023-03-09", // the date the billing will start
 });
 
@@ -79,9 +79,8 @@ const getNextBillingDate = () => {
   const weekday = billingCycle.value.day - 1;
   let startingDate = billingCycle.value.starting_from;
 
-  // simple - every week or month
+  // Weekly Billing
   if (weekly) {
-    // last thing to do for weekly is check interval and starting date
     if (interval === 1) {
       return now
         .plus({
@@ -89,6 +88,7 @@ const getNextBillingDate = () => {
         })
         .set({ weekday: weekday });
     }
+
     if (interval > 1) {
       const start = DateTime.fromISO(startingDate);
 
@@ -106,8 +106,45 @@ const getNextBillingDate = () => {
     }
   }
 
+  // Monthly Billing
   if (monthly) {
-    return DateTime.now();
+    if (interval === 1) {
+      // more simple (every 1 month)
+      if (anyday) {
+        // return last day - if you're already on the last day of the month, add 1 day so you get the next months billing date
+        // TODO: first or last?
+        return now
+          .plus({
+            days: now === now.endOf("month") ? 1 : 0,
+          })
+          .endOf("month");
+      } else {
+        // return last weekday
+        // TODO: first or last?
+        let lastWeekday = now.endOf("month").minus({
+          days: (now.endOf("month").weekday - weekday + 7) % 7,
+        });
+
+        var isBefore = lastWeekday < now;
+        if (isBefore) {
+          console.log("is before");
+          // should be getting the last monday of next month but is getting sat 25th of march
+          var nextMonth = now.plus({ months: 1 });
+          var nextLastDay = nextMonth.endOf("month");
+          lastWeekday = nextLastDay.minus({
+            days: (nextLastDay.weekday - weekday + 7) % 7,
+          });
+        }
+
+        return lastWeekday;
+      }
+    }
+
+    if (interval > 1) {
+      // more complex (every x months)
+      // go off starting date - could be easy - could be hard
+      return now;
+    }
   }
 };
 
