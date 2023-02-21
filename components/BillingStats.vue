@@ -1,5 +1,5 @@
 <script setup>
-import { DateTime } from "luxon";
+import { DateTime, Interval } from "luxon";
 import { PencilIcon } from "@heroicons/vue/24/outline";
 
 const stats = [
@@ -15,38 +15,98 @@ const nextBillingDate = ref(null);
 // init with fallback values
 const billingCycle = ref({
   yard_id: selectedYard.value,
-  every: 1, // interval
-  period: 1, // day or month
+  every: 3, // interval
+  period: 1, // weekly or monthly
   on_the: 2, // first or last - month only
-  day: 3, // day, monday, tuesday, wednesday, etc.
-  starting_from: null, // the date the billing will start
+  day: 5, // day, monday, tuesday, wednesday, etc.
+  starting_from: "2023-02-09", // the date the billing will start
 });
 
 // TODO: fetch billing cycle info for this yard from db
 
-const NextBillingDate = async () => {
-  if (billingCycle.value.every === 1) {
-    // simple calc - once, either every week or month
-    if (billingCycle.value.period === 1) {
-      // weekly
-      return DateTime.now()
-        .startOf("week")
-        .plus({
-          weeks: billingCycle.value.day - 1 <= DateTime.now().weekday ? 1 : 0,
-        })
-        .set({ weekday: billingCycle.value.day - 1 });
-    } else {
-      // monthly
-    }
+// const NextBillingDate = async () => {
+//   if (billingCycle.value.every === 1) {
+//     // simple calc - once, either every week or month
+//     if (billingCycle.value.period === 1) {
+//       // weekly
+//       return DateTime.now()
+//         .startOf("week")
+//         .plus({
+//           weeks: billingCycle.value.day - 1 <= DateTime.now().weekday ? 1 : 0,
+//         })
+//         .set({ weekday: billingCycle.value.day - 1 });
+//     } else {
+//       // monthly
+//       // every month on the last monday
+//       if (billingCycle.value.day === 1) {
+//         // *anyday
+//         if (billingCycle.value.on_the == 1) {
+//           // first
+//           return DateTime.now()
+//             .startOf("week")
+//             .plus({
+//               months:
+//                 billingCycle.value.day - 1 <= DateTime.now().weekday ? 1 : 0,
+//             })
+//             .set({ weekday: billingCycle.value.day - 1 });
+//         } else {
+//           // last
+//         }
+//       } else {
+//         // weekday
+//         if (billingCycle.value.on_the == 1) {
+//           // first
+//         } else {
+//           // last
+//         }
+//       }
+//     }
 
-    return null;
-  } else {
-    // harder calc - need to take into accoun the starting date
-    return null;
+//     return null;
+//   } else {
+//     // harder calc - need to take into accoun the starting date
+//     return null;
+//   }
+// };
+
+const getNextBillingDate = () => {
+  const now = DateTime.now();
+  const interval = billingCycle.value.every;
+  const weekly = billingCycle.value.period === 1;
+  const monthly = billingCycle.value.period === 2;
+  const firstOrLast = billingCycle.value.on_the;
+  const anyday = billingCycle.value.day === 1;
+  const weekday = billingCycle.value.day - 1;
+  let startingDate = billingCycle.value.starting_from;
+
+  // simple - every week or month
+  if (weekly) {
+    // last thing to do for weekly is check interval and starting date
+    if (interval === 1) {
+      return now
+        .plus({
+          weeks: weekday <= now.weekday ? 1 : 0,
+        })
+        .set({ weekday: weekday });
+    }
+    if (interval > 1) {
+      // need to take into account the starting date when calculating next billing date
+      const start = DateTime.fromISO(startingDate);
+
+      const daysAgo = now.diff(start, ["days"]).days;
+      const weeksAgo = Math.ceil(daysAgo / 7);
+      const nextBillingDate = start.plus({ weeks: weeksAgo });
+
+      return nextBillingDate;
+    }
+  }
+
+  if (monthly) {
+    return DateTime.now();
   }
 };
 
-nextBillingDate.value = await NextBillingDate();
+nextBillingDate.value = getNextBillingDate();
 </script>
 
 <template>
