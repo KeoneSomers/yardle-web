@@ -17,7 +17,7 @@ const billingCycle = ref({
   yard_id: selectedYard.value,
   every: 1, // interval
   period: 2, // weekly or monthly
-  on_the: 2, // first or last - month only
+  on_the: 1, // first or last - month only
   day: 2, // day, monday, tuesday, wednesday, etc.
   starting_from: "2023-03-09", // the date the billing will start
 });
@@ -111,32 +111,59 @@ const getNextBillingDate = () => {
     if (interval === 1) {
       // more simple (every 1 month)
       if (anyday) {
-        // return last day - if you're already on the last day of the month, add 1 day so you get the next months billing date
-        // TODO: first or last?
-        return now
-          .plus({
-            days: now === now.endOf("month") ? 1 : 0,
-          })
-          .endOf("month");
-      } else {
-        // return last weekday
-        // TODO: first or last?
-        let lastWeekday = now.endOf("month").minus({
-          days: (now.endOf("month").weekday - weekday + 7) % 7,
-        });
-
-        var isBefore = lastWeekday < now;
-        if (isBefore) {
-          console.log("is before");
-          // should be getting the last monday of next month but is getting sat 25th of march
-          var nextMonth = now.plus({ months: 1 });
-          var nextLastDay = nextMonth.endOf("month");
-          lastWeekday = nextLastDay.minus({
-            days: (nextLastDay.weekday - weekday + 7) % 7,
-          });
+        // return anyday - if you're already on the last day of the month, add 1 day so you get the next months billing date
+        if (firstOrLast === 2) {
+          // last
+          return now
+            .plus({
+              days: now === now.endOf("month") ? 1 : 0,
+            })
+            .endOf("month");
+        } else {
+          // first
+          return now.plus({ months: 1 }).startOf("month");
         }
+      } else {
+        // return weekday
+        if (firstOrLast === 2) {
+          // last
+          let lastWeekday = now.endOf("month").minus({
+            days: (now.endOf("month").weekday - weekday + 7) % 7,
+          });
 
-        return lastWeekday;
+          var isBefore = lastWeekday < now;
+          if (isBefore) {
+            console.log("is before");
+            var nextMonth = now.plus({ months: 1 });
+            var nextLastDay = nextMonth.endOf("month");
+            lastWeekday = nextLastDay.minus({
+              days: (nextLastDay.weekday - weekday + 7) % 7,
+            });
+          }
+
+          return lastWeekday;
+        } else {
+          // first - march 7th
+          console.log("yayaya");
+
+          let firstWeekday = now.startOf("month").plus({
+            days: (weekday - now.startOf("month").weekday + 7) % 7,
+          });
+
+          console.log(firstWeekday.toFormat("EEEE, MMMM d, yyyy"));
+
+          var isBefore = firstWeekday < now;
+          if (isBefore) {
+            console.log("is before");
+            var nextMonth = now.plus({ months: 1 });
+            var nextFirstDay = nextMonth.startOf("month");
+            firstWeekday = nextFirstDay.plus({
+              days: (weekday - nextFirstDay.weekday + 7) % 7,
+            });
+          }
+
+          return firstWeekday;
+        }
       }
     }
 
