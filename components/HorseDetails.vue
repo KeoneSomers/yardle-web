@@ -18,11 +18,11 @@ const viewingHorse = useState("viewingHorse");
 
 const selectedTab = useState("horseTab", () => 0);
 const tabs = [
+  { name: "Services", component: HorseServicesTab },
   { name: "General", component: HorseGeneralTab },
   { name: "Rugs", component: HorseRugsTab },
   { name: "Feeds", component: HorseFeedsTab },
   { name: "Medications", component: HorseMedicationsTab },
-  { name: "Services", component: HorseServicesTab },
 ];
 
 // supabase

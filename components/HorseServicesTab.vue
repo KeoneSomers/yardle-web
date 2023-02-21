@@ -1,10 +1,10 @@
 <script setup>
 import { DateTime } from "luxon";
 import { TrashIcon, LockClosedIcon } from "@heroicons/vue/24/outline";
-import { PlusIcon } from "@heroicons/vue/20/solid";
 import RequestServiceModal from "@/components/modals/RequestServiceModal.vue";
 import CancelServiceRequest from "@/components/modals/CancelServiceRequest.vue";
 import ServiceRequestLog from "@/components/ServiceRequestLog.vue";
+import BillingStats from "@/components/BillingStats.vue";
 
 const viewingHistory = ref(false);
 const createModalOpen = ref(false);
@@ -14,21 +14,6 @@ const selectedService = ref(null);
 const serviceRequests = useState("service_requests", () => []);
 const serviceRequestsLog = useState("service_requests_log", () => []);
 
-const months = [
-  "January",
-  "Febuary",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
 const weekdays = [
   { id: 1, shortName: "Mon", name: "Monday" },
   { id: 2, shortName: "Tue", name: "Tuesday" },
@@ -37,12 +22,6 @@ const weekdays = [
   { id: 5, shortName: "Fri", name: "Friday" },
   { id: 6, shortName: "Sat", name: "Saturday" },
   { id: 7, shortName: "Sun", name: "Sunday" },
-];
-
-const stats = [
-  { name: "Total Requirements This Month", stat: "33" },
-  { name: "Current Weeks Cost", stat: "£44.00" },
-  { name: "Forcast Bill This Month", stat: "£289.00" },
 ];
 
 const offset = ref(0);
@@ -159,24 +138,7 @@ const goToPreviousWeek = () => {
           </button>
         </div>
       </div>
-      <div class="">
-        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-          <div
-            v-for="item in stats"
-            :key="item.name"
-            class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
-          >
-            <dt class="truncate text-sm font-medium text-gray-500">
-              {{ item.name }}
-            </dt>
-            <dd
-              class="mt-1 text-3xl font-semibold tracking-tight text-gray-900"
-            >
-              {{ item.stat }}
-            </dd>
-          </div>
-        </dl>
-      </div>
+      <BillingStats />
       <div class="mt-4 rounded-xl border overflow-hidden">
         <div class="flex justify-between items-center p-2 bg-gray-50">
           <div
