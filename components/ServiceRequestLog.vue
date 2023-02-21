@@ -14,7 +14,7 @@ const getEvents = async () => {
         "*, livery_services(name, price), canceled_by(username), created_by(username)"
       )
       .eq("horse_id", horse.value.id)
-      .order("created_at", "desc");
+      .order("created_at", { ascending: false });
 
     console.log(data);
 
