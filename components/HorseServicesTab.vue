@@ -3,9 +3,12 @@ import { DateTime } from "luxon";
 import { TrashIcon, LockClosedIcon } from "@heroicons/vue/24/outline";
 import { PlusIcon } from "@heroicons/vue/20/solid";
 import RequestServiceModal from "@/components/modals/RequestServiceModal.vue";
+import CancelServiceRequest from "@/components/modals/CancelServiceRequest.vue";
 
 const viewingHistory = ref(false);
 const createModalOpen = ref(false);
+const cancelModalOpen = ref(false);
+const selectedService = ref(null);
 
 const serviceRequests = useState("service_requests", () => []);
 
@@ -56,7 +59,8 @@ const getEvents = async () => {
     const { data, error } = await client
       .from("service_requests")
       .select("*, livery_services(name, price)")
-      .eq("horse_id", horse.value.id);
+      .eq("horse_id", horse.value.id)
+      .filter("canceled_at", "is", null);
 
     console.log(data);
 
@@ -142,7 +146,7 @@ const goToPreviousWeek = () => {
             type="button"
             class="inline-flex mr-2 items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
           >
-            View History
+            View Logs
           </button>
           <button
             @click="() => (createModalOpen = true)"
@@ -219,7 +223,7 @@ const goToPreviousWeek = () => {
               <div
                 v-for="event in day.serviceRequests"
                 :key="event.id"
-                class="bg-gray-50 rounded mb-1 p-1 flex justify-between items-center"
+                class="bg-blue-50 rounded mb-1 p-1 flex justify-between items-center"
               >
                 <div class="text-gray-600">
                   {{ event.livery_services.name }} - £{{
@@ -228,6 +232,10 @@ const goToPreviousWeek = () => {
                 </div>
                 <div>
                   <TrashIcon
+                    @click="
+                      selectedService = event;
+                      cancelModalOpen = true;
+                    "
                     v-tooltip="'Cancel Service'"
                     class="h-5 w-5 text-gray-400 cursor-pointer"
                   />
@@ -284,5 +292,10 @@ const goToPreviousWeek = () => {
   <RequestServiceModal
     :is-open="createModalOpen"
     @close="createModalOpen = false"
+  />
+  <CancelServiceRequest
+    :is-open="cancelModalOpen"
+    :service="selectedService"
+    @close="cancelModalOpen = false"
   />
 </template>
