@@ -26,12 +26,9 @@ const tabs = [
   { name: "Services", component: HorseServicesTab },
 ];
 
-// supabase
 const client = useSupabaseClient();
-
 const selectedHorseId = useState("selectedHorseId");
 const horse = useState("horse");
-const deleteModalOpen = ref(false);
 const editModalOpen = ref(false);
 const profile = useState("profile");
 const horses = useState("horses");
@@ -151,7 +148,9 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
     confirmButtonText: "Delete",
     isLoading: loading,
     onBeforeOpen() {
-      loading.value = false;
+      if (loading.value === true) {
+        loading.value = false;
+      }
     },
     onCancel() {
       closeDeleteHorseModal();
