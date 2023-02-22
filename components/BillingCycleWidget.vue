@@ -195,7 +195,6 @@ const fetchYardBillingCycle = async () => {
     }
 
     if (data) {
-      console.log(data);
       billingPeriodOptions.value = data;
       billingPeriodOptions.value.starting_from = DateTime.fromISO(
         new Date(billingPeriodOptions.value.starting_from).toISOString()

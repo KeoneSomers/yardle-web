@@ -16,8 +16,6 @@ const getEvents = async () => {
       .eq("horse_id", horse.value.id)
       .order("created_at", { ascending: false });
 
-    console.log(data);
-
     serviceRequestsLog.value = data;
   });
 };
