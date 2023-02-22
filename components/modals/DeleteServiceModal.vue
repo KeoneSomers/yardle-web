@@ -10,70 +10,50 @@ import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 
 const loading = ref(false);
 
-const props = defineProps(["isOpen", "horseId"]);
+const props = defineProps(["isOpen", "service"]);
 const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
+const services = useState("services");
 
-const selectedHorseId = useState("selectedHorseId");
-const horses = useState("horses");
-const viewingHorse = useState("viewingHorse");
+const errors = ref([]);
 
-const handleDelete = async () => {
-  // delete horse image
-  const index = horses.value.map((e) => e.id).indexOf(props.horseId);
-
-  if (horses.value[index].avatar_url) {
-    const { error } = await client.storage
-      .from("horse-avatars")
-      .remove([horses.value[index].avatar_url]);
-
-    if (error) {
-      console.log(error);
-      return;
+// handle open and close
+watch(
+  () => props.isOpen,
+  async (isOpen) => {
+    if (isOpen) {
+      errors.value = [];
     }
   }
+);
 
-  // first delete horses rugs, feeds, medications and image
-  await client.from("rugs").delete().eq("horse_id", props.horseId);
-  await client.from("ingredients").delete().eq("horse_id", props.horseId);
-  await client.from("feeds").delete().eq("horse_id", props.horseId);
-  await client.from("medications").delete().eq("horse_id", props.horseId);
+const handleDelete = async () => {
+  // first move the horses to the unsorted field
+  const index = services.value.map((e) => e.id).indexOf(props.service.id);
 
-  // second, delete horse from calendar events
-  const { error: delError } = await client
-    .from("calendar_events_horses")
+  // unlink any requests to this service
+  const { error: error2 } = await client
+    .from("service_requests")
+    .update({ service_id: null })
+    .eq("service_id", props.service.id);
+
+  // Delete the service
+  const { error } = await client
+    .from("livery_services")
     .delete()
-    .eq("horse_id", props.horseId);
+    .eq("id", props.service.id);
 
-  if (delError) {
+  if (error) {
+    console.log(error);
     return;
   }
 
-  const { error: horseDeleteError } = await client
-    .from("horses")
-    .delete()
-    .eq("id", props.horseId)
-    .select();
+  // now remove the deleted service from the webpage
+  services.value.splice(index, 1);
 
-  if (!horseDeleteError) {
-    // success! - now handle cleanup on frontend
-    horses.value.splice(index, 1);
-
-    // change selected horse
-    if (horses.value.length > 0) {
-      selectedHorseId.value = horses.value[0].id;
-    } else {
-      selectedHorseId.value = 0;
-    }
-
-    // close the modal
-    viewingHorse.value = false;
-    emits("close");
-  } else {
-    console.log("error deleting horse");
-    console.log(horseDeleteError);
-  }
+  // close the modal
+  emits("close");
 };
 </script>
 
@@ -123,16 +103,27 @@ const handleDelete = async () => {
                   <DialogTitle
                     as="h3"
                     class="text-lg font-medium leading-6 text-gray-900"
-                    >Delete Horse</DialogTitle
+                    >Delete Service</DialogTitle
                   >
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
-                      Are you sure you want to delete this horse? All of it's
-                      data will be permanently removed from your yard forever.
-                      This action cannot be undone.
+                      Are you sure you want to delete this livery service?
+                      Clients will no longer be able to select this service and
+                      it will show as deleted on previously created client
+                      requests. This action cannot be undone.
                     </p>
                   </div>
                 </div>
+              </div>
+              <div
+                v-if="errors.length > 0"
+                class="p-4 my-2 bg-red-100 text-red-500 rounded-lg"
+              >
+                <ul class="list-disc list-inside">
+                  <li v-for="error in errors" :key="error">
+                    {{ error }}
+                  </li>
+                </ul>
               </div>
               <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                 <button

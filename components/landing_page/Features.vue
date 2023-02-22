@@ -3,9 +3,9 @@ import { CheckIcon } from "@heroicons/vue/20/solid";
 
 const features = [
   {
-    name: "Invite Team Members",
+    name: "Manage Livery Billing",
     description:
-      "Add members to your yard and work together in managing your horses. This makes it easier to collaborate on horse care and ensure that all details are kept up to date",
+      "You and your liveries can manage billing and see upcoming bills based on services requested.",
   },
   {
     name: "Horses Details",
@@ -33,9 +33,9 @@ const features = [
       "Create fields then drag and drop horses into the fields that they should be in.",
   },
   {
-    name: "Dashboard Overview (Soon)",
+    name: "Invite Team Members",
     description:
-      "Get up to date at a glance with the dashboard view that will give you all the important information you need.",
+      "Add members to your yard and work together in managing your horses. This makes it easier to collaborate on horse care and ensure that all details are kept up to date",
   },
   {
     name: "Team Roles",

@@ -1,13 +1,30 @@
 <script setup>
+import { DateTime } from "luxon";
+import { PlusIcon, EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import CreateServiceModal from "@/components/modals/CreateServiceModal.vue";
+import EditServiceModal from "@/components/modals/EditServiceModal.vue";
+import DeleteServiceModal from "@/components/modals/DeleteServiceModal.vue";
+import BillingCycleWidget from "@/components/BillingCycleWidget.vue";
+
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
 });
+
+const now = ref(DateTime.now());
 
 const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
 const yard = useState("yard");
 const loading = ref(false);
 const done = ref(false);
+const services = useState("services", () => []);
+
+const createModalOpen = ref(false);
+const editModalOpen = ref(false);
+const deleteModalOpen = ref(false);
+
+const selectedService = ref(null);
 
 const yardName = ref("");
 yardName.value = yard.value.name;
@@ -35,10 +52,29 @@ const updateYard = async () => {
     console.error(err);
   }
 };
+
+const fetchServices = async () => {
+  try {
+    const { data, error } = await client
+      .from("livery_services")
+      .select()
+      .eq("yard_id", selectedYard.value);
+
+    if (error) {
+      throw error;
+    }
+
+    services.value = data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+await fetchServices();
 </script>
 
 <template>
-  <div>
+  <div class="overflow-auto pb-20 px-4 md:px-0">
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="py-5">
         <p class="text-4xl font-bold mt-20">Yard Settings</p>
@@ -81,14 +117,199 @@ const updateYard = async () => {
       </div>
       <hr class="my-10" />
       <h1 class="text-xl font-semibold text-gray-900">Services & Billing</h1>
-      <p class="mt-2 text-sm text-gray-700">
+      <p class="mt-2 text-sm text-gray-700 mb-10">
         Manage the services you offer to your clients and configure your billing
         settings.
       </p>
-      <span
-        class="my-5 inline-flex items-center rounded-full bg-yellow-100 px-3 py-0.5 text-sm font-medium text-yellow-800"
-        >Coming Soon!</span
-      >
+
+      <BillingCycleWidget />
+
+      <hr class="my-5 border-dashed border-1" />
+
+      <div v-if="services.length > 0">
+        <div class="sm:flex sm:items-center">
+          <div class="sm:flex-auto">
+            <h1 class="font-semibold text-gray-900">Livery Services</h1>
+            <p class="mt-2 text-sm text-gray-700">
+              Add new livery services to your yard.
+            </p>
+          </div>
+          <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <button
+              @click="createModalOpen = true"
+              type="button"
+              class="block rounded-md bg-indigo-600 py-1.5 px-3 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Add service
+            </button>
+          </div>
+        </div>
+        <div class="mt-8 flow-root">
+          <div class="-my-2 -mx-6 overflow-y-visible lg:-mx-8">
+            <div
+              class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
+            >
+              <table class="min-w-full divide-y divide-gray-300 border">
+                <thead>
+                  <tr class="divide-x divide-gray-200">
+                    <th
+                      scope="col"
+                      class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900"
+                    >
+                      Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      Description
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      Price
+                    </th>
+                    <th scope="col" class="px-4 py-3.5"></th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                  <tr
+                    v-for="service in services"
+                    :key="service.id"
+                    class="divide-x divide-gray-200"
+                  >
+                    <td
+                      class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900"
+                    >
+                      {{ service.name }}
+                    </td>
+                    <td class="p-4 text-sm text-gray-500">
+                      {{ service.description }}
+                    </td>
+                    <td class="py-4 pl-4 pr-4 text-sm text-gray-500">
+                      £{{ service.price.toFixed(2) }}
+                    </td>
+                    <td class="py-4 pl-4 pr-4 text-sm text-gray-500">
+                      <Menu as="div" class="relative inline-block text-left">
+                        <div>
+                          <MenuButton
+                            class="flex items-center p-2 rounded-full text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                          >
+                            <span class="sr-only">Open options</span>
+                            <EllipsisVerticalIcon
+                              class="h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          </MenuButton>
+                        </div>
+
+                        <transition
+                          enter-active-class="transition ease-out duration-100"
+                          enter-from-class="transform opacity-0 scale-95"
+                          enter-to-class="transform opacity-100 scale-100"
+                          leave-active-class="transition ease-in duration-75"
+                          leave-from-class="transform opacity-100 scale-100"
+                          leave-to-class="transform opacity-0 scale-95"
+                        >
+                          <MenuItems
+                            class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                          >
+                            <div class="py-1">
+                              <MenuItem v-slot="{ active }">
+                                <button
+                                  @click="
+                                    selectedService = service;
+                                    editModalOpen = true;
+                                  "
+                                  :class="[
+                                    active
+                                      ? 'bg-gray-100 text-gray-900'
+                                      : 'text-gray-700',
+                                    'block px-4 py-2 text-sm w-full text-left',
+                                  ]"
+                                >
+                                  Edit
+                                </button>
+                              </MenuItem>
+                              <MenuItem v-slot="{ active }">
+                                <button
+                                  @click="
+                                    selectedService = service;
+                                    deleteModalOpen = true;
+                                  "
+                                  :class="[
+                                    active
+                                      ? 'bg-gray-100 text-gray-900'
+                                      : 'text-gray-700',
+                                    'block px-4 py-2 text-sm w-full text-left',
+                                  ]"
+                                >
+                                  Delete
+                                </button>
+                              </MenuItem>
+                            </div>
+                          </MenuItems>
+                        </transition>
+                      </Menu>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else class="flex w-full my-20 justify-center items-center">
+        <div class="text-center">
+          <svg
+            class="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              vector-effect="non-scaling-stroke"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+            />
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900">
+            No Livery Services
+          </h3>
+          <p class="mt-1 text-sm text-gray-500 px-10">
+            Livery Services that you add to your yard will be shown here.
+          </p>
+          <div class="mt-6">
+            <button
+              @click="() => (createModalOpen = true)"
+              type="button"
+              class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              New Service
+            </button>
+          </div>
+        </div>
+      </div>
+      <hr class="my-10" />
     </div>
   </div>
+  <CreateServiceModal
+    :is-open="createModalOpen"
+    @close="createModalOpen = false"
+  />
+  <EditServiceModal
+    :is-open="editModalOpen"
+    :service="selectedService"
+    @close="editModalOpen = false"
+  />
+  <DeleteServiceModal
+    :is-open="deleteModalOpen"
+    :service="selectedService"
+    @close="deleteModalOpen = false"
+  />
 </template>

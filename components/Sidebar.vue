@@ -38,12 +38,6 @@ const navigation = [
     icon: RectangleGroupIcon,
   },
   {
-    name: "Rugs",
-    to: "/yard/rugs",
-    icon: ClipboardDocumentListIcon,
-    hint: "Soon",
-  },
-  {
     name: "Yard Settings",
     to: "/yard/settings",
     icon: Cog8ToothIcon,
