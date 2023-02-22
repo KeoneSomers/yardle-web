@@ -226,7 +226,7 @@ const getPreviousBillingDate = async () => {
         if (firstOrLast === 2) {
           // last
 
-          return now
+          return next
             .minus({ months: 1 })
             .endOf("month")
             .minus({
@@ -234,8 +234,8 @@ const getPreviousBillingDate = async () => {
             });
         } else {
           // first
-
-          return now
+          // TODO: not working correctly - not correct weekday is returned
+          return next
             .minus({ months: 1 })
             .startOf("month")
             .plus({
@@ -318,7 +318,17 @@ const getPreviousBillingDate = async () => {
 
 nextBillingDate.value = await getNextBillingDate();
 previousBillingDate.value = await getPreviousBillingDate();
-console.log(previousBillingDate.value.toFormat("EEEE, MMMM d, yyyy"));
+console.log(
+  "Last Billing Date" +
+    previousBillingDate.value.toFormat(
+      "EEEE, MMMM d, yyyy" +
+        "(" +
+        Math.ceil(
+          previousBillingDate.value.diff(DateTime.now(), "days").toObject().days
+        ) +
+        ")"
+    )
+);
 </script>
 
 <template>
