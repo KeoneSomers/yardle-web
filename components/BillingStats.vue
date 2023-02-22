@@ -16,11 +16,11 @@ const previousBillingDate = ref(null);
 // init with fallback values
 const billingCycle = ref({
   yard_id: selectedYard.value,
-  every: 1, // interval
+  every: 3, // interval
   period: 2, // weekly or monthly
   on_the: 2, // first or last - month only
   day: 3, // day, monday, tuesday, wednesday, etc.
-  starting_from: "2023-01-03", // the date the billing will start
+  starting_from: "2023-01-31", // the date the billing will start
 });
 
 // TODO: fetch billing cycle info for this yard from db
@@ -299,7 +299,7 @@ const getPreviousBillingDate = async () => {
               months: interval,
             })
             .startOf("month")
-            .minus({
+            .plus({
               days:
                 (weekday -
                   next
