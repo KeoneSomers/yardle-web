@@ -32,6 +32,12 @@ const handleDelete = async () => {
   // first move the horses to the unsorted field
   const index = services.value.map((e) => e.id).indexOf(props.service.id);
 
+  // delete any requests that were using it
+  const { error: error2 } = await client
+    .from("service_requests")
+    .delete()
+    .eq("service_id", props.service.id);
+
   // Delete the field
   const { error } = await client
     .from("livery_services")
