@@ -11,11 +11,12 @@ const stats = [
 const selectedYard = useState("selectedYard");
 const profile = useState("profile");
 const nextBillingDate = ref(null);
+const previousBillingDate = ref(null);
 
 // init with fallback values
 const billingCycle = ref({
   yard_id: selectedYard.value,
-  every: 3, // interval
+  every: 1, // interval
   period: 2, // weekly or monthly
   on_the: 2, // first or last - month only
   day: 3, // day, monday, tuesday, wednesday, etc.
@@ -24,52 +25,7 @@ const billingCycle = ref({
 
 // TODO: fetch billing cycle info for this yard from db
 
-// const NextBillingDate = async () => {
-//   if (billingCycle.value.every === 1) {
-//     // simple calc - once, either every week or month
-//     if (billingCycle.value.period === 1) {
-//       // weekly
-//       return DateTime.now()
-//         .startOf("week")
-//         .plus({
-//           weeks: billingCycle.value.day - 1 <= DateTime.now().weekday ? 1 : 0,
-//         })
-//         .set({ weekday: billingCycle.value.day - 1 });
-//     } else {
-//       // monthly
-//       // every month on the last monday
-//       if (billingCycle.value.day === 1) {
-//         // *anyday
-//         if (billingCycle.value.on_the == 1) {
-//           // first
-//           return DateTime.now()
-//             .startOf("week")
-//             .plus({
-//               months:
-//                 billingCycle.value.day - 1 <= DateTime.now().weekday ? 1 : 0,
-//             })
-//             .set({ weekday: billingCycle.value.day - 1 });
-//         } else {
-//           // last
-//         }
-//       } else {
-//         // weekday
-//         if (billingCycle.value.on_the == 1) {
-//           // first
-//         } else {
-//           // last
-//         }
-//       }
-//     }
-
-//     return null;
-//   } else {
-//     // harder calc - need to take into accoun the starting date
-//     return null;
-//   }
-// };
-
-const getNextBillingDate = () => {
+const getNextBillingDate = async () => {
   const now = DateTime.now();
   const interval = billingCycle.value.every;
   const weekly = billingCycle.value.period === 1;
@@ -236,7 +192,26 @@ const getNextBillingDate = () => {
   }
 };
 
-nextBillingDate.value = getNextBillingDate();
+const getPreviousBillingDate = async () => {
+  const next = nextBillingDate.value;
+  const now = DateTime.now();
+  const interval = billingCycle.value.every;
+  const weekly = billingCycle.value.period === 1;
+  const monthly = billingCycle.value.period === 2;
+  const firstOrLast = billingCycle.value.on_the;
+  const anyday = billingCycle.value.day === 1;
+  const weekday = billingCycle.value.day - 1;
+  let startingDate = billingCycle.value.starting_from;
+
+  // Weekly Billing
+  if (weekly) {
+    return next.minus({ weeks: interval });
+  }
+};
+
+nextBillingDate.value = await getNextBillingDate();
+previousBillingDate.value = await getPreviousBillingDate();
+console.log(previousBillingDate.value.toFormat("EEEE, MMMM d, yyyy"));
 </script>
 
 <template>
