@@ -2,16 +2,16 @@
 import { DateTime, Interval } from "luxon";
 import { PencilIcon } from "@heroicons/vue/24/outline";
 
-const stats = [
-  { name: "Total Requirements This Month", stat: "33" },
-  { name: "Current Weeks Cost", stat: "£44.00" },
-  { name: "Forcast Bill This Month", stat: "£289.00" },
-];
-
 const selectedYard = useState("selectedYard");
 const profile = useState("profile");
 const nextBillingDate = ref(null);
 const previousBillingDate = ref(null);
+
+const days = useState("weekdays", () => []);
+const client = useSupabaseClient();
+const horse = useState("horse");
+
+const serviceRequestsLog = useState("service_requests");
 
 // init with fallback values
 const billingCycle = ref({
@@ -318,17 +318,48 @@ const getPreviousBillingDate = async () => {
 
 nextBillingDate.value = await getNextBillingDate();
 previousBillingDate.value = await getPreviousBillingDate();
-console.log(
-  "Last Billing Date" +
-    previousBillingDate.value.toFormat(
-      "EEEE, MMMM d, yyyy" +
-        "(" +
-        Math.ceil(
-          previousBillingDate.value.diff(DateTime.now(), "days").toObject().days
-        ) +
-        ")"
-    )
-);
+
+const thisWeekServices = ref(null);
+const thisPeriodsServices = ref(null);
+const spendThisWeek = ref(0.0);
+const nextBill = ref(0.0);
+
+watchEffect(() => {
+  if (serviceRequestsLog.value.length > 0) {
+    // get weeks services
+    thisWeekServices.value = serviceRequestsLog.value.filter((item) => {
+      return (
+        DateTime.fromISO(item.date) >= DateTime.now().startOf("week") &&
+        DateTime.fromISO(item.date) <= DateTime.now().endOf("week") &&
+        item.canceled_at === null
+      );
+    });
+
+    // calculate weekly spend
+    spendThisWeek.value = 0.0;
+    thisWeekServices.value.forEach((item) => {
+      spendThisWeek.value += item.livery_services.price;
+    });
+
+    // get periods services
+    thisPeriodsServices.value = serviceRequestsLog.value.filter((item) => {
+      return (
+        DateTime.fromISO(item.date) >= previousBillingDate.value &&
+        DateTime.fromISO(item.date) <= nextBillingDate.value &&
+        item.canceled_at === null
+      );
+    });
+
+    // calculate period bill
+    nextBill.value = 0.0;
+    thisPeriodsServices.value.forEach((item) => {
+      nextBill.value += item.livery_services.price;
+    });
+  }
+});
+
+console.log(thisWeekServices.value);
+console.log(spendThisWeek.value);
 </script>
 
 <template>
@@ -344,21 +375,41 @@ console.log(
         ><NuxtLink
           to="/yard/settings"
           class="flex items-center ml-2 text-blue-500"
-          >(Change <PencilIcon class="h-3 w-3 ml-1" />)</NuxtLink
+          >(Edit <PencilIcon class="h-3 w-3 ml-1" />)</NuxtLink
         ></span
       >
     </p>
     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-      <div
-        v-for="item in stats"
-        :key="item.name"
-        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
-      >
+      <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
         <dt class="truncate text-sm font-medium text-gray-500">
-          {{ item.name }}
+          Total Requirements This Billing Period
         </dt>
         <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-          {{ item.stat }}
+          {{ thisPeriodsServices.length }}
+        </dd>
+      </div>
+
+      <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+        <dt class="truncate text-sm font-medium text-gray-500">
+          Spend this Week
+        </dt>
+        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+          £{{ spendThisWeek.toFixed(2) }}
+        </dd>
+      </div>
+
+      <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+        <dt class="truncate text-sm font-medium text-gray-500">
+          Forcast Next Bill (Due in
+          {{
+            Math.ceil(
+              nextBillingDate.diff(DateTime.now(), "days").toObject().days
+            )
+          }}
+          days)
+        </dt>
+        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+          £{{ nextBill.toFixed(2) }}
         </dd>
       </div>
     </dl>
