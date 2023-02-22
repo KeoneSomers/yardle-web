@@ -383,7 +383,7 @@ watchEffect(() => {
         Math.ceil(nextBillingDate.diff(DateTime.now(), "days").toObject().days)
       }}
       days)
-      <span v-if="profile.active_role < 3"
+      <span v-if="profile.active_role === 1"
         ><NuxtLink
           to="/yard/settings"
           class="flex items-center ml-2 text-blue-500"
