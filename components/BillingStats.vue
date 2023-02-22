@@ -15,11 +15,11 @@ const nextBillingDate = ref(null);
 // init with fallback values
 const billingCycle = ref({
   yard_id: selectedYard.value,
-  every: 1, // interval
+  every: 3, // interval
   period: 2, // weekly or monthly
-  on_the: 1, // first or last - month only
-  day: 2, // day, monday, tuesday, wednesday, etc.
-  starting_from: "2023-03-09", // the date the billing will start
+  on_the: 2, // first or last - month only
+  day: 1, // day, monday, tuesday, wednesday, etc.
+  starting_from: "2023-01-01", // the date the billing will start
 });
 
 // TODO: fetch billing cycle info for this yard from db
@@ -98,9 +98,7 @@ const getNextBillingDate = () => {
         const nextBillingDate = start.plus({ weeks: weeksAgo });
 
         return nextBillingDate;
-      }
-
-      if (start > now) {
+      } else {
         return start;
       }
     }
@@ -133,7 +131,6 @@ const getNextBillingDate = () => {
 
           var isBefore = lastWeekday < now;
           if (isBefore) {
-            console.log("is before");
             var nextMonth = now.plus({ months: 1 });
             var nextLastDay = nextMonth.endOf("month");
             lastWeekday = nextLastDay.minus({
@@ -143,18 +140,14 @@ const getNextBillingDate = () => {
 
           return lastWeekday;
         } else {
-          // first - march 7th
-          console.log("yayaya");
+          // first
 
           let firstWeekday = now.startOf("month").plus({
             days: (weekday - now.startOf("month").weekday + 7) % 7,
           });
 
-          console.log(firstWeekday.toFormat("EEEE, MMMM d, yyyy"));
-
           var isBefore = firstWeekday < now;
           if (isBefore) {
-            console.log("is before");
             var nextMonth = now.plus({ months: 1 });
             var nextFirstDay = nextMonth.startOf("month");
             firstWeekday = nextFirstDay.plus({
@@ -169,8 +162,39 @@ const getNextBillingDate = () => {
 
     if (interval > 1) {
       // more complex (every x months)
-      // go off starting date - could be easy - could be hard
-      return now;
+      const start = DateTime.fromISO(startingDate);
+      const monthsAgo = now.diff(start, ["months"]).months;
+      // const weeksAgo = Math.ceil(daysAgo / 7);
+
+      if (start < now) {
+        if (anyday) {
+          if (firstOrLast === 2) {
+            // anyday last
+            return start.plus({
+              months: interval,
+            });
+          } else {
+            // anyday first
+            return start.plus({
+              months: interval,
+            });
+          }
+        } else {
+          // weekday
+
+          if (firstOrLast === 2) {
+            // TODO: weekday last
+            return now;
+          } else {
+            // TODO: weekday first
+            return now;
+          }
+        }
+      } else {
+        return start;
+      }
+
+      //
     }
   }
 };
