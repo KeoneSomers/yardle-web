@@ -4,8 +4,9 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/vue/20/solid";
+import { useModal } from "vue-final-modal";
+import ModalConfirm from "@/components/modals/ModalConfirm.vue";
 import EditHorseModal from "@/components/modals/EditHorseModal.vue";
-import DeleteHorseModal from "@/components/modals/DeleteHorseModal.vue";
 
 import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
 import HorseRugsTab from "@/components/HorseRugsTab.vue";
@@ -33,6 +34,8 @@ const horse = useState("horse");
 const deleteModalOpen = ref(false);
 const editModalOpen = ref(false);
 const profile = useState("profile");
+const horses = useState("horses");
+const loading = ref(false);
 
 const horseDetailsElement = ref(null);
 const { x, y } = useScroll(horseDetailsElement);
@@ -70,6 +73,94 @@ watchEffect(async () => {
   if (!viewingHorse.value) {
     y.value = 0;
   }
+});
+
+const handleDeleteHorse = async () => {
+  try {
+    // delete horse image
+    const index = horses.value.map((e) => e.id).indexOf(horse.value.id);
+
+    if (horses.value[index].avatar_url) {
+      const { error } = await client.storage
+        .from("horse-avatars")
+        .remove([horses.value[index].avatar_url]);
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+    }
+
+    // first delete related data
+    await client
+      .from("service_requests")
+      .delete()
+      .eq("horse_id", horse.value.id);
+    await client.from("rugs").delete().eq("horse_id", horse.value.id);
+    await client.from("ingredients").delete().eq("horse_id", horse.value.id);
+    await client.from("feeds").delete().eq("horse_id", horse.value.id);
+    await client.from("medications").delete().eq("horse_id", horse.value.id);
+
+    // second, delete horse from calendar events
+    const { error: delError } = await client
+      .from("calendar_events_horses")
+      .delete()
+      .eq("horse_id", horse.value.id);
+
+    if (delError) {
+      throw new Error(delError);
+    }
+
+    const { error: horseDeleteError } = await client
+      .from("horses")
+      .delete()
+      .eq("id", horse.value.id)
+      .select();
+
+    if (horseDeleteError) {
+      throw new Error(horseDeleteError);
+    }
+
+    // success! - now handle cleanup on frontend
+    horses.value.splice(index, 1);
+
+    // change selected horse
+    if (horses.value.length > 0) {
+      selectedHorseId.value = horses.value[0].id;
+    } else {
+      selectedHorseId.value = 0;
+    }
+
+    viewingHorse.value = false;
+    closeDeleteHorseModal();
+  } catch (error) {
+    // TODO - Push error to snackbar
+    console.log(error);
+    loading.value = false;
+  }
+};
+
+// Delete Horse Modal
+const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
+  component: ModalConfirm,
+  attrs: {
+    title: "Delete Horse",
+    message:
+      "Are you sure you want to delete this horse? All of it's data will be permanently removed from your yard forever. This action cannot be undone.",
+    cancelButtonText: "Cancel",
+    confirmButtonText: "Delete",
+    isLoading: loading,
+    onBeforeOpen() {
+      loading.value = false;
+    },
+    onCancel() {
+      closeDeleteHorseModal();
+    },
+    async onConfirm() {
+      loading.value = true;
+      await handleDeleteHorse();
+    },
+  },
 });
 </script>
 
@@ -155,7 +246,7 @@ watchEffect(async () => {
                       <span>Edit</span>
                     </button>
                     <button
-                      @click="() => (deleteModalOpen = true)"
+                      @click="() => openDeleteHorseModal()"
                       type="button"
                       class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                     >
@@ -212,12 +303,6 @@ watchEffect(async () => {
     :is-open="editModalOpen"
     :horse="horse"
     @close="editModalOpen = false"
-  />
-  <DeleteHorseModal
-    v-if="horse"
-    :is-open="deleteModalOpen"
-    :horse-id="horse.id"
-    @close="deleteModalOpen = false"
   />
 </template>
 

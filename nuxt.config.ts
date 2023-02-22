@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   typescript: {
     shim: false,
   },
-  css: ["@/assets/css/main.css"],
+  css: ["@/assets/css/main.css", "vue-final-modal/style.css"],
   app: {
     head: {
       title: "Yardle - Equestrian Yard Management",

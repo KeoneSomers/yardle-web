@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import { ModalsContainer } from "vue-final-modal";
 import { PaperAirplaneIcon } from "@heroicons/vue/24/outline";
 import FeedbackModal from "@/components/modals/FeedbackModal.vue";
 
@@ -107,5 +108,6 @@ onUnmounted(() => {
         @close="feedbackModalOpen = false"
       />
     </div>
+    <ModalsContainer />
   </div>
 </template>
