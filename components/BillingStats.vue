@@ -17,9 +17,9 @@ const billingCycle = ref({
   yard_id: selectedYard.value,
   every: 3, // interval
   period: 2, // weekly or monthly
-  on_the: 2, // first or last - month only
-  day: 1, // day, monday, tuesday, wednesday, etc.
-  starting_from: "2023-01-01", // the date the billing will start
+  on_the: 1, // first or last - month only
+  day: 3, // day, monday, tuesday, wednesday, etc.
+  starting_from: "2023-01-03", // the date the billing will start
 });
 
 // TODO: fetch billing cycle info for this yard from db
@@ -167,6 +167,7 @@ const getNextBillingDate = () => {
       // const weeksAgo = Math.ceil(daysAgo / 7);
 
       if (start < now) {
+        // TODO: times interval by monthsAgo (kinda)
         if (anyday) {
           if (firstOrLast === 2) {
             // anyday last
@@ -183,18 +184,48 @@ const getNextBillingDate = () => {
           // weekday
 
           if (firstOrLast === 2) {
-            // TODO: weekday last
-            return now;
+            // weekday last
+
+            return start
+              .plus({
+                months: interval,
+              })
+              .endOf("month")
+              .minus({
+                days:
+                  (start
+                    .plus({
+                      months: interval,
+                    })
+                    .endOf("month").weekday -
+                    weekday +
+                    7) %
+                  7,
+              });
           } else {
-            // TODO: weekday first
-            return now;
+            //  weekday first
+
+            return start
+              .plus({
+                months: interval,
+              })
+              .startOf("month")
+              .plus({
+                days:
+                  (weekday -
+                    start
+                      .plus({
+                        months: interval,
+                      })
+                      .startOf("month").weekday +
+                    7) %
+                  7,
+              });
           }
         }
       } else {
         return start;
       }
-
-      //
     }
   }
 };
