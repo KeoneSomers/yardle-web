@@ -251,70 +251,66 @@ const getPreviousBillingDate = async () => {
       const monthsAgo = now.diff(start, ["months"]).months;
       const intervalCount = Math.floor(monthsAgo / interval) + 1;
 
-      if (start < now) {
-        if (anyday) {
-          if (firstOrLast === 2) {
-            // anyday last
+      if (anyday) {
+        if (firstOrLast === 2) {
+          // anyday last
 
-            return start
-              .plus({
-                months: interval * intervalCount,
-              })
-              .endOf("month");
-          } else {
-            // anyday first
-
-            return start
-              .plus({
-                months: interval * intervalCount,
-              })
-              .startOf("month");
-          }
+          return next
+            .minus({
+              months: interval,
+            })
+            .endOf("month");
         } else {
-          // weekday
+          // anyday first
 
-          if (firstOrLast === 2) {
-            // weekday last
-
-            return start
-              .plus({
-                months: interval * intervalCount,
-              })
-              .endOf("month")
-              .minus({
-                days:
-                  (start
-                    .plus({
-                      months: interval * intervalCount,
-                    })
-                    .endOf("month").weekday -
-                    weekday +
-                    7) %
-                  7,
-              });
-          } else {
-            //  weekday first
-
-            return start
-              .plus({
-                months: interval * intervalCount,
-              })
-              .startOf("month")
-              .plus({
-                days:
-                  (weekday -
-                    start
-                      .plus({
-                        months: interval * intervalCount,
-                      })
-                      .startOf("month").weekday +
-                    7) %
-                  7,
-              });
-          }
+          return next
+            .minus({
+              months: interval,
+            })
+            .startOf("month");
         }
       } else {
-        return start;
+        // weekday
+
+        if (firstOrLast === 2) {
+          // weekday last
+
+          return next
+            .minus({
+              months: interval,
+            })
+            .endOf("month")
+            .minus({
+              days:
+                (next
+                  .minus({
+                    months: interval,
+                  })
+                  .endOf("month").weekday -
+                  weekday +
+                  7) %
+                7,
+            });
+        } else {
+          //  weekday first
+
+          return next
+            .minus({
+              months: interval,
+            })
+            .startOf("month")
+            .minus({
+              days:
+                (weekday -
+                  next
+                    .minus({
+                      months: interval,
+                    })
+                    .startOf("month").weekday +
+                  7) %
+                7,
+            });
+        }
       }
     }
   }
