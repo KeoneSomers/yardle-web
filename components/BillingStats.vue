@@ -207,6 +207,117 @@ const getPreviousBillingDate = async () => {
   if (weekly) {
     return next.minus({ weeks: interval });
   }
+
+  // Monthly Billing
+  if (monthly) {
+    if (interval === 1) {
+      // more simple (every 1 month)
+      if (anyday) {
+        // return anyday
+        if (firstOrLast === 2) {
+          // last
+          return next.minus({ months: 1 }).endOf("month");
+        } else {
+          // first
+          return next.minus({ months: 1 }).startOf("month");
+        }
+      } else {
+        // return weekday
+        if (firstOrLast === 2) {
+          // last
+
+          return now
+            .minus({ months: 1 })
+            .endOf("month")
+            .minus({
+              days: (now.endOf("month").weekday - weekday + 7) % 7,
+            });
+        } else {
+          // first
+
+          return now
+            .minus({ months: 1 })
+            .startOf("month")
+            .plus({
+              days: (weekday - now.startOf("month").weekday + 7) % 7,
+            });
+        }
+      }
+    }
+
+    if (interval > 1) {
+      // more complex (every x months)
+      const start = DateTime.fromISO(startingDate);
+      const monthsAgo = now.diff(start, ["months"]).months;
+      const intervalCount = Math.floor(monthsAgo / interval) + 1;
+
+      if (start < now) {
+        if (anyday) {
+          if (firstOrLast === 2) {
+            // anyday last
+
+            return start
+              .plus({
+                months: interval * intervalCount,
+              })
+              .endOf("month");
+          } else {
+            // anyday first
+
+            return start
+              .plus({
+                months: interval * intervalCount,
+              })
+              .startOf("month");
+          }
+        } else {
+          // weekday
+
+          if (firstOrLast === 2) {
+            // weekday last
+
+            return start
+              .plus({
+                months: interval * intervalCount,
+              })
+              .endOf("month")
+              .minus({
+                days:
+                  (start
+                    .plus({
+                      months: interval * intervalCount,
+                    })
+                    .endOf("month").weekday -
+                    weekday +
+                    7) %
+                  7,
+              });
+          } else {
+            //  weekday first
+
+            return start
+              .plus({
+                months: interval * intervalCount,
+              })
+              .startOf("month")
+              .plus({
+                days:
+                  (weekday -
+                    start
+                      .plus({
+                        months: interval * intervalCount,
+                      })
+                      .startOf("month").weekday +
+                    7) %
+                  7,
+              });
+          }
+        }
+      } else {
+        return start;
+      }
+    }
+  }
 };
 
 nextBillingDate.value = await getNextBillingDate();
