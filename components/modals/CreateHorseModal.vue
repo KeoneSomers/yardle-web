@@ -71,8 +71,6 @@ const handleSubmit = async () => {
     loading.value = false;
   }
 };
-
-console.log("here!!");
 </script>
 
 <template>

@@ -16,14 +16,29 @@ const serviceRequestsLog = useState("service_requests");
 // init with fallback values
 const billingCycle = ref({
   yard_id: selectedYard.value,
-  every: 3, // interval
+  every: 1, // interval
   period: 2, // weekly or monthly
   on_the: 2, // first or last - month only
-  day: 3, // day, monday, tuesday, wednesday, etc.
-  starting_from: "2023-01-31", // the date the billing will start
+  day: 1, // day, monday, tuesday, wednesday, etc.
+  starting_from: null, // the date the billing will start
 });
 
 // TODO: fetch billing cycle info for this yard from db
+const getBillingCycle = async () => {
+  await useAsyncData("billingCycle", async () => {
+    const { data, error } = await client
+      .from("yard_billing_cycles")
+      .select()
+      .eq("yard_id", selectedYard.value)
+      .single();
+
+    if (data) {
+      billingCycle.value = data;
+    }
+  });
+};
+
+await getBillingCycle();
 
 const getNextBillingDate = async () => {
   const now = DateTime.now();
@@ -357,9 +372,6 @@ watchEffect(() => {
     });
   }
 });
-
-console.log(thisWeekServices.value);
-console.log(spendThisWeek.value);
 </script>
 
 <template>
@@ -385,7 +397,7 @@ console.log(spendThisWeek.value);
           Total Requirements This Billing Period
         </dt>
         <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-          {{ thisPeriodsServices.length }}
+          {{ thisPeriodsServices ? thisPeriodsServices.length : 0 }}
         </dd>
       </div>
 

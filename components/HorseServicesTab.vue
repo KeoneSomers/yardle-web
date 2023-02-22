@@ -43,8 +43,6 @@ const getEvents = async () => {
       .eq("horse_id", horse.value.id)
       .filter("canceled_at", "is", null);
 
-    console.log(data);
-
     serviceRequests.value = data;
   });
 };
