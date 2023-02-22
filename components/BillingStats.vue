@@ -17,7 +17,7 @@ const billingCycle = ref({
   yard_id: selectedYard.value,
   every: 3, // interval
   period: 2, // weekly or monthly
-  on_the: 1, // first or last - month only
+  on_the: 2, // first or last - month only
   day: 3, // day, monday, tuesday, wednesday, etc.
   starting_from: "2023-01-03", // the date the billing will start
 });
@@ -125,6 +125,7 @@ const getNextBillingDate = () => {
         // return weekday
         if (firstOrLast === 2) {
           // last
+
           let lastWeekday = now.endOf("month").minus({
             days: (now.endOf("month").weekday - weekday + 7) % 7,
           });
@@ -164,21 +165,26 @@ const getNextBillingDate = () => {
       // more complex (every x months)
       const start = DateTime.fromISO(startingDate);
       const monthsAgo = now.diff(start, ["months"]).months;
-      // const weeksAgo = Math.ceil(daysAgo / 7);
+      const intervalCount = Math.floor(monthsAgo / interval) + 1;
 
       if (start < now) {
-        // TODO: times interval by monthsAgo (kinda)
         if (anyday) {
           if (firstOrLast === 2) {
             // anyday last
-            return start.plus({
-              months: interval,
-            });
+
+            return start
+              .plus({
+                months: interval * intervalCount,
+              })
+              .endOf("month");
           } else {
             // anyday first
-            return start.plus({
-              months: interval,
-            });
+
+            return start
+              .plus({
+                months: interval * intervalCount,
+              })
+              .startOf("month");
           }
         } else {
           // weekday
@@ -188,14 +194,14 @@ const getNextBillingDate = () => {
 
             return start
               .plus({
-                months: interval,
+                months: interval * intervalCount,
               })
               .endOf("month")
               .minus({
                 days:
                   (start
                     .plus({
-                      months: interval,
+                      months: interval * intervalCount,
                     })
                     .endOf("month").weekday -
                     weekday +
@@ -207,7 +213,7 @@ const getNextBillingDate = () => {
 
             return start
               .plus({
-                months: interval,
+                months: interval * intervalCount,
               })
               .startOf("month")
               .plus({
@@ -215,7 +221,7 @@ const getNextBillingDate = () => {
                   (weekday -
                     start
                       .plus({
-                        months: interval,
+                        months: interval * intervalCount,
                       })
                       .startOf("month").weekday +
                     7) %
