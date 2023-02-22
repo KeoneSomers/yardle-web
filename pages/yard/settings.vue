@@ -188,7 +188,7 @@ await fetchServices();
                       {{ service.description }}
                     </td>
                     <td class="py-4 pl-4 pr-4 text-sm text-gray-500">
-                      £{{ service.price }}
+                      £{{ service.price.toFixed(2) }}
                     </td>
                     <td class="py-4 pl-4 pr-4 text-sm text-gray-500">
                       <Menu as="div" class="relative inline-block text-left">

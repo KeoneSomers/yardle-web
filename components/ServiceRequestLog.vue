@@ -46,7 +46,7 @@ await getEvents();
                   <span
                     class="font-semibold"
                     :class="request.canceled_at != null ? 'line-through' : ''"
-                    >{{ request.livery_services.name }}</span
+                    >{{ request.service_name }}</span
                   >
                 </div>
                 <div v-if="request.canceled_at === null">
@@ -85,7 +85,7 @@ await getEvents();
               <div class="p-2">
                 <dl class="font-normal">
                   <dd class="mt-1 truncate text-gray-700">
-                    Price: £{{ request.livery_services.price }}
+                    Price: £{{ request.service_price.toFixed(2) }}
                   </dd>
                   <dd class="mt-1 truncate text-gray-700">
                     Due:

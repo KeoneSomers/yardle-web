@@ -353,7 +353,7 @@ watchEffect(() => {
     // calculate weekly spend
     spendThisWeek.value = 0.0;
     thisWeekServices.value.forEach((item) => {
-      spendThisWeek.value += item.livery_services.price;
+      spendThisWeek.value += item.service_price;
     });
 
     // get periods services
@@ -368,7 +368,7 @@ watchEffect(() => {
     // calculate period bill
     nextBill.value = 0.0;
     thisPeriodsServices.value.forEach((item) => {
-      nextBill.value += item.livery_services.price;
+      nextBill.value += item.service_price;
     });
   }
 });
@@ -412,7 +412,7 @@ watchEffect(() => {
 
       <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
         <dt class="truncate text-sm font-medium text-gray-500">
-          Forcast Next Bill (Due in
+          Forcast Upcoming Bill (Due in
           {{
             Math.ceil(
               nextBillingDate.diff(DateTime.now(), "days").toObject().days

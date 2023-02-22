@@ -16,8 +16,6 @@ const emit = defineEmits<{
   (e: "cancel"): void;
   (e: "confirm"): void;
 }>();
-
-console.log("modal open");
 </script>
 
 <template>

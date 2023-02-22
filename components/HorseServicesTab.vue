@@ -188,8 +188,8 @@ const goToPreviousWeek = () => {
                 class="bg-blue-50 rounded mb-1 p-1 flex justify-between items-center"
               >
                 <div class="text-gray-600">
-                  {{ event.livery_services.name }} - £{{
-                    event.livery_services.price
+                  {{ event.service_name }} - £{{
+                    event.service_price.toFixed(2)
                   }}
                 </div>
                 <div>

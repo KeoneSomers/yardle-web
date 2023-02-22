@@ -1,4 +1,5 @@
 <script setup>
+import { DateTime } from "luxon";
 import {
   TransitionRoot,
   TransitionChild,
@@ -29,6 +30,17 @@ watch(
 );
 
 const handleSubmit = async () => {
+  // first, update the service_price and service_name on service_requests where date is after today
+  const { data: data2, error: error2 } = await client
+    .from("service_requests")
+    .update({
+      service_name: name.value,
+      service_price: price.value,
+    })
+    .gt("date", DateTime.now().toISODate())
+    .eq("service_id", props.service.id);
+
+  // now update the service
   const { data, error } = await client
     .from("livery_services")
     .update({
@@ -90,6 +102,10 @@ const handleSubmit = async () => {
               >
                 Edit service
               </DialogTitle>
+              <p class="text-gray-500 text-sm">
+                Please take note that edits will only be applied to your
+                clients' requests that take place in the future.
+              </p>
               <form
                 @submit.prevent="handleSubmit"
                 class="mt-4 flex flex-col space-y-4"

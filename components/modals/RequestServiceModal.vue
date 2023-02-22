@@ -49,8 +49,10 @@ const handleSubmit = async () => {
     .insert({
       created_by: user.value.id,
       horse_id: horse.value.id,
-      service_id: selectedService.value.id,
       date: date.value,
+      service_id: selectedService.value.id,
+      service_name: selectedService.value.name,
+      service_price: selectedService.value.price,
     })
     .select()
     .single();
@@ -128,7 +130,7 @@ const handleSubmit = async () => {
                       :key="item.id"
                       :value="item"
                     >
-                      {{ item.name }} - £{{ item.price }}
+                      {{ item.name }} - £{{ item.price.toFixed(2) }}
                     </option>
                   </select>
                 </div>
