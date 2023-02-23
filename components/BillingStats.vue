@@ -254,7 +254,7 @@ const getPreviousBillingDate = async (offset) => {
             });
         } else {
           // first
-          // TODO: not working correctly - not correct weekday is returned
+
           return next
             .minus({ months: offset })
             .startOf("month")
@@ -351,7 +351,9 @@ previousBillingDate.value = await getPreviousBillingDate(1);
 const lastSixBillingDates = useState("lastSixBillingDates", () => [
   nextBillingDate.value,
 ]);
+
 let i = 0;
+lastSixBillingDates.value = [nextBillingDate.value];
 while (i < 6) {
   i++;
   let date = await getPreviousBillingDate(i);
@@ -363,7 +365,7 @@ const thisPeriodsServices = ref(null);
 const spendThisWeek = ref(0.0);
 const nextBill = ref(0.0);
 
-watchEffect(() => {
+watchEffect(async () => {
   if (serviceRequestsLog.value.length > 0) {
     // get weeks services
     thisWeekServices.value = serviceRequestsLog.value.filter((item) => {

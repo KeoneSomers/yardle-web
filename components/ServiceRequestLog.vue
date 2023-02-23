@@ -22,8 +22,6 @@ const getEvents = async () => {
 
 await getEvents();
 
-console.log(serviceRequestsLog.value);
-
 const lastSixBillingDates = useState("lastSixBillingDates");
 const lastSixBillTotals = ref([]);
 const lastSixBillingSegmentedServices = ref([]);
