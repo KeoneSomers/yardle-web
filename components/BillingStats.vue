@@ -207,7 +207,8 @@ const getNextBillingDate = async () => {
   }
 };
 
-const getPreviousBillingDate = async () => {
+const getPreviousBillingDate = async (offset) => {
+  // offset prop - how many billing cycles to go back (last billing cycle = 1, 2nd last = 2, etc.)
   const next = nextBillingDate.value;
   const now = DateTime.now();
   const interval = billingCycle.value.every;
@@ -220,7 +221,7 @@ const getPreviousBillingDate = async () => {
 
   // Weekly Billing
   if (weekly) {
-    return next.minus({ weeks: interval });
+    return next.minus({ weeks: interval * offset });
   }
 
   // Monthly Billing
@@ -231,10 +232,10 @@ const getPreviousBillingDate = async () => {
         // return anyday
         if (firstOrLast === 2) {
           // last
-          return next.minus({ months: 1 }).endOf("month");
+          return next.minus({ months: offset }).endOf("month");
         } else {
           // first
-          return next.minus({ months: 1 }).startOf("month");
+          return next.minus({ months: offset }).startOf("month");
         }
       } else {
         // return weekday
@@ -242,19 +243,27 @@ const getPreviousBillingDate = async () => {
           // last
 
           return next
-            .minus({ months: 1 })
+            .minus({ months: offset })
             .endOf("month")
             .minus({
-              days: (now.endOf("month").weekday - weekday + 7) % 7,
+              days:
+                (next.minus({ months: offset }).endOf("month").weekday -
+                  weekday +
+                  7) %
+                7,
             });
         } else {
           // first
           // TODO: not working correctly - not correct weekday is returned
           return next
-            .minus({ months: 1 })
+            .minus({ months: offset })
             .startOf("month")
             .plus({
-              days: (weekday - now.startOf("month").weekday + 7) % 7,
+              days:
+                (weekday -
+                  next.minus({ months: offset }).startOf("month").weekday +
+                  7) %
+                7,
             });
         }
       }
@@ -262,9 +271,6 @@ const getPreviousBillingDate = async () => {
 
     if (interval > 1) {
       // more complex (every x months)
-      const start = DateTime.fromISO(startingDate);
-      const monthsAgo = now.diff(start, ["months"]).months;
-      const intervalCount = Math.floor(monthsAgo / interval) + 1;
 
       if (anyday) {
         if (firstOrLast === 2) {
@@ -272,7 +278,7 @@ const getPreviousBillingDate = async () => {
 
           return next
             .minus({
-              months: interval,
+              months: interval * offset,
             })
             .endOf("month");
         } else {
@@ -280,7 +286,7 @@ const getPreviousBillingDate = async () => {
 
           return next
             .minus({
-              months: interval,
+              months: interval * offset,
             })
             .startOf("month");
         }
@@ -292,14 +298,14 @@ const getPreviousBillingDate = async () => {
 
           return next
             .minus({
-              months: interval,
+              months: interval * offset,
             })
             .endOf("month")
             .minus({
               days:
                 (next
                   .minus({
-                    months: interval,
+                    months: interval * offset,
                   })
                   .endOf("month").weekday -
                   weekday +
@@ -311,7 +317,7 @@ const getPreviousBillingDate = async () => {
 
           return next
             .minus({
-              months: interval,
+              months: interval * offset,
             })
             .startOf("month")
             .plus({
@@ -319,7 +325,7 @@ const getPreviousBillingDate = async () => {
                 (weekday -
                   next
                     .minus({
-                      months: interval,
+                      months: interval * offset,
                     })
                     .startOf("month").weekday +
                   7) %
@@ -332,7 +338,25 @@ const getPreviousBillingDate = async () => {
 };
 
 nextBillingDate.value = await getNextBillingDate();
-previousBillingDate.value = await getPreviousBillingDate();
+previousBillingDate.value = await getPreviousBillingDate(1);
+
+// console.log(previousBillingDate.value.toFormat("EEEE, MMMM d, yyyy"));
+// console.log(
+//   Math.ceil(
+//     previousBillingDate.value.diff(DateTime.now(), "days").toObject().days
+//   ) + " days ago."
+// );
+
+// a while loop to get all previous billing dates from the last 6 cycles
+const lastSixBillingDates = useState("lastSixBillingDates", () => [
+  nextBillingDate.value,
+]);
+let i = 0;
+while (i < 6) {
+  i++;
+  let date = await getPreviousBillingDate(i);
+  lastSixBillingDates.value.push(date);
+}
 
 const thisWeekServices = ref(null);
 const thisPeriodsServices = ref(null);
