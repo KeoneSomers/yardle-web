@@ -267,7 +267,24 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
           </div>
 
           <!-- Tabs -->
-          <div class="mt-6 sm:mt-2 2xl:mt-5">
+          <div class="sm:hidden px-4 mt-4">
+            <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
+            <select
+              v-model="selectedTab"
+              id="tabs"
+              name="tabs"
+              class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+            >
+              <option
+                v-for="(tab, index) in tabs"
+                :key="tab.name"
+                :value="index"
+              >
+                {{ tab.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mt-6 sm:mt-2 2xl:mt-5 hidden sm:block">
             <div class="border-b border-gray-200">
               <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
