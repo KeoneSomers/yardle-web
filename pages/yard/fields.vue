@@ -66,7 +66,7 @@ const getHorsesSlim = async () => {
   await useAsyncData("horses", async () => {
     const { data } = await client
       .from("horses")
-      .select("id, name, avatar_url")
+      .select("id, name, avatar_url, avatar_background")
       .eq("yard_id", selectedYardId.value)
       .order("name", { ascending: true });
 
