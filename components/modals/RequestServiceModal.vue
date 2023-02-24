@@ -196,7 +196,7 @@ const handleSubmit = async () => {
                     daysNotice <= 1
                   "
                 >
-                  Notice: Booking a service on this date will encore a x2 late
+                  Notice: Booking a service on this date will encur a x2 late
                   booking fee
                 </div>
 
