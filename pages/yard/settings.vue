@@ -1,7 +1,16 @@
 <script setup>
 import { DateTime } from "luxon";
 import { PlusIcon, EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Switch,
+  SwitchDescription,
+  SwitchGroup,
+  SwitchLabel,
+} from "@headlessui/vue";
 import CreateServiceModal from "@/components/modals/CreateServiceModal.vue";
 import EditServiceModal from "@/components/modals/EditServiceModal.vue";
 import DeleteServiceModal from "@/components/modals/DeleteServiceModal.vue";
@@ -19,6 +28,23 @@ const yard = useState("yard");
 const loading = ref(false);
 const done = ref(false);
 const services = useState("services", () => []);
+
+const enableLateBookingFee = ref(yard.value.enabled_billing_late_booking_fee);
+
+// save when the user changes the value
+watch(enableLateBookingFee, async (newValue) => {
+  const { error } = await client
+    .from("yards")
+    .update({ enabled_billing_late_booking_fee: newValue })
+    .eq("id", selectedYard.value);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  yard.value.enabled_billing_late_booking_fee = newValue;
+});
 
 const createModalOpen = ref(false);
 const editModalOpen = ref(false);
@@ -123,6 +149,35 @@ await fetchServices();
       </p>
 
       <BillingCycleWidget />
+
+      <hr class="my-5 border-dashed border-1" />
+
+      <SwitchGroup as="li" class="flex items-center justify-between py-4">
+        <div class="flex flex-col">
+          <SwitchLabel as="p" class="text-sm font-medium text-gray-900" passive
+            >Late Booking Fee</SwitchLabel
+          >
+          <SwitchDescription class="text-sm text-gray-500"
+            >Services that are booked with less that 24 hours notice will cause
+            the price of the service to be doubled.</SwitchDescription
+          >
+        </div>
+        <Switch
+          v-model="enableLateBookingFee"
+          :class="[
+            enableLateBookingFee ? 'bg-teal-500' : 'bg-gray-200',
+            'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2',
+          ]"
+        >
+          <span
+            aria-hidden="true"
+            :class="[
+              enableLateBookingFee ? 'translate-x-5' : 'translate-x-0',
+              'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+            ]"
+          />
+        </Switch>
+      </SwitchGroup>
 
       <hr class="my-5 border-dashed border-1" />
 

@@ -1,5 +1,6 @@
 <script setup>
 import { DateTime } from "luxon";
+import { ClockIcon } from "@heroicons/vue/24/outline";
 
 const serviceRequestsLog = useState("service_requests_log");
 
@@ -73,12 +74,18 @@ for (let index = 0; index < 6; index++) {
                 class="w-full max-w-0 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none"
               >
                 <div class="bg-gray-100 p-2 text-xs justify-between flex">
-                  <div>
-                    <span
+                  <div class="flex items-center">
+                    <div
                       class="font-semibold"
                       :class="request.canceled_at != null ? 'line-through' : ''"
-                      >{{ request.service_name }}</span
                     >
+                      {{ request.service_name }}
+                    </div>
+                    <ClockIcon
+                      v-if="request.booked_late"
+                      v-tooltip="'Late Booking'"
+                      class="h-5 w-5 text-orange-400 ml-2"
+                    />
                   </div>
                   <div v-if="request.canceled_at === null">
                     <span

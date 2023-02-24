@@ -6,7 +6,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
-import { DateTime } from "luxon";
+import { DateTime, Interval } from "luxon";
 
 const loading = ref(false);
 
@@ -19,6 +19,7 @@ const yardId = useState("selectedYard");
 const serviceRequests = useState("service_requests");
 const horse = useState("horse");
 const liveryServices = ref([]);
+const yard = useState("yard");
 
 const selectedService = ref(null);
 const date = ref(null);
@@ -43,7 +44,27 @@ const fetchLiveryServices = async () => {
 
 await fetchLiveryServices();
 
+const daysNotice = ref(null);
+
+watch(date, async (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    let interval = Interval.fromDateTimes(
+      DateTime.now().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }),
+      DateTime.fromISO(date.value).set({
+        hour: 0,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+      })
+    );
+    daysNotice.value = interval.length("days");
+  }
+});
+
 const handleSubmit = async () => {
+  if (daysNotice.value === null) {
+    return;
+  }
   const { data, error } = await client
     .from("service_requests")
     .insert({
@@ -52,7 +73,14 @@ const handleSubmit = async () => {
       date: date.value,
       service_id: selectedService.value.id,
       service_name: selectedService.value.name,
-      service_price: selectedService.value.price,
+      service_price:
+        yard.value.enabled_billing_late_booking_fee === true &&
+        daysNotice.value <= 1
+          ? selectedService.value.price * 2 // TODO - the multiplier should not be hard coded - should be an option in the yard settings
+          : selectedService.value.price,
+      booked_late:
+        yard.value.enabled_billing_late_booking_fee === true &&
+        daysNotice.value <= 1,
     })
     .select()
     .single();
@@ -141,6 +169,16 @@ const handleSubmit = async () => {
                     >
                     <div class="mt-1">
                       <input
+                        :min="
+                          DateTime.now()
+                            .set({
+                              hour: 0,
+                              minute: 0,
+                              second: 0,
+                              millisecond: 0,
+                            })
+                            .toISODate()
+                        "
                         type="date"
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         v-model="date"
@@ -148,6 +186,18 @@ const handleSubmit = async () => {
                       />
                     </div>
                   </div>
+                </div>
+
+                <div
+                  class="text-sm text-orange-600 bg-orange-50 p-2 rounded"
+                  v-if="
+                    yard.enabled_billing_late_booking_fee &&
+                    daysNotice !== null &&
+                    daysNotice <= 1
+                  "
+                >
+                  Notice: Booking a service on this date will encore a x2 late
+                  booking fee
                 </div>
 
                 <div class="mt-4 pt-4 flex justify-end space-x-2">

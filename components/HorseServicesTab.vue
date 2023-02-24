@@ -1,6 +1,10 @@
 <script setup>
 import { DateTime } from "luxon";
-import { TrashIcon, LockClosedIcon } from "@heroicons/vue/24/outline";
+import {
+  TrashIcon,
+  LockClosedIcon,
+  ClockIcon,
+} from "@heroicons/vue/24/outline";
 import RequestServiceModal from "@/components/modals/RequestServiceModal.vue";
 import CancelServiceRequest from "@/components/modals/CancelServiceRequest.vue";
 import ServiceRequestLog from "@/components/ServiceRequestLog.vue";
@@ -187,10 +191,18 @@ const goToPreviousWeek = () => {
                 :key="event.id"
                 class="bg-blue-50 rounded mb-1 p-1 flex justify-between items-center"
               >
-                <div class="text-gray-600">
-                  {{ event.service_name }} - £{{
-                    event.service_price.toFixed(2)
-                  }}
+                <div class="text-gray-600 flex items-center">
+                  <div>
+                    {{ event.service_name }} - £{{
+                      event.service_price.toFixed(2)
+                    }}
+                  </div>
+
+                  <ClockIcon
+                    v-if="event.booked_late"
+                    v-tooltip="'Late Booking'"
+                    class="h-5 w-5 text-orange-400 ml-2"
+                  />
                 </div>
                 <div>
                   <TrashIcon
