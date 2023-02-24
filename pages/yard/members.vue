@@ -17,19 +17,19 @@ definePageMeta({
 const roles = [
   {
     id: 1,
-    name: "Owner",
+    name: "Yard Owner",
     description:
       "The owner of the yard can preform all actions within this yard",
   },
   {
     id: 2,
-    name: "Admin",
+    name: "Yard Admin",
     description:
       "Admins can do everything an owner can do except delete the yard and demote the yard owner.",
   },
   {
     id: 3,
-    name: "Member",
+    name: "Yard Member",
     description:
       "Members can only view the yards information (excluding billing infomation), Owners and Admins may set members as horse owners - which allows them to preform actions on that horse as well as view the horses billing information.",
   },

@@ -14,7 +14,8 @@ const props = defineProps(["isOpen", "field"]);
 const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
-const fields = useState("fields");
+const field_rotations = useState("field_rotations");
+const selectedRotation = useState("selectedRotation");
 
 const errors = ref([]);
 
@@ -29,23 +30,27 @@ watch(
 );
 
 const handleDelete = async () => {
-  // capture the horses of this field so i can move them to another field after deletion
-  const horses = props.field.horses;
+  const index = field_rotations.value.map((e) => e.id).indexOf(props.field.id);
 
-  // remove joins for this field in the horse/rotation/field join table
+  if (field_rotations.value.length < 2) {
+    errors.value.push("You must have at least one field rotation.");
+    return;
+  }
+
+  // remove joins for this rotation in the join table
   const { error: unlinkError } = await client
     .from("field_rotation_horses")
     .delete()
-    .eq("field_id", props.field.id);
+    .eq("rotation_id", props.field.id);
 
   if (unlinkError) {
     console.log(unlinkError);
     return;
   }
 
-  // Delete the field
+  // Delete the field rotation
   const { error } = await client
-    .from("fields")
+    .from("field_rotations")
     .delete()
     .eq("id", props.field.id);
 
@@ -54,14 +59,11 @@ const handleDelete = async () => {
     return;
   }
 
-  // now remove the deleted feed from the webpage
-  const index = fields.value.map((e) => e.id).indexOf(props.field.id);
-  fields.value.splice(index, 1);
+  // now remove the deleted field_rotation from the webpage
+  field_rotations.value.splice(index, 1);
 
-  // now move the horses to another field
-  horses.forEach(async (horse) => {
-    fields.value[0].horses.push(horse);
-  });
+  // set users selected rotation back to the first one
+  selectedRotation.value = field_rotations.value[0];
 
   // close the modal
   emits("close");
@@ -114,13 +116,12 @@ const handleDelete = async () => {
                   <DialogTitle
                     as="h3"
                     class="text-lg font-medium leading-6 text-gray-900"
-                    >Delete Field</DialogTitle
+                    >Delete Field rotation "{{ field.name }}"</DialogTitle
                   >
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
-                      Are you sure you want to delete this field? All of horses
-                      will be moved to the unsorted group. This action cannot be
-                      undone.
+                      Are you sure you want to delete this field rotation? This
+                      action cannot be undone.
                     </p>
                   </div>
                 </div>

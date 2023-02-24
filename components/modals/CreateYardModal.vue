@@ -46,44 +46,60 @@ const createYard = async () => {
     .select()
     .single();
 
-  if (!createError) {
-    // step 2: create the user/yard relationship
-    const _members = [
-      {
-        profile_id: user.value.id,
-        yard_id: newYard.id,
-        role: 1,
-      },
-    ];
-
-    if (user.value.id !== "ddc8533d-0773-4211-adaf-74db9b448a02") {
-      _members.push({
-        profile_id: "ddc8533d-0773-4211-adaf-74db9b448a02", // add shadow user - TODO: this is dumb - redo this
-        yard_id: newYard.id,
-        role: 3,
-      });
-    }
-
-    const { error: relError } = await client
-      .from("profiles_yards")
-      .insert(_members);
-
-    // step 3: update local state
-    if (!relError) {
-      if (yards.value) {
-        yards.value.unshift(newYard);
-      } else {
-        yards.value = [newYard];
-      }
-
-      // now close the modal
-      emits("close");
-    } else {
-      error.value = relError.message + relError.hint;
-    }
-  } else {
+  if (createError) {
     error.value = createError.message + createError.hint;
+    return;
   }
+
+  // create the user/yard relationship
+  const _members = [
+    {
+      profile_id: user.value.id,
+      yard_id: newYard.id,
+      role: 1,
+    },
+  ];
+
+  if (user.value.id !== "ddc8533d-0773-4211-adaf-74db9b448a02") {
+    _members.push({
+      profile_id: "ddc8533d-0773-4211-adaf-74db9b448a02", // add shadow user - TODO: this is dumb - redo this
+      yard_id: newYard.id,
+      role: 3,
+    });
+  }
+
+  const { error: relError } = await client
+    .from("profiles_yards")
+    .insert(_members);
+
+  if (relError) {
+    error.value = relError.message + relError.hint;
+    return;
+  }
+
+  // create the default field rotation for the yard
+  const { error: createFieldRotationError } = await client
+    .from("field_rotations")
+    .insert({
+      name: "Rotation 1",
+      yard_id: newYard.id,
+    });
+
+  if (createFieldRotationError) {
+    error.value =
+      createFieldRotationError.message + createFieldRotationError.hint;
+    return;
+  }
+
+  // update local state
+  if (yards.value) {
+    yards.value.unshift(newYard);
+  } else {
+    yards.value = [newYard];
+  }
+
+  // close the modal
+  emits("close");
 };
 
 const handleSubmit = async () => {
