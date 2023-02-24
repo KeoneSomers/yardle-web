@@ -200,7 +200,7 @@ const handleFieldChange = async (e) => {
         </button>
       </div> -->
     </div>
-    <div class="p-4 pb-0 md:p-8 md:pb-2 overflow-x-auto overflow-y-visible">
+    <div class="p-4 pb-2 md:p-8 md:pb-4 overflow-x-auto overflow-y-visible">
       <div>
         <div class="border-b border-gray-200">
           <nav class="-mb-px flex space-x-8" aria-label="field_rotations">
@@ -234,13 +234,13 @@ const handleFieldChange = async (e) => {
         </div>
       </div>
     </div>
-    <div class="flex justify-end pb-2 md:px-8 px-4">
+    <div class="flex justify-end pb-0 md:pb-2 md:px-8 px-4">
       <Menu as="div" class="relative inline-block text-left">
         <div>
           <MenuButton
             class="inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium border shadow"
           >
-            Options
+            Rotation Options
             <ChevronDownIcon class="ml-2 -mr-1 h-5 w-5" aria-hidden="true" />
           </MenuButton>
         </div>
@@ -254,7 +254,7 @@ const handleFieldChange = async (e) => {
           leave-to-class="transform scale-95 opacity-0"
         >
           <MenuItems
-            class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            class="absolute z-20 right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
           >
             <div class="px-1 py-1">
               <MenuItem v-slot="{ active }">
@@ -281,6 +281,13 @@ const handleFieldChange = async (e) => {
           </MenuItems>
         </transition>
       </Menu>
+      <button
+        @click="createModalOpen = true"
+        type="button"
+        class="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      >
+        Add field
+      </button>
       <!-- <Menu as="div" class="text-left">
         <div>
           <MenuButton
@@ -334,7 +341,7 @@ const handleFieldChange = async (e) => {
         </transition>
       </Menu> -->
     </div>
-    <div class="flex flex-1 overflow-x-scroll p-4 md:pt-0 md:px-8">
+    <div class="flex flex-1 overflow-x-scroll p-4 pt-2 md:px-8">
       <div
         v-for="field in fields"
         :key="field.id"
