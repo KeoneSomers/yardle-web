@@ -438,7 +438,7 @@ watchEffect(async () => {
 
       <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
         <dt class="truncate text-sm font-medium text-gray-500">
-          Forcast Upcoming Bill (Due in
+          Estimated Next Bill (Due in
           {{
             Math.ceil(
               nextBillingDate.diff(DateTime.now(), "days").toObject().days

@@ -162,6 +162,12 @@ const handleSubmit = async () => {
                     </option>
                   </select>
                 </div>
+                <div
+                  class="text-sm text-blue-600 bg-blue-50 p-2 rounded"
+                  v-if="selectedService && selectedService.description"
+                >
+                  {{ selectedService.name }}: {{ selectedService.description }}
+                </div>
                 <div class="flex space-x-2">
                   <div class="flex-1">
                     <label class="block text-sm font-medium text-gray-700"

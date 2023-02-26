@@ -21,14 +21,6 @@ const name = ref("");
 const description = ref("");
 const price = ref(0.0);
 
-// console.log("bad!!!!");
-
-// const { data: test, error: testError } = await client
-//   .from("livery_services")
-//   .select();
-
-// console.log(test);
-
 watch(
   () => props.isOpen,
   (isOpen) => {

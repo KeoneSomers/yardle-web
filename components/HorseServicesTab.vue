@@ -11,6 +11,8 @@ import ServiceRequestLog from "@/components/ServiceRequestLog.vue";
 import BillingStats from "@/components/BillingStats.vue";
 
 const viewingHistory = ref(false);
+const viewingInvoces = ref(false);
+
 const createModalOpen = ref(false);
 const cancelModalOpen = ref(false);
 const selectedService = ref(null);
@@ -114,7 +116,7 @@ const goToPreviousWeek = () => {
     "
     class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8"
   >
-    <div v-if="viewingHistory === false">
+    <div v-if="viewingHistory === false && viewingInvoces === false">
       <div class="sm:flex sm:items-center mb-5 border-b pb-5">
         <div class="sm:flex-auto">
           <h1 class="text-xl font-semibold text-gray-900">Your Services</h1>
@@ -125,11 +127,18 @@ const goToPreviousWeek = () => {
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <button
+            @click="viewingInvoces = true"
+            type="button"
+            class="inline-flex mr-2 items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
+          >
+            Invoces
+          </button>
+          <button
             @click="viewingHistory = true"
             type="button"
             class="inline-flex mr-2 items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
           >
-            Billing History
+            Order History
           </button>
           <button
             @click="() => (createModalOpen = true)"
@@ -189,29 +198,27 @@ const goToPreviousWeek = () => {
               <div
                 v-for="event in day.serviceRequests"
                 :key="event.id"
-                class="bg-blue-50 rounded mb-1 p-1 flex justify-between items-center"
+                class="bg-blue-50 text-gray-600 rounded mb-1 p-1 flex justify-between items-center"
               >
-                <div class="text-gray-600 flex items-center">
+                <div class="flex items-center">
                   <div>
-                    {{ event.service_name }} - £{{
-                      event.service_price.toFixed(2)
-                    }}
+                    {{ event.service_name }}
                   </div>
-
+                </div>
+                <div class="flex items-center">
                   <ClockIcon
                     v-if="event.booked_late"
                     v-tooltip="'Late Booking'"
-                    class="h-5 w-5 text-orange-400 ml-2"
+                    class="h-5 w-5 text-orange-400 mr-2"
                   />
-                </div>
-                <div>
+                  £{{ event.service_price.toFixed(2) }}
                   <TrashIcon
                     @click="
                       selectedService = event;
                       cancelModalOpen = true;
                     "
                     v-tooltip="'Cancel Service'"
-                    class="h-5 w-5 text-gray-400 cursor-pointer"
+                    class="h-5 w-5 text-gray-400 cursor-pointer ml-2"
                   />
                 </div>
               </div>
@@ -231,7 +238,7 @@ const goToPreviousWeek = () => {
         </div>
       </div>
     </div>
-    <div v-else>
+    <div v-if="viewingHistory">
       <div class="sm:flex sm:items-center mb-5 border-b pb-5">
         <div class="sm:flex-auto">
           <h1 class="text-xl font-semibold text-gray-900">History</h1>
@@ -251,6 +258,25 @@ const goToPreviousWeek = () => {
         </div>
       </div>
       <ServiceRequestLog />
+    </div>
+    <div v-if="viewingInvoces">
+      <div class="sm:flex sm:items-center mb-5 border-b pb-5">
+        <div class="sm:flex-auto">
+          <h1 class="text-xl font-semibold text-gray-900">Invoces</h1>
+          <p class="mt-2 text-sm text-gray-700">
+            A list of all your previous invoces.
+          </p>
+        </div>
+        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+          <button
+            @click="viewingInvoces = false"
+            type="button"
+            class="inline-flex mr-2 items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
+          >
+            Back
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div v-else class="flex w-full my-20 justify-center items-center">
