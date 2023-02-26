@@ -1,7 +1,7 @@
 const handler = async (req, res) => {
-  res.end("Hello Cron!");
+  // my code here
 
-  return;
+  res.end("Cron Job ran successfully!");
 };
 
 export default handler;

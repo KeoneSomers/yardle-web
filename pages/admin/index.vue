@@ -43,10 +43,19 @@ const handleDelete = async (id) => {
     feedback.value = feedback.value.filter((item) => item.id !== id);
   }
 };
+
+const handleGenerateInvoices = async () => {
+  const { result } = await useFetch("/api/generateInvoces", {
+    method: "POST",
+  });
+
+  console.log(result);
+};
 </script>
 
 <template>
   <div class="py-20 px-10">
+    <button @click="handleGenerateInvoices">Generate Todays Invoces</button>
     <div class="m-5 text-4xl font-fold">Feedback</div>
     <div
       v-for="(item, index) in feedback"

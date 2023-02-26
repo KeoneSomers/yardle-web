@@ -55,7 +55,7 @@ const getNextBillingDate = async () => {
     if (interval === 1) {
       return now
         .plus({
-          weeks: weekday <= now.weekday ? 1 : 0,
+          weeks: weekday < now.weekday ? 1 : 0,
         })
         .set({ weekday: weekday });
     }
@@ -64,11 +64,14 @@ const getNextBillingDate = async () => {
       const start = DateTime.fromISO(startingDate);
 
       if (start < now) {
-        const daysAgo = now.diff(start, ["days"]).days;
-        const weeksAgo = Math.ceil(daysAgo / 7);
-        const nextBillingDate = start.plus({ weeks: weeksAgo });
+        const daysAgo = now.diff(start, ["days"]).days - 1; // NOTE: - 1 so that it will not skip the current day (today)
+        const weeksAgo = daysAgo / 7;
 
-        return nextBillingDate;
+        return start
+          .plus({
+            weeks: interval * Math.ceil(weeksAgo / interval),
+          })
+          .set({ weekday: weekday });
       } else {
         return start;
       }
@@ -404,11 +407,23 @@ watchEffect(async () => {
   <div>
     <p class="text-xs flex">
       Next Billing Date is
-      {{ nextBillingDate.toFormat("EEEE, MMMM d, yyyy") }} (in
-      {{
-        Math.ceil(nextBillingDate.diff(DateTime.now(), "days").toObject().days)
-      }}
-      days)
+      {{ nextBillingDate.toFormat("EEEE, MMMM d, yyyy") }}
+      <span
+        v-if="
+          Math.floor(
+            nextBillingDate.diff(DateTime.now(), 'days').toObject().days
+          ) > 0
+        "
+      >
+        (in
+        {{
+          Math.floor(
+            nextBillingDate.diff(DateTime.now(), "days").toObject().days
+          )
+        }}
+        days)
+      </span>
+      <span v-else> (Today)</span>
       <span v-if="profile.active_role === 1"
         ><NuxtLink
           to="/yard/settings"
@@ -438,13 +453,23 @@ watchEffect(async () => {
 
       <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
         <dt class="truncate text-sm font-medium text-gray-500">
-          Estimated Next Bill (Due in
-          {{
-            Math.ceil(
-              nextBillingDate.diff(DateTime.now(), "days").toObject().days
-            )
-          }}
-          days)
+          Estimated Next Bill
+          <span
+            v-if="
+              Math.floor(
+                nextBillingDate.diff(DateTime.now(), 'days').toObject().days
+              ) > 0
+            "
+          >
+            (Due in
+            {{
+              Math.floor(
+                nextBillingDate.diff(DateTime.now(), "days").toObject().days
+              )
+            }}
+            days)
+          </span>
+          <span v-else> (Due Today)</span>
         </dt>
         <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
           £{{ nextBill.toFixed(2) }}
