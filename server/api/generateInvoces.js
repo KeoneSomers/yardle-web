@@ -1,5 +1,5 @@
 import { serverSupabaseServiceRole } from "#supabase/server";
-import { DateTime, Interval } from "luxon";
+import { DateTime } from "luxon";
 
 const getNextBillingDate = async (billingCycle) => {
   const now = DateTime.now();
@@ -171,34 +171,211 @@ const getNextBillingDate = async (billingCycle) => {
   }
 };
 
+const getPreviousBillingDate = async (
+  offset,
+  nextBillingDate,
+  billingCycle
+) => {
+  // offset prop - how many billing cycles to go back (last billing cycle = 1, 2nd last = 2, etc.)
+  const next = nextBillingDate;
+  const now = DateTime.now();
+  const interval = billingCycle.every;
+  const weekly = billingCycle.period === 1;
+  const monthly = billingCycle.period === 2;
+  const firstOrLast = billingCycle.on_the;
+  const anyday = billingCycle.day === 1;
+  const weekday = billingCycle.day - 1;
+  let startingDate = billingCycle.starting_from;
+
+  // Weekly Billing
+  if (weekly) {
+    return next.minus({ weeks: interval * offset });
+  }
+
+  // Monthly Billing
+  if (monthly) {
+    if (interval === 1) {
+      // more simple (every 1 month)
+      if (anyday) {
+        // return anyday
+        if (firstOrLast === 2) {
+          // last
+          return next.minus({ months: offset }).endOf("month");
+        } else {
+          // first
+          return next.minus({ months: offset }).startOf("month");
+        }
+      } else {
+        // return weekday
+        if (firstOrLast === 2) {
+          // last
+
+          return next
+            .minus({ months: offset })
+            .endOf("month")
+            .minus({
+              days:
+                (next.minus({ months: offset }).endOf("month").weekday -
+                  weekday +
+                  7) %
+                7,
+            });
+        } else {
+          // first
+
+          return next
+            .minus({ months: offset })
+            .startOf("month")
+            .plus({
+              days:
+                (weekday -
+                  next.minus({ months: offset }).startOf("month").weekday +
+                  7) %
+                7,
+            });
+        }
+      }
+    }
+
+    if (interval > 1) {
+      // more complex (every x months)
+
+      if (anyday) {
+        if (firstOrLast === 2) {
+          // anyday last
+
+          return next
+            .minus({
+              months: interval * offset,
+            })
+            .endOf("month");
+        } else {
+          // anyday first
+
+          return next
+            .minus({
+              months: interval * offset,
+            })
+            .startOf("month");
+        }
+      } else {
+        // weekday
+
+        if (firstOrLast === 2) {
+          // weekday last
+
+          return next
+            .minus({
+              months: interval * offset,
+            })
+            .endOf("month")
+            .minus({
+              days:
+                (next
+                  .minus({
+                    months: interval * offset,
+                  })
+                  .endOf("month").weekday -
+                  weekday +
+                  7) %
+                7,
+            });
+        } else {
+          //  weekday first
+
+          return next
+            .minus({
+              months: interval * offset,
+            })
+            .startOf("month")
+            .plus({
+              days:
+                (weekday -
+                  next
+                    .minus({
+                      months: interval * offset,
+                    })
+                    .startOf("month").weekday +
+                  7) %
+                7,
+            });
+        }
+      }
+    }
+  }
+};
+
 export default defineEventHandler(async (event) => {
   const client = serverSupabaseServiceRole(event);
 
-  //   const { data, error } = await client.auth.admin.deleteUser(userId);
-
-  // check what yard billing cycles are due for today
+  // get all billing cycles
   const { data: billingCycles, error: errorBillingCycles } = await client
     .from("yard_billing_cycles")
     .select("*");
 
+  // check what yard billing cycles are due for yestrday
   billingCycles.forEach(async (billingCycle) => {
     const nextBillingDay = await getNextBillingDate(billingCycle);
+    const latestBillingDay = await getPreviousBillingDate(
+      1,
+      nextBillingDay,
+      billingCycle
+    );
 
-    console.log(nextBillingDay.toFormat("EEEE, MMMM d, yyyy"));
-
-    // if today is their billing day
+    // if yesterday was their billing day
     if (
-      nextBillingDay.toISODate() === DateTime.now().toISODate() // TODO: remove the plus 1 week - for testing purposes
+      latestBillingDay.toISODate() ===
+      DateTime.now().minus({ days: 1 }).toISODate()
     ) {
-      console.log("Billing Day!");
-      console.log(nextBillingDay.toFormat("EEEE, MMMM d, yyyy"));
+      console.log("Yesterday was their Billing Day!");
+      console.log(latestBillingDay.toFormat("EEEE, MMMM d, yyyy"));
       // calculate the periods start and end dates
-      const start = "";
-      const end = nextBillingDay.toISODate();
-      // get all the service_requests for the current period
+      const start = await getPreviousBillingDate(
+        1,
+        latestBillingDay,
+        billingCycle
+      );
+      const end = latestBillingDay.toISODate();
+
+      // get all the service_requests after the start date and before or equal to the end date
+      const { data: serviceRequests, error: errorServiceRequests } =
+        await client
+          .from("service_requests")
+          .select("*, horse_id!inner(id, yard_id)")
+          .eq("horse_id.yard_id", billingCycle.yard_id)
+          .gt("date", start.toISODate())
+          .lte("date", end);
+
       // split the service_requests into groups by horse_id
-      // foreach group, create an invoice
-      // save the invoce to the database
+      const ServiceRequestsGroupedByHorse = serviceRequests.reduce(
+        (acc, cur) => {
+          const horseId = cur.horse_id.id;
+          acc[horseId] = acc[horseId] || [];
+          acc[horseId].push(cur);
+          return acc;
+        },
+        {}
+      );
+
+      // loop though the horse_id groups and create an invoice for each horse
+      for (const horseId in ServiceRequestsGroupedByHorse) {
+        const horseServices = ServiceRequestsGroupedByHorse[horseId];
+        console.log(`Horse ID: ${horseId}`);
+
+        // save the invoice to the database
+        const { data: invoiceData, error: errorInvoiceData } = await client
+          .from("invoices")
+          .insert({
+            yard_id: billingCycle.yard_id,
+            horse_id: horseId,
+            start_date: start.toISODate(),
+            end_date: end,
+          })
+          .select()
+          .single();
+
+        // add services to related invoice_items table
+      }
     }
   });
 

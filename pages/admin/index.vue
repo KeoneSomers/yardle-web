@@ -55,7 +55,12 @@ const handleGenerateInvoices = async () => {
 
 <template>
   <div class="py-20 px-10">
-    <button @click="handleGenerateInvoices">Generate Todays Invoces</button>
+    <button
+      @click="handleGenerateInvoices"
+      class="bg-indigo-500 p-4 m-4 rounded text-white"
+    >
+      Manually Generate Todays Invoces
+    </button>
     <div class="m-5 text-4xl font-fold">Feedback</div>
     <div
       v-for="(item, index) in feedback"

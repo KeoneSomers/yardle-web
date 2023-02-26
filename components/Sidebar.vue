@@ -12,6 +12,7 @@ import {
   ClipboardDocumentListIcon,
   LinkIcon,
   Cog8ToothIcon,
+  DocumentTextIcon,
 } from "@heroicons/vue/24/outline";
 import { EllipsisHorizontalIcon } from "@heroicons/vue/20/solid";
 
@@ -36,11 +37,6 @@ const navigation = [
     name: "Field Groups",
     to: "/yard/fields",
     icon: RectangleGroupIcon,
-  },
-  {
-    name: "Yard Settings",
-    to: "/yard/settings",
-    icon: Cog8ToothIcon,
   },
 ];
 
@@ -190,6 +186,51 @@ const handleSignout = async () => {
               >{{ item.hint }}</span
             >
           </NuxtLink>
+          <div v-if="profile && profile.active_role == 1">
+            <p class="text-xs font-semibold pl-2 pt-4 pb-2 text-gray-600">
+              Admin
+            </p>
+            <NuxtLink
+              to="/yard/invoices"
+              :class="[
+                '/yard/invoices' == router.currentRoute.value.path
+                  ? 'bg-gray-200 text-gray-900'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+              ]"
+            >
+              <DocumentTextIcon
+                :class="[
+                  '/yard/invoices' == router.currentRoute.value.path
+                    ? 'text-gray-500'
+                    : 'text-gray-400 group-hover:text-gray-500',
+                  'mr-3 flex-shrink-0 h-6 w-6',
+                ]"
+                aria-hidden="true"
+              />
+              <span class="flex-1">Manage Invoices</span>
+            </NuxtLink>
+            <NuxtLink
+              to="/yard/settings"
+              :class="[
+                '/yard/settings' == router.currentRoute.value.path
+                  ? 'bg-gray-200 text-gray-900'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+              ]"
+            >
+              <Cog8ToothIcon
+                :class="[
+                  '/yard/settings' == router.currentRoute.value.path
+                    ? 'text-gray-500'
+                    : 'text-gray-400 group-hover:text-gray-500',
+                  'mr-3 flex-shrink-0 h-6 w-6',
+                ]"
+                aria-hidden="true"
+              />
+              <span class="flex-1">Settings</span>
+            </NuxtLink>
+          </div>
         </div>
         <div v-if="yard" class="w-full p-4 flex">
           <button

@@ -49,8 +49,8 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
     if (guards.requireAuth) return navigateTo("/login");
   }
 
-  // TODO: this if statement is a hack, need to find a better way to do this (just for yard settings page)
-  if (to.path === "/yard/settings") {
+  // TODO: this if statement is a hack, need to find a better way to do this (just for yard settings and invoices pages)
+  if (to.path === "/yard/settings" || to.path === "/yard/invoices") {
     if (!user.value || !selectedYardId.value || selectedYardId.value === 0) {
       return abortNavigation();
     }
