@@ -91,6 +91,23 @@ const createYard = async () => {
     return;
   }
 
+  // create the default field rotation for the yard
+  const { error: createBillingCycleError } = await client
+    .from("yard_billing_cycles")
+    .insert({
+      yard_id: newYard.id,
+      every: 1,
+      period: 2,
+      on_the: 2,
+      day: 1,
+    });
+
+  if (createBillingCycleError) {
+    error.value =
+      createBillingCycleError.message + createBillingCycleError.hint;
+    return;
+  }
+
   // update local state
   if (yards.value) {
     yards.value.unshift(newYard);

@@ -359,9 +359,6 @@ export default defineEventHandler(async (event) => {
 
       // loop though the horse_id groups and create an invoice for each horse
       for (const horseId in ServiceRequestsGroupedByHorse) {
-        const horseServices = ServiceRequestsGroupedByHorse[horseId];
-        console.log(`Horse ID: ${horseId}`);
-
         // save the invoice to the database
         const { data: invoiceData, error: errorInvoiceData } = await client
           .from("invoices")
@@ -374,8 +371,19 @@ export default defineEventHandler(async (event) => {
           .select()
           .single();
 
-        // add services to related invoice_items table
+        // update the service_requests with the invoice_id
+        const { data: serviceRequestData, error: errorServiceRequestData } =
+          await client
+            .from("service_requests")
+            .update({
+              invoice_id: invoiceData.id,
+            })
+            .eq("horse_id", horseId)
+            .gt("date", start.toISODate())
+            .lte("date", end);
       }
+    } else {
+      console.log(billingCycle.yard_id + " - Not their billing day yet!");
     }
   });
 
