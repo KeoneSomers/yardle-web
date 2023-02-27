@@ -1,4 +1,5 @@
 <script setup>
+import { ChevronRightIcon } from "@heroicons/vue/20/solid";
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
 });
@@ -27,10 +28,11 @@ invoices.value = invoicesData;
       <hr class="my-10" />
 
       <!-- Table here -->
-      <div
+      <NuxtLink
         v-for="invoice in invoices"
         :key="invoice.id"
-        class="rounded-lg mb-4 border flex justify-between items-center"
+        :to="`/yard/invoices/${invoice.id * 36}`"
+        class="rounded-lg mb-4 border flex justify-between items-center hover:shadow-lg hover:cursor-pointer transition-all duration-300 ease-in-out"
         :class="{
           'bg-green-50': invoice.published,
           'bg-gray-50': !invoice.published,
@@ -38,19 +40,20 @@ invoices.value = invoicesData;
       >
         <div class="p-4">
           <p>
-            Invoice for horse: {{ invoice.horse_id.name }} -
+            {{ invoice.horse_id.name }} -
             {{ invoice.end_date }}
           </p>
         </div>
         <div>
-          <button class="p-2 mr-2 shadow border rounded">
+          <ChevronRightIcon class="h-8 w-8 mr-4" />
+          <!-- <button class="p-2 mr-2 shadow border rounded">
             View / Edit Items
           </button>
           <button class="p-2 mr-2 bg-indigo-500 text-white rounded">
             Create Invoice
-          </button>
+          </button> -->
         </div>
-      </div>
+      </NuxtLink>
     </div>
   </div>
   <!-- Empty State -->

@@ -1,0 +1,483 @@
+<script setup>
+import { DateTime } from "luxon";
+import { XMarkIcon, EnvelopeIcon } from "@heroicons/vue/20/solid";
+import { useModal } from "vue-final-modal";
+import ModalConfirm from "@/components/modals/ModalConfirm.vue";
+
+const params = useRoute().params;
+const invoice_id = params.invoice_id / 36;
+const user = useSupabaseUser();
+const client = useSupabaseClient();
+const selectedYard = useState("selectedYard");
+const yard = useState("yard");
+
+definePageMeta({
+  guards: ["requireAuth", "requireYard"],
+});
+
+const loading = ref(false);
+const itemToDelete = ref(null);
+const invoiceData = ref(null);
+const itemsData = ref([]);
+const subtotal = ref(0.0);
+const client_name = ref("");
+const client_email = ref("");
+const baseRate = ref(0);
+const discount = ref(0);
+const discountNote = ref("");
+
+// get the invoice
+const { data: _invoiceData, error: invoiceError } = await client
+  .from("invoices")
+  .select("*, horse_id (name, owner(email, username)), yard_id (name)")
+  .eq("id", invoice_id)
+  .single();
+
+if (_invoiceData.horse_id.owner) {
+  client_name.value = _invoiceData.horse_id.owner.username;
+  client_email.value = _invoiceData.horse_id.owner.email;
+}
+baseRate.value = _invoiceData.base_rate;
+discount.value = _invoiceData.discount;
+discountNote.value = _invoiceData.discount_note;
+
+invoiceData.value = _invoiceData;
+
+const { data: _itemsData, error: itemsError } = await client
+  .from("service_requests")
+  .select("*")
+  .eq("invoice_id", invoice_id)
+  .filter("canceled_at", "is", null)
+  .order("date", { ascending: true });
+
+_itemsData.forEach((element) => {
+  subtotal.value += element.service_price;
+});
+
+itemsData.value = _itemsData;
+
+const removeItem = async () => {
+  const item_id = itemToDelete.value;
+  const { data, error } = await client
+    .from("service_requests")
+    .delete()
+    .eq("id", item_id);
+  if (error) {
+    console.log(error);
+  } else {
+    // console.log(data);
+
+    // remove from the itemsData
+    itemsData.value = itemsData.value.filter((item) => item.id !== item_id);
+
+    closeDeleteItemModal();
+  }
+  loading.value = false;
+};
+
+// Delete Horse Modal
+const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
+  component: ModalConfirm,
+  attrs: {
+    title: "Delete Item From Invoice",
+    message:
+      "Are you sure you want to delete this service? It will be completely removed from the invoice.",
+    cancelButtonText: "Cancel",
+    confirmButtonText: "Delete",
+    isLoading: loading,
+    onBeforeOpen() {
+      if (loading.value === true) {
+        loading.value = false;
+      }
+    },
+    onCancel() {
+      closeDeleteItemModal();
+    },
+    async onConfirm() {
+      loading.value = true;
+      await removeItem();
+    },
+  },
+});
+</script>
+
+<template>
+  <div class="overflow-auto pb-20 px-4 md:px-0">
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div class="py-5">
+        <p class="text-4xl font-bold mt-20">Prepare Invoice</p>
+      </div>
+      <hr class="my-10" />
+      <div class="flex justify-between">
+        <div>
+          <NuxtLink to="/yard/invoices" class="shadow rounded border py-2 px-3"
+            >Back</NuxtLink
+          >
+        </div>
+        <div class="flex">
+          <div class="shadow rounded border py-2 px-3 mr-2">Download</div>
+          <div class="rounded py-2 px-3 text-white bg-indigo-500">
+            Email to client
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-10" />
+      <div class="mb-10 flex flex-wrap">
+        <div class="items-center mr-3">
+          <label for="name" class="block text-sm font-medium text-gray-700"
+            >Client Name</label
+          >
+          <div class="mt-1">
+            <input
+              v-model="client_name"
+              type="text"
+              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              placeholder="you@example.com"
+            />
+          </div>
+        </div>
+        <div class="flex items-center mr-3">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700"
+              >Client Email</label
+            >
+            <div class="relative mt-1 rounded-md shadow-sm">
+              <div
+                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+              >
+                <EnvelopeIcon
+                  class="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+              </div>
+              <input
+                v-model="client_email"
+                type="email"
+                name="email"
+                id="email"
+                class="block w-full rounded-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="you@example.com"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center mr-3">
+          <div>
+            <label
+              for="base-rate"
+              class="block text-sm font-medium text-gray-700"
+              >Base Rate</label
+            >
+            <input
+              v-model="baseRate"
+              type="number"
+              class="block mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+          </div>
+        </div>
+        <div class="flex items-center mr-3">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700"
+              >Discount %</label
+            >
+            <input
+              v-model="discount"
+              type="number"
+              min="0"
+              max="100"
+              class="block mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+          </div>
+        </div>
+        <div v-if="discount > 0" class="flex items-center">
+          <div>
+            <label
+              for="discountNote"
+              class="block text-sm font-medium text-gray-700"
+              >Discount Note</label
+            >
+            <div class="mt-1">
+              <input
+                v-model="discountNote"
+                type="text"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="i.e. Multi-horse discount"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-10 border p-10">
+        <div class="flex justify-between">
+          <div>
+            <h1 class="text-4xl font-semibold">
+              {{ invoiceData.yard_id.name }}
+            </h1>
+            <p class="font-mono text-gray-600">
+              Invoice number: INV{{ invoiceData.id * 36 }}
+            </p>
+          </div>
+          <div class="flex justify-end text-sm">
+            <div>
+              <div class="flex justify-between">
+                <div class="mr-5">Invoice Date:</div>
+                <div>
+                  {{
+                    DateTime.fromISO(invoiceData.created_at).toFormat(
+                      "EEEE, MMMM d, yyyy"
+                    )
+                  }}
+                </div>
+              </div>
+
+              <div class="flex justify-between">
+                <div class="mr-5">Due Date:</div>
+                <div>
+                  {{
+                    DateTime.fromISO(invoiceData.created_at)
+                      .plus({ weeks: 2 })
+                      .toFormat("EEEE, MMMM d, yyyy")
+                  }}
+                </div>
+              </div>
+              <div class="flex justify-between">
+                <div class="mr-5">To:</div>
+                <div>{{ client_name }} - {{ client_email }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-5" />
+        <div>
+          <div class="sm:flex sm:items-center">
+            <div class="sm:flex-auto">
+              <h1 class="text-base font-semibold leading-6 text-gray-900">
+                Invoice
+              </h1>
+
+              <p class="mt-2 text-sm text-gray-700">
+                Livery services for {{ invoiceData.horse_id.name }} from
+                <time :datetime="invoiceData.start_date">{{
+                  DateTime.fromISO(invoiceData.start_date).toFormat(
+                    "MMMM d, yyyy"
+                  )
+                }}</time>
+                to
+                <time :datetime="invoiceData.end_date">{{
+                  DateTime.fromISO(invoiceData.end_date).toFormat(
+                    "MMMM d, yyyy"
+                  )
+                }}</time
+                >.
+              </p>
+            </div>
+            <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none"></div>
+          </div>
+          <div class="-mx-4 mt-8 flow-root sm:mx-0">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead>
+                <tr>
+                  <th
+                    scope="col"
+                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                  >
+                    Service
+                  </th>
+                  <th
+                    scope="col"
+                    class="hidden py-3.5 px-3 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                  >
+                    booked for
+                  </th>
+                  <th
+                    v-if="yard.enabled_billing_late_booking_fee"
+                    scope="col"
+                    class="hidden py-3.5 px-3 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                  >
+                    booked late
+                  </th>
+                  <th
+                    scope="col"
+                    class="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
+                  >
+                    Price
+                  </th>
+                  <th
+                    scope="col"
+                    class="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
+                  ></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="item in itemsData"
+                  :key="item.id"
+                  class="border-b border-gray-200"
+                >
+                  <td class="py-4 pl-4 pr-3 text-sm sm:pl-0">
+                    <div class="font-medium text-gray-900">
+                      <p class="truncate whitespace-pre-wrap">
+                        {{ item.service_name }}
+                      </p>
+                    </div>
+                    <div class="mt-0.5 text-gray-500 sm:hidden">
+                      {{ item.hours }} hours at {{ item.rate }}
+                    </div>
+                  </td>
+                  <td
+                    class="hidden py-4 px-3 text-right text-sm text-gray-500 sm:table-cell"
+                  >
+                    {{ DateTime.fromISO(item.date).toFormat("MMMM d, yyyy") }}
+                  </td>
+                  <td
+                    v-if="yard.enabled_billing_late_booking_fee"
+                    class="hidden py-4 px-3 text-right text-sm text-gray-500 sm:table-cell"
+                    :class="{
+                      'text-red-500': item.booked_late,
+                    }"
+                  >
+                    {{ item.booked_late ? "Yes" : "No" }}
+                  </td>
+                  <td
+                    class="py-4 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0"
+                  >
+                    <span
+                      v-if="
+                        yard.enabled_billing_late_booking_fee &&
+                        item.booked_late
+                      "
+                      class="line-through mr-3 text-gray-400"
+                      >£{{ item.service_price.toFixed(2) / 2 }}</span
+                    >
+                    <span>£{{ item.service_price.toFixed(2) }}</span>
+                  </td>
+                  <td class="py-4 pl-3 text-right text-sm text-red-500 sm:pr-0">
+                    <div
+                      @click="
+                        itemToDelete = item.id;
+                        openDeleteItemModal();
+                      "
+                      class="flex justify-end hover:cursor-pointer"
+                    >
+                      <XMarkIcon class="h-6 w-6" v-tooltip="'Remove'" />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th
+                    scope="row"
+                    colspan="3"
+                    class="hidden pl-4 pr-3 pt-6 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
+                  >
+                    Base Rate
+                  </th>
+                  <th
+                    scope="row"
+                    class="pl-6 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:hidden"
+                  >
+                    Base Rate
+                  </th>
+                  <td
+                    class="pl-3 pr-6 pt-6 text-right text-sm text-gray-500 sm:pr-0"
+                  >
+                    £{{ baseRate.toFixed(2) }}
+                  </td>
+                </tr>
+                <tr>
+                  <th
+                    scope="row"
+                    colspan="3"
+                    class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
+                  >
+                    Services
+                  </th>
+                  <th
+                    scope="row"
+                    class="pl-6 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
+                  >
+                    Services
+                  </th>
+                  <td
+                    class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
+                  >
+                    £{{ subtotal.toFixed(2) }}
+                  </td>
+                </tr>
+                <tr>
+                  <th
+                    scope="row"
+                    colspan="3"
+                    class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
+                  >
+                    Subtotal
+                  </th>
+                  <th
+                    scope="row"
+                    class="pl-6 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
+                  >
+                    Subtotal
+                  </th>
+                  <td
+                    class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
+                  >
+                    £{{ (subtotal + baseRate).toFixed(2) }}
+                  </td>
+                </tr>
+                <tr>
+                  <th
+                    scope="row"
+                    colspan="3"
+                    class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
+                  >
+                    Discount
+                  </th>
+                  <th
+                    scope="row"
+                    class="pl-6 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
+                  >
+                    Discount
+                  </th>
+                  <td
+                    class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
+                  >
+                    {{ discount }}% - £{{
+                      (((subtotal + baseRate) * discount) / 100).toFixed(2)
+                    }}
+                  </td>
+                </tr>
+                <tr>
+                  <th
+                    scope="row"
+                    colspan="3"
+                    class="hidden pl-4 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell sm:pl-0"
+                  >
+                    Total
+                  </th>
+                  <th
+                    scope="row"
+                    class="pl-6 pr-3 pt-4 text-left text-sm font-semibold text-gray-900 sm:hidden"
+                  >
+                    Total
+                  </th>
+                  <td
+                    class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
+                  >
+                    £{{ (subtotal + baseRate - discount).toFixed(2) }}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <div v-if="discountNote" class="text-gray-700">
+              <p>Discount Note: {{ discountNote }}</p>
+            </div>
+            <p>Thank you for your continued business!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
