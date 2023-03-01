@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
     "@nuxt/image-edge",
+    "@sidebase/nuxt-pdf",
   ],
   plugins: [{ src: "@/plugins/vercel.ts", mode: "client" }],
   typescript: {
@@ -27,7 +28,20 @@ export default defineNuxtConfig({
       ],
       meta: [
         {
+          name: "og:site_name",
+          content: "Yardle",
+        },
+        {
+          name: "og:title",
+          content: "Yardle",
+        },
+        {
           name: "description",
+          content:
+            "Horse yard management tool - Join multiple yards, manage horses, their feeds, rugs and medications.",
+        },
+        {
+          name: "og:description",
           content:
             "Horse yard management tool - Join multiple yards, manage horses, their feeds, rugs and medications.",
         },

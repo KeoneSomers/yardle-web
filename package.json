@@ -11,7 +11,9 @@
     "@nuxt/image-edge": "^1.0.0-27919678.2f5b64b",
     "@nuxtjs/supabase": "^0.3.1",
     "@nuxtjs/tailwindcss": "^6.3.1",
+    "@sidebase/nuxt-pdf": "^0.1.1",
     "@tailwindcss/forms": "^0.5.3",
+    "@types/luxon": "^3.2.0",
     "nuxt": "^3.2.0"
   },
   "dependencies": {
@@ -24,6 +26,7 @@
     "floating-vue": "^2.0.0-beta.20",
     "html-to-image": "^1.11.11",
     "luxon": "^3.2.1",
+    "pdfjs": "^2.4.7",
     "print-js": "^1.6.0",
     "vue-final-modal": "^4.0.4",
     "vuedraggable": "^4.1.0"

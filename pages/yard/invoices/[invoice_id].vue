@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import { XMarkIcon, EnvelopeIcon } from "@heroicons/vue/20/solid";
 import { useModal } from "vue-final-modal";
 import ModalConfirm from "@/components/modals/ModalConfirm.vue";
+import { exportToPDF } from "#imports";
 
 const params = useRoute().params;
 const invoice_id = params.invoice_id / 36;
@@ -10,6 +11,8 @@ const user = useSupabaseUser();
 const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
 const yard = useState("yard");
+
+const route = useRoute();
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
@@ -25,36 +28,39 @@ const client_email = ref("");
 const baseRate = ref(0);
 const discount = ref(0);
 const discountNote = ref("");
+const printItem = ref(null);
 
-// get the invoice
-const { data: _invoiceData, error: invoiceError } = await client
-  .from("invoices")
-  .select("*, horse_id (name, owner(email, username)), yard_id (name)")
-  .eq("id", invoice_id)
-  .single();
+onMounted(async () => {
+  // get the invoice
+  const { data: _invoiceData, error: invoiceError } = await client
+    .from("invoices")
+    .select("*, horse_id (name, owner(email, username)), yard_id (name)")
+    .eq("id", invoice_id)
+    .single();
 
-if (_invoiceData.horse_id.owner) {
-  client_name.value = _invoiceData.horse_id.owner.username;
-  client_email.value = _invoiceData.horse_id.owner.email;
-}
-baseRate.value = _invoiceData.base_rate;
-discount.value = _invoiceData.discount;
-discountNote.value = _invoiceData.discount_note;
+  if (_invoiceData.horse_id.owner) {
+    client_name.value = _invoiceData.horse_id.owner.username;
+    client_email.value = _invoiceData.horse_id.owner.email;
+  }
+  baseRate.value = _invoiceData.base_rate;
+  discount.value = _invoiceData.discount;
+  discountNote.value = _invoiceData.discount_note;
 
-invoiceData.value = _invoiceData;
+  invoiceData.value = _invoiceData;
 
-const { data: _itemsData, error: itemsError } = await client
-  .from("service_requests")
-  .select("*")
-  .eq("invoice_id", invoice_id)
-  .filter("canceled_at", "is", null)
-  .order("date", { ascending: true });
+  const { data: _itemsData, error: itemsError } = await client
+    .from("service_requests")
+    .select("*")
+    .eq("invoice_id", invoice_id)
+    .filter("canceled_at", "is", null)
+    .order("date", { ascending: true });
 
-_itemsData.forEach((element) => {
-  subtotal.value += element.service_price;
+  _itemsData.forEach((element) => {
+    subtotal.value += element.service_price;
+  });
+
+  itemsData.value = _itemsData;
 });
-
-itemsData.value = _itemsData;
 
 const removeItem = async () => {
   const item_id = itemToDelete.value;
@@ -102,27 +108,45 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
 </script>
 
 <template>
-  <div class="overflow-auto pb-20 px-4 md:px-0">
+  <div v-if="invoiceData" class="overflow-auto pb-20 px-4 md:px-0 bg-white">
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="py-5">
         <p class="text-4xl font-bold mt-20">Prepare Invoice</p>
       </div>
-      <hr class="my-10" />
-      <div class="flex justify-between">
+      <hr class="my-5" />
+      <div class="flex justify-between items-center">
         <div>
-          <NuxtLink to="/yard/invoices" class="shadow rounded border py-2 px-3"
+          <NuxtLink
+            to="/yard/invoices"
+            class="shadow rounded-lg border py-2 px-3"
             >Back</NuxtLink
           >
         </div>
-        <div class="flex">
-          <div class="shadow rounded border py-2 px-3 mr-2">Download</div>
-          <div class="rounded py-2 px-3 text-white bg-indigo-500">
-            Email to client
-          </div>
+        <div
+          v-tooltip="
+            client_email == '' || client_name == ''
+              ? 'Please provide a client name and email'
+              : ''
+          "
+          class="flex"
+          :class="{
+            'opacity-50 cursor-not-allowed':
+              client_email == '' || client_name == '',
+          }"
+        >
+          <DownloadInvoice
+            :is-disabled="client_email == '' || client_name == ''"
+          />
+          <button
+            :disabled="client_email == '' || client_name == ''"
+            class="rounded py-2 px-3 text-white bg-indigo-500"
+          >
+            Email Invoice
+          </button>
         </div>
       </div>
 
-      <hr class="my-10" />
+      <hr class="my-5" />
       <div class="mb-10 flex flex-wrap">
         <div class="items-center mr-3">
           <label for="name" class="block text-sm font-medium text-gray-700"
@@ -208,7 +232,8 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
           </div>
         </div>
       </div>
-      <div class="mt-10 border p-10">
+
+      <div class="border p-10 bg-white">
         <div class="flex justify-between">
           <div>
             <h1 class="text-4xl font-semibold">
@@ -305,6 +330,7 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
                     Price
                   </th>
                   <th
+                    id="invoice-web-only"
                     scope="col"
                     class="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
                   ></th>
@@ -321,9 +347,6 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
                       <p class="truncate whitespace-pre-wrap">
                         {{ item.service_name }}
                       </p>
-                    </div>
-                    <div class="mt-0.5 text-gray-500 sm:hidden">
-                      {{ item.hours }} hours at {{ item.rate }}
                     </div>
                   </td>
                   <td
@@ -353,7 +376,10 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
                     >
                     <span>£{{ item.service_price.toFixed(2) }}</span>
                   </td>
-                  <td class="py-4 pl-3 text-right text-sm text-red-500 sm:pr-0">
+                  <td
+                    id="invoice-web-only"
+                    class="py-4 pl-3 text-right text-sm text-red-500 sm:pr-0"
+                  >
                     <div
                       @click="
                         itemToDelete = item.id;
@@ -474,10 +500,25 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
             <div v-if="discountNote" class="text-gray-700">
               <p>Discount Note: {{ discountNote }}</p>
             </div>
-            <p>Thank you for your continued business!</p>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <div class="-z-50 fixed top-20 left-20">
+    <InvoiceReport
+      v-if="invoiceData && itemsData"
+      id="invoice-report"
+      class="w-[21cm] overflow-hidden p-[10px]"
+      :invoice-data="invoiceData"
+      :items-data="itemsData"
+      :client_name="client_name"
+      :client_email="client_email"
+      :yard="yard"
+      :base-rate="baseRate"
+      :subtotal="subtotal"
+      :discount="discount"
+      :discount-note="discountNote"
+    />
   </div>
 </template>
