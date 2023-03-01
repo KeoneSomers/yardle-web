@@ -27,12 +27,12 @@ const {
 <template>
   <div>
     <div>
-      <div>
+      <div class="pb-[15px] px-[15px]">
         <h1 class="text-[27px]">
           {{ invoiceData.yard_id.name }}
         </h1>
       </div>
-      <div class="border my-[10px]">
+      <div class="border my-[10px] pb-[15px] px-[15px]">
         <p>Invoice number: INV{{ invoiceData.id * 36 }}</p>
         <div>
           <div>
@@ -65,7 +65,7 @@ const {
 
     <div>
       <div>
-        <div class="border my-[10px]">
+        <div class="border my-[10px] pb-[15px] px-[15px]">
           <p>
             Invoice - Livery services for {{ invoiceData.horse_id.name }} from
             <time :datetime="invoiceData.start_date">{{
@@ -78,16 +78,20 @@ const {
             >.
           </p>
         </div>
-        <div></div>
       </div>
       <div>
         <table class="w-full">
           <thead>
-            <tr>
-              <th>Service</th>
-              <th>booked for</th>
-              <th v-if="yard.enabled_billing_late_booking_fee">booked late</th>
-              <th>Price</th>
+            <tr class="border divide-x bg-gray-50">
+              <th class="pb-[15px]">Service</th>
+              <th class="pb-[15px]">booked for</th>
+              <th
+                class="pb-[15px]"
+                v-if="yard.enabled_billing_late_booking_fee"
+              >
+                booked late
+              </th>
+              <th class="pb-[15px]">Price</th>
             </tr>
           </thead>
           <tbody>
@@ -96,23 +100,23 @@ const {
               :key="item.id"
               class="border divide-x"
             >
-              <td class="w-[40%] pb-[15px]">
+              <td class="w-[40%] pb-[15px] px-[15px]">
                 <div>
                   <p>
                     {{ item.service_name }}
                   </p>
                 </div>
               </td>
-              <td class="pb-[15px]">
+              <td class="pb-[15px] px-[15px]">
                 {{ DateTime.fromISO(item.date).toFormat("MMMM d, yyyy") }}
               </td>
               <td
-                class="pb-[15px]"
+                class="pb-[15px] px-[15px]"
                 v-if="yard.enabled_billing_late_booking_fee"
               >
                 {{ item.booked_late ? "Yes" : "No" }}
               </td>
-              <td class="pb-[15px]">
+              <td class="pb-[15px] px-[15px]">
                 <div class="float-right">
                   <span>£{{ item.service_price.toFixed(2) }}</span>
                 </div>
@@ -123,28 +127,28 @@ const {
         <div class="w-full">
           <table class="w-[40%] float-right mt-[10px]">
             <tr class="border divide-x">
-              <td>Base Rate</td>
-              <td>
+              <td class="pb-[15px] px-[15px]">Base Rate</td>
+              <td class="pb-[15px] px-[15px]">
                 <span class="float-right">£{{ baseRate.toFixed(2) }}</span>
               </td>
             </tr>
             <tr class="border divide-x">
-              <td>Services</td>
-              <td>
+              <td class="pb-[15px] px-[15px]">Services</td>
+              <td class="pb-[15px] px-[15px]">
                 <span class="float-right">£{{ subtotal.toFixed(2) }}</span>
               </td>
             </tr>
             <tr class="border divide-x">
-              <td>Subtotal</td>
-              <td>
+              <td class="pb-[15px] px-[15px]">Subtotal</td>
+              <td class="pb-[15px] px-[15px]">
                 <span class="float-right"
                   >£{{ (subtotal + baseRate).toFixed(2) }}</span
                 >
               </td>
             </tr>
             <tr class="border divide-x">
-              <td>Discount</td>
-              <td>
+              <td class="pb-[15px] px-[15px]">Discount</td>
+              <td class="pb-[15px] px-[15px]">
                 <span class="float-right"
                   >{{ discount }}% - £{{
                     (((subtotal + baseRate) * discount) / 100).toFixed(2)
@@ -153,8 +157,8 @@ const {
               </td>
             </tr>
             <tr class="border divide-x">
-              <td>Total</td>
-              <td>
+              <td class="pb-[15px] px-[15px]">Total</td>
+              <td class="pb-[15px] px-[15px]">
                 <span class="float-right"
                   >£{{ (subtotal + baseRate - discount).toFixed(2) }}</span
                 >

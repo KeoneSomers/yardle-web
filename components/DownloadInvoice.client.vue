@@ -6,7 +6,7 @@ import { CloudArrowDownIcon } from "@heroicons/vue/20/solid";
 //import { exportToPDF } from "#imports";
 // import jsPDF from "jspdf";
 
-const { isDisabled } = defineProps(["isDisabled"]);
+const { isDisabled, fileName } = defineProps(["isDisabled", "fileName"]);
 
 const imgUrl = ref("");
 const pdfSection = ref(null);
@@ -22,17 +22,17 @@ const downloadReportImage = () => {
 
   // save pdf
   exportToPDF(
-    "invoice.pdf",
+    `${fileName}.pdf`,
     report,
     {
       orientation: "portrait",
       format: "A4",
-      hotfixes: {},
     },
     {
       html2canvas: {
         scale: newScale,
         letterRendering: true,
+        svgRendering: true,
       },
     }
   );

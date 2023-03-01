@@ -114,8 +114,8 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
         <p class="text-4xl font-bold mt-20">Prepare Invoice</p>
       </div>
       <hr class="my-5" />
-      <div class="flex justify-between items-center">
-        <div>
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="hidden md:block">
           <NuxtLink
             to="/yard/invoices"
             class="shadow rounded-lg border py-2 px-3"
@@ -128,21 +128,22 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
               ? 'Please provide a client name and email'
               : ''
           "
-          class="flex"
+          class="flex mt-5"
           :class="{
             'opacity-50 cursor-not-allowed':
               client_email == '' || client_name == '',
           }"
         >
           <DownloadInvoice
+            :fileName="
+              invoiceData.horse_id.name +
+              ' Invoice: ' +
+              DateTime.fromISO(invoiceData.created_at).toFormat(
+                'EEEE, MMMM d, yyyy'
+              )
+            "
             :is-disabled="client_email == '' || client_name == ''"
           />
-          <button
-            :disabled="client_email == '' || client_name == ''"
-            class="rounded py-2 px-3 text-white bg-indigo-500"
-          >
-            Email Invoice
-          </button>
         </div>
       </div>
 
@@ -233,7 +234,7 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
         </div>
       </div>
 
-      <div class="border p-10 bg-white">
+      <div class="border p-2 md:p-10 bg-white">
         <div class="flex justify-between">
           <div>
             <h1 class="text-4xl font-semibold">
@@ -300,7 +301,7 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
             </div>
             <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none"></div>
           </div>
-          <div class="-mx-4 mt-8 flow-root sm:mx-0">
+          <div class="mt-8 flow-root">
             <table class="min-w-full divide-y divide-gray-300">
               <thead>
                 <tr>
