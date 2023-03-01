@@ -40,7 +40,7 @@ const downloadReportImage = () => {
 </script>
 
 <template>
-  <div class="hidden lg:block">
+  <div>
     <button
       @click="downloadReportImage"
       :disabled="isDisabled"
