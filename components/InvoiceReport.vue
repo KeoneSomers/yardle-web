@@ -96,20 +96,23 @@ const {
               :key="item.id"
               class="border divide-x"
             >
-              <td class="w-[40%]">
+              <td class="w-[40%] pb-[15px]">
                 <div>
                   <p>
                     {{ item.service_name }}
                   </p>
                 </div>
               </td>
-              <td>
+              <td class="pb-[15px]">
                 {{ DateTime.fromISO(item.date).toFormat("MMMM d, yyyy") }}
               </td>
-              <td v-if="yard.enabled_billing_late_booking_fee">
+              <td
+                class="pb-[15px]"
+                v-if="yard.enabled_billing_late_booking_fee"
+              >
                 {{ item.booked_late ? "Yes" : "No" }}
               </td>
-              <td>
+              <td class="pb-[15px]">
                 <div class="float-right">
                   <span>£{{ item.service_price.toFixed(2) }}</span>
                 </div>
