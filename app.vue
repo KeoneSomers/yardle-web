@@ -3,6 +3,7 @@ import type { RealtimeChannel } from "@supabase/supabase-js";
 import { ModalsContainer } from "vue-final-modal";
 import { PaperAirplaneIcon } from "@heroicons/vue/24/outline";
 import FeedbackModal from "@/components/modals/FeedbackModal.vue";
+import Alerts from "@/components/Alerts.vue";
 
 useRouteManager();
 
@@ -108,6 +109,7 @@ onUnmounted(() => {
         @close="feedbackModalOpen = false"
       />
     </div>
+    <Alerts />
     <ModalsContainer />
   </div>
 </template>

@@ -123,7 +123,8 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
         to="/yard/invoices"
         class="flex items-center hover:underline cursor-pointer"
       >
-        <ChevronLeftIcon class="-ml-3 mr-1 h-6 w-6" /> Back
+        <ChevronLeftIcon class="-ml-3 mr-1 h-6 w-6" />
+        Back
       </NuxtLink>
     </div>
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -348,18 +349,22 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
 
               <p class="mt-2 text-sm text-gray-700">
                 Livery services for {{ invoiceData.horse_id.name }} from
-                <time :datetime="invoiceData.start_date">{{
-                  DateTime.fromISO(invoiceData.start_date).toFormat(
-                    "MMMM d, yyyy"
-                  )
-                }}</time>
+                <time :datetime="invoiceData.start_date"
+                  >{{
+                    DateTime.fromISO(invoiceData.start_date).toFormat(
+                      "MMMM d, yyyy"
+                    )
+                  }}
+                </time>
                 to
-                <time :datetime="invoiceData.end_date">{{
-                  DateTime.fromISO(invoiceData.end_date).toFormat(
-                    "MMMM d, yyyy"
-                  )
-                }}</time
-                >.
+                <time :datetime="invoiceData.end_date"
+                  >{{
+                    DateTime.fromISO(invoiceData.end_date).toFormat(
+                      "MMMM d, yyyy"
+                    )
+                  }}
+                </time>
+                .
               </p>
             </div>
             <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none"></div>
