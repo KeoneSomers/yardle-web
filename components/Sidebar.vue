@@ -93,11 +93,11 @@ const handleSignout = async () => {
   <div
     class="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-gray-100"
   >
-    <div class="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-      <div class="flex flex-shrink-0 items-center px-4">
+    <div class="flex flex-1 flex-col overflow-y-auto pb-4">
+      <div class="flex flex-shrink-0 items-center px-4 h-16">
         <Logo class="h-8 w-8" />
       </div>
-      <nav class="mt-3 flex-1" aria-label="Sidebar">
+      <nav class="flex-1" aria-label="Sidebar">
         <!-- yard widget -->
         <div v-if="yard" class="border-t border-b p-4 bg-gray-50 flex">
           <div class="flex-1">

@@ -1,9 +1,12 @@
 <script setup>
 import { DateTime } from "luxon";
-import { XMarkIcon, EnvelopeIcon } from "@heroicons/vue/20/solid";
+import {
+  XMarkIcon,
+  EnvelopeIcon,
+  ChevronLeftIcon,
+} from "@heroicons/vue/20/solid";
 import { useModal } from "vue-final-modal";
 import ModalConfirm from "@/components/modals/ModalConfirm.vue";
-import { exportToPDF } from "#imports";
 
 const params = useRoute().params;
 const invoice_id = params.invoice_id / 36;
@@ -109,18 +112,20 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
 
 <template>
   <div v-if="invoiceData" class="overflow-auto pb-20 px-4 md:px-0 bg-white">
+    <div
+      class="h-16 flex justify-start items-center mx-auto max-w-7xl sm:px-6 lg:px-8"
+    >
+      <NuxtLink
+        to="/yard/invoices"
+        class="flex items-center hover:underline cursor-pointer"
+      >
+        <ChevronLeftIcon class="-ml-3 mr-1 h-6 w-6" /> Back
+      </NuxtLink>
+    </div>
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-      <div class="py-5">
-        <p class="text-4xl font-bold mt-20">Prepare Invoice</p>
-      </div>
-      <hr class="my-5" />
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="hidden md:block">
-          <NuxtLink
-            to="/yard/invoices"
-            class="shadow rounded-lg border py-2 px-3"
-            >Back</NuxtLink
-          >
+      <div class="flex flex-col md:flex-row justify-between items-start">
+        <div>
+          <h1 class="text-4xl font-bold mb-4 md:mb-0">Prepare Invoice</h1>
         </div>
         <div
           v-tooltip="
@@ -128,7 +133,6 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
               ? 'Please provide a client name and email'
               : ''
           "
-          class="flex mt-5"
           :class="{
             'opacity-50 cursor-not-allowed':
               client_email == '' || client_name == '',
@@ -147,9 +151,10 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
         </div>
       </div>
 
-      <hr class="my-5" />
+      <hr class="mt-5 mb-14" />
+
       <div class="mb-10 flex flex-wrap">
-        <div class="items-center mr-3">
+        <div class="items-center mr-3 mb-3">
           <label for="name" class="block text-sm font-medium text-gray-700"
             >Client Name</label
           >
@@ -162,7 +167,7 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
             />
           </div>
         </div>
-        <div class="flex items-center mr-3">
+        <div class="flex items-center mr-3 mb-3">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700"
               >Client Email</label
@@ -187,21 +192,39 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
             </div>
           </div>
         </div>
-        <div class="flex items-center mr-3">
+        <div class="flex items-center mr-3 mb-3">
           <div>
             <label
               for="base-rate"
               class="block text-sm font-medium text-gray-700"
               >Base Rate</label
             >
-            <input
-              v-model="baseRate"
-              type="number"
-              class="block mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
+            <div class="relative mt-1 rounded-md shadow-sm">
+              <div
+                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+              >
+                <span class="text-gray-500 sm:text-sm">£</span>
+              </div>
+              <input
+                type="number"
+                min="0"
+                v-model="baseRate"
+                name="base-rate"
+                class="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="0.00"
+                aria-describedby="price-currency"
+              />
+              <div
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
+              >
+                <span class="text-gray-500 sm:text-sm" id="price-currency"
+                  >GBP</span
+                >
+              </div>
+            </div>
           </div>
         </div>
-        <div class="flex items-center mr-3">
+        <div class="flex items-center mr-3 mb-3">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700"
               >Discount %</label
@@ -215,7 +238,7 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
             />
           </div>
         </div>
-        <div v-if="discount > 0" class="flex items-center">
+        <div v-if="discount > 0" class="flex items-center mb-3">
           <div>
             <label
               for="discountNote"
@@ -234,7 +257,7 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
         </div>
       </div>
 
-      <div class="border p-2 md:p-10 bg-white">
+      <div class="border shadow-lg p-2 md:p-10 bg-white">
         <div class="flex justify-between">
           <div>
             <h1 class="text-4xl font-semibold">
