@@ -7,6 +7,7 @@ import {
 } from "@heroicons/vue/20/solid";
 import { useModal } from "vue-final-modal";
 import ModalConfirm from "@/components/modals/ModalConfirm.vue";
+import AddServiceModal from "@/components/modals/AddServiceModal.vue";
 
 const params = useRoute().params;
 const invoice_id = params.invoice_id / 36;
@@ -24,20 +25,21 @@ definePageMeta({
 const loading = ref(false);
 const itemToDelete = ref(null);
 const invoiceData = ref(null);
-const itemsData = ref([]);
-const subtotal = ref(0.0);
+const itemsData = useState("itemsData", () => []);
+const subtotal = useState("subtotal", () => 0.0);
 const client_name = ref("");
 const client_email = ref("");
 const baseRate = ref(0);
 const discount = ref(0);
 const discountNote = ref("");
 const printItem = ref(null);
+const createModalOpen = ref(false);
 
 onMounted(async () => {
   // get the invoice
   const { data: _invoiceData, error: invoiceError } = await client
     .from("invoices")
-    .select("*, horse_id (name, owner(email, username)), yard_id (name)")
+    .select("*, horse_id (id, name, owner(email, username)), yard_id (name)")
     .eq("id", invoice_id)
     .single();
 
@@ -57,6 +59,8 @@ onMounted(async () => {
     .eq("invoice_id", invoice_id)
     .filter("canceled_at", "is", null)
     .order("date", { ascending: true });
+
+  subtotal.value = 0.0;
 
   _itemsData.forEach((element) => {
     subtotal.value += element.service_price;
@@ -234,6 +238,7 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
               type="number"
               min="0"
               max="100"
+              placeholder="0"
               class="block mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
@@ -256,8 +261,43 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
           </div>
         </div>
       </div>
+      <div class="py-4 flex justify-end">
+        <button
+          @click="() => (createModalOpen = true)"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg shadow"
+        >
+          Add Item
+        </button>
+      </div>
 
       <div class="border shadow-lg p-2 md:p-10 bg-white">
+        <div
+          class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
+        >
+          <svg
+            class="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]"
+            viewBox="0 0 1155 678"
+          >
+            <path
+              fill="url(#45de2b6b-92d5-4d68-a6a0-9b9b2abad533)"
+              fill-opacity=".3"
+              d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
+            />
+            <defs>
+              <linearGradient
+                id="45de2b6b-92d5-4d68-a6a0-9b9b2abad533"
+                x1="1155.49"
+                x2="-78.208"
+                y1=".177"
+                y2="474.645"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop stop-color="#9089FC" />
+                <stop offset="1" stop-color="#FF80B5" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
         <div class="flex justify-between">
           <div>
             <h1 class="text-4xl font-semibold">
@@ -516,7 +556,13 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
                   <td
                     class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
                   >
-                    £{{ (subtotal + baseRate - discount).toFixed(2) }}
+                    £{{
+                      (
+                        subtotal +
+                        baseRate -
+                        ((subtotal + baseRate) * discount) / 100
+                      ).toFixed(2)
+                    }}
                   </td>
                 </tr>
               </tfoot>
@@ -545,4 +591,14 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
       :discount-note="discountNote"
     />
   </div>
+
+  <AddServiceModal
+    v-if="invoiceData"
+    :is-open="createModalOpen"
+    :horse-id="invoiceData.horse_id.id"
+    :start-date="invoiceData.start_date"
+    :end-date="invoiceData.end_date"
+    :invoice-id="invoiceData.id"
+    @close="createModalOpen = false"
+  />
 </template>
