@@ -10,7 +10,7 @@ const yard = useState("yard");
 const profile = useState("profile");
 const client = useSupabaseClient();
 const assignOwnerModalOpen = ref(false);
-const alerts = useState("alerts");
+const alerts = useAlerts();
 
 const todaysDateString = DateTime.fromMillis(DateTime.now().ts)
   .toISO()

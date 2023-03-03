@@ -3,13 +3,12 @@ import { ref } from "vue";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/24/outline";
 import { XMarkIcon } from "@heroicons/vue/20/solid";
 
-const alerts = useState("alerts", () => []);
-const show = ref(true);
+const alerts = useAlerts();
 
 watchEffect(() => {
   if (alerts.value.length > 0) {
     setTimeout(() => {
-      alerts.value.pop();
+      alerts.value.splice(0, 1);
     }, 5000);
   }
 });

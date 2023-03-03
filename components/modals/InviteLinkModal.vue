@@ -12,7 +12,7 @@ const emits = defineEmits(["close"]);
 const yard = useState("yard");
 const copyButtonText = ref("Copy");
 const link = ref("");
-const alerts = useState("alerts");
+const alerts = useAlerts();
 
 onMounted(() => {
   link.value = `${window.location.origin}/join/${yard.value.invite_code}`;

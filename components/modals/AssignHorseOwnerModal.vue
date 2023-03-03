@@ -10,10 +10,8 @@ import {
   ComboboxButton,
   ComboboxOptions,
   ComboboxOption,
-  ComboboxLabel,
 } from "@headlessui/vue";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
-import { DateTime } from "luxon";
 
 const loading = ref(false);
 
@@ -28,7 +26,7 @@ const owner = ref(null);
 const members = useState("members");
 const selectedYard = useState("selectedYard");
 const query = ref("");
-const alerts = useState("alerts");
+const alerts = useAlerts();
 
 await useAsyncData("members", async () => {
   const { data, error } = await client

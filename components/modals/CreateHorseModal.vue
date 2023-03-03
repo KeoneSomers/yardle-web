@@ -17,7 +17,7 @@ const user = useSupabaseUser();
 const selectedYard = useState("selectedYard");
 const horses = useState("horses");
 const selectedHorseId = useState("selectedHorseId");
-const alerts = useState("alerts");
+const alerts = useAlerts();
 
 const name = ref("");
 

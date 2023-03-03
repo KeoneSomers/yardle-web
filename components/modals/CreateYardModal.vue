@@ -17,7 +17,7 @@ const user = useSupabaseUser();
 const yards = useState("yards");
 const yardName = ref("");
 const error = ref("");
-const alerts = useState("alerts");
+const alerts = useAlerts();
 
 watch(
   () => props.isOpen,
