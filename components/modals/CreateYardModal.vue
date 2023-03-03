@@ -116,7 +116,7 @@ const createYard = async () => {
     yards.value = [newYard];
   }
 
-  alerts.value.push({
+  alerts.value.unshift({
     title: "Yard created!",
     message: "Your new yard has been created.",
     type: "success",
@@ -133,7 +133,7 @@ const handleSubmit = async () => {
       await createYard();
     } catch (e) {
       error.value = e.message;
-      alerts.value.push({
+      alerts.value.unshift({
         title: "Error Creating Yard!",
         message: "Please try again for contact support.",
         type: "error",

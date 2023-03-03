@@ -64,7 +64,7 @@ const handleSubmit = async () => {
       name.value = "";
       selectedHorseId.value = newHorse.id;
 
-      alerts.value.push({
+      alerts.value.unshift({
         title: "Horse Created!",
         message: "You have added a horse to the yard.",
         type: "success",
@@ -74,7 +74,7 @@ const handleSubmit = async () => {
       emits("close");
     }
   } catch (err) {
-    alerts.value.push({
+    alerts.value.unshift({
       title: "Error Creating Horse!",
       message: "Please try again for contact support.",
       type: "error",

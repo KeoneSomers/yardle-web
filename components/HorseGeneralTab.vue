@@ -173,7 +173,7 @@ const handleUnassignOwner = async () => {
     .eq("id", horse.value.id);
 
   if (!error) {
-    alerts.value.push({
+    alerts.value.unshift({
       title: "Owner Unassigned!",
       message: `${horse.value.owner.username} has been unassigned as the owner of ${horse.value.name}.`,
       type: "success",
@@ -181,7 +181,7 @@ const handleUnassignOwner = async () => {
 
     horse.value.owner = null;
   } else {
-    alerts.value.push({
+    alerts.value.unshift({
       title: "Error",
       message: "There was an error unassigning the owner.",
       type: "error",

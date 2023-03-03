@@ -5,13 +5,17 @@ import { XMarkIcon } from "@heroicons/vue/20/solid";
 
 const alerts = useAlerts();
 
-watchEffect(() => {
-  if (alerts.value.length > 0) {
-    setTimeout(() => {
-      alerts.value.splice(0, 1);
-    }, 5000);
+// When an alert is added to the array, start a timer to remove it after 5 seconds
+watch(
+  () => alerts.value.length,
+  (newValue, oldValue) => {
+    if (newValue > oldValue) {
+      setTimeout(() => {
+        alerts.value.pop();
+      }, 5000);
+    }
   }
-});
+);
 </script>
 
 <template>

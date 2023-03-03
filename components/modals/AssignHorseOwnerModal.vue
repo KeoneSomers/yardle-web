@@ -72,7 +72,7 @@ const handleSubmit = async () => {
         username: owner.value.profile.username,
       };
 
-      alerts.value.push({
+      alerts.value.unshift({
         title: "Owner Assigned!",
         message: `${owner.value.profile.username} has been assigned to ${horse.value.name}.`,
         type: "success",
@@ -83,7 +83,7 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     console.log(error);
-    alerts.value.push({
+    alerts.value.unshift({
       title: "Error Assigning Owner!",
       message: "Please try again for contact support.",
       type: "error",

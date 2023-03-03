@@ -23,7 +23,7 @@ const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 const copyLinkToClipboard = async () => {
   await navigator.clipboard.writeText(link.value);
   copyButtonText.value = "Copied!";
-  alerts.value.push({
+  alerts.value.unshift({
     title: "Link Copied!",
     message: "You can now share this link with your friends.",
     type: "success",
