@@ -35,7 +35,7 @@ const copyLinkToClipboard = async () => {
 
 <template>
   <TransitionRoot as="template" :show="isOpen">
-    <Dialog as="div" class="relative z-10" @close="$emit('close')">
+    <Dialog as="div" class="relative z-40" @close="$emit('close')">
       <TransitionChild
         as="template"
         enter="ease-out duration-300"
@@ -52,7 +52,7 @@ const copyLinkToClipboard = async () => {
 
       <div class="fixed inset-0 z-10 overflow-y-auto">
         <div
-          class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+          class="flex min-h-full justify-center p-4 text-center items-center sm:p-0"
         >
           <TransitionChild
             as="template"
