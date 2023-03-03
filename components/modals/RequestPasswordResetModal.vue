@@ -17,6 +17,7 @@ const emits = defineEmits(["close"]);
 const email = ref("");
 const errorMessage = ref("");
 const successMessage = ref("");
+const alerts = useAlerts();
 
 watchEffect(async () => {
   if (props.isOpen) {
@@ -38,11 +39,21 @@ const handleResetPassword = async () => {
   });
 
   if (!error) {
-    successMessage.value = "Success! Please check your email.";
+    // successMessage.value = "Success! Please check your email.";
     loading.value = false;
+    alerts.value.unshift({
+      title: "Success!",
+      message: "Please check your email.",
+      type: "success",
+    });
   } else {
-    errorMessage.value = error.message;
+    // errorMessage.value = error.message;
     loading.value = false;
+    alerts.value.unshift({
+      title: "Error!",
+      message: "Please try again, or contact support.",
+      type: "error",
+    });
   }
 };
 </script>
@@ -66,7 +77,7 @@ const handleResetPassword = async () => {
 
       <div class="fixed inset-0 z-10 overflow-y-auto">
         <div
-          class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+          class="flex min-h-full justify-center p-4 text-center items-center sm:p-0"
         >
           <TransitionChild
             as="template"

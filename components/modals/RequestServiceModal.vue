@@ -20,6 +20,7 @@ const serviceRequests = useState("service_requests");
 const horse = useState("horse");
 const liveryServices = ref([]);
 const yard = useState("yard");
+const alerts = useAlerts();
 
 const selectedService = ref(null);
 const date = ref(null);
@@ -97,6 +98,12 @@ const handleSubmit = async () => {
       name: selectedService.value.name,
       price: selectedService.value.price,
     },
+  });
+
+  alerts.value.unshift({
+    title: "Request Submitted!",
+    message: "Your service request has been submitted.",
+    type: "success",
   });
 
   emits("close");

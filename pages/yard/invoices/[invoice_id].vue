@@ -11,12 +11,8 @@ import AddServiceModal from "@/components/modals/AddServiceModal.vue";
 
 const params = useRoute().params;
 const invoice_id = params.invoice_id / 36;
-const user = useSupabaseUser();
 const client = useSupabaseClient();
-const selectedYard = useState("selectedYard");
 const yard = useState("yard");
-
-const route = useRoute();
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
@@ -139,27 +135,34 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
         <div>
           <h1 class="text-4xl font-bold mb-4 md:mb-0">Prepare Invoice</h1>
         </div>
-        <div
-          v-tooltip="
-            client_email == '' || client_name == ''
-              ? 'Please provide a client name and email'
-              : ''
-          "
-          :class="{
-            'opacity-50 cursor-not-allowed':
-              client_email == '' || client_name == '',
-          }"
-        >
-          <DownloadInvoice
-            :fileName="
-              invoiceData.horse_id.name +
-              ' Invoice: ' +
-              DateTime.fromISO(invoiceData.created_at).toFormat(
-                'EEEE, MMMM d, yyyy'
-              )
+        <div class="flex items-center">
+          <div
+            class="bg-blue-500 text-white px-3 py-2 rounded-lg mr-2 cursor-pointer hover:bg-blue-600"
+          >
+            Save Changes
+          </div>
+          <div
+            v-tooltip="
+              client_email == '' || client_name == ''
+                ? 'Please provide a client name and email'
+                : ''
             "
-            :is-disabled="client_email == '' || client_name == ''"
-          />
+            :class="{
+              'opacity-50 cursor-not-allowed':
+                client_email == '' || client_name == '',
+            }"
+          >
+            <DownloadInvoice
+              :fileName="
+                invoiceData.horse_id.name +
+                ' Invoice: ' +
+                DateTime.fromISO(invoiceData.created_at).toFormat(
+                  'EEEE, MMMM d, yyyy'
+                )
+              "
+              :is-disabled="client_email == '' || client_name == ''"
+            />
+          </div>
         </div>
       </div>
 

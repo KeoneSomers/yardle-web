@@ -133,13 +133,13 @@ const goToPreviousWeek = () => {
           >
             Invoces
           </button> -->
-          <button
+          <!-- <button
             @click="viewingHistory = true"
             type="button"
             class="inline-flex mr-2 items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
           >
             Order History
-          </button>
+          </button> -->
           <button
             @click="() => (createModalOpen = true)"
             type="button"

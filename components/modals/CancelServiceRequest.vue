@@ -18,6 +18,7 @@ const client = useSupabaseClient();
 const user = useSupabaseUser();
 const serviceRequests = useState("service_requests");
 const serviceRequestsLog = useState("service_requests_log");
+const alerts = useAlerts();
 
 const errors = ref([]);
 
@@ -66,6 +67,12 @@ const handleDelete = async () => {
     serviceRequestsLog.value[index2].canceled_at = new Date();
     serviceRequestsLog.value[index2].canceled_by = user.value.id;
   }
+
+  alerts.value.unshift({
+    title: "Request Canceled!",
+    message: "Your service request has been canceled.",
+    type: "success",
+  });
 
   // close the modal
   emits("close");
