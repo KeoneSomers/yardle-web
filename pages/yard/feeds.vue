@@ -18,6 +18,7 @@ const createModalOpen = ref(false);
 const editModalOpen = ref(false);
 const deleteModalOpen = ref(false);
 const selectedFeedId = ref(0);
+const alerts = useAlerts();
 
 // TODO: this need to use the feeds state
 // fetch feeds
@@ -97,6 +98,12 @@ const handleDelete = async () => {
   // success! - now remove the deleted feed from the webpage
   const index = feeds.value.map((e) => e.id).indexOf(selectedFeedId.value);
   feeds.value.splice(index, 1);
+
+  alerts.value.unshift({
+    title: "Feed Deleted!",
+    message: "Your feed has been deleted.",
+    type: "success",
+  });
 
   // close the modal
   deleteModalOpen.value = false;

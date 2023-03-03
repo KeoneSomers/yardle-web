@@ -21,6 +21,16 @@ const selectedYard = useState("selectedYard");
 const route = useRoute();
 const mustManualSelectedHorse = ref(route.path == "/yard/feeds");
 
+await useAsyncData("horses", async () => {
+  const { data } = await client
+    .from("horses")
+    .select()
+    .eq("yard_id", selectedYard.value)
+    .order("name", { ascending: true });
+
+  horses.value = data;
+});
+
 const ingredients = ref([]);
 const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
 const alerts = useAlerts();
