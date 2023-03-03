@@ -20,6 +20,7 @@ const services = useState("services");
 const name = ref("");
 const description = ref("");
 const price = ref(0.0);
+const alerts = useAlerts();
 
 watch(
   () => props.isOpen,
@@ -55,6 +56,12 @@ const handleSubmit = async () => {
     name: name.value,
     description: description.value,
     price: price.value,
+  });
+
+  alerts.value.unshift({
+    title: "Service Created!",
+    message: "Your service has been created.",
+    type: "success",
   });
 
   emits("close");

@@ -10,6 +10,7 @@ const user = useSupabaseUser();
 const yardId = useState("selectedYard");
 // const fields = useState("fields");
 const selectedYard = useState("selectedYard");
+const alerts = useAlerts();
 
 const billingPeriodOptions = ref({
   yard_id: selectedYard.value,
@@ -167,12 +168,25 @@ const handleBillingCycleSave = async () => {
 
     loading2.value = false;
     done2.value = true;
+
+    alerts.value.unshift({
+      title: "Changes Saved!",
+      message: "Your changes have been saved.",
+      type: "success",
+    });
+
     setTimeout(() => {
       done2.value = false;
     }, 1200);
   } catch (err) {
     loading2.value = false;
     console.error(err);
+
+    alerts.value.unshift({
+      title: "Error Saving Changes!",
+      message: "There was an error saving your changes.",
+      type: "error",
+    });
   }
 };
 

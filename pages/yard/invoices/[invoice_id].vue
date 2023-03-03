@@ -34,6 +34,7 @@ const discount = ref(0);
 const discountNote = ref("");
 const printItem = ref(null);
 const createModalOpen = ref(false);
+const alerts = useAlerts();
 
 onMounted(async () => {
   // get the invoice
@@ -86,6 +87,12 @@ const removeItem = async () => {
     closeDeleteItemModal();
   }
   loading.value = false;
+
+  alerts.value.unshift({
+    title: "Service Removed!",
+    message: "This item has been removed from the invoice.",
+    type: "success",
+  });
 };
 
 // Delete Horse Modal

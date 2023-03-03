@@ -22,11 +22,11 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const yardId = useState("selectedYard");
-const serviceRequests = useState("service_requests");
 const liveryServices = ref([]);
 const yard = useState("yard");
 const itemsData = useState("itemsData");
 const subtotal = useState("subtotal");
+const alerts = useAlerts();
 
 const selectedService = ref(null);
 const date = ref(null);
@@ -107,6 +107,12 @@ const handleSubmit = async () => {
   });
 
   subtotal.value += data.service_price;
+
+  alerts.value.unshift({
+    title: "Service Added!",
+    message: "This item has been added to the invoice.",
+    type: "success",
+  });
 
   emits("close");
 };

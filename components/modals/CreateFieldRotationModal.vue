@@ -15,6 +15,7 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const yardId = useState("selectedYard");
 const field_rotations = useState("field_rotations");
+const alerts = useAlerts();
 
 const name = ref("");
 
@@ -35,8 +36,21 @@ const handleSubmit = async () => {
     .select()
     .single();
 
+  alerts.value.unshift({
+    title: "Field Rotation Created!",
+    message: "Your field rotation has been created.",
+    type: "success",
+  });
+
   if (error) {
     console.log(error);
+
+    alerts.value.unshift({
+      title: "Error Creating Field Rotation!",
+      message: "Please try again, or contact support.",
+      type: "error",
+    });
+
     return;
   }
 

@@ -16,6 +16,7 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const field_rotations = useState("field_rotations");
 const selectedRotation = useState("selectedRotation");
+const alerts = useAlerts();
 
 const errors = ref([]);
 
@@ -33,7 +34,14 @@ const handleDelete = async () => {
   const index = field_rotations.value.map((e) => e.id).indexOf(props.field.id);
 
   if (field_rotations.value.length < 2) {
-    errors.value.push("You must have at least one field rotation.");
+    // errors.value.push("You must have at least one field rotation.");
+
+    alerts.value.unshift({
+      title: "Unable To Delete!",
+      message: "You must have at least one field rotation.",
+      type: "error",
+    });
+
     return;
   }
 
@@ -64,6 +72,12 @@ const handleDelete = async () => {
 
   // set users selected rotation back to the first one
   selectedRotation.value = field_rotations.value[0];
+
+  alerts.value.unshift({
+    title: "Field Rotation Deleted!",
+    message: "Your field rotation has been deleted.",
+    type: "success",
+  });
 
   // close the modal
   emits("close");

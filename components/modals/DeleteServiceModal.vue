@@ -15,6 +15,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const services = useState("services");
+const alerts = useAlerts();
 
 const errors = ref([]);
 
@@ -51,6 +52,12 @@ const handleDelete = async () => {
 
   // now remove the deleted service from the webpage
   services.value.splice(index, 1);
+
+  alerts.value.unshift({
+    title: "Service Deleted!",
+    message: "This service has been deleted.",
+    type: "success",
+  });
 
   // close the modal
   emits("close");

@@ -28,6 +28,7 @@ const yard = useState("yard");
 const loading = ref(false);
 const done = ref(false);
 const services = useState("services", () => []);
+const alerts = useAlerts();
 
 const enableLateBookingFee = ref(yard.value.enabled_billing_late_booking_fee);
 
@@ -44,6 +45,12 @@ watch(enableLateBookingFee, async (newValue) => {
   }
 
   yard.value.enabled_billing_late_booking_fee = newValue;
+
+  alerts.value.unshift({
+    title: "Changes Saved!",
+    message: "Your changes have been saved.",
+    type: "success",
+  });
 });
 
 const createModalOpen = ref(false);
@@ -70,6 +77,13 @@ const updateYard = async () => {
     yard.value.name = yardName.value;
     loading.value = false;
     done.value = true;
+
+    alerts.value.unshift({
+      title: "Changes Saved!",
+      message: "Your changes have been saved.",
+      type: "success",
+    });
+
     setTimeout(() => {
       done.value = false;
     }, 1200);
