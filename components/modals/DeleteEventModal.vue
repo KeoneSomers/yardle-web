@@ -15,6 +15,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const events = useState("events");
+const alerts = useAlerts();
 
 const handleDelete = async () => {
   // first delete the horses
@@ -35,6 +36,12 @@ const handleDelete = async () => {
     const index = events.value.map((e) => e.id).indexOf(props.eventId);
     events.value.splice(index, 1);
 
+    alerts.value.unshift({
+      title: "Event Deleted!",
+      message: "Your event has been deleted.",
+      type: "success",
+    });
+
     // close the modal
     emits("close");
   }
@@ -42,6 +49,12 @@ const handleDelete = async () => {
   if (error) {
     // somthing went wrong!
     console.log(error);
+
+    alerts.value.unshift({
+      title: "Error Deleting Event!",
+      message: "Please try again, or contact support.",
+      type: "error",
+    });
   }
 };
 </script>

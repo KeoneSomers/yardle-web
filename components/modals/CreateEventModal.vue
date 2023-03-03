@@ -27,6 +27,7 @@ const events = useState("events");
 const yard = useState("yard");
 const horses = useState("horses");
 const selDay = useState("selDay");
+const alerts = useAlerts();
 
 await useAsyncData("horses", async () => {
   const { data } = await client
@@ -104,8 +105,6 @@ const handleSubmit = async () => {
           ? formattedDateTime.set({ hour: h, minute: m })
           : formattedDateTime;
 
-      console.log(formattedDateTime);
-
       // step 1: create the event in the database
       const { data: newEvent, error: createError } = await client
         .from("calendar_events")
@@ -153,12 +152,24 @@ const handleSubmit = async () => {
       notes.value = "";
       all_day.value = false;
 
+      alerts.value.unshift({
+        title: "Event Created!",
+        message: "Your event has been created.",
+        type: "success",
+      });
+
       loading.value = false;
       emits("close");
     }
   } catch (err) {
     loading.value = false;
     error.value = err.message;
+
+    alerts.value.unshift({
+      title: "Error Creating Event!",
+      message: "Please try again, or contact support.",
+      type: "error",
+    });
   }
 };
 

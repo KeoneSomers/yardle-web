@@ -22,10 +22,10 @@ const { event } = toRefs(props);
 const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
-const user = useSupabaseUser();
 const selectedYard = useState("selectedYard");
 const events = useState("events");
 const horses = useState("horses");
+const alerts = useAlerts();
 
 const date = ref("");
 const time = ref("");
@@ -103,8 +103,11 @@ const handleSubmit = async () => {
   // }
 
   formattedDateTime =
-    time.value && !event.all_day.value
-      ? formattedDateTime.set({ hour: h, minute: m })
+    time.value && !event.value.all_day
+      ? formattedDateTime.set({
+          hour: time.value.split(":")[0],
+          minute: time.value.split(":")[1],
+        })
       : formattedDateTime;
 
   // step 1: create the event in the database
@@ -143,9 +146,21 @@ const handleSubmit = async () => {
     const i = events.value.map((e) => e.id).indexOf(event.value.id);
     events.value[i] = { ...event.value, date_time: formattedDateTime };
 
+    alerts.value.unshift({
+      title: "Event Updated!",
+      message: "Your event has been updated.",
+      type: "success",
+    });
+
     emits("close");
   } else {
-    error.value = createError.message + createError.hint;
+    // error.value = createError.message + createError.hint;
+
+    alerts.value.unshift({
+      title: "Error Updating Event!",
+      message: "Please try again, or contact support.",
+      type: "error",
+    });
   }
 };
 
