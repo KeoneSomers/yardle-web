@@ -12,6 +12,7 @@ const emits = defineEmits(["close"]);
 const yard = useState("yard");
 const copyButtonText = ref("Copy");
 const link = ref("");
+const alerts = useState("alerts");
 
 onMounted(() => {
   link.value = `${window.location.origin}/join/${yard.value.invite_code}`;
@@ -22,6 +23,11 @@ const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 const copyLinkToClipboard = async () => {
   await navigator.clipboard.writeText(link.value);
   copyButtonText.value = "Copied!";
+  alerts.value.push({
+    title: "Link Copied!",
+    message: "You can now share this link with your friends.",
+    type: "success",
+  });
   await delay(2000);
   copyButtonText.value = "Copy";
 };

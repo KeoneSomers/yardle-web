@@ -17,6 +17,7 @@ const user = useSupabaseUser();
 const selectedYard = useState("selectedYard");
 const horses = useState("horses");
 const selectedHorseId = useState("selectedHorseId");
+const alerts = useState("alerts");
 
 const name = ref("");
 
@@ -63,11 +64,21 @@ const handleSubmit = async () => {
       name.value = "";
       selectedHorseId.value = newHorse.id;
 
+      alerts.value.push({
+        title: "Horse Created!",
+        message: "You have added a horse to the yard.",
+        type: "success",
+      });
+
       loading.value = false;
       emits("close");
     }
   } catch (err) {
-    error.value = err.message;
+    alerts.value.push({
+      title: "Error Creating Horse!",
+      message: "Please try again for contact support.",
+      type: "error",
+    });
     loading.value = false;
   }
 };

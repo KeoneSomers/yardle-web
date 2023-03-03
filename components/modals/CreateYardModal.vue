@@ -17,6 +17,7 @@ const user = useSupabaseUser();
 const yards = useState("yards");
 const yardName = ref("");
 const error = ref("");
+const alerts = useState("alerts");
 
 watch(
   () => props.isOpen,
@@ -115,6 +116,12 @@ const createYard = async () => {
     yards.value = [newYard];
   }
 
+  alerts.value.push({
+    title: "Yard created!",
+    message: "Your new yard has been created.",
+    type: "success",
+  });
+
   // close the modal
   emits("close");
 };
@@ -126,6 +133,11 @@ const handleSubmit = async () => {
       await createYard();
     } catch (e) {
       error.value = e.message;
+      alerts.value.push({
+        title: "Error Creating Yard!",
+        message: "Please try again for contact support.",
+        type: "error",
+      });
       loading.value = false;
     }
   }

@@ -10,6 +10,7 @@ const yard = useState("yard");
 const profile = useState("profile");
 const client = useSupabaseClient();
 const assignOwnerModalOpen = ref(false);
+const alerts = useState("alerts");
 
 const todaysDateString = DateTime.fromMillis(DateTime.now().ts)
   .toISO()
@@ -172,7 +173,19 @@ const handleUnassignOwner = async () => {
     .eq("id", horse.value.id);
 
   if (!error) {
+    alerts.value.push({
+      title: "Owner Unassigned!",
+      message: `${horse.value.owner.username} has been unassigned as the owner of ${horse.value.name}.`,
+      type: "success",
+    });
+
     horse.value.owner = null;
+  } else {
+    alerts.value.push({
+      title: "Error",
+      message: "There was an error unassigning the owner.",
+      type: "error",
+    });
   }
 };
 </script>

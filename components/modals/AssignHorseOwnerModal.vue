@@ -28,6 +28,7 @@ const owner = ref(null);
 const members = useState("members");
 const selectedYard = useState("selectedYard");
 const query = ref("");
+const alerts = useState("alerts");
 
 await useAsyncData("members", async () => {
   const { data, error } = await client
@@ -73,11 +74,22 @@ const handleSubmit = async () => {
         username: owner.value.profile.username,
       };
 
+      alerts.value.push({
+        title: "Owner Assigned!",
+        message: `${owner.value.profile.username} has been assigned to ${horse.value.name}.`,
+        type: "success",
+      });
+
       loading.value = false;
       emits("close");
     }
   } catch (error) {
     console.log(error);
+    alerts.value.push({
+      title: "Error Assigning Owner!",
+      message: "Please try again for contact support.",
+      type: "error",
+    });
     loading.value = false;
     error.value = error.message;
   }
