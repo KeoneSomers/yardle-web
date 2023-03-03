@@ -68,7 +68,7 @@ watchEffect(() => {
       </div>
     </TransitionGroup>
   </div>
-  <button
+  <!-- <button
     @click="
       alerts.push({
         title: 'Horse Added!',
@@ -79,7 +79,7 @@ watchEffect(() => {
     class="cursor-pointer z-50 fixed bottom-10 left-20"
   >
     Add Alert
-  </button>
+  </button> -->
 </template>
 
 <style scoped>
