@@ -15,6 +15,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const feeds = useState("feeds");
+const alerts = useAlerts();
 
 const handleDelete = async () => {
   // delete the feeds ingredients
@@ -46,6 +47,12 @@ const handleDelete = async () => {
   // success! - now remove the deleted feed from the webpage
   const index = feeds.value.map((e) => e.id).indexOf(props.feedId);
   feeds.value.splice(index, 1);
+
+  alerts.value.unshift({
+    title: "Feed Deleted!",
+    message: "Your feed has been deleted.",
+    type: "success",
+  });
 
   // close the modal
   emits("close");

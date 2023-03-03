@@ -83,11 +83,13 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     console.log(error);
+
     alerts.value.unshift({
       title: "Error Assigning Owner!",
-      message: "Please try again for contact support.",
+      message: "Please try again, or contact support.",
       type: "error",
     });
+
     loading.value = false;
     error.value = error.message;
   }

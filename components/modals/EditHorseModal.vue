@@ -18,6 +18,7 @@ const client = useSupabaseClient();
 const user = useSupabaseUser();
 const horses = useState("horses");
 const isLoading = useState("isLoading");
+const alerts = useAlerts();
 
 const error = ref("");
 
@@ -49,9 +50,21 @@ const handleSubmit = async () => {
     horses.value[index].name = horse.value.name;
     horses.value[index].avatar_url = horse.value.avatar_url;
     horses.value[index].updated_at = DateTime.now();
+
+    alerts.value.unshift({
+      title: "Changes Saved!",
+      message: "Your changes have been saved.",
+      type: "success",
+    });
     emits("close");
   } else {
     error.value = createError.message + createError.hint;
+
+    alerts.value.unshift({
+      title: "Error Editing Horse!",
+      message: "Please try again, or contact support.",
+      type: "error",
+    });
   }
 };
 </script>

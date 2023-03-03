@@ -16,6 +16,7 @@ const client = useSupabaseClient();
 const user = useSupabaseUser();
 const medications = useState("medications");
 const selectedHorseId = useState("selectedHorseId");
+const alerts = useAlerts();
 
 const name = ref("");
 const instructions = ref("");
@@ -47,9 +48,21 @@ const handleSubmit = async () => {
     name.value = "";
     instructions.value = "";
 
+    alerts.value.unshift({
+      title: "Medication Created!",
+      message: "Your medication has been created.",
+      type: "success",
+    });
+
     emits("close");
   } else {
     error.value = createError.message + createError.hint;
+
+    alerts.value.unshift({
+      title: "Error Creating Medication!",
+      message: "Please try again, or contact support.",
+      type: "error",
+    });
   }
 };
 </script>

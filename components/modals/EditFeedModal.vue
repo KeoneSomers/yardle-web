@@ -17,6 +17,7 @@ const feeds = useState("feeds");
 const selectedHorseId = useState("selectedHorseId");
 const ingredients = ref([]);
 const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
+const alerts = useAlerts();
 
 const errors = ref([]);
 
@@ -160,6 +161,12 @@ const handleUpdateFeed = async () => {
   // only update fields that have changed
   feeds.value[i].instructions = data.instructions;
   feeds.value[i] = { ...data, horse: feeds.value[i].horse };
+
+  alerts.value.unshift({
+    title: "Feed Updated!",
+    message: "Your feed has been updated.",
+    type: "success",
+  });
 
   // cleanup
   resetModal();

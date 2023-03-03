@@ -76,7 +76,7 @@ const handleSubmit = async () => {
   } catch (err) {
     alerts.value.unshift({
       title: "Error Creating Horse!",
-      message: "Please try again for contact support.",
+      message: "Please try again, or contact support.",
       type: "error",
     });
     loading.value = false;

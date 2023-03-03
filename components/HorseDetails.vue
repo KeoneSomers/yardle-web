@@ -33,6 +33,7 @@ const editModalOpen = ref(false);
 const profile = useState("profile");
 const horses = useState("horses");
 const loading = ref(false);
+const alerts = useAlerts();
 
 const horseDetailsElement = ref(null);
 const { x, y } = useScroll(horseDetailsElement);
@@ -128,12 +129,24 @@ const handleDeleteHorse = async () => {
       selectedHorseId.value = 0;
     }
 
+    alerts.value.unshift({
+      type: "success",
+      title: "Horse deleted!",
+      message: 'Horse "' + horse.value.name + '" has been deleted',
+    });
+
     viewingHorse.value = false;
     closeDeleteHorseModal();
   } catch (error) {
     // TODO - Push error to snackbar
     console.log(error);
     loading.value = false;
+
+    alerts.value.unshift({
+      title: "Error Deleting Horse",
+      message: "Please try again, or contact support.",
+      type: "error",
+    });
   }
 };
 

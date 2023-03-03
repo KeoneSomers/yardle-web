@@ -15,6 +15,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const medications = useState("medications");
+const alerts = useAlerts();
 
 const handleDelete = async () => {
   const { data, error } = await client
@@ -30,6 +31,12 @@ const handleDelete = async () => {
       .indexOf(props.medicationId);
     medications.value.splice(index, 1);
 
+    alerts.value.unshift({
+      title: "Medication Deleted!",
+      message: "Your medication has been deleted.",
+      type: "success",
+    });
+
     // close the modal
     emits("close");
   }
@@ -37,6 +44,12 @@ const handleDelete = async () => {
   if (error) {
     // somthing went wrong!
     console.log(error);
+
+    alerts.value.unshift({
+      title: "Error Deleting Medication!",
+      message: "Please try again, or contact support.",
+      type: "error",
+    });
   }
 };
 </script>

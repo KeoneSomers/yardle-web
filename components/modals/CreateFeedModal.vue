@@ -23,6 +23,7 @@ const mustManualSelectedHorse = ref(route.path == "/yard/feeds");
 
 const ingredients = ref([]);
 const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
+const alerts = useAlerts();
 
 const errors = ref([]);
 
@@ -161,6 +162,12 @@ const handleCreateFeed = async () => {
   } else {
     feeds.value = [data];
   }
+
+  alerts.value.unshift({
+    title: "Feed Created!",
+    message: "Your feed has been created.",
+    type: "success",
+  });
 
   // cleanup
   resetModal();
