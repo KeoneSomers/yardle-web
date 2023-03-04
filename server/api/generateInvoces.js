@@ -344,7 +344,9 @@ export default defineEventHandler(async (event) => {
           .select("*, horse_id!inner(id, yard_id)")
           .eq("horse_id.yard_id", billingCycle.yard_id)
           .gt("date", start.toISODate())
-          .lte("date", end);
+          .lte("date", end)
+          .filter("status", "eq", "accepted")
+          .filter("canceled_at", "is", null);
 
       // split the service_requests into groups by horse_id
       const ServiceRequestsGroupedByHorse = serviceRequests.reduce(
@@ -380,7 +382,9 @@ export default defineEventHandler(async (event) => {
             })
             .eq("horse_id", horseId)
             .gt("date", start.toISODate())
-            .lte("date", end);
+            .lte("date", end)
+            .filter("status", "eq", "accepted")
+            .filter("canceled_at", "is", null);
       }
     } else {
       console.log(billingCycle.yard_id + " - Not their billing day yet!");
