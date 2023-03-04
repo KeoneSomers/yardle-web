@@ -23,12 +23,13 @@ const itemToDelete = ref(null);
 const invoiceData = ref(null);
 const itemsData = useState("itemsData", () => []);
 const subtotal = useState("subtotal", () => 0.0);
+
 const client_name = ref("");
 const client_email = ref("");
 const baseRate = ref(0);
 const discount = ref(0);
 const discountNote = ref("");
-const printItem = ref(null);
+
 const createModalOpen = ref(false);
 const alerts = useAlerts();
 
@@ -40,10 +41,24 @@ onMounted(async () => {
     .eq("id", invoice_id)
     .single();
 
-  if (_invoiceData.horse_id.owner) {
-    client_name.value = _invoiceData.horse_id.owner.username;
-    client_email.value = _invoiceData.horse_id.owner.email;
+  if (invoiceError) {
+    console.log(invoiceError);
+
+    alerts.value.upshift({
+      title: "Error",
+      message: "There was an error loading the invoice.",
+      type: "error",
+    });
+
+    return;
   }
+
+  // if (_invoiceData.horse_id.owner) {
+  //   client_name.value = _invoiceData.horse_id.owner.username;
+  //   client_email.value = _invoiceData.horse_id.owner.email;
+  // }
+  client_name.value = _invoiceData.client_name;
+  client_email.value = _invoiceData.client_email;
   baseRate.value = _invoiceData.base_rate;
   discount.value = _invoiceData.discount;
   discountNote.value = _invoiceData.discount_note;
@@ -115,6 +130,35 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
     },
   },
 });
+
+const saveChanges = async () => {
+  const { data, error } = await client
+    .from("invoices")
+    .update({
+      client_name: client_name.value,
+      client_email: client_email.value,
+      base_rate: baseRate.value,
+      discount: discount.value,
+      discount_note: discountNote.value,
+    })
+    .eq("id", invoice_id)
+    .select("*, horse_id (id, name, owner(email, username)), yard_id (name)")
+    .single();
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  // sync the data locally
+  invoiceData.value = data;
+
+  alerts.value.unshift({
+    title: "Changes Saved!",
+    message: "Your changes have been saved.",
+    type: "success",
+  });
+};
 </script>
 
 <template>
@@ -136,11 +180,19 @@ const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
           <h1 class="text-4xl font-bold mb-4 md:mb-0">Prepare Invoice</h1>
         </div>
         <div class="flex items-center">
-          <div
+          <button
+            @click="saveChanges"
+            v-if="
+              client_name != invoiceData.client_name ||
+              client_email != invoiceData.client_email ||
+              baseRate != invoiceData.base_rate ||
+              discount != invoiceData.discount ||
+              discountNote != invoiceData.discount_note
+            "
             class="bg-blue-500 text-white px-3 py-2 rounded-lg mr-2 cursor-pointer hover:bg-blue-600"
           >
             Save Changes
-          </div>
+          </button>
           <div
             v-tooltip="
               client_email == '' || client_name == ''
