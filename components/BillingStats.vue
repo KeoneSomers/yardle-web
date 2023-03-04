@@ -375,7 +375,8 @@ watchEffect(async () => {
       return (
         DateTime.fromISO(item.date) >= DateTime.now().startOf("week") &&
         DateTime.fromISO(item.date) <= DateTime.now().endOf("week") &&
-        item.canceled_at === null
+        item.canceled_at === null &&
+        item.status === "accepted"
       );
     });
 
@@ -390,7 +391,8 @@ watchEffect(async () => {
       return (
         DateTime.fromISO(item.date) >= previousBillingDate.value &&
         DateTime.fromISO(item.date) <= nextBillingDate.value &&
-        item.canceled_at === null
+        item.canceled_at === null &&
+        item.status === "accepted"
       );
     });
 

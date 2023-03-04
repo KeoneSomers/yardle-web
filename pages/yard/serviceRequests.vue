@@ -68,7 +68,7 @@ const updateRequest = async (requestId, status) => {
           <li
             v-for="request in requests"
             :key="request.id"
-            class="overflow-hidden bg-white px-4 py-4 shadow sm:rounded-md sm:px-6"
+            class="overflow-hidden bg-white p-2 sm:pl-6 shadow sm:rounded-md"
           >
             <div class="flex justify-between items-center">
               <div>
@@ -78,15 +78,35 @@ const updateRequest = async (requestId, status) => {
                 requested
                 <span class="text-blue-700">{{ request.service_name }}</span>
                 for
-                <span class="text-blue-700">{{
-                  DateTime.fromISO(request.date).toFormat("LLL dd, yyyy")
-                }}</span>
+                <span class="text-blue-700"
+                  >{{ DateTime.fromISO(request.date).toFormat("LLL dd, yyyy") }}
+                  <!-- <span v-if="DateTime.fromISO(request.date) > DateTime.now()">
+                    ({{
+                      Math.ceil(
+                        DateTime.fromISO(request.date)
+                          .diff(DateTime.now(), "days")
+                          .toObject().days
+                      )
+                    }}
+                    day<span
+                      v-if="
+                        Math.ceil(
+                          DateTime.fromISO(request.date)
+                            .diff(DateTime.now(), 'days')
+                            .toObject().days
+                        ) !== 1
+                      "
+                      >s</span
+                    >
+                    from now)
+                  </span> -->
+                </span>
               </div>
-              <div>
+              <div class="flex flex-col sm:flex-row">
                 <button
                   @click="updateRequest(request.id, 'accepted')"
                   v-tooltip="'Accept Request'"
-                  class="shadow rounded mr-2 p-2 hover:bg-gray-50"
+                  class="shadow rounded sm:mr-2 mb-2 sm:mb-0 p-3 hover:bg-gray-50"
                   :class="{
                     'bg-green-500 hover:bg-green-600 text-white':
                       request.status === 'accepted',
@@ -97,7 +117,7 @@ const updateRequest = async (requestId, status) => {
                 <button
                   @click="updateRequest(request.id, 'declined')"
                   v-tooltip="'Decline Request'"
-                  class="shadow rounded p-2 hover:bg-gray-50"
+                  class="shadow rounded p-3 hover:bg-gray-50"
                   :class="{
                     'bg-red-500 hover:bg-red-600 text-white':
                       request.status === 'declined',
