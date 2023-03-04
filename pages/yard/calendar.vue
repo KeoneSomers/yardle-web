@@ -5,6 +5,7 @@ import {
   ChevronRightIcon,
   EllipsisHorizontalIcon,
 } from "@heroicons/vue/20/solid";
+import { EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
 import { DateTime } from "luxon";
 import CreateEventModal from "@/components/modals/CreateEventModal.vue";
 import EditEventModal from "@/components/modals/EditEventModal.vue";
@@ -16,6 +17,8 @@ definePageMeta({
 
 const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
+
+const selectedDate = ref(DateTime.now().toISODate());
 
 const createModalOpen = ref(false);
 const editModalOpen = ref(false);
@@ -155,13 +158,165 @@ const createEvent = (e, day) => {
 
 <template>
   <div>
-    <div
-      class="lg:hidden flex justify-center items-center w-full h-screen text-center"
-    >
-      <p class="p-10 font-mono">
-        The calendar is only viewable on larger screens.<br />
-        We're currently working on adding support for smaller screens.
-      </p>
+    <!-- Mobile Calendar -->
+    <div class="lg:hidden pt-4 px-2">
+      <div class="flex items-center">
+        <h2 class="flex-auto text-sm font-semibold text-gray-900">
+          {{ months[dt.month - 1] }} {{ dt.year }}
+        </h2>
+        <button
+          @click="() => goToPreviousMonth()"
+          type="button"
+          class="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+        >
+          <span class="sr-only">Previous month</span>
+          <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
+        </button>
+        <button
+          @click="() => goToNextMonth()"
+          type="button"
+          class="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+        >
+          <span class="sr-only">Next month</span>
+          <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
+        </button>
+      </div>
+      <div
+        class="mt-10 grid grid-cols-7 text-center text-xs leading-6 text-gray-500"
+      >
+        <div>M</div>
+        <div>T</div>
+        <div>W</div>
+        <div>T</div>
+        <div>F</div>
+        <div>S</div>
+        <div>S</div>
+      </div>
+      <div class="mt-2 grid grid-cols-7 text-sm">
+        <div
+          v-for="(day, dayIdx) in days"
+          :key="day"
+          :class="[dayIdx > 6 && 'border-t border-gray-200', 'py-2']"
+        >
+          <button
+            @click="selectedDate = day.toISODate()"
+            type="button"
+            :class="[
+              day.toISODate() == selectedDate && 'text-white',
+              day.toISODate() != selectedDate &&
+                day.toISODate() === trueDateTime.toISODate() &&
+                'text-indigo-600',
+              !day.isSelected &&
+                day.toISODate() != trueDateTime.toISODate() &&
+                day.month == trueDateTime.month &&
+                'text-gray-900',
+              day.toISODate() != selectedDate &&
+                day.toISODate() != trueDateTime.toISODate() &&
+                day.month != dt.month &&
+                'text-gray-400',
+              day.toISODate() == selectedDate &&
+                day.toISODate() == trueDateTime.toISODate() &&
+                'bg-indigo-600',
+              day.toISODate() == selectedDate &&
+                day.toISODate() != trueDateTime.toISODate() &&
+                'bg-gray-900',
+              day.toISODate() != selectedDate && 'hover:bg-gray-200',
+              day == selectedDate && 'font-semibold',
+              'mx-auto flex h-8 w-8 items-center justify-center rounded-full',
+            ]"
+          >
+            <time :datetime="day.date">{{ day.day }}</time>
+          </button>
+        </div>
+      </div>
+      <section class="mt-12">
+        <h2 class="text-base font-semibold leading-6 text-gray-900">
+          Schedule for
+          <time :datetime="selectedDate">{{
+            DateTime.fromISO(selectedDate).toLocaleString({
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })
+          }}</time>
+        </h2>
+        <ol class="mt-4 space-y-1 text-sm leading-6 text-gray-500">
+          <li
+            v-for="meeting in meetings"
+            :key="meeting.id"
+            class="group flex items-center space-x-4 rounded-xl py-2 px-4 focus-within:bg-gray-100 hover:bg-gray-100"
+          >
+            <img
+              :src="meeting.imageUrl"
+              alt=""
+              class="h-10 w-10 flex-none rounded-full"
+            />
+            <div class="flex-auto">
+              <p class="text-gray-900">{{ meeting.name }}</p>
+              <p class="mt-0.5">
+                <time :datetime="meeting.startDatetime">{{
+                  meeting.start
+                }}</time>
+                -
+                <time :datetime="meeting.endDatetime">{{ meeting.end }}</time>
+              </p>
+            </div>
+            <Menu
+              as="div"
+              class="relative opacity-0 focus-within:opacity-100 group-hover:opacity-100"
+            >
+              <div>
+                <MenuButton
+                  class="-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600"
+                >
+                  <span class="sr-only">Open options</span>
+                  <EllipsisVerticalIcon class="h-6 w-6" aria-hidden="true" />
+                </MenuButton>
+              </div>
+
+              <transition
+                enter-active-class="transition ease-out duration-100"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-75"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
+              >
+                <MenuItems
+                  class="absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                >
+                  <div class="py-1">
+                    <MenuItem v-slot="{ active }">
+                      <a
+                        href="#"
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'block px-4 py-2 text-sm',
+                        ]"
+                        >Edit</a
+                      >
+                    </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                      <a
+                        href="#"
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'block px-4 py-2 text-sm',
+                        ]"
+                        >Cancel</a
+                      >
+                    </MenuItem>
+                  </div>
+                </MenuItems>
+              </transition>
+            </Menu>
+          </li>
+        </ol>
+      </section>
     </div>
     <div class="hidden lg:flex lg:h-screen lg:flex-col">
       <header
