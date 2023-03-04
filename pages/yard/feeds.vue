@@ -110,7 +110,6 @@ const handleDelete = async () => {
   selectedFeedId.value = 0;
 };
 
-// delete modal
 const handleDeleteFeed = (feedId) => {
   selectedFeedId.value = feedId;
   deleteModalOpen.value = true;
@@ -119,49 +118,6 @@ const handleDeleteFeed = (feedId) => {
 const handleEditFeed = (feedId) => {
   selectedFeedId.value = feedId;
   editModalOpen.value = true;
-};
-
-const scrollAmount = ref(0);
-const edgeShadowLeft = ref(null);
-const edgeShadowLeftShow = ref(false);
-const edgeShadowRight = ref(null);
-const edgeShadowRightShow = ref(false);
-const weatherWrapper = ref(null);
-const weatherWrapperOutter = ref(null);
-
-onMounted(() => {
-  setShadow();
-});
-
-const setShadow = (event) => {
-  if (event) {
-    scrollAmount.value = event.target.scrollLeft;
-  }
-
-  const maxScroll =
-    weatherWrapper.value.clientWidth - weatherWrapperOutter.value.clientWidth;
-  var scrollPercent = (scrollAmount.value / maxScroll) * 100;
-
-  const scrollViewport = weatherWrapperOutter.value.clientWidth;
-  const scrollContent = weatherWrapper.value.clientWidth;
-
-  // content is bigger than scroll viewport
-  if (scrollContent > scrollViewport) {
-    if (scrollPercent > 0) {
-      edgeShadowLeftShow.value = true;
-    } else {
-      edgeShadowLeftShow.value = false;
-    }
-
-    if (scrollPercent < 100) {
-      edgeShadowRightShow.value = true;
-    } else {
-      edgeShadowRightShow.value = false;
-    }
-  } else {
-    edgeShadowLeftShow.value = false;
-    edgeShadowRightShow.value = false;
-  }
 };
 </script>
 
@@ -180,7 +136,7 @@ const setShadow = (event) => {
         <button
           @click="() => (createModalOpen = true)"
           type="button"
-          class="inline-flex w-full md:w-fit justify-center md:mr-2 items-center rounded-md border border-transparent bg-indigo-600 md:px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          class="inline-flex whitespace-nowrap w-full md:w-fit justify-center md:mr-2 items-center rounded-md border border-transparent bg-indigo-600 md:px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           <PlusIcon class="-ml-1 mr-3 h-5 w-5" aria-hidden="true" />
           Add a feed
@@ -195,25 +151,9 @@ const setShadow = (event) => {
       class="hidden sm:block relative flex-1 overflow-y-auto"
     >
       <div
-        ref="edgeShadowLeft"
-        v-if="edgeShadowLeftShow"
-        class="hidden md:block w-6 z-50 h-full bg-gradient-to-r from-stone-200 absolute left-0 top-0 pointer-events-none border-l rounded"
-      ></div>
-      <div
-        ref="edgeShadowRight"
-        v-if="edgeShadowRightShow"
-        class="hidden md:block w-6 z-50 h-full bg-gradient-to-l from-stone-200 absolute right-0 top-0 pointer-events-none border-r rounded"
-      ></div>
-      <div
-        :onscroll="setShadow"
-        ref="weatherWrapperOutter"
         class="mt-5 relative overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
       >
-        <table
-          id="feed-report"
-          ref="weatherWrapper"
-          class="min-w-full divide-y divide-gray-300"
-        >
+        <table id="feed-report" class="min-w-full divide-y divide-gray-300">
           <thead class="bg-gray-50">
             <tr class="divide-x divide-gray-200">
               <th

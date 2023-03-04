@@ -51,14 +51,14 @@ const emits = defineEmits(["editFeed", "deleteFeed"]);
                   </div>
 
                   <div>
-                    <p>{{ feed.horse.name }}</p>
+                    <p class="font-semibold">{{ feed.horse.name }}</p>
                   </div>
                 </div>
                 <div>
                   <Menu as="div" class="relative inline-block text-left">
                     <div>
                       <MenuButton
-                        class="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                        class="flex items-center p-0.5 rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                       >
                         <span class="sr-only">Open options</span>
                         <EllipsisVerticalIcon
@@ -116,7 +116,7 @@ const emits = defineEmits(["editFeed", "deleteFeed"]);
               <dl class="font-normal lg:hidden">
                 <dd class="mt-1 truncate text-gray-700" v-if="feed.condition">
                   <div
-                    class="bg-purple-50 p-0.5 rounded border-purple-100 text-purple-800 whitespace-pre-wrap"
+                    class="bg-gray-50 p-0.5 rounded border whitespace-pre-wrap"
                   >
                     Condition:
                     {{ feed.condition }}
@@ -127,93 +127,85 @@ const emits = defineEmits(["editFeed", "deleteFeed"]);
                   v-if="feed.instructions"
                 >
                   <div
-                    class="bg-yellow-50 p-0.5 rounded border-yellow-100 text-yellow-700 whitespace-pre-wrap"
+                    class="bg-gray-50 p-0.5 rounded border whitespace-pre-wrap"
                   >
                     Instructions:
                     {{ feed.instructions }}
                   </div>
                 </dd>
                 <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                  <div class="flex">
-                    <div class="mr-1">Chaff:</div>
-                    <div class="flex flex-wrap">
-                      <div
-                        v-for="ingredient in feed.ingredients.filter(
-                          (i) => i.type === 1
-                        )"
-                        :key="ingredient.id"
+                  <div class="mr-1 mt-1">Chaff:</div>
+                  <div class="flex flex-wrap">
+                    <div
+                      v-for="ingredient in feed.ingredients.filter(
+                        (i) => i.type === 1
+                      )"
+                      :key="ingredient.id"
+                    >
+                      <span
+                        class="inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700 mr-1 mb-1"
                       >
-                        <span
-                          class="inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700 mr-1 mb-1"
-                        >
-                          {{
-                            `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                          }}
-                        </span>
-                      </div>
+                        {{
+                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                        }}
+                      </span>
                     </div>
                   </div>
                 </dd>
                 <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                  <div class="flex">
-                    <div class="mr-1">Nuts:</div>
-                    <div class="flex flex-wrap">
-                      <div
-                        v-for="ingredient in feed.ingredients.filter(
-                          (i) => i.type === 2
-                        )"
-                        :key="ingredient.id"
+                  <div class="mr-1 mt-1">Nuts:</div>
+                  <div class="flex flex-wrap">
+                    <div
+                      v-for="ingredient in feed.ingredients.filter(
+                        (i) => i.type === 2
+                      )"
+                      :key="ingredient.id"
+                    >
+                      <span
+                        class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700 mr-1 mb-1"
                       >
-                        <span
-                          class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700 mr-1 mb-1"
-                        >
-                          {{
-                            `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                          }}
-                        </span>
-                      </div>
+                        {{
+                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                        }}
+                      </span>
                     </div>
                   </div>
                 </dd>
                 <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                  <div class="flex">
-                    <div class="mr-1">Extra:</div>
-                    <div class="flex flex-wrap">
-                      <div
-                        v-for="ingredient in feed.ingredients.filter(
-                          (i) => i.type === 3
-                        )"
-                        :key="ingredient.id"
+                  <div class="mr-1 mt-1">Extra:</div>
+                  <div class="flex flex-wrap">
+                    <div
+                      v-for="ingredient in feed.ingredients.filter(
+                        (i) => i.type === 3
+                      )"
+                      :key="ingredient.id"
+                    >
+                      <span
+                        class="inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700 mr-1 mb-1"
                       >
-                        <span
-                          class="inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700 mr-1 mb-1"
-                        >
-                          {{
-                            `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                          }}
-                        </span>
-                      </div>
+                        {{
+                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                        }}
+                      </span>
                     </div>
                   </div>
                 </dd>
                 <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                  <div class="flex">
-                    <div class="mr-1">Suppliments:</div>
-                    <div class="flex flex-wrap">
-                      <div
-                        v-for="ingredient in feed.ingredients.filter(
-                          (i) => i.type === 4
-                        )"
-                        :key="ingredient.id"
+                  <div class="mr-1 mt-1">Suppliments:</div>
+                  <div class="flex flex-wrap">
+                    <div
+                      v-for="ingredient in feed.ingredients.filter(
+                        (i) => i.type === 4
+                      )"
+                      :key="ingredient.id"
+                    >
+                      <span
+                        class="inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700 mr-1 mb-1"
                       >
-                        <span
-                          class="inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700 mr-1 mb-1"
-                        >
-                          {{
-                            `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                          }}
-                        </span>
-                      </div>
+                        {{
+                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                        }}
+                      </span>
                     </div>
                   </div>
                 </dd>
