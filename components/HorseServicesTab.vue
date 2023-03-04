@@ -172,8 +172,8 @@ const goToPreviousWeek = () => {
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 divide-x">
           <div v-for="day in days" :key="day.id">
-            <div class="border-t p-2 pb-0">
-              <div class="flex space-x-2">
+            <div class="border-t pb-0">
+              <div class="flex items-center bg-gray-50 p-2 space-x-2">
                 <time
                   :datetime="day.date"
                   :class="
@@ -191,21 +191,36 @@ const goToPreviousWeek = () => {
               </div>
             </div>
 
-            <div
-              v-if="day.serviceRequests && day.serviceRequests.length > 0"
-              class="p-3"
-            >
+            <div v-if="day.serviceRequests && day.serviceRequests.length > 0">
               <div
                 v-for="event in day.serviceRequests"
                 :key="event.id"
-                class="bg-blue-50 text-gray-600 rounded mb-1 p-1 flex justify-between items-center"
+                class="text-gray-600 border-t p-2 flex justify-between items-center"
               >
                 <div class="flex items-center">
-                  <div>
-                    {{ event.service_name }}
+                  <div class="flex flex-col justify-center">
+                    <p>{{ event.service_name }}</p>
+                    <small
+                      class="text-xs"
+                      :class="[
+                        event.status === 'pending'
+                          ? 'text-yellow-600'
+                          : 'text-gray-600',
+                        event.status === 'accepted'
+                          ? 'text-green-600'
+                          : 'text-gray-600',
+                        event.status === 'declined'
+                          ? 'text-red-600'
+                          : 'text-gray-600',
+                      ]"
+                      >{{
+                        event.status.charAt(0).toUpperCase() +
+                        event.status.slice(1)
+                      }}</small
+                    >
                   </div>
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center font-mono text-sm">
                   <ClockIcon
                     v-if="event.booked_late"
                     v-tooltip="'Late Booking'"
@@ -224,7 +239,7 @@ const goToPreviousWeek = () => {
               </div>
             </div>
             <div v-else class="p-3">
-              <p class="italic text-gray-500">No Services</p>
+              <p class="italic text-gray-500 text-xs">No Services</p>
             </div>
 
             <!-- <ul class="text-gray-500 p-2 pt-0 mt-3">

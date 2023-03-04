@@ -78,6 +78,7 @@ const handleSubmit = async () => {
     .insert({
       created_by: user.value.id,
       invoice_id: props.invoiceId,
+      status: "accepted",
       horse_id: props.horseId,
       date: date.value,
       service_id: selectedService.value.id,

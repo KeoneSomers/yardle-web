@@ -437,7 +437,9 @@ watchEffect(async () => {
         <dt class="truncate text-sm font-medium text-gray-500">
           Total Requirements This Billing Period
         </dt>
-        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+        <dd
+          class="mt-1 text-3xl font-semibold tracking-tight text-gray-700 font-mono"
+        >
           {{ thisPeriodsServices ? thisPeriodsServices.length : 0 }}
         </dd>
       </div>
@@ -446,7 +448,9 @@ watchEffect(async () => {
         <dt class="truncate text-sm font-medium text-gray-500">
           Spend this Week
         </dt>
-        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+        <dd
+          class="mt-1 text-3xl font-semibold tracking-tight text-gray-700 font-mono"
+        >
           £{{ spendThisWeek.toFixed(2) }}
         </dd>
       </div>
@@ -471,7 +475,9 @@ watchEffect(async () => {
           </span>
           <span v-else> (Due Today)</span>
         </dt>
-        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+        <dd
+          class="mt-1 text-3xl font-semibold tracking-tight text-gray-700 font-mono"
+        >
           £{{ nextBill.toFixed(2) }}
         </dd>
       </div>

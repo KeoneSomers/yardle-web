@@ -53,10 +53,6 @@ onMounted(async () => {
     return;
   }
 
-  // if (_invoiceData.horse_id.owner) {
-  //   client_name.value = _invoiceData.horse_id.owner.username;
-  //   client_email.value = _invoiceData.horse_id.owner.email;
-  // }
   client_name.value = _invoiceData.client_name;
   client_email.value = _invoiceData.client_email;
   baseRate.value = _invoiceData.base_rate;

@@ -13,6 +13,7 @@ import {
   LinkIcon,
   Cog8ToothIcon,
   DocumentTextIcon,
+  InboxIcon,
 } from "@heroicons/vue/24/outline";
 import { EllipsisHorizontalIcon } from "@heroicons/vue/20/solid";
 
@@ -190,6 +191,26 @@ const handleSignout = async () => {
             <p class="text-xs font-semibold pl-2 pt-4 pb-2 text-gray-600">
               Admin
             </p>
+            <NuxtLink
+              to="/yard/serviceRequests"
+              :class="[
+                '/yard/serviceRequests' == router.currentRoute.value.path
+                  ? 'bg-gray-200 text-gray-900'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+              ]"
+            >
+              <InboxIcon
+                :class="[
+                  '/yard/serviceRequests' == router.currentRoute.value.path
+                    ? 'text-gray-500'
+                    : 'text-gray-400 group-hover:text-gray-500',
+                  'mr-3 flex-shrink-0 h-6 w-6',
+                ]"
+                aria-hidden="true"
+              />
+              <span class="flex-1">Service Requests</span>
+            </NuxtLink>
             <NuxtLink
               to="/yard/invoices"
               :class="[

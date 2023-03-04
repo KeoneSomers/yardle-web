@@ -50,7 +50,11 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   }
 
   // TODO: this if statement is a hack, need to find a better way to do this (just for yard settings and invoices pages)
-  if (to.path === "/yard/settings" || to.path.includes("/yard/invoices")) {
+  if (
+    to.path === "/yard/settings" ||
+    to.path.includes("/yard/invoices") ||
+    to.path.includes("/yard/servicerequests")
+  ) {
     if (!user.value || !selectedYardId.value || selectedYardId.value === 0) {
       return abortNavigation();
     }
