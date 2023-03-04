@@ -327,7 +327,7 @@ export default defineEventHandler(async (event) => {
       latestBillingDay.toISODate() ===
       DateTime.now().minus({ days: 1 }).toISODate()
     ) {
-      console.log("Yesterday was their Billing Day!");
+      console.log(billingCycle.yard_id + " - Yesterday was their Billing Day!");
       console.log(latestBillingDay.toFormat("EEEE, MMMM d, yyyy"));
       // calculate the periods start and end dates
       const start = await getPreviousBillingDate(
