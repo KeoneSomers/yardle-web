@@ -37,6 +37,10 @@ const openDeleteModal = (e) => {
   deleteModalOpen.value = true;
 };
 
+const { data: eventTypes, error: eventTypesError } = await client
+  .from("calendar_event_types")
+  .select();
+
 const offset = ref(0);
 const dt = ref(DateTime.now());
 const trueDateTime = DateTime.now();
@@ -48,7 +52,7 @@ const getEvents = async () => {
   await useAsyncData("events", async () => {
     const { data } = await client
       .from("calendar_events")
-      .select()
+      .select("*, horses(id, name, avatar_url, avatar_background)")
       .order("all_day", { ascending: false })
       .eq("yard_id", selectedYard.value);
 
@@ -135,7 +139,7 @@ const createEvent = (e, day) => {
 <template>
   <div>
     <!-- Mobile Calendar -->
-    <div class="lg:hidden p-4">
+    <div class="lg:hidden p-4 h-screen overflow-y-auto pb-20">
       <div class="flex items-center">
         <h2 class="flex-auto text-sm font-semibold text-gray-900">
           {{
@@ -214,7 +218,7 @@ const createEvent = (e, day) => {
           </button>
         </div>
       </div>
-      <section class="mt-12">
+      <section class="pt-12">
         <h2 class="text-base font-semibold leading-6 text-gray-900">
           Schedule for
           <time :datetime="selectedDate">{{
@@ -233,25 +237,40 @@ const createEvent = (e, day) => {
           class="mt-4 space-y-1 text-sm leading-6 text-gray-500"
         >
           <li
-            v-for="event in days.find((day) => day.toISODate() == selectedDate)
-              .events"
+            v-for="(event, index) in days.find(
+              (day) => day.toISODate() == selectedDate
+            ).events"
             :key="event.id"
             class="group flex items-center space-x-4 rounded-xl py-2 px-4"
           >
-            <!-- <img
-              :src="event.imageUrl"
-              alt=""
-              class="h-10 w-10 flex-none rounded-full"
-            /> -->
             <div class="flex-auto">
               <p class="text-gray-900">{{ event.title }}</p>
+              <div class="flex -space-x-1 overflow-hidden">
+                <div
+                  v-for="horse in event.horses"
+                  :key="horse.id"
+                  class="flex h-6 w-6 rounded-full ring-2 ring-white text-white items-center justify-center overflow-hidden"
+                  :class="horse.avatar_background"
+                  v-tooltip="horse.name"
+                >
+                  <SupabaseImage
+                    v-if="horse.avatar_url"
+                    id="horse-avatars"
+                    :path="horse.avatar_url"
+                  />
+                  <span v-else>
+                    {{ horse.name.substring(0, 1) }}
+                  </span>
+                </div>
+              </div>
               <p class="mt-0.5">
                 <span v-if="!event.all_day">
                   {{
                     DateTime.fromISO(String(event.date_time)).toFormat("h:mma")
                   }}
                 </span>
-                <span v-else> All Day </span>
+                <span v-else> All Day </span> -
+                {{ eventTypes[event.type - 1].type }}
               </p>
             </div>
             <Menu as="div" class="relative">

@@ -66,7 +66,7 @@ const { data: eventTypes, error: eventTypesError } = await client
   .select();
 
 const title = ref("");
-const date = ref("");
+const date = ref(DateTime.now().toFormat("dd-MM-yyyy"));
 const time = ref("09:00");
 const notes = ref("");
 const all_day = ref(false);
@@ -140,7 +140,7 @@ const handleSubmit = async () => {
 
       // step 3: update local state
       if (events.value) {
-        events.value.push(newEvent);
+        events.value.push({ ...newEvent, horses: selectedHorses.value });
       } else {
         events.value = [newEvent];
       }

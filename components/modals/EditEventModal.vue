@@ -144,7 +144,11 @@ const handleSubmit = async () => {
 
     // step 3: update local state
     const i = events.value.map((e) => e.id).indexOf(event.value.id);
-    events.value[i] = { ...event.value, date_time: formattedDateTime };
+    events.value[i] = {
+      ...event.value,
+      date_time: formattedDateTime,
+      horses: selectedHorses.value,
+    };
 
     alerts.value.unshift({
       title: "Event Updated!",
