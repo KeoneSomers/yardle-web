@@ -4,9 +4,10 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   EllipsisHorizontalIcon,
+  PlusIcon,
 } from "@heroicons/vue/20/solid";
 import { EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
-import { DateTime } from "luxon";
+import { DateTime, Info } from "luxon";
 import CreateEventModal from "@/components/modals/CreateEventModal.vue";
 import EditEventModal from "@/components/modals/EditEventModal.vue";
 import DeleteEventModal from "@/components/modals/DeleteEventModal.vue";
@@ -39,31 +40,6 @@ const openDeleteModal = (e) => {
 const offset = ref(0);
 const dt = ref(DateTime.now());
 const trueDateTime = DateTime.now();
-
-const months = [
-  "January",
-  "Febuary",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-const weekdays = [
-  { id: 1, shortName: "Mon", name: "Monday" },
-  { id: 2, shortName: "Tue", name: "Tuesday" },
-  { id: 3, shortName: "Wed", name: "Wednesday" },
-  { id: 4, shortName: "Thu", name: "Thursday" },
-  { id: 5, shortName: "Fri", name: "Friday" },
-  { id: 6, shortName: "Sat", name: "Saturday" },
-  { id: 7, shortName: "Sun", name: "Sunday" },
-];
 
 const days = useState("days", () => []);
 const events = useState("events", () => []);
@@ -159,10 +135,15 @@ const createEvent = (e, day) => {
 <template>
   <div>
     <!-- Mobile Calendar -->
-    <div class="lg:hidden pt-4 px-2">
+    <div class="lg:hidden p-4">
       <div class="flex items-center">
         <h2 class="flex-auto text-sm font-semibold text-gray-900">
-          {{ months[dt.month - 1] }} {{ dt.year }}
+          {{
+            dt.toLocaleString({
+              month: "long",
+              year: "numeric",
+            })
+          }}
         </h2>
         <button
           @click="() => goToPreviousMonth()"
@@ -180,17 +161,21 @@ const createEvent = (e, day) => {
           <span class="sr-only">Next month</span>
           <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
         </button>
+        <button
+          @click="createModalOpen = true"
+          type="button"
+          class="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+        >
+          <span class="sr-only">Create event</span>
+          <PlusIcon class="h-5 w-5" aria-hidden="true" />
+        </button>
       </div>
       <div
         class="mt-10 grid grid-cols-7 text-center text-xs leading-6 text-gray-500"
       >
-        <div>M</div>
-        <div>T</div>
-        <div>W</div>
-        <div>T</div>
-        <div>F</div>
-        <div>S</div>
-        <div>S</div>
+        <div v-for="(item, index) in 7" :key="item">
+          {{ Info.weekdays()[index].substring(0, 1) }}
+        </div>
       </div>
       <div class="mt-2 grid grid-cols-7 text-sm">
         <div
@@ -233,38 +218,43 @@ const createEvent = (e, day) => {
         <h2 class="text-base font-semibold leading-6 text-gray-900">
           Schedule for
           <time :datetime="selectedDate">{{
-            DateTime.fromISO(selectedDate).toLocaleString({
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })
+            DateTime.fromISO(selectedDate).toLocaleString(
+              {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              },
+              { locale: "en-GB" }
+            )
           }}</time>
         </h2>
-        <ol class="mt-4 space-y-1 text-sm leading-6 text-gray-500">
+        <ol
+          v-if="days.find((day) => day.toISODate() == selectedDate)"
+          class="mt-4 space-y-1 text-sm leading-6 text-gray-500"
+        >
           <li
-            v-for="meeting in meetings"
-            :key="meeting.id"
-            class="group flex items-center space-x-4 rounded-xl py-2 px-4 focus-within:bg-gray-100 hover:bg-gray-100"
+            v-for="event in days.find((day) => day.toISODate() == selectedDate)
+              .events"
+            :key="event.id"
+            class="group flex items-center space-x-4 rounded-xl py-2 px-4"
           >
-            <img
-              :src="meeting.imageUrl"
+            <!-- <img
+              :src="event.imageUrl"
               alt=""
               class="h-10 w-10 flex-none rounded-full"
-            />
+            /> -->
             <div class="flex-auto">
-              <p class="text-gray-900">{{ meeting.name }}</p>
+              <p class="text-gray-900">{{ event.title }}</p>
               <p class="mt-0.5">
-                <time :datetime="meeting.startDatetime">{{
-                  meeting.start
-                }}</time>
-                -
-                <time :datetime="meeting.endDatetime">{{ meeting.end }}</time>
+                <span v-if="!event.all_day">
+                  {{
+                    DateTime.fromISO(String(event.date_time)).toFormat("h:mma")
+                  }}
+                </span>
+                <span v-else> All Day </span>
               </p>
             </div>
-            <Menu
-              as="div"
-              class="relative opacity-0 focus-within:opacity-100 group-hover:opacity-100"
-            >
+            <Menu as="div" class="relative">
               <div>
                 <MenuButton
                   class="-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600"
@@ -287,28 +277,30 @@ const createEvent = (e, day) => {
                 >
                   <div class="py-1">
                     <MenuItem v-slot="{ active }">
-                      <a
-                        href="#"
+                      <button
+                        @click="openEditModal(event)"
                         :class="[
                           active
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-700',
-                          'block px-4 py-2 text-sm',
+                          'block px-4 py-2 text-sm w-full text-left',
                         ]"
-                        >Edit</a
                       >
+                        Edit
+                      </button>
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
-                      <a
-                        href="#"
+                      <button
+                        @click="openDeleteModal(event)"
                         :class="[
                           active
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-700',
-                          'block px-4 py-2 text-sm',
+                          'block px-4 py-2 text-sm w-full text-left',
                         ]"
-                        >Cancel</a
                       >
+                        Cancel
+                      </button>
                     </MenuItem>
                   </div>
                 </MenuItems>
@@ -318,14 +310,18 @@ const createEvent = (e, day) => {
         </ol>
       </section>
     </div>
+    <!-- Desktop  -->
     <div class="hidden lg:flex lg:h-screen lg:flex-col">
       <header
         class="flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none"
       >
         <h1 class="text-lg font-semibold text-gray-900">
-          <time datetime="2022-01"
-            >{{ months[dt.month - 1] }} {{ dt.year }}</time
-          >
+          <time :datetime="dt.toISODate()">{{
+            dt.toLocaleString({
+              month: "long",
+              year: "numeric",
+            })
+          }}</time>
         </h1>
         <div class="flex items-center">
           <div class="flex items-center rounded-md shadow-sm md:items-stretch">
@@ -355,83 +351,6 @@ const createEvent = (e, day) => {
             </button>
           </div>
           <div class="hidden md:ml-4 md:flex md:items-center">
-            <!-- <Menu as="div" class="relative">
-                        <MenuButton
-                            type="button"
-                            class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                        >
-                            Month view
-                            <ChevronDownIcon
-                                class="ml-2 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                            />
-                        </MenuButton>
-
-                        <transition
-                            enter-active-class="transition ease-out duration-100"
-                            enter-from-class="transform opacity-0 scale-95"
-                            enter-to-class="transform opacity-100 scale-100"
-                            leave-active-class="transition ease-in duration-75"
-                            leave-from-class="transform opacity-100 scale-100"
-                            leave-to-class="transform opacity-0 scale-95"
-                        >
-                            <MenuItems
-                                class="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                            >
-                                <div class="py-1">
-                                    <MenuItem v-slot="{ active }">
-                                        <a
-                                            href="#"
-                                            :class="[
-                                                active
-                                                    ? 'bg-gray-100 text-gray-900'
-                                                    : 'text-gray-700',
-                                                'block px-4 py-2 text-sm',
-                                            ]"
-                                            >Day view</a
-                                        >
-                                    </MenuItem>
-                                    <MenuItem v-slot="{ active }">
-                                        <a
-                                            href="#"
-                                            :class="[
-                                                active
-                                                    ? 'bg-gray-100 text-gray-900'
-                                                    : 'text-gray-700',
-                                                'block px-4 py-2 text-sm',
-                                            ]"
-                                            >Week view</a
-                                        >
-                                    </MenuItem>
-                                    <MenuItem v-slot="{ active }">
-                                        <a
-                                            href="#"
-                                            :class="[
-                                                active
-                                                    ? 'bg-gray-100 text-gray-900'
-                                                    : 'text-gray-700',
-                                                'block px-4 py-2 text-sm',
-                                            ]"
-                                            >Month view</a
-                                        >
-                                    </MenuItem>
-                                    <MenuItem v-slot="{ active }">
-                                        <a
-                                            href="#"
-                                            :class="[
-                                                active
-                                                    ? 'bg-gray-100 text-gray-900'
-                                                    : 'text-gray-700',
-                                                'block px-4 py-2 text-sm',
-                                            ]"
-                                            >Year view</a
-                                        >
-                                    </MenuItem>
-                                </div>
-                            </MenuItems>
-                        </transition>
-                    </Menu> -->
-            <!-- <div class="ml-6 h-6 w-px bg-gray-300" /> -->
             <button
               @click="createEvent"
               type="button"
@@ -544,8 +463,8 @@ const createEvent = (e, day) => {
         <div
           class="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none"
         >
-          <div v-for="day in weekdays" :key="day.id" class="bg-white py-2">
-            {{ day.shortName }}
+          <div v-for="(item, index) in 7" :key="item" class="bg-white py-2">
+            {{ Info.weekdays()[index].substring(0, 3) }}
           </div>
         </div>
 

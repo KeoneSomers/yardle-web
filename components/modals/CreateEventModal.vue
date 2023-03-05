@@ -228,7 +228,7 @@ const removeSelectedHorse = (i) => {
                 as="h3"
                 class="text-lg font-medium leading-6 text-gray-900"
               >
-                Add an event
+                Create an event
               </DialogTitle>
               <form
                 @submit.prevent="handleSubmit"
@@ -465,7 +465,7 @@ const removeSelectedHorse = (i) => {
                     type="submit"
                     class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
                   >
-                    Add
+                    Create
                   </button>
                   <LoadingButton v-else />
                 </div>
