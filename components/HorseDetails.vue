@@ -183,10 +183,10 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
     class="relative md:block z-0 flex-1 focus:outline-none xl:order-last overflow-y-auto"
     :class="{ hidden: !viewingHorse }"
   >
-    <main v-if="horse" class="flex flex-col h-full">
+    <main v-if="horse" class="flex flex-col">
       <!-- Breadcrumb -->
       <nav
-        class="fixed left-0 z-30 w-full bg-white flex items-start px-4 py-3 sm:px-6 lg:px-8 md:hidden border-b"
+        class="fixed left-0 top-16 z-30 w-full bg-white flex items-start px-4 py-3 sm:px-6 lg:px-8 md:hidden border-b"
         aria-label="Breadcrumb"
       >
         <a
