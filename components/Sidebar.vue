@@ -14,6 +14,7 @@ import {
   Cog8ToothIcon,
   DocumentTextIcon,
   InboxIcon,
+  CheckBadgeIcon,
 } from "@heroicons/vue/24/outline";
 import { EllipsisHorizontalIcon } from "@heroicons/vue/20/solid";
 
@@ -292,9 +293,9 @@ const handleSignout = async () => {
               >
                 {{ profile.username }}
               </p>
-              <VerifiedTick
+              <CheckBadgeIcon
                 v-if="profile.is_early_adopter"
-                class="h-4 w-4 ml-2"
+                class="h-5 w-5 ml-2 text-blue-500"
                 v-tooltip="'Early Adopter'"
               />
             </div>

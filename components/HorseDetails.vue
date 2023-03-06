@@ -4,7 +4,12 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/vue/20/solid";
-import { EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
+import {
+  EllipsisVerticalIcon,
+  CurrencyPoundIcon,
+  ClipboardDocumentIcon,
+  RectangleGroupIcon,
+} from "@heroicons/vue/24/outline";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { useModal } from "vue-final-modal";
 import ModalConfirm from "@/components/modals/ModalConfirm.vue";
@@ -21,11 +26,11 @@ const viewingHorse = useState("viewingHorse");
 
 const selectedTab = useState("horseTab", () => 0);
 const tabs = [
-  { name: "General", component: HorseGeneralTab },
-  { name: "Rugs", component: HorseRugsTab },
-  { name: "Feeds", component: HorseFeedsTab },
-  { name: "Medications", component: HorseMedicationsTab },
-  { name: "Services", component: HorseServicesTab },
+  { name: "General", component: HorseGeneralTab, icon: RectangleGroupIcon },
+  { name: "Rugs", component: HorseRugsTab, icon: ClipboardDocumentIcon },
+  { name: "Feeds", component: HorseFeedsTab, icon: ClipboardDocumentIcon },
+  { name: "Meds", component: HorseMedicationsTab, icon: ClipboardDocumentIcon },
+  { name: "Services", component: HorseServicesTab, icon: CurrencyPoundIcon },
 ];
 
 const client = useSupabaseClient();
@@ -198,7 +203,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
       </a>
     </nav>
 
-    <div ref="horseDetailsElement" class="overflow-y-auto">
+    <div ref="horseDetailsElement" class="overflow-y-auto pb-14 md:py-0">
       <article>
         <!-- Profile header -->
         <div>
@@ -307,20 +312,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
           </div>
         </div>
 
-        <!-- Tabs -->
-        <div class="sm:hidden px-4 mt-4">
-          <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
-          <select
-            v-model="selectedTab"
-            id="tabs"
-            name="tabs"
-            class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-          >
-            <option v-for="(tab, index) in tabs" :key="tab.name" :value="index">
-              {{ tab.name }}
-            </option>
-          </select>
-        </div>
+        <!-- Desktop Tabs -->
         <div class="mt-6 sm:mt-2 2xl:mt-5 hidden sm:block">
           <div class="border-b border-gray-200">
             <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -347,6 +339,23 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
         <component :is="tabs[selectedTab].component" />
       </article>
     </div>
+
+    <nav
+      class="bg-white w-full fixed bottom-0 left-0 z-40 flex justify-around items-center md:hidden border-t p-2"
+    >
+      <div
+        v-for="(tab, index) in tabs"
+        :key="tab.name"
+        @click="() => (selectedTab = index)"
+        :class="[
+          index == selectedTab ? 'bg-indigo-100 text-indigo-700' : '',
+          'flex flex-col items-center flex-1 rounded py-1',
+        ]"
+      >
+        <component :is="tab.icon" class="h-5 w-5 mb-1" />
+        <small class="text-xs">{{ tab.name }}</small>
+      </div>
+    </nav>
   </div>
 
   <!-- Modals -->
