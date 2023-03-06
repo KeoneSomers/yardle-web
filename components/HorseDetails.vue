@@ -183,27 +183,22 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
     class="relative md:block z-0 flex-1 focus:outline-none xl:order-last"
     :class="{ hidden: !viewingHorse }"
   >
-    <main v-if="horse" class="flex flex-col h-full">
+    <main v-if="horse" class="flex flex-col h-full overflow-y-auto">
       <!-- Breadcrumb -->
-      <div>
-        <nav
-          class="flex items-start px-4 py-3 sm:px-6 lg:px-8 md:hidden border-b"
-          aria-label="Breadcrumb"
+      <nav
+        class="fixed left-0 z-30 w-full bg-white flex items-start px-4 py-3 sm:px-6 lg:px-8 md:hidden border-b"
+        aria-label="Breadcrumb"
+      >
+        <a
+          @click="() => (viewingHorse = false)"
+          class="inline-flex items-center space-x-1 text-sm font-medium text-blue-500"
         >
-          <a
-            @click="() => (viewingHorse = false)"
-            class="inline-flex items-center space-x-3 text-sm font-medium text-gray-900"
-          >
-            <ChevronLeftIcon
-              class="-ml-2 h-5 w-5 text-gray-400"
-              aria-hidden="true"
-            />
-            <span>Horses</span>
-          </a>
-        </nav>
-      </div>
+          <ChevronLeftIcon class="-ml-2 h-7 w-7" aria-hidden="true" />
+          <span>Horses</span>
+        </a>
+      </nav>
 
-      <div ref="horseDetailsElement" class="overflow-y-auto">
+      <div ref="horseDetailsElement">
         <article>
           <!-- Profile header -->
           <div>
