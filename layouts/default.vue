@@ -60,7 +60,7 @@ onMounted(async () => {
     </div>
 
     <!-- page content -->
-    <div class="flex flex-col flex-1 pt-16 md:pt-0">
+    <div class="flex flex-col flex-1 pt-16 lg:pt-0">
       <MobileNavbar />
       <div class="flex-1">
         <slot />

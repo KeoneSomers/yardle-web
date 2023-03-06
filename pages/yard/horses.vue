@@ -96,7 +96,7 @@ const selectHorse = (horseId) => {
     <div
       v-if="horses.length > 0"
       :class="{ hidden: viewingHorse }"
-      class="w-full md:block md:w-96 flex-shrink-0 border-r border-gray-200 md:overflow-y-auto"
+      class="w-full md:block md:w-96 flex-shrink-0 border-r border-gray-200 md:h-screen md:overflow-y-auto"
     >
       <div class="px-4 pt-6 pb-4">
         <h2 class="text-lg font-medium text-gray-900">Horses</h2>
@@ -152,7 +152,7 @@ const selectHorse = (horseId) => {
           class="relative"
         >
           <div
-            class="sticky top-14 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500"
+            class="sticky top-14 md:top-0 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500"
           >
             <h3>{{ letter }}</h3>
           </div>

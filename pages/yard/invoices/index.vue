@@ -20,7 +20,10 @@ invoices.value = invoicesData;
 </script>
 
 <template>
-  <div v-if="invoices.length > 0" class="overflow-auto pb-20 px-4 md:px-0">
+  <div
+    v-if="invoices.length > 0"
+    class="md:overflow-y-auto md:h-screen pb-20 px-4 md:px-0"
+  >
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="py-5">
         <p class="text-4xl font-bold mt-20">Manage Invoices</p>
@@ -57,7 +60,7 @@ invoices.value = invoicesData;
     </div>
   </div>
   <!-- Empty State -->
-  <div v-else class="flex w-full flex-1 justify-center items-center">
+  <div v-else class="flex h-full w-full flex-1 justify-center items-center">
     <div class="text-center">
       <svg
         class="mx-auto h-12 w-12 text-gray-400"

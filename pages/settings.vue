@@ -9,7 +9,7 @@ const deleteUserAccountModalOpen = ref(false);
 </script>
 
 <template>
-  <div>
+  <div class="md:h-screen md:overflow-y-auto">
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="flex flex-col space-y-10">
         <div class="pt-5">

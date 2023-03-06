@@ -96,7 +96,7 @@ const handleLeaveYard = async (yardId) => {
 </script>
 
 <template>
-  <div v-if="yards && yards.length > 0" class="overflow-auto">
+  <div v-if="yards && yards.length > 0" class="md:h-screen md:overflow-y-auto">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       <div class="flex items-center justify-between sm:my-10 md:my-14">
         <div class="min-w-0 flex-1">

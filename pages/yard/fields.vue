@@ -180,7 +180,9 @@ const handleFieldChange = async (e) => {
 </script>
 
 <template>
-  <div class="h-full flex flex-col overflow-y-auto">
+  <div
+    class="md:h-screen flex flex-col md:overflow-y-auto w-screen lg:w-[calc(100vw-16rem)]"
+  >
     <div class="flex md:items-center md:justify-between pt-6 px-4 md:px-8 pb-0">
       <div class="min-w-0 flex-1">
         <h2
@@ -200,41 +202,39 @@ const handleFieldChange = async (e) => {
         </button>
       </div> -->
     </div>
-    <div class="p-4 pb-2 md:p-8 md:pb-4 overflow-x-auto overflow-y-visible">
-      <div>
-        <div class="border-b border-gray-200">
-          <nav class="-mb-px flex space-x-8" aria-label="field_rotations">
-            <div class="py-2">
-              <div class="pr-2 border-r">
-                <div
-                  @click="createModalOpen2 = true"
-                  v-tooltip="'Add a field rotation'"
-                  class="flex items-center cursor-pointer text-gray-500 hover:text-gray-700 hover:bg-indigo-200 rounded-lg whitespace-nowrap p-2 font-medium text-sm"
-                >
-                  <PlusIcon class="h-5 w-5" />
-                </div>
+    <div class="p-4 pb-2 md:p-8 md:pb-4 w-full overflow-x-auto">
+      <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8" aria-label="field_rotations">
+          <div class="py-2">
+            <div class="pr-2 border-r">
+              <div
+                @click="createModalOpen2 = true"
+                v-tooltip="'Add a field rotation'"
+                class="flex items-center cursor-pointer text-gray-500 hover:text-gray-700 hover:bg-indigo-200 rounded-lg whitespace-nowrap p-2 font-medium text-sm"
+              >
+                <PlusIcon class="h-5 w-5" />
               </div>
             </div>
+          </div>
 
-            <div
-              v-for="rotation in field_rotations"
-              :key="rotation.name"
-              @click="selectedRotation = rotation"
-              :class="[
-                rotation === selectedRotation
-                  ? 'border-indigo-500 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex cursor-pointer',
-              ]"
-              :aria-current="rotation.is_current ? 'page' : undefined"
-            >
-              {{ rotation.name }}
-            </div>
-          </nav>
-        </div>
+          <div
+            v-for="rotation in field_rotations"
+            :key="rotation.name"
+            @click="selectedRotation = rotation"
+            :class="[
+              rotation === selectedRotation
+                ? 'border-indigo-500 text-indigo-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+              'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex cursor-pointer',
+            ]"
+            :aria-current="rotation.is_current ? 'page' : undefined"
+          >
+            {{ rotation.name }}
+          </div>
+        </nav>
       </div>
     </div>
-    <div class="flex justify-end pb-0 md:pb-2 md:px-8 px-4">
+    <div class="flex justify-end pb-0 md:pb-2 md:px-8 px-4 overflow-x-auto">
       <Menu as="div" class="relative inline-block text-left">
         <div>
           <MenuButton

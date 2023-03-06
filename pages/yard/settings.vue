@@ -114,7 +114,7 @@ await fetchServices();
 </script>
 
 <template>
-  <div class="overflow-auto pb-20 px-4 md:px-0">
+  <div class="md:overflow-y-auto md:h-screen pb-20 px-4 md:px-0">
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="py-5">
         <p class="text-4xl font-bold mt-20">Yard Settings</p>

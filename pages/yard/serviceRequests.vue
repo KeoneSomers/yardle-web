@@ -55,7 +55,7 @@ const updateRequest = async (requestId, status) => {
 </script>
 
 <template>
-  <div class="overflow-y-auto">
+  <div v-if="requests.length > 0" class="md:overflow-y-auto md:h-screen">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-20">
       <!-- We've used 3xl here, but feel free to try other max-widths based on your needs -->
       <div class="mx-auto max-w-3xl mt-20">
@@ -130,6 +130,29 @@ const updateRequest = async (requestId, status) => {
           </li>
         </ul>
       </div>
+    </div>
+  </div>
+  <div v-else class="flex h-full w-full flex-1 justify-center items-center">
+    <div class="text-center">
+      <svg
+        class="mx-auto h-12 w-12 text-gray-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          vector-effect="non-scaling-stroke"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+        />
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No Requests</h3>
+      <p class="mt-1 text-sm text-gray-500">
+        When your liveries make service requests, they will appear here.
+      </p>
     </div>
   </div>
 </template>
