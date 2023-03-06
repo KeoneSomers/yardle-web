@@ -6,7 +6,7 @@ const sidebarOpen = useState("sidebarOpen");
 
 <template>
   <div
-    class="lg:hidden flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-1.5 z-10"
+    class="lg:hidden fixed top-0 left-0 w-full z-40 flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-1.5 z-10"
   >
     <div>
       <Logo class="h-6 w-8" />
