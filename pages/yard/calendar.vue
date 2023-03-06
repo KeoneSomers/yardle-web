@@ -54,6 +54,7 @@ const getEvents = async () => {
       .from("calendar_events")
       .select("*, horses(id, name, avatar_url, avatar_background)")
       .order("all_day", { ascending: false })
+      .order("date_time", { ascending: true })
       .eq("yard_id", selectedYard.value);
 
     events.value = data;
