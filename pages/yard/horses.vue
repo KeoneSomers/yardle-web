@@ -96,7 +96,7 @@ const selectHorse = (horseId) => {
     <div
       v-if="horses.length > 0"
       :class="{ hidden: viewingHorse }"
-      class="w-full md:block md:w-96 flex-shrink-0 border-r border-gray-200 overflow-y-auto"
+      class="w-full md:block md:w-96 flex-shrink-0 border-r border-gray-200 md:overflow-y-auto"
     >
       <div class="px-4 pt-6 pb-4">
         <h2 class="text-lg font-medium text-gray-900">Horses</h2>
@@ -145,7 +145,7 @@ const selectHorse = (horseId) => {
         </div>
       </div>
       <!-- Directory list -->
-      <nav class="min-h-0 flex-1 overflow-y-auto" aria-label="Directory">
+      <nav class="min-h-0 flex-1" aria-label="Directory">
         <div
           v-for="letter in Object.keys(groupedHorses)"
           :key="letter"

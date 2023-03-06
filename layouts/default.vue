@@ -60,9 +60,11 @@ onMounted(async () => {
     </div>
 
     <!-- page content -->
-    <div class="flex flex-col flex-1 pt-16 lg:pt-0">
+    <div class="flex flex-col flex-1">
       <MobileNavbar />
-      <slot />
+      <div class="flex-1 overflow-y-auto">
+        <slot />
+      </div>
     </div>
   </div>
 
