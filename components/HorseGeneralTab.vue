@@ -194,7 +194,7 @@ const handleUnassignOwner = async () => {
   <div class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
     <div
       v-if="horse && !horse.owner"
-      class="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 mb-4"
+      class="grid grid-cols-1 gap-4 2-xl:grid-cols-2 mb-4"
     >
       <div
         v-if="profile.active_role < 3"

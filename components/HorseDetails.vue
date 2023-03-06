@@ -4,6 +4,8 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/vue/20/solid";
+import { EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { useModal } from "vue-final-modal";
 import ModalConfirm from "@/components/modals/ModalConfirm.vue";
 import EditHorseModal from "@/components/modals/EditHorseModal.vue";
@@ -209,7 +211,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
               <div class="h-32 w-full object-cover lg:h-48 banner-svg"></div>
             </div>
             <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-              <div class="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
+              <div class="-mt-12 sm:-mt-16 sm:items-end">
                 <div class="flex">
                   <SupabaseImage
                     v-if="horse.avatar_url"
@@ -230,52 +232,83 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
                     {{ horse.name[0].toUpperCase() }}
                   </div>
                 </div>
-                <div
-                  class="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1"
-                >
-                  <div class="mt-6 min-w-0 flex-1 sm:hidden 2xl:block">
+                <div class="mt-6 flex justify-between items-center">
+                  <div>
                     <h1 class="truncate text-2xl font-bold text-gray-900">
                       {{ horse.name }}
                     </h1>
                   </div>
-                  <div
+
+                  <Menu
+                    as="div"
+                    class="relative"
                     v-if="
                       profile &&
                       ((horse.owner && profile.id === horse.owner.id) ||
                         profile.active_role < 3)
                     "
-                    class="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4"
                   >
-                    <button
-                      @click="() => (editModalOpen = true)"
-                      type="button"
-                      class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+                    <div>
+                      <MenuButton
+                        class="-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600"
+                      >
+                        <span class="sr-only">Open options</span>
+                        <EllipsisVerticalIcon
+                          class="h-6 w-6"
+                          aria-hidden="true"
+                        />
+                      </MenuButton>
+                    </div>
+
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
                     >
-                      <PencilSquareIcon
-                        class="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span>Edit</span>
-                    </button>
-                    <button
-                      @click="() => openDeleteHorseModal()"
-                      type="button"
-                      class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
-                    >
-                      <TrashIcon
-                        class="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span>Delete</span>
-                    </button>
-                  </div>
+                      <MenuItems
+                        class="absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      >
+                        <div class="py-1">
+                          <MenuItem v-slot="{ active }">
+                            <button
+                              @click="() => (editModalOpen = true)"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'block px-4 py-2 text-sm w-full text-left',
+                              ]"
+                            >
+                              Edit
+                            </button>
+                          </MenuItem>
+                          <MenuItem v-slot="{ active }">
+                            <button
+                              @click="() => openDeleteHorseModal()"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'block px-4 py-2 text-sm w-full text-left',
+                              ]"
+                            >
+                              Delete
+                            </button>
+                          </MenuItem>
+                        </div>
+                      </MenuItems>
+                    </transition>
+                  </Menu>
                 </div>
               </div>
-              <div class="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
+              <!-- <div class="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
                 <h1 class="truncate text-2xl font-bold text-gray-900">
                   {{ horse.name }}
                 </h1>
-              </div>
+              </div> -->
             </div>
           </div>
 
