@@ -39,13 +39,15 @@ const handleResetPassword = async () => {
   });
 
   if (!error) {
-    // successMessage.value = "Success! Please check your email.";
     loading.value = false;
     alerts.value.unshift({
       title: "Success!",
-      message: "Please check your email.",
+      message:
+        "Please check your email. You should receive an email within a few minutes.",
       type: "success",
     });
+
+    emits("close");
   } else {
     // errorMessage.value = error.message;
     loading.value = false;
@@ -131,24 +133,9 @@ const handleResetPassword = async () => {
                         placeholder="you@example.com"
                       />
                     </div>
-                    <div
-                      v-if="errorMessage"
-                      class="mt-2 text-red-500 bg-red-50 rounded p-2"
-                    >
-                      {{ errorMessage }}
-                    </div>
-                    <div
-                      v-if="successMessage"
-                      class="mt-2 text-green-500 bg-green-50 rounded p-2"
-                    >
-                      {{ successMessage }}
-                    </div>
                   </div>
                 </div>
-                <div
-                  v-if="!successMessage"
-                  class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse"
-                >
+                <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                   <button
                     v-if="!loading"
                     type="submit"
