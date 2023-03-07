@@ -92,7 +92,7 @@ const ingredientTypes = [
           </button>
         </div>
       </div>
-      <div v-if="feeds.length > 0" class="grid md:grid-cols-2 mt-5 md:mt-16">
+      <div class="grid md:grid-cols-2 mt-5 md:mt-16">
         <div
           v-for="feed in feeds"
           :key="feed.id"
