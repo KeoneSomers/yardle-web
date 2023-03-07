@@ -94,9 +94,9 @@ const selectHorse = (horseId) => {
   <div class="flex flex-1 h-full">
     <!-- TODO: HorseDirectory.vue Component -->
     <div
+      class="flex flex-col md:h-screen w-full md:w-96 flex-shrink-0 border-r border-gray-200"
       v-if="horses.length > 0"
       :class="{ hidden: viewingHorse }"
-      class="w-full md:block md:w-96 flex-shrink-0 border-r border-gray-200 md:h-screen md:overflow-y-auto"
     >
       <div class="px-4 pt-6 pb-4">
         <h2 class="text-lg font-medium text-gray-900">Horses</h2>
@@ -144,81 +144,83 @@ const selectHorse = (horseId) => {
           </button>
         </div>
       </div>
-      <!-- Directory list -->
-      <nav class="min-h-0 flex-1" aria-label="Directory">
-        <div
-          v-for="letter in Object.keys(groupedHorses)"
-          :key="letter"
-          class="relative"
-        >
+      <div class="flex-1 md:overflow-y-auto">
+        <!-- Directory list -->
+        <nav class="min-h-0 flex-1" aria-label="Directory">
           <div
-            class="sticky top-14 lg:top-0 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500"
+            v-for="letter in Object.keys(groupedHorses)"
+            :key="letter"
+            class="relative"
           >
-            <h3>{{ letter }}</h3>
-          </div>
-          <ul role="list" class="relative z-0 divide-y divide-gray-200">
-            <li
-              @click="() => selectHorse(horse.id)"
-              v-for="horse in groupedHorses[letter]"
-              :key="horse.id"
+            <div
+              class="sticky top-14 md:top-0 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500"
             >
-              <div
-                :class="
-                  horse.id == selectedHorseId
-                    ? 'bg-pink-100'
-                    : 'hover:bg-gray-50'
-                "
-                class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500"
+              <h3>{{ letter }}</h3>
+            </div>
+            <ul role="list" class="relative z-0 divide-y divide-gray-200">
+              <li
+                @click="() => selectHorse(horse.id)"
+                v-for="horse in groupedHorses[letter]"
+                :key="horse.id"
               >
-                <div class="flex-shrink-0">
-                  <SupabaseImage
-                    v-if="horse.avatar_url"
-                    class="h-10 w-10 rounded-full overflow-hidden"
-                    id="horse-avatars"
-                    v-model:path="horse.avatar_url"
-                  />
-                  <div
-                    v-else
-                    class="rounded-full h-10 w-10 text-white flex items-center justify-center"
-                    :class="
-                      horse.avatar_background
-                        ? horse.avatar_background
-                        : 'bg-pink-500'
-                    "
-                  >
-                    {{ horse.name[0].toUpperCase() }}
+                <div
+                  :class="
+                    horse.id == selectedHorseId
+                      ? 'bg-pink-100'
+                      : 'hover:bg-gray-50'
+                  "
+                  class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500"
+                >
+                  <div class="flex-shrink-0">
+                    <SupabaseImage
+                      v-if="horse.avatar_url"
+                      class="h-10 w-10 rounded-full overflow-hidden"
+                      id="horse-avatars"
+                      v-model:path="horse.avatar_url"
+                    />
+                    <div
+                      v-else
+                      class="rounded-full h-10 w-10 text-white flex items-center justify-center"
+                      :class="
+                        horse.avatar_background
+                          ? horse.avatar_background
+                          : 'bg-pink-500'
+                      "
+                    >
+                      {{ horse.name[0].toUpperCase() }}
+                    </div>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <a href="#" class="focus:outline-none">
+                      <!-- Extend touch target to entire panel -->
+                      <span class="absolute inset-0" aria-hidden="true" />
+                      <p class="text-sm font-medium text-gray-900">
+                        {{ horse.name }}
+                      </p>
+                      <p class="truncate text-sm text-gray-500">
+                        <span v-if="!horse.updated_at">
+                          {{
+                            `Created ${DateTime.fromISO(
+                              horse.created_at
+                            ).toRelativeCalendar()}`
+                          }}
+                        </span>
+                        <span v-else>
+                          {{
+                            `Updated ${DateTime.fromISO(
+                              horse.updated_at
+                            ).toRelativeCalendar()}`
+                          }}
+                        </span>
+                      </p>
+                    </a>
                   </div>
                 </div>
-                <div class="min-w-0 flex-1">
-                  <a href="#" class="focus:outline-none">
-                    <!-- Extend touch target to entire panel -->
-                    <span class="absolute inset-0" aria-hidden="true" />
-                    <p class="text-sm font-medium text-gray-900">
-                      {{ horse.name }}
-                    </p>
-                    <p class="truncate text-sm text-gray-500">
-                      <span v-if="!horse.updated_at">
-                        {{
-                          `Created ${DateTime.fromISO(
-                            horse.created_at
-                          ).toRelativeCalendar()}`
-                        }}
-                      </span>
-                      <span v-else>
-                        {{
-                          `Updated ${DateTime.fromISO(
-                            horse.updated_at
-                          ).toRelativeCalendar()}`
-                        }}
-                      </span>
-                    </p>
-                  </a>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </nav>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
     </div>
 
     <HorseDetails v-if="selectedHorseId > 0" />
