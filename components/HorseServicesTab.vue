@@ -239,7 +239,7 @@ const goToPreviousWeek = () => {
               </div>
             </div>
             <div v-else class="p-3">
-              <p class="italic text-gray-500 text-xs">No Services</p>
+              <p class="italic text-gray-500 text-xs">No Requests</p>
             </div>
 
             <!-- <ul class="text-gray-500 p-2 pt-0 mt-3">

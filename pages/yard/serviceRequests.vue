@@ -1,6 +1,7 @@
 <script setup>
 import { DateTime } from "luxon";
 import { CheckIcon, XMarkIcon } from "@heroicons/vue/20/solid";
+import RequestResponseModal from "@/components/modals/RequestResponseModal.vue";
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
@@ -9,7 +10,11 @@ definePageMeta({
 const client = useSupabaseClient();
 const alerts = useAlerts();
 const selectedYard = useState("selectedYard");
-const requests = ref([]);
+const requests = useState("requests", () => []);
+
+const modalOpen = ref(false);
+const selectedRequest = ref(null);
+const selectedStatus = ref(null);
 
 const { data: _requests, error } = await client
   .from("service_requests")
@@ -19,39 +24,6 @@ const { data: _requests, error } = await client
   .order("created_at", { ascending: false });
 
 requests.value = _requests;
-
-const updateRequest = async (requestId, status) => {
-  const { error } = await client
-    .from("service_requests")
-    .update({ status: status })
-    .eq("id", requestId);
-
-  if (!error) {
-    // update local state
-    const request = requests.value.find((r) => r.id === requestId);
-    request.status = status;
-
-    if (status === "accepted") {
-      alerts.value.unshift({
-        title: "Request Accepted!",
-        message: "The service request has been accepted.",
-        type: "success",
-      });
-    } else if (status === "declined") {
-      alerts.value.unshift({
-        title: "Request Declined!",
-        message: "The service request has been declined.",
-        type: "success",
-      });
-    }
-  } else {
-    alerts.value.unshift({
-      title: "Error!",
-      message: "There was an error updating the request.",
-      type: "error",
-    });
-  }
-};
 </script>
 
 <template>
@@ -64,13 +36,13 @@ const updateRequest = async (requestId, status) => {
           This is a list of all service requests that have been made to your
           yard.
         </p>
-        <ul role="list" class="space-y-3 mt-10">
+        <ul role="list" class="space-y-3 mt-10 divide-y">
           <li
             v-for="request in requests"
             :key="request.id"
-            class="overflow-hidden bg-white p-2 sm:pl-6 shadow sm:rounded-md"
+            class="overflow-hidden bg-white p-2 sm:rounded-md"
           >
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center pt-3">
               <div>
                 <span class="text-blue-700">{{
                   request.created_by.username
@@ -79,34 +51,27 @@ const updateRequest = async (requestId, status) => {
                 <span class="text-blue-700">{{ request.service_name }}</span>
                 for
                 <span class="text-blue-700"
-                  >{{ DateTime.fromISO(request.date).toFormat("LLL dd, yyyy") }}
-                  <!-- <span v-if="DateTime.fromISO(request.date) > DateTime.now()">
-                    ({{
-                      Math.ceil(
-                        DateTime.fromISO(request.date)
-                          .diff(DateTime.now(), "days")
-                          .toObject().days
-                      )
-                    }}
-                    day<span
-                      v-if="
-                        Math.ceil(
-                          DateTime.fromISO(request.date)
-                            .diff(DateTime.now(), 'days')
-                            .toObject().days
-                        ) !== 1
-                      "
-                      >s</span
-                    >
-                    from now)
-                  </span> -->
+                  >{{
+                    DateTime.fromISO(request.date).toLocaleString(
+                      {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      },
+                      { locale: "en-GB" }
+                    )
+                  }}
                 </span>
               </div>
               <div class="flex flex-col sm:flex-row">
                 <button
-                  @click="updateRequest(request.id, 'accepted')"
+                  @click="
+                    selectedRequest = request;
+                    selectedStatus = 'accepted';
+                    modalOpen = true;
+                  "
                   v-tooltip="'Accept Request'"
-                  class="shadow rounded sm:mr-2 mb-2 sm:mb-0 p-3 hover:bg-gray-50"
+                  class="border rounded-full sm:mr-2 mb-2 sm:mb-0 p-3 hover:bg-gray-50"
                   :class="{
                     'bg-green-500 hover:bg-green-600 text-white':
                       request.status === 'accepted',
@@ -115,9 +80,13 @@ const updateRequest = async (requestId, status) => {
                   <CheckIcon class="h-5 w-5" />
                 </button>
                 <button
-                  @click="updateRequest(request.id, 'declined')"
+                  @click="
+                    selectedRequest = request;
+                    selectedStatus = 'declined';
+                    modalOpen = true;
+                  "
                   v-tooltip="'Decline Request'"
-                  class="shadow rounded p-3 hover:bg-gray-50"
+                  class="border rounded-full p-3 hover:bg-gray-50"
                   :class="{
                     'bg-red-500 hover:bg-red-600 text-white':
                       request.status === 'declined',
@@ -155,4 +124,11 @@ const updateRequest = async (requestId, status) => {
       </p>
     </div>
   </div>
+
+  <RequestResponseModal
+    :is-open="modalOpen"
+    :request="selectedRequest"
+    :status="selectedStatus"
+    @close="modalOpen = false"
+  />
 </template>
