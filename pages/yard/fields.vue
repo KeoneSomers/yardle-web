@@ -234,7 +234,7 @@ const handleFieldChange = async (e) => {
         </nav>
       </div>
     </div>
-    <div class="flex justify-end pb-0 md:pb-2 md:px-8 px-4 overflow-x-auto">
+    <div class="flex justify-end pb-0 md:pb-2 md:px-8 px-4">
       <Menu as="div" class="relative inline-block text-left">
         <div>
           <MenuButton
