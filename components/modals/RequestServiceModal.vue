@@ -20,6 +20,7 @@ const serviceRequests = useState("service_requests");
 const horse = useState("horse");
 const liveryServices = ref([]);
 const yard = useState("yard");
+const profile = useState("profile");
 const alerts = useAlerts();
 
 const selectedService = ref(null);
@@ -28,7 +29,11 @@ const date = ref(null);
 watch(
   () => props.isOpen,
   (isOpen) => {
-    selectedService.value = null;
+    if ((isOpen = true)) {
+      selectedService.value = null;
+      date.value = null;
+      loading.value = false;
+    }
   }
 );
 
@@ -62,51 +67,92 @@ watch(date, async (newValue, oldValue) => {
   }
 });
 
+const yardOwner = ref(null);
+
 const handleSubmit = async () => {
-  if (daysNotice.value === null) {
-    return;
-  }
-  const { data, error } = await client
-    .from("service_requests")
-    .insert({
-      created_by: user.value.id,
-      horse_id: horse.value.id,
-      date: date.value,
-      service_id: selectedService.value.id,
-      service_name: selectedService.value.name,
-      service_price:
-        yard.value.enabled_billing_late_booking_fee === true &&
-        daysNotice.value <= 1
-          ? selectedService.value.price * 2 // TODO - the multiplier should not be hard coded - should be an option in the yard settings
-          : selectedService.value.price,
-      booked_late:
-        yard.value.enabled_billing_late_booking_fee === true &&
-        daysNotice.value <= 1,
-    })
-    .select()
-    .single();
+  try {
+    if (daysNotice.value === null) {
+      return;
+    }
 
-  if (error) {
+    if (loading.value === true) {
+      return;
+    }
+
+    loading.value = true;
+
+    const { data, error } = await client
+      .from("service_requests")
+      .insert({
+        created_by: user.value.id,
+        horse_id: horse.value.id,
+        date: date.value,
+        service_id: selectedService.value.id,
+        service_name: selectedService.value.name,
+        service_price:
+          yard.value.enabled_billing_late_booking_fee === true &&
+          daysNotice.value <= 1
+            ? selectedService.value.price * 2 // TODO - the multiplier should not be hard coded - should be an option in the yard settings
+            : selectedService.value.price,
+        booked_late:
+          yard.value.enabled_billing_late_booking_fee === true &&
+          daysNotice.value <= 1,
+      })
+      .select()
+      .single();
+
+    // update horseServices locally
+    serviceRequests.value.push({
+      ...data,
+      livery_services: {
+        name: selectedService.value.name,
+        price: selectedService.value.price,
+      },
+    });
+
+    // get yard owner (If it hasn't been fetched already)
+    if (yardOwner.value === null) {
+      const { data: _yardOwner, error: error2 } = await client
+        .from("profiles_yards")
+        .select("*, profile_id(email, username)")
+        .eq("yard_id", yard.value.id)
+        .eq("role", 1)
+        .single();
+
+      yardOwner.value = _yardOwner;
+    }
+
+    // send email to yard owner
+    await $fetch("/api/sendEmail", {
+      method: "post",
+      body: {
+        recipients: [
+          {
+            email: yardOwner.value.profile_id.email,
+            name: yardOwner.value.profile_id.username,
+          },
+        ],
+        subject: `${yard.value.name}: You've got a Livery Service Request!`,
+        text: `${profile.value.username} has requested a service for ${
+          horse.value.name
+        } at ${yard.value.name} for ${DateTime.fromISO(date.value).toFormat(
+          "LLL dd, yyyy"
+        )}. Please log in to your account to accept or reject the request.`,
+        html: ``,
+      },
+    });
+
+    alerts.value.unshift({
+      title: "Request Submitted!",
+      message: "The yard owner will be notified.",
+      type: "success",
+    });
+
+    emits("close");
+  } catch (error) {
     console.log(error);
-    return;
+    loading.value = false;
   }
-
-  // update horseServices locally
-  serviceRequests.value.push({
-    ...data,
-    livery_services: {
-      name: selectedService.value.name,
-      price: selectedService.value.price,
-    },
-  });
-
-  alerts.value.unshift({
-    title: "Request Submitted!",
-    message: "Your service request has been submitted.",
-    type: "success",
-  });
-
-  emits("close");
 };
 </script>
 

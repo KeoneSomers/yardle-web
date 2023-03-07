@@ -1,18 +1,14 @@
-import { serverSupabaseServiceRole } from "#supabase/server";
+// import { serverSupabaseServiceRole } from "#supabase/server";
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 // Endpoint for sending emails with MailerSend.com
 
 export default defineEventHandler(async (event) => {
-  const supabase = serverSupabaseServiceRole(event);
+  // const supabase = serverSupabaseServiceRole(event);
   const { mailerSendAPIKey } = useRuntimeConfig();
-
-  console.log(mailerSendAPIKey);
 
   // props
   const { recipients, subject, html, text } = await readBody(event);
-
-  console.log(recipients);
 
   // logic
   const mailerSend = new MailerSend({
@@ -26,8 +22,6 @@ export default defineEventHandler(async (event) => {
   recipients.forEach((recipient) => {
     _recipients.push(new Recipient(recipient.email, recipient.name));
   });
-
-  console.log(_recipients);
 
   const emailParams = new EmailParams()
     .setFrom(sentFrom)
