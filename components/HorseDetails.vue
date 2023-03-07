@@ -211,7 +211,9 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
             <div class="h-32 w-full object-cover lg:h-48 banner-svg"></div>
           </div>
           <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-            <div class="-mt-12 sm:-mt-16 sm:items-end">
+            <div
+              class="-mt-12 sm:-mt-16 sm:items-end border-b md:border-none pb-5 md:pb-0"
+            >
               <div class="flex">
                 <SupabaseImage
                   v-if="horse.avatar_url"
@@ -313,7 +315,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
         </div>
 
         <!-- Desktop Tabs -->
-        <div class="mt-6 sm:mt-2 2xl:mt-5 hidden sm:block">
+        <div class="mt-6 sm:mt-2 2xl:mt-5 hidden md:block">
           <div class="border-b border-gray-200">
             <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
               <nav class="-mb-px flex space-x-8" aria-label="Tabs">

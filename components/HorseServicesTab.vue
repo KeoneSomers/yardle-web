@@ -119,7 +119,7 @@ const goToPreviousWeek = () => {
     <div v-if="viewingHistory === false && viewingInvoces === false">
       <div class="sm:flex sm:items-center mb-5 border-b pb-5">
         <div class="sm:flex-auto">
-          <h1 class="text-xl font-semibold text-gray-900">Your Services</h1>
+          <h1 class="text-xl font-semibold text-gray-900">Services</h1>
           <p class="mt-2 text-sm text-gray-700">
             A list of all the services you have requested for your horse. Only
             visible to the Yard owner, Admins and Horse Owner.

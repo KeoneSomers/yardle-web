@@ -123,13 +123,11 @@ const handleEditFeed = (feedId) => {
 
 <template>
   <div
+    v-if="feeds.length > 0"
     class="px-0 sm:px-6 lg:px-8 md:h-screen flex flex-col md:overflow-y-auto"
   >
     <!-- Page Heading -->
-    <div
-      v-show="feeds.length > 0"
-      class="sm:flex sm:items-center md:my-16 p-4 md:p-0"
-    >
+    <div class="sm:flex sm:items-center md:my-16 p-4 md:p-0">
       <div class="sm:flex-auto">
         <h1 class="text-xl font-semibold text-gray-900">All Feeds</h1>
         <p class="mt-2 text-sm text-gray-700">
@@ -151,10 +149,7 @@ const handleEditFeed = (feedId) => {
     </div>
 
     <!-- Desktop Table -->
-    <div
-      v-show="feeds.length > 0"
-      class="hidden sm:block relative flex-1 overflow-y-auto"
-    >
+    <div class="hidden sm:block relative flex-1 overflow-y-auto">
       <div
         class="mt-5 relative overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
       >
@@ -335,12 +330,7 @@ const handleEditFeed = (feedId) => {
       @deleteFeed="(id) => handleDeleteFeed(id)"
     />
   </div>
-
-  <!-- Empty State -->
-  <div
-    v-show="feeds.length == 0"
-    class="flex h-full w-full flex-1 justify-center items-center"
-  >
+  <div v-else class="flex h-full flex-1 justify-center items-center">
     <div class="text-center">
       <svg
         class="mx-auto h-12 w-12 text-gray-400"
