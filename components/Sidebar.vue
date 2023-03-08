@@ -188,7 +188,9 @@ const handleSignout = async () => {
               >{{ item.hint }}</span
             >
           </NuxtLink>
-          <div v-if="profile && profile.active_role == 1">
+          <div
+            v-if="profile && profile.active_role == 1 && selectedYard != null"
+          >
             <p class="text-xs font-semibold pl-2 pt-4 pb-2 text-gray-600">
               Admin
             </p>

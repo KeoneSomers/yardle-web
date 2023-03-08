@@ -17,8 +17,11 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const serviceRequests = useState("service_requests");
-const serviceRequestsLog = useState("service_requests_log");
+const yard = useState("yard");
+const profile = useState("profile");
 const alerts = useAlerts();
+const yardOwner = ref(null);
+const horse = useState("horse");
 
 const errors = ref([]);
 
@@ -28,54 +31,82 @@ watch(
   async (isOpen) => {
     if (isOpen) {
       errors.value = [];
+      loading.value = false;
     }
   }
 );
 
 const handleDelete = async () => {
-  // Delete the field
-  // const { error } = await client
-  //   .from("service_requests")
-  //   .delete()
-  //   .eq("id", props.service.id);
+  try {
+    if (loading.value === true) {
+      return;
+    }
 
-  const { data, error } = await client
-    .from("service_requests")
-    .update({
-      canceled_at: DateTime.now(),
-      canceled_by: user.value.id,
-    })
-    .eq("id", props.service.id);
+    loading.value = true;
 
-  if (error) {
-    console.log(error);
-    return;
-  }
+    const { data, error } = await client
+      .from("service_requests")
+      .update({
+        canceled_at: DateTime.now(),
+        canceled_by: user.value.id,
+      })
+      .eq("id", props.service.id);
 
-  // now remove the deleted feed from the webpage
-  const index = serviceRequests.value
-    .map((e) => e.id)
-    .indexOf(props.service.id);
-  serviceRequests.value.splice(index, 1);
-
-  // cancel the item in the log
-
-  if (serviceRequestsLog.value.length > 0) {
-    const index2 = serviceRequestsLog.value
+    // remove the item from the list
+    const index = serviceRequests.value
       .map((e) => e.id)
       .indexOf(props.service.id);
-    serviceRequestsLog.value[index2].canceled_at = new Date();
-    serviceRequestsLog.value[index2].canceled_by = user.value.id;
+    serviceRequests.value.splice(index, 1);
+
+    // get yard owner (If it hasn't been fetched already)
+    if (yardOwner.value === null) {
+      const { data: _yardOwner, error: error2 } = await client
+        .from("profiles_yards")
+        .select("*, profile_id(email, username)")
+        .eq("yard_id", yard.value.id)
+        .eq("role", 1)
+        .single();
+
+      yardOwner.value = _yardOwner;
+    }
+
+    // send email to yard owner
+    await $fetch("/api/sendEmail", {
+      method: "post",
+      body: {
+        recipients: [
+          {
+            email: yardOwner.value.profile_id.email,
+            name: yardOwner.value.profile_id.username,
+          },
+        ],
+        subject: `${yard.value.name}: A service request has been canceled`,
+        text: `${profile.value.username} has canceled their service request "${
+          props.service.service_name
+        }", for ${horse.value.name} at ${
+          yard.value.name
+        } for ${DateTime.fromISO(props.service.date).toFormat("LLL dd, yyyy")}`,
+        html: ``,
+      },
+    });
+
+    alerts.value.unshift({
+      title: "Request Canceled!",
+      message: "The yard owner will be notified.",
+      type: "success",
+    });
+
+    // close the modal
+    emits("close");
+  } catch (error) {
+    console.log(error);
+    loading.value = false;
+    alerts.value.unshift({
+      title: "Error!",
+      message: "There was an error cancelling this request.",
+      type: "error",
+    });
   }
-
-  alerts.value.unshift({
-    title: "Request Canceled!",
-    message: "Your service request has been canceled.",
-    type: "success",
-  });
-
-  // close the modal
-  emits("close");
 };
 </script>
 
