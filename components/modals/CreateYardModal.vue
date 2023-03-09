@@ -18,6 +18,7 @@ const yards = useState("yards");
 const yardName = ref("");
 const error = ref("");
 const alerts = useAlerts();
+const regionId = ref(0);
 
 watch(
   () => props.isOpen,
@@ -30,16 +31,27 @@ watch(
   }
 );
 
+const { data: regions, error: regionsError } = await client
+  .from("regions")
+  .select()
+  .order("name", { ascending: true });
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 const createYard = async () => {
+  if (regionId === 0) {
+    error.value = "Please select a region";
+    return;
+  }
+
   const { data: newYard, error: createError } = await client
     .from("yards")
     .insert({
       created_by: user.value.id,
       name: capitalizeFirstLetter(yardName.value),
+      region_id: regionId.value,
       invite_code:
         Math.random().toString(36).substring(2, 15) +
         Math.random().toString(36).substring(2, 15),
@@ -182,10 +194,10 @@ const handleSubmit = async () => {
                 Create a yard
               </DialogTitle>
               <form @submit.prevent="handleSubmit" class="mt-4">
-                <label class="block text-sm font-medium text-gray-700"
+                <label class="block text-sm font-medium leading-6 text-gray-900"
                   >Name</label
                 >
-                <div class="mt-1">
+                <div class="mt-2">
                   <input
                     type="text"
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -193,15 +205,27 @@ const handleSubmit = async () => {
                     required
                   />
                 </div>
-
-                <div
-                  v-if="error"
-                  class="p-2 my-2 bg-red-100 text-red-500 rounded-lg"
-                >
-                  {{ error }}
+                <div class="mt-5">
+                  <label
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >Location / Region</label
+                  >
+                  <select
+                    v-model="regionId"
+                    required
+                    class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  >
+                    <option
+                      v-for="region in regions"
+                      :key="region.id"
+                      :value="region.id"
+                    >
+                      {{ region.name }}
+                    </option>
+                  </select>
                 </div>
 
-                <div class="mt-4 flex justify-end space-x-2">
+                <div class="mt-4 pt-4 flex justify-end space-x-2">
                   <button
                     v-if="!loading"
                     type="submit"

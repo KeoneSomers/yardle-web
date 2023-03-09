@@ -10,6 +10,7 @@ const previousBillingDate = ref(null);
 const days = useState("weekdays", () => []);
 const client = useSupabaseClient();
 const horse = useState("horse");
+const yard = useState("yard");
 
 const serviceRequestsLog = useState("service_requests");
 
@@ -453,7 +454,7 @@ watchEffect(async () => {
         <dd
           class="mt-1 text-3xl font-semibold tracking-tight text-gray-700 font-mono"
         >
-          £{{ spendThisWeek.toFixed(2) }}
+          {{ yard.region.currency }}{{ spendThisWeek.toFixed(2) }}
         </dd>
       </div>
 
@@ -480,7 +481,7 @@ watchEffect(async () => {
         <dd
           class="mt-1 text-3xl font-semibold tracking-tight text-gray-700 font-mono"
         >
-          £{{ nextBill.toFixed(2) }}
+          {{ yard.region.currency }}{{ nextBill.toFixed(2) }}
         </dd>
       </div>
     </dl>

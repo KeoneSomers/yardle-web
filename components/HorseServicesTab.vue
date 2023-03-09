@@ -12,6 +12,7 @@ import BillingStats from "@/components/BillingStats.vue";
 
 const viewingHistory = ref(false);
 const viewingInvoces = ref(false);
+const yard = useState("yard");
 
 const createModalOpen = ref(false);
 const cancelModalOpen = ref(false);
@@ -226,7 +227,7 @@ const goToPreviousWeek = () => {
                     v-tooltip="'Late Booking'"
                     class="h-5 w-5 text-orange-400 mr-2"
                   />
-                  £{{ event.service_price.toFixed(2) }}
+                  {{ yard.region.currency }}{{ event.service_price.toFixed(2) }}
                   <TrashIcon
                     @click="
                       selectedService = event;
@@ -241,13 +242,6 @@ const goToPreviousWeek = () => {
             <div v-else class="p-3">
               <p class="italic text-gray-500 text-xs">No Requests</p>
             </div>
-
-            <!-- <ul class="text-gray-500 p-2 pt-0 mt-3">
-            <li>Turnout - £2</li>
-            <li>Turn in - £2</li>
-            <li>Rug Change - £1</li>
-            <li>Full Livery - £10</li>
-          </ul> -->
           </div>
           <div class="border-t"></div>
         </div>

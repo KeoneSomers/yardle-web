@@ -211,7 +211,8 @@ const handleSubmit = async () => {
                       :key="item.id"
                       :value="item"
                     >
-                      {{ item.name }} - £{{ item.price.toFixed(2) }}
+                      {{ item.name }} - {{ yard.region.currency
+                      }}{{ item.price.toFixed(2) }}
                     </option>
                   </select>
                 </div>

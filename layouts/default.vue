@@ -25,7 +25,7 @@ const getSelectedYardData = async () => {
     await useAsyncData("yard", async () => {
       const { data, error } = await supabaseClient
         .from("yards")
-        .select()
+        .select("*, region:region_id(*)")
         .eq("id", selectedYard.value)
         .single();
 

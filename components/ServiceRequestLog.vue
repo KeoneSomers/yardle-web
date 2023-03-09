@@ -58,7 +58,9 @@ for (let index = 0; index < 6; index++) {
               lastSixBillingDates[index].toFormat("EEEE, MMMM d, yyyy")
             }}
           </div>
-          <div>£{{ lastSixBillTotals[index].toFixed(2) }}</div>
+          <div>
+            {{ yard.region.currency }}{{ lastSixBillTotals[index].toFixed(2) }}
+          </div>
         </div>
         <div
           v-if="serviceRequestsLog.length > 0"
@@ -127,7 +129,8 @@ for (let index = 0; index < 6; index++) {
                 <div class="p-2">
                   <dl class="font-normal">
                     <dd class="mt-1 truncate text-gray-700">
-                      Price: £{{ request.service_price.toFixed(2) }}
+                      Price: {{ yard.region.currency
+                      }}{{ request.service_price.toFixed(2) }}
                     </dd>
                     <dd class="mt-1 truncate text-gray-700">
                       Due:

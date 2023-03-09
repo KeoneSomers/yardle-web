@@ -15,6 +15,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const services = useState("services");
+const yard = useState("yard");
 
 const name = ref("");
 const description = ref("");
@@ -139,7 +140,7 @@ const handleSubmit = async () => {
 
                 <div>
                   <label class="block text-sm font-medium text-gray-700"
-                    >Price (£)</label
+                    >Price ({{ yard.region.currency }})</label
                   >
                   <div class="mt-1">
                     <input

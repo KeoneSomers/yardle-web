@@ -269,7 +269,9 @@ const saveChanges = async () => {
               <div
                 class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
               >
-                <span class="text-gray-500 sm:text-sm">£</span>
+                <span class="text-gray-500 sm:text-sm">{{
+                  yard.region.currency
+                }}</span>
               </div>
               <input
                 type="number"
@@ -478,9 +480,13 @@ const saveChanges = async () => {
                         item.booked_late
                       "
                       class="line-through mr-3 text-gray-400"
-                      >£{{ item.service_price.toFixed(2) / 2 }}</span
+                      >{{ yard.region.currency
+                      }}{{ item.service_price.toFixed(2) / 2 }}</span
                     >
-                    <span>£{{ item.service_price.toFixed(2) }}</span>
+                    <span
+                      >{{ yard.region.currency
+                      }}{{ item.service_price.toFixed(2) }}</span
+                    >
                   </td>
                   <td
                     id="invoice-web-only"
@@ -516,7 +522,7 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-6 pt-6 text-right text-sm text-gray-500 sm:pr-0"
                   >
-                    £{{ baseRate.toFixed(2) }}
+                    {{ yard.region.currency }}{{ baseRate.toFixed(2) }}
                   </td>
                 </tr>
                 <tr>
@@ -536,7 +542,7 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
                   >
-                    £{{ subtotal.toFixed(2) }}
+                    {{ yard.region.currency }}{{ subtotal.toFixed(2) }}
                   </td>
                 </tr>
                 <tr>
@@ -556,7 +562,8 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
                   >
-                    £{{ (subtotal + baseRate).toFixed(2) }}
+                    {{ yard.region.currency
+                    }}{{ (subtotal + baseRate).toFixed(2) }}
                   </td>
                 </tr>
                 <tr>
@@ -576,7 +583,8 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
                   >
-                    {{ discount }}% - £{{
+                    {{ discount }}% - {{ yard.region.currency
+                    }}{{
                       (((subtotal + baseRate) * discount) / 100).toFixed(2)
                     }}
                   </td>
@@ -598,7 +606,8 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
                   >
-                    £{{
+                    {{ yard.region.currency
+                    }}{{
                       (
                         subtotal +
                         baseRate -

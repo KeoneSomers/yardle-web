@@ -118,7 +118,10 @@ const {
               </td>
               <td class="pb-[15px] px-[15px]">
                 <div class="float-right">
-                  <span>£{{ item.service_price.toFixed(2) }}</span>
+                  <span
+                    >{{ yard.region.currency
+                    }}{{ item.service_price.toFixed(2) }}</span
+                  >
                 </div>
               </td>
             </tr>
@@ -129,20 +132,25 @@ const {
             <tr class="border divide-x">
               <td class="pb-[15px] px-[15px]">Base Rate</td>
               <td class="pb-[15px] px-[15px]">
-                <span class="float-right">£{{ baseRate.toFixed(2) }}</span>
+                <span class="float-right"
+                  >{{ yard.region.currency }}{{ baseRate.toFixed(2) }}</span
+                >
               </td>
             </tr>
             <tr class="border divide-x">
               <td class="pb-[15px] px-[15px]">Services</td>
               <td class="pb-[15px] px-[15px]">
-                <span class="float-right">£{{ subtotal.toFixed(2) }}</span>
+                <span class="float-right"
+                  >{{ yard.region.currency }}{{ subtotal.toFixed(2) }}</span
+                >
               </td>
             </tr>
             <tr class="border divide-x">
               <td class="pb-[15px] px-[15px]">Subtotal</td>
               <td class="pb-[15px] px-[15px]">
                 <span class="float-right"
-                  >£{{ (subtotal + baseRate).toFixed(2) }}</span
+                  >{{ yard.region.currency
+                  }}{{ (subtotal + baseRate).toFixed(2) }}</span
                 >
               </td>
             </tr>
@@ -150,7 +158,8 @@ const {
               <td class="pb-[15px] px-[15px]">Discount</td>
               <td class="pb-[15px] px-[15px]">
                 <span class="float-right"
-                  >{{ discount }}% - £{{
+                  >{{ discount }}% - {{ yard.region.currency
+                  }}{{
                     (((subtotal + baseRate) * discount) / 100).toFixed(2)
                   }}</span
                 >
@@ -160,7 +169,8 @@ const {
               <td class="pb-[15px] px-[15px]">Total</td>
               <td class="pb-[15px] px-[15px]">
                 <span class="float-right"
-                  >£{{ (subtotal + baseRate - discount).toFixed(2) }}</span
+                  >{{ yard.region.currency
+                  }}{{ (subtotal + baseRate - discount).toFixed(2) }}</span
                 >
               </td>
             </tr>
