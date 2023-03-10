@@ -40,9 +40,12 @@ function capitalizeFirstLetter(string) {
 
 const handleSubmit = async () => {
   try {
+    // only do this if the form is not already loading
     if (loading.value === false) {
+      // start the loading animation
       loading.value = true;
-      // step 1: create the horse in the database
+
+      // create the horse in the database
       const { data: newHorse, error: createError } = await client
         .from("horses")
         .insert({
@@ -55,22 +58,33 @@ const handleSubmit = async () => {
         .select()
         .single();
 
-      // step 2: update local state
+      // catch any errors
       if (createError) {
         throw new Error("Error adding new horse");
       }
 
-      horses.value.push(newHorse);
+      // add the new horse to the local horses list and sort the list alphabetically
+      horses.value = [...horses.value, newHorse].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+
+      // reset modal values
       name.value = "";
+
+      // select the new horse automatically
       selectedHorseId.value = newHorse.id;
 
+      // tell the user the horse was created successfully
       alerts.value.unshift({
         title: "Horse Created!",
         message: "You have added a horse to the yard.",
         type: "success",
       });
 
+      // end the loading animation
       loading.value = false;
+
+      // close the modal
       emits("close");
     }
   } catch (err) {
