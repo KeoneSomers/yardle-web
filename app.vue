@@ -8,22 +8,19 @@ import Alerts from "@/components/Alerts.vue";
 useRouteManager();
 
 const feedbackModalOpen = ref(false);
-
 const user = useSupabaseUser();
 const client = useSupabaseClient();
-
 let realtimeChannel: RealtimeChannel;
-
 const selectedYard = useState("selectedYard", () => undefined);
-
 const profile = useState<any>("profile");
 
-// TODO - Subscribe when user logs in and not just on mounted
-
-// Fetch SeletcedYard and get the refresh method provided by useAsyncData
+// Function for fetching the users "selected_yard" and their "active_role"
+// from the "profiles" table and capture the refresh method provided by "useAsyncData".
 const { refresh: refreshSeletcedYard } = await useAsyncData(
   "seletcedYard",
   async () => {
+    console.log("Refreshing 'seletced yard' and 'active role'");
+
     if (user.value) {
       const { data } = await client
         .from("profiles")
@@ -32,7 +29,7 @@ const { refresh: refreshSeletcedYard } = await useAsyncData(
         .single();
 
       if (data) {
-        selectedYard.value = data.selected_yard;
+        selectedYard.value = data.selected_yard; // why don't i just use the profile object state?
 
         if (profile.value) {
           profile.value.active_role = data.active_role;
@@ -42,27 +39,10 @@ const { refresh: refreshSeletcedYard } = await useAsyncData(
   }
 );
 
-// Once page is mounted, listen to changes on the `profiles` table and refresh SeletcedYard when receiving event
-onMounted(() => {
-  if (user.value) {
-    // Real time listener for new workouts
-    realtimeChannel = client.channel("public:collaborators").on(
-      "postgres_changes",
-      {
-        event: "UPDATE",
-        schema: "public",
-        table: "profiles",
-        filter: `id=eq.${user.value.id}`,
-      },
-      () => refreshSeletcedYard()
-    );
-    realtimeChannel.subscribe();
-  }
-});
-
+// Listen to changes on the `profiles` table and refresh SeletcedYard when receiving event
 watchEffect(() => {
   if (user.value) {
-    // Real time listener for new workouts
+    // Real time listener for changes to the profile
     realtimeChannel = client.channel("public:collaborators").on(
       "postgres_changes",
       {
@@ -74,8 +54,11 @@ watchEffect(() => {
       () => refreshSeletcedYard()
     );
     realtimeChannel.subscribe();
+
+    console.log(client.getChannels());
+    console.log(client.getChannels().length);
   } else {
-    if (client.getChannels.length > 0) {
+    if (client.getChannels().length > 0) {
       client.removeChannel(realtimeChannel);
     }
   }
@@ -83,7 +66,7 @@ watchEffect(() => {
 
 // Don't forget to unsubscribe when user left the page
 onUnmounted(() => {
-  if (client.getChannels.length > 0) {
+  if (client.getChannels().length > 0) {
     client.removeChannel(realtimeChannel);
   }
 });
