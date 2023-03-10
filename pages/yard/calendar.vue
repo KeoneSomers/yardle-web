@@ -140,7 +140,7 @@ const createEvent = (e, day) => {
 <template>
   <div>
     <!-- Mobile Calendar -->
-    <div class="lg:hidden p-4 h-screen overflow-y-auto pb-20">
+    <div class="lg:hidden p-4 h-screen pb-20">
       <div class="flex items-center">
         <h2 class="flex-auto text-sm font-semibold text-gray-900">
           {{
