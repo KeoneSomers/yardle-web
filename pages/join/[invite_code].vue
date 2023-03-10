@@ -129,12 +129,12 @@ const handleJoinYard = async () => {
 
         <div class="flex space-x-2 jusify-center mt-4">
           <NuxtLink
-            :to="'/login?invite_code=' + invite_code"
+            :to="'/auth/login?invite_code=' + invite_code"
             class="flex-1 bg-pink-500 p-3 rounded text-white"
             >Login</NuxtLink
           >
           <NuxtLink
-            :to="'/signup?invite_code=' + invite_code"
+            :to="'/auth/signup?invite_code=' + invite_code"
             class="flex-1 bg-indigo-500 p-3 rounded text-white"
             >Sign up</NuxtLink
           >

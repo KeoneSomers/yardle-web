@@ -10,10 +10,10 @@ profile.value = null;
 </script>
 
 <template>
-  <div class="h-screen bg-gray-50 flex flex-col">
+  <div class="h-screen bg-white flex flex-col">
     <div class="flex-1">
       <slot />
     </div>
-    <Footer />
+    <!-- <Footer /> -->
   </div>
 </template>

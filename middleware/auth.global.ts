@@ -46,7 +46,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   // Logged out
   if (!user.value) {
     console.log("User logged out, Redirecting to login page");
-    if (guards.requireAuth) return navigateTo("/login");
+    if (guards.requireAuth) return navigateTo("/auth/login");
   }
 
   // TODO: this if statement is a hack, need to find a better way to do this (just for yard settings and invoices pages)

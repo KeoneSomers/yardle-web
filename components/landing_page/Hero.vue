@@ -66,12 +66,12 @@ import { ChevronRightIcon } from "@heroicons/vue/20/solid";
         </p>
         <div class="mt-10 flex items-center gap-x-6">
           <NuxtLink
-            to="/signup"
+            to="/auth/signup"
             class="rounded-md bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >Get started</NuxtLink
           >
           <NuxtLink
-            to="/login"
+            to="/auth/login"
             class="text-base font-semibold leading-7 text-gray-900"
             >Login <span aria-hidden="true">→</span></NuxtLink
           >

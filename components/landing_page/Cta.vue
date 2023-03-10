@@ -62,7 +62,7 @@
         </p>
         <div class="mt-8">
           <NuxtLink
-            to="/signup"
+            to="/auth/signup"
             class="inline-flex rounded-md bg-white/10 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >Get started</NuxtLink
           >
