@@ -32,7 +32,7 @@ const alerts = useAlerts();
 await useAsyncData("horses", async () => {
   const { data } = await client
     .from("horses")
-    .select()
+    .select("*, owner(id, first_name, last_name)")
     .eq("yard_id", selectedYard.value)
     .order("name", { ascending: true });
 

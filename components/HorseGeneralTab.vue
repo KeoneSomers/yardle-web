@@ -6,6 +6,7 @@ import AssignHorseOwnerModal from "@/components/modals/AssignHorseOwnerModal.vue
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 const horse = useState("horse");
+const horses = useState("horses");
 const yard = useState("yard");
 const profile = useState("profile");
 const client = useSupabaseClient();
@@ -175,11 +176,15 @@ const handleUnassignOwner = async () => {
   if (!error) {
     alerts.value.unshift({
       title: "Owner Unassigned!",
-      message: `${horse.value.owner.first_name} + ${horse.value.owner.last_name} has been unassigned as the owner of ${horse.value.name}.`,
+      message: `${horse.value.owner.first_name} ${horse.value.owner.last_name} has been unassigned as the owner of ${horse.value.name}.`,
       type: "success",
     });
 
+    // update horse
     horse.value.owner = null;
+
+    // update horses list
+    horses.value.find((h) => h.id === horse.value.id).owner = null;
   } else {
     alerts.value.unshift({
       title: "Error",

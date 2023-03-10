@@ -16,10 +16,11 @@ const horses = useState("horses");
 const viewingHorse = useState("viewingHorse", () => false);
 const profile = useState("profile");
 
+// Get horses from the db
 await useAsyncData("horses", async () => {
   const { data } = await client
     .from("horses")
-    .select()
+    .select("*, owner(id, first_name, last_name)")
     .eq("yard_id", selectedYard.value)
     .order("name", { ascending: true });
 
@@ -198,20 +199,10 @@ const selectHorse = (horseId) => {
                         {{ horse.name }}
                       </p>
                       <p class="truncate text-sm text-gray-500">
-                        <span v-if="!horse.updated_at">
-                          {{
-                            `Created ${DateTime.fromISO(
-                              horse.created_at
-                            ).toRelativeCalendar()}`
-                          }}
-                        </span>
-                        <span v-else>
-                          {{
-                            `Updated ${DateTime.fromISO(
-                              horse.updated_at
-                            ).toRelativeCalendar()}`
-                          }}
-                        </span>
+                        <span v-if="horse.owner">{{
+                          horse.owner.first_name + " " + horse.owner.last_name
+                        }}</span>
+                        <span v-else class="italic text-gray-400"> --</span>
                       </p>
                     </a>
                   </div>

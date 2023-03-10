@@ -49,7 +49,7 @@ const { x, y } = useScroll(horseDetailsElement);
 await useAsyncData("horseDetails", async () => {
   const { data } = await client
     .from("horses")
-    .select(`*, owner("first_name", "last_name", "id")`)
+    .select("*, owner(id, first_name, last_name)")
     .eq("id", selectedHorseId.value)
     .single();
 

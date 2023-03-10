@@ -21,6 +21,7 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const horse = useState("horse");
+const horses = useState("horses");
 const error = ref("");
 const owner = ref(null);
 const members = useState("members");
@@ -67,7 +68,15 @@ const handleSubmit = async () => {
         throw error;
       }
 
+      // update the horse
       horse.value.owner = {
+        id: owner.value.profile.id,
+        first_name: owner.value.profile.first_name,
+        last_name: owner.value.profile.last_name,
+      };
+
+      // update the horses list
+      horses.value.find((h) => h.id === horse.value.id).owner = {
         id: owner.value.profile.id,
         first_name: owner.value.profile.first_name,
         last_name: owner.value.profile.last_name,
