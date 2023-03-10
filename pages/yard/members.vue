@@ -101,9 +101,9 @@ const handleRoleChange = async (memberId, roleId) => {
 
   alerts.value.unshift({
     title: "Updated Role!",
-    message: `${members.value[index].profile.username} is now a ${
-      roles.find((role) => role.id == roleId).name
-    }`,
+    message: `${members.value[index].profile.first_name} ${
+      members.value[index].profile.last_name
+    } is now a ${roles.find((role) => role.id == roleId).name}`,
     type: "success",
   });
 };
@@ -116,7 +116,7 @@ const handleRoleChange = async (memberId, roleId) => {
         <h1 class="text-xl font-semibold text-gray-900">Members</h1>
         <p class="mt-2 text-sm text-gray-700">
           A list of all the members that are currently in this yard including
-          their username, joined date and role.
+          their name, joined date and role.
         </p>
       </div>
       <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -140,7 +140,7 @@ const handleRoleChange = async (memberId, roleId) => {
                     scope="col"
                     class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                   >
-                    Username
+                    Name
                   </th>
                   <th
                     scope="col"
@@ -170,10 +170,11 @@ const handleRoleChange = async (memberId, roleId) => {
                       v-else
                       class="h-9 w-9 mr-3 bg-indigo-500 rounded-full flex items-center justify-center text-white"
                     >
-                      {{ member.profile.username[0].toUpperCase() }}
+                      {{ member.profile.first_name[0].toUpperCase() }}
                     </div>
 
-                    {{ member.profile.username }}
+                    {{ member.profile.first_name }}
+                    {{ member.profile.last_name }}
                     <span v-if="user.id == member.profile.id" class="ml-2">
                       (You)</span
                     >

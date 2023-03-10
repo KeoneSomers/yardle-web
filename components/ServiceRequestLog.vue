@@ -12,7 +12,7 @@ const getEvents = async () => {
     const { data, error } = await client
       .from("service_requests")
       .select(
-        "*, livery_services(name, price), canceled_by(username), created_by(username)"
+        "*, livery_services(name, price), canceled_by(first_name, last_name), created_by(first_name, last_name)"
       )
       .eq("horse_id", horse.value.id)
       .order("created_at", { ascending: false });
@@ -103,7 +103,10 @@ for (let index = 0; index < 6; index++) {
                           request.created_at
                         ).toRelativeCalendar()
                       }}
-                      by {{ request.created_by.username }}
+                      by
+                      {{
+                        `${request.created_by.first_name} ${request.created_by.last_name}`
+                      }}
                     </span>
                   </div>
                   <div v-else>
@@ -122,7 +125,10 @@ for (let index = 0; index < 6; index++) {
                           request.canceled_at
                         ).toRelativeCalendar()
                       }}
-                      by {{ request.canceled_by.username }}</span
+                      by
+                      {{
+                        `${request.canceled_by.first_name} ${request.canceled_by.last_name}`
+                      }}</span
                     >
                   </div>
                 </div>

@@ -46,7 +46,7 @@ let filteredMembers = computed(() =>
   query.value === ""
     ? members.value
     : members.value.filter((member) =>
-        member.profile.username
+        (member.profile.first_name + " " + member.profile.last_name)
           .toLowerCase()
           .replace(/\s+/g, "")
           .includes(query.value.toLowerCase().replace(/\s+/g, ""))
@@ -69,12 +69,13 @@ const handleSubmit = async () => {
 
       horse.value.owner = {
         id: owner.value.profile.id,
-        username: owner.value.profile.username,
+        first_name: owner.value.profile.first_name,
+        last_name: owner.value.profile.last_name,
       };
 
       alerts.value.unshift({
         title: "Owner Assigned!",
-        message: `${owner.value.profile.username} has been assigned to ${horse.value.name}.`,
+        message: `${owner.value.profile.first_name} ${owner.value.profile.last_name} has been assigned to ${horse.value.name}.`,
         type: "success",
       });
 
@@ -145,7 +146,12 @@ const handleSubmit = async () => {
                       >
                         <ComboboxInput
                           class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-                          :displayValue="(member) => member.profile.username"
+                          :displayValue="
+                            (member) =>
+                              member.profile.first_name +
+                              ' ' +
+                              member.profile.last_name
+                          "
                           @change="query = $event.target.value"
                         />
                         <ComboboxButton
@@ -194,7 +200,9 @@ const handleSubmit = async () => {
                                   'font-normal': !owner,
                                 }"
                               >
-                                {{ member.profile.username }}
+                                {{
+                                  `${member.profile.first_name} ${member.profile.last_name}`
+                                }}
                               </span>
                               <span
                                 v-if="owner"

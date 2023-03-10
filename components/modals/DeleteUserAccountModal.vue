@@ -27,7 +27,8 @@ const handleSubmit = async () => {
         const { error: updateProfileError } = await supabase
           .from("profiles")
           .update({
-            username: "deletedUser",
+            first_name: "deleted",
+            last_name: "user",
             avatar_url: null,
             selected_yard: null,
             active_role: null,

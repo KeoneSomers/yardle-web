@@ -1,52 +1,55 @@
 <script setup>
-  definePageMeta({
-    guards: ["requireAuth"],
-  });
+definePageMeta({
+  guards: ["requireAuth"],
+});
 
-  const user = useSupabaseUser();
-  const client = useSupabaseClient();
-  const loading = ref(true);
+const user = useSupabaseUser();
+const client = useSupabaseClient();
+const loading = ref(true);
 
-  const username = ref("");
-  const website = ref("");
-  const avatar_path = ref("");
+const firstName = ref("");
+const lastName = ref("");
+const website = ref("");
+const avatar_path = ref("");
 
-  loading.value = true;
+loading.value = true;
 
-  let { data } = await client
-    .from("profiles")
-    .select(`username, website, avatar_url`)
-    .eq("id", user.value.id)
-    .single();
+let { data } = await client
+  .from("profiles")
+  .select(`first_name, last_name, website, avatar_url`)
+  .eq("id", user.value.id)
+  .single();
 
-  if (data) {
-    username.value = data.username;
-    website.value = data.website;
-    avatar_path.value = data.avatar_url;
+if (data) {
+  firstName.value = data.first_name;
+  lastName.value = data.last_name;
+  website.value = data.website;
+  avatar_path.value = data.avatar_url;
+}
+
+loading.value = false;
+
+async function updateProfile() {
+  try {
+    loading.value = true;
+    const updates = {
+      id: user.value.id,
+      first_name: firstName.value,
+      last_name: lastName.value,
+      website: website.value,
+      avatar_url: avatar_path.value,
+      updated_at: new Date(),
+    };
+    let { error } = await client.from("profiles").upsert(updates, {
+      returning: "minimal", // Don't return the value after inserting
+    });
+    if (error) throw error;
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    loading.value = false;
   }
-
-  loading.value = false;
-
-  async function updateProfile() {
-    try {
-      loading.value = true;
-      const updates = {
-        id: user.value.id,
-        username: username.value,
-        website: website.value,
-        avatar_url: avatar_path.value,
-        updated_at: new Date(),
-      };
-      let { error } = await client.from("profiles").upsert(updates, {
-        returning: "minimal", // Don't return the value after inserting
-      });
-      if (error) throw error;
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      loading.value = false;
-    }
-  }
+}
 </script>
 
 <template>
@@ -57,8 +60,12 @@
       <input id="email" type="text" :value="user.email" disabled />
     </div>
     <div>
-      <label for="username">Name</label>
-      <input id="username" type="text" v-model="username" />
+      <label for="firstName">First Name</label>
+      <input id="firstName" type="text" v-model="firstName" />
+    </div>
+    <div>
+      <label for="lastName">Last Name</label>
+      <input id="lastName" type="text" v-model="lastName" />
     </div>
     <div>
       <label for="website">Website</label>

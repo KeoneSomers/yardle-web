@@ -49,7 +49,7 @@ const { x, y } = useScroll(horseDetailsElement);
 await useAsyncData("horseDetails", async () => {
   const { data } = await client
     .from("horses")
-    .select(`*, owner("username", "id")`)
+    .select(`*, owner("first_name", "last_name", "id")`)
     .eq("id", selectedHorseId.value)
     .single();
 
@@ -65,7 +65,7 @@ watchEffect(async () => {
     await useAsyncData("horseDetails", async () => {
       const { data } = await client
         .from("horses")
-        .select(`*, owner("username", "id")`)
+        .select(`*, owner("first_name", "last_name", "id")`)
         .eq("id", selectedHorseId.value)
         .single();
 

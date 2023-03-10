@@ -18,7 +18,9 @@ const selectedStatus = ref(null);
 
 const { data: _requests, error } = await client
   .from("service_requests")
-  .select("*, horse_id!inner(yard_id), created_by(username, email)")
+  .select(
+    "*, horse_id!inner(yard_id), created_by(first_name, last_name, email)"
+  )
   .eq("horse_id.yard_id", selectedYard.value)
   .filter("canceled_at", "is", null)
   .order("created_at", { ascending: false });
@@ -45,7 +47,7 @@ requests.value = _requests;
             <div class="flex justify-between items-center pt-3">
               <div>
                 <span class="text-blue-700">{{
-                  request.created_by.username
+                  `${request.created_by.first_name} ${request.created_by.last_name}`
                 }}</span>
                 requested
                 <span class="text-blue-700">{{ request.service_name }}</span>

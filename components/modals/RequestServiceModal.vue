@@ -114,7 +114,7 @@ const handleSubmit = async () => {
     if (yardOwner.value === null) {
       const { data: _yardOwner, error: error2 } = await client
         .from("profiles_yards")
-        .select("*, profile_id(email, username)")
+        .select("*, profile_id(email, first_name, last_name)")
         .eq("yard_id", yard.value.id)
         .eq("role", 1)
         .single();
@@ -129,13 +129,18 @@ const handleSubmit = async () => {
         recipients: [
           {
             email: yardOwner.value.profile_id.email,
-            name: yardOwner.value.profile_id.username,
+            name:
+              yardOwner.value.profile_id.firsfirst_nametName +
+              " " +
+              yardOwner.value.profile_id.last_name,
           },
         ],
         subject: `${yard.value.name}: You've got a Livery Service Request!`,
-        text: `${profile.value.username} has requested a service for ${
-          horse.value.name
-        } at ${yard.value.name} for ${DateTime.fromISO(date.value).toFormat(
+        text: `${profile.value.first_name} ${
+          profile.value.last_name
+        } has requested a service for ${horse.value.name} at ${
+          yard.value.name
+        } for ${DateTime.fromISO(date.value).toFormat(
           "LLL dd, yyyy"
         )}. Please log in to your account to accept or reject the request.`,
         html: ``,

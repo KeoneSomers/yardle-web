@@ -62,7 +62,7 @@ const handleDelete = async () => {
     if (yardOwner.value === null) {
       const { data: _yardOwner, error: error2 } = await client
         .from("profiles_yards")
-        .select("*, profile_id(email, username)")
+        .select("*, profile_id(email, first_name, last_name)")
         .eq("yard_id", yard.value.id)
         .eq("role", 1)
         .single();
@@ -77,11 +77,16 @@ const handleDelete = async () => {
         recipients: [
           {
             email: yardOwner.value.profile_id.email,
-            name: yardOwner.value.profile_id.username,
+            name:
+              yardOwner.value.profile_id.first_name +
+              " " +
+              yardOwner.value.profile_id.last_name,
           },
         ],
         subject: `${yard.value.name}: A service request has been canceled`,
-        text: `${profile.value.username} has canceled their service request "${
+        text: `${profile.value.first_name} ${
+          profile.value.last_name
+        } has canceled their service request "${
           props.service.service_name
         }", for ${horse.value.name} at ${
           yard.value.name

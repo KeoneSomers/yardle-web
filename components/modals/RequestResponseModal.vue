@@ -57,7 +57,10 @@ const handleSubmit = async () => {
         recipients: [
           {
             email: props.request.created_by.email,
-            name: props.request.created_by.username,
+            name:
+              props.request.created_by.first_name +
+              " " +
+              props.request.created_by.last_name,
           },
         ],
         subject:

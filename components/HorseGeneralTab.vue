@@ -175,7 +175,7 @@ const handleUnassignOwner = async () => {
   if (!error) {
     alerts.value.unshift({
       title: "Owner Unassigned!",
-      message: `${horse.value.owner.username} has been unassigned as the owner of ${horse.value.name}.`,
+      message: `${horse.value.owner.first_name} + ${horse.value.owner.last_name} has been unassigned as the owner of ${horse.value.name}.`,
       type: "success",
     });
 
@@ -219,13 +219,13 @@ const handleUnassignOwner = async () => {
             <div
               class="rounded-full h-10 w-10 text-white flex items-center justify-center bg-pink-500"
             >
-              {{ horse.owner.username[0].toUpperCase() }}
+              {{ horse.owner.first_name[0].toUpperCase() }}
             </div>
           </div>
           <div class="min-w-0 flex-1">
             <span class="absolute inset-0" aria-hidden="true" />
             <p class="text-sm font-medium text-gray-900">
-              {{ horse.owner.username }}
+              {{ horse.owner.first_name }} {{ horse.owner.last_name }}
             </p>
             <p class="truncate text-sm text-gray-500">Owns this horse</p>
           </div>

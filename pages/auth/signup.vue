@@ -12,7 +12,8 @@ const alerts = useAlerts();
 
 const supabaseAuthClient = useSupabaseAuthClient();
 
-const username = ref("");
+const firstName = ref("");
+const lastName = ref("");
 const email = ref("");
 const password = ref("");
 const passwordConfirm = ref("");
@@ -49,20 +50,30 @@ const handleSignup = async () => {
     return;
   }
 
-  if (username.value == "") {
+  if (firstName.value == "" || lastName.value == "") {
     alerts.value.unshift({
       title: "Error",
-      message: "Please enter a username",
+      message: "Please enter a frist and last name",
       type: "error",
     });
     loading.value = false;
     return;
   }
 
-  if (username.value.length < 3) {
+  if (firstName.value.length < 3) {
     alerts.value.unshift({
       title: "Error",
-      message: "Username too short",
+      message: "First Name too short",
+      type: "error",
+    });
+    loading.value = false;
+    return;
+  }
+
+  if (lastName.value.length < 3) {
+    alerts.value.unshift({
+      title: "Error",
+      message: "Last Name too short",
       type: "error",
     });
     loading.value = false;
@@ -74,7 +85,8 @@ const handleSignup = async () => {
     password: password.value,
     options: {
       data: {
-        username: username.value,
+        first_name: firstName.value,
+        last_name: lastName.value,
       },
     },
   });
@@ -87,6 +99,8 @@ const handleSignup = async () => {
       message: "Please try again later",
       type: "error",
     });
+
+    loading.value = false;
 
     return;
   }
@@ -209,15 +223,34 @@ const handleSignup = async () => {
             <form @submit.prevent="handleSignup" class="space-y-6">
               <div>
                 <label
-                  for="username"
+                  for="first_name"
                   class="block text-sm font-medium leading-6 text-gray-900"
-                  >Username</label
+                  >First Name</label
                 >
                 <div class="mt-2">
                   <input
-                    v-model="username"
-                    id="username"
-                    name="username"
+                    v-model="firstName"
+                    id="first_name"
+                    name="first_name"
+                    type="text"
+                    autocomplete="off"
+                    required
+                    class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  for="last_name"
+                  class="block text-sm font-medium leading-6 text-gray-900"
+                  >Last Name</label
+                >
+                <div class="mt-2">
+                  <input
+                    v-model="lastName"
+                    id="last_name"
+                    name="last_name"
                     type="text"
                     autocomplete="off"
                     required

@@ -269,7 +269,7 @@ const handleSignout = async () => {
       </nav>
     </div>
     <div
-      v-if="profile && profile.username"
+      v-if="profile && profile.first_name"
       class="flex flex-shrink-0 border-t border-gray-200 p-4"
     >
       <NuxtLink class="group block w-full flex-shrink-0">
@@ -285,7 +285,7 @@ const handleSignout = async () => {
               v-else
               class="h-9 w-9 bg-indigo-500 rounded-full flex items-center justify-center text-white"
             >
-              {{ profile.username[0].toUpperCase() }}
+              {{ profile.first_name[0].toUpperCase() }}
             </div>
           </div>
           <div class="ml-3 flex-1 flex items-center">
@@ -293,7 +293,7 @@ const handleSignout = async () => {
               <p
                 class="text-sm font-medium text-gray-700 group-hover:text-gray-900 truncate"
               >
-                {{ profile.username }}
+                {{ `${profile.first_name} ${profile.last_name}` }}
               </p>
               <CheckBadgeIcon
                 v-if="profile.is_early_adopter"

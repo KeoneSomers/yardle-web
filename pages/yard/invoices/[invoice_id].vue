@@ -37,7 +37,9 @@ onMounted(async () => {
   // get the invoice
   const { data: _invoiceData, error: invoiceError } = await client
     .from("invoices")
-    .select("*, horse_id (id, name, owner(email, username)), yard_id (name)")
+    .select(
+      "*, horse_id (id, name, owner(email, first_name, last_name)), yard_id (name)"
+    )
     .eq("id", invoice_id)
     .single();
 
@@ -138,7 +140,9 @@ const saveChanges = async () => {
       discount_note: discountNote.value,
     })
     .eq("id", invoice_id)
-    .select("*, horse_id (id, name, owner(email, username)), yard_id (name)")
+    .select(
+      "*, horse_id (id, name, owner(email, first_name, last_name)), yard_id (name)"
+    )
     .single();
 
   if (error) {
