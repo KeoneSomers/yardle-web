@@ -11,10 +11,15 @@ export default defineEventHandler(async (event) => {
     .select(
       "*, created_by(id, first_name, last_name, email), type(type), yard_id(name)"
     )
-    .gte("date_time", tomorrow.set({ hour: 0, minute: 0, second: 0 }).toISO())
+    .gte(
+      "date_time",
+      tomorrow.set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toISO()
+    )
     .lte(
       "date_time",
-      tomorrow.set({ hour: 23, minute: 59, second: 59 }).toISO()
+      tomorrow
+        .set({ hour: 23, minute: 59, second: 59, millisecond: 999 })
+        .toISO()
     );
 
   if (!events || events.length === 0 || eventsError) {
@@ -48,15 +53,15 @@ export default defineEventHandler(async (event) => {
       .join("");
 
     let emailMessage = `
-   <p>Hey ${user.first_name},</p>
-   <p>You have ${usersEvents.length} event${
+     <p>Hey ${user.first_name},</p>
+     <p>You have ${usersEvents.length} event${
       usersEvents.length === 1 ? "" : "s"
     } scheduled for tomorrow:</p><ul>${eventList}</ul>
-    <br>
-    <p>More details regarding ${
-      usersEvents.length === 1 ? "this event" : "these events"
-    } are available to view on yardle.app</p>
-   `;
+      <br>
+      <p>More details regarding ${
+        usersEvents.length === 1 ? "this event" : "these events"
+      } are available to view on yardle.app</p>
+     `;
 
     // send email
     await $fetch("/api/sendEmail", {
