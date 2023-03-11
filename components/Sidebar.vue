@@ -14,9 +14,11 @@ import {
   Cog8ToothIcon,
   DocumentTextIcon,
   InboxIcon,
-  CheckBadgeIcon,
 } from "@heroicons/vue/24/outline";
-import { EllipsisHorizontalIcon } from "@heroicons/vue/20/solid";
+import {
+  EllipsisHorizontalIcon,
+  CheckBadgeIcon,
+} from "@heroicons/vue/20/solid";
 
 const inviteLinkModalOpen = ref(false);
 
@@ -272,7 +274,7 @@ const handleSignout = async () => {
       v-if="profile && profile.first_name"
       class="flex flex-shrink-0 border-t border-gray-200 p-4"
     >
-      <NuxtLink class="group block w-full flex-shrink-0">
+      <div class="group block w-full flex-shrink-0">
         <div class="flex items-center">
           <div>
             <SupabaseImage
@@ -288,7 +290,7 @@ const handleSignout = async () => {
               {{ profile.first_name[0].toUpperCase() }}
             </div>
           </div>
-          <div class="ml-3 flex-1 flex items-center">
+          <div class="ml-3 flex-1 flex flex-col">
             <div class="w-28 truncate flex items-center">
               <p
                 class="text-sm font-medium text-gray-700 group-hover:text-gray-900 truncate"
@@ -297,16 +299,19 @@ const handleSignout = async () => {
               </p>
               <CheckBadgeIcon
                 v-if="profile.is_early_adopter"
-                class="h-5 w-5 ml-2 text-blue-500"
+                class="h-4 w-4 ml-2 text-blue-500"
                 v-tooltip="'Early Adopter'"
               />
             </div>
 
-            <!-- <p
-              class="text-xs font-medium text-gray-500 group-hover:text-gray-700"
-            >
-              View profile
-            </p> -->
+            <div>
+              <NuxtLink
+                to="/auth/accountSettings"
+                class="text-xs font-medium text-gray-500 group-hover:text-gray-700 cursor-pointer"
+              >
+                View account
+              </NuxtLink>
+            </div>
           </div>
           <div>
             <Menu as="div" class="relative ml-3">
@@ -334,18 +339,11 @@ const handleSignout = async () => {
                 <MenuItems
                   class="absolute bottom-0 right-0 z-10 mt-2 w-48 origin-bottom-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
-                  <!-- <MenuItem>
-                                                <NuxtLink
-                                                    to="/profile"
-                                                    class="block px-4 py-2 text-sm text-gray-700"
-                                                    >Your Profile</NuxtLink
-                                                >
-                                            </MenuItem> -->
                   <MenuItem>
                     <NuxtLink
-                      to="/settings"
+                      to="/auth/accountSettings"
                       class="block px-4 py-2 text-sm text-gray-700"
-                      >Settings</NuxtLink
+                      >Account settings</NuxtLink
                     >
                   </MenuItem>
                   <MenuItem>
@@ -361,7 +359,7 @@ const handleSignout = async () => {
             </Menu>
           </div>
         </div>
-      </NuxtLink>
+      </div>
     </div>
     <SidebarFooter />
 
