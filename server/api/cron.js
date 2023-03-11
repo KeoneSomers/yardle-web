@@ -1,5 +1,10 @@
 const handler = async (req, res) => {
-  // my code here
+  // send email reminders
+  await $fetch("/api/sendEventEmailReminders", {
+    method: "POST",
+  });
+
+  // TODO: generate invoices
 
   res.end("Cron Job ran successfully!");
 };

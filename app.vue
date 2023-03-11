@@ -19,8 +19,6 @@ const profile = useState<any>("profile");
 const { refresh: refreshSeletcedYard } = await useAsyncData(
   "seletcedYard",
   async () => {
-    console.log("Refreshing 'seletced yard' and 'active role'");
-
     if (user.value) {
       const { data } = await client
         .from("profiles")
@@ -54,9 +52,6 @@ watchEffect(() => {
       () => refreshSeletcedYard()
     );
     realtimeChannel.subscribe();
-
-    console.log(client.getChannels());
-    console.log(client.getChannels().length);
   } else {
     if (client.getChannels().length > 0) {
       client.removeChannel(realtimeChannel);

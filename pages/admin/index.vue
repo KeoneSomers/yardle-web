@@ -51,6 +51,14 @@ const handleGenerateInvoices = async () => {
 
   console.log(result);
 };
+
+const handleSendEventEmailReminders = async () => {
+  const result = await useFetch("/api/sendEventEmailReminders", {
+    method: "POST",
+  });
+
+  console.log(result);
+};
 </script>
 
 <template>
@@ -60,6 +68,12 @@ const handleGenerateInvoices = async () => {
       class="bg-indigo-500 p-4 m-4 rounded text-white"
     >
       Manually Generate Todays Invoces
+    </button>
+    <button
+      @click="handleSendEventEmailReminders"
+      class="bg-blue-500 p-4 m-4 rounded text-white"
+    >
+      Send event email reminders
     </button>
     <div class="m-5 text-4xl font-fold">Feedback</div>
     <div
