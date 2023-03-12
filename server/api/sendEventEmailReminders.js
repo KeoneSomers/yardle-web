@@ -62,6 +62,8 @@ export default defineEventHandler(async (event) => {
       <p>More details regarding ${
         usersEvents.length === 1 ? "this event" : "these events"
       } are available to view on yardle.app</p>
+      <br/>
+      <small>To unsubscribe from these types of emails, please visit yardle.app/auth/accountSettings</small>
      `;
 
     // send email

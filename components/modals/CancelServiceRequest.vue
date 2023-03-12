@@ -85,14 +85,20 @@ const handleDelete = async () => {
           },
         ],
         subject: `${yard.value.name}: A service request has been canceled`,
-        text: `${profile.value.first_name} ${
+        text: ``,
+        html: `
+          <p>${profile.value.first_name} ${
           profile.value.last_name
         } has canceled their service request "${
           props.service.service_name
         }", for ${horse.value.name} at ${
           yard.value.name
-        } for ${DateTime.fromISO(props.service.date).toFormat("LLL dd, yyyy")}`,
-        html: ``,
+        } for ${DateTime.fromISO(props.service.date).toFormat(
+          "LLL dd, yyyy"
+        )}</p>
+        <br/>
+          <small>To unsubscribe from these types of emails, please visit yardle.app/auth/accountSettings</small>
+        `,
       },
     });
 

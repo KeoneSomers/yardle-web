@@ -84,7 +84,9 @@ const handleSubmit = async () => {
                   "LLL dd, yyyy"
                 )}" has been declined.</p><p>${
                   note.value ? "Notes: " + note.value : ""
-                }</p>`,
+                }</p>
+                <br/>
+                <small>To unsubscribe from these types of emails, please visit yardle.app/auth/accountSettings</small>`,
         },
       });
     }
