@@ -133,7 +133,7 @@ const handleSubmit = async () => {
             {
               email: yardOwner.value.profile_id.email,
               name:
-                yardOwner.value.profile_id.firsfirst_nametName +
+                yardOwner.value.profile_id.first_name +
                 " " +
                 yardOwner.value.profile_id.last_name,
             },
