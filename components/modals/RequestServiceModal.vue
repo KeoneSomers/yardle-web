@@ -139,14 +139,16 @@ const handleSubmit = async () => {
             },
           ],
           subject: `${yard.value.name}: You've got a Livery Service Request!`,
-          text: `${profile.value.first_name} ${
+          text: ``,
+          html: `<p>${profile.value.first_name} ${
             profile.value.last_name
           } has requested a service for ${horse.value.name} at ${
             yard.value.name
           } for ${DateTime.fromISO(date.value).toFormat(
             "LLL dd, yyyy"
-          )}. Please log in to your account to accept or reject the request.`,
-          html: ``,
+          )}. Please log in to your account to accept or reject the request.</p>
+          <br/>
+          <small>To unsubscribe from these types of emails, please visit yardle.app/auth/accountSettings</small>`,
         },
       });
     }
