@@ -23,6 +23,8 @@ const user = useSupabaseUser();
 const status = ref("");
 const note = ref("");
 
+const pendingServiceRequestCount = useState("pendingServiceRequestCount");
+
 watch(
   () => props.isOpen,
   (isOpen) => {
@@ -47,8 +49,15 @@ const handleSubmit = async () => {
       .update({ status: status.value, status_note: note.value })
       .eq("id", props.request.id);
 
+    if (error) {
+      console.log("error: " + error.message);
+      return;
+    }
+
+    // update local state
     const index = requests.value.findIndex((r) => r.id === props.request.id);
     requests.value[index].status = status.value;
+    pendingServiceRequestCount.value--;
 
     // send email to user
     if (props.request.created_by.service_request_response_emails === true) {

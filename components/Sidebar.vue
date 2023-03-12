@@ -20,6 +20,8 @@ import {
   CheckBadgeIcon,
 } from "@heroicons/vue/20/solid";
 
+const pendingServiceRequestCount = useState("pendingServiceRequestCount");
+
 const inviteLinkModalOpen = ref(false);
 
 const navigation = [
@@ -52,6 +54,31 @@ const selectedYard = useState("selectedYard");
 const yard = useState("yard");
 const profile = useState("profile");
 const sidebarOpen = useState("sidebarOpen");
+
+const countServiceRequests = async () => {
+  const {
+    count: _pendingServiceRequestCount,
+    error: pendingServiceRequestsError,
+  } = await supabaseClient
+    .from("service_requests")
+    .select("*, horse_id!inner(yard_id)", { count: "exact", head: false })
+    .eq("horse_id.yard_id", selectedYard.value)
+    .eq("status", "pending")
+    .filter("canceled_at", "is", null);
+
+  pendingServiceRequestCount.value = _pendingServiceRequestCount || 0;
+};
+
+await countServiceRequests();
+
+watch(
+  () => selectedYard.value,
+  async (selectedYard) => {
+    if (selectedYard) {
+      await countServiceRequests();
+    }
+  }
+);
 
 // TODO: this should pull from db
 const roles = [
@@ -215,6 +242,11 @@ const handleSignout = async () => {
                 aria-hidden="true"
               />
               <span class="flex-1">Service Requests</span>
+              <span
+                v-if="pendingServiceRequestCount > 0"
+                class="ml-3 inline-block rounded-full py-0.5 px-3 text-xs font-medium bg-red-100 text-red-800"
+                >{{ pendingServiceRequestCount }}</span
+              >
             </NuxtLink>
             <NuxtLink
               to="/yard/invoices"
