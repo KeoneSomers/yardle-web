@@ -114,7 +114,9 @@ const handleSubmit = async () => {
     if (yardOwner.value === null) {
       const { data: _yardOwner, error: error2 } = await client
         .from("profiles_yards")
-        .select("*, profile_id(email, first_name, last_name)")
+        .select(
+          "*, profile_id(email, first_name, last_name, service_request_emails)"
+        )
         .eq("yard_id", yard.value.id)
         .eq("role", 1)
         .single();
@@ -123,29 +125,31 @@ const handleSubmit = async () => {
     }
 
     // send email to yard owner
-    await $fetch("/api/sendEmail", {
-      method: "post",
-      body: {
-        recipients: [
-          {
-            email: yardOwner.value.profile_id.email,
-            name:
-              yardOwner.value.profile_id.firsfirst_nametName +
-              " " +
-              yardOwner.value.profile_id.last_name,
-          },
-        ],
-        subject: `${yard.value.name}: You've got a Livery Service Request!`,
-        text: `${profile.value.first_name} ${
-          profile.value.last_name
-        } has requested a service for ${horse.value.name} at ${
-          yard.value.name
-        } for ${DateTime.fromISO(date.value).toFormat(
-          "LLL dd, yyyy"
-        )}. Please log in to your account to accept or reject the request.`,
-        html: ``,
-      },
-    });
+    if (yardOwner.value.profile_id.service_request_emails === true) {
+      await $fetch("/api/sendEmail", {
+        method: "post",
+        body: {
+          recipients: [
+            {
+              email: yardOwner.value.profile_id.email,
+              name:
+                yardOwner.value.profile_id.firsfirst_nametName +
+                " " +
+                yardOwner.value.profile_id.last_name,
+            },
+          ],
+          subject: `${yard.value.name}: You've got a Livery Service Request!`,
+          text: `${profile.value.first_name} ${
+            profile.value.last_name
+          } has requested a service for ${horse.value.name} at ${
+            yard.value.name
+          } for ${DateTime.fromISO(date.value).toFormat(
+            "LLL dd, yyyy"
+          )}. Please log in to your account to accept or reject the request.`,
+          html: ``,
+        },
+      });
+    }
 
     alerts.value.unshift({
       title: "Request Submitted!",

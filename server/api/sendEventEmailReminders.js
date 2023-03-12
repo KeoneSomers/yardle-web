@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   const { data: events, error: eventsError } = await supabase
     .from("calendar_events")
     .select(
-      "*, created_by(id, first_name, last_name, email), type(type), yard_id(name)"
+      "*, created_by!inner(id, first_name, last_name, email, calendar_event_reminder_emails), type(type), yard_id(name)"
     )
     .gte(
       "date_time",
@@ -20,7 +20,8 @@ export default defineEventHandler(async (event) => {
       tomorrow
         .set({ hour: 23, minute: 59, second: 59, millisecond: 999 })
         .toISO()
-    );
+    )
+    .eq("created_by.calendar_event_reminder_emails", true);
 
   if (!events || events.length === 0 || eventsError) {
     return;

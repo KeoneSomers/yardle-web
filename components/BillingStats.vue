@@ -436,7 +436,9 @@ watchEffect(async () => {
       >
     </p>
     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-      <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+      <div
+        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow border sm:p-6"
+      >
         <dt class="truncate text-sm font-medium text-gray-500">
           Total Requirements This Billing Period
         </dt>
@@ -447,7 +449,9 @@ watchEffect(async () => {
         </dd>
       </div>
 
-      <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+      <div
+        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow border sm:p-6"
+      >
         <dt class="truncate text-sm font-medium text-gray-500">
           Spend this Week
         </dt>
@@ -458,7 +462,9 @@ watchEffect(async () => {
         </dd>
       </div>
 
-      <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+      <div
+        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow border sm:p-6"
+      >
         <dt class="truncate text-sm font-medium text-gray-500">
           Estimated Next Bill
           <span

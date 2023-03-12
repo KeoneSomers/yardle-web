@@ -10,27 +10,26 @@
   "devDependencies": {
     "@nuxt/image-edge": "^1.0.0-27919678.2f5b64b",
     "@nuxtjs/supabase": "^0.3.1",
-    "@nuxtjs/tailwindcss": "^6.3.1",
+    "@nuxtjs/tailwindcss": "^6.4.1",
     "@sidebase/nuxt-pdf": "^0.1.1",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.9",
     "@types/luxon": "^3.2.0",
-    "nuxt": "^3.2.0"
+    "nuxt": "^3.2.3"
   },
   "dependencies": {
-    "@headlessui/vue": "^1.7.9",
+    "@headlessui/vue": "^1.7.12",
     "@heroicons/vue": "^2.0.16",
-    "@pinia/nuxt": "^0.4.6",
-    "@vercel/analytics": "^0.1.8",
+    "@vercel/analytics": "^0.1.11",
     "@vueuse/core": "^9.12.0",
     "downloadjs": "^1.4.7",
     "floating-vue": "^2.0.0-beta.20",
     "html-to-image": "^1.11.11",
-    "luxon": "^3.2.1",
+    "luxon": "^3.3.0",
     "mailersend": "^2.0.5",
     "pdfjs": "^2.4.7",
     "print-js": "^1.6.0",
-    "vue-final-modal": "^4.0.4",
+    "vue-final-modal": "^4.0.11",
     "vuedraggable": "^4.1.0"
   }
 }

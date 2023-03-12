@@ -51,41 +51,43 @@ const handleSubmit = async () => {
     _request.status = status.value;
 
     // send email to user
-    await $fetch("/api/sendEmail", {
-      method: "post",
-      body: {
-        recipients: [
-          {
-            email: props.request.created_by.email,
-            name:
-              props.request.created_by.first_name +
-              " " +
-              props.request.created_by.last_name,
-          },
-        ],
-        subject:
-          status.value === "accepted"
-            ? `${yard.value.name}: Livery Service Request Accepted`
-            : `${yard.value.name}: Livery Service Request Declined`,
-        text: ``,
-        html:
-          status.value === "accepted"
-            ? `<p>Your service request for "${
-                props.request.service_name
-              }" on "${DateTime.fromISO(props.request.date).toFormat(
-                "LLL dd, yyyy"
-              )}" has been accepted!</p><p>${
-                note.value ? "Notes: " + note.value : ""
-              }</p>`
-            : `<p>Your service request for "${
-                props.request.service_name
-              }" on "${DateTime.fromISO(props.request.date).toFormat(
-                "LLL dd, yyyy"
-              )}" has been declined.</p><p>${
-                note.value ? "Notes: " + note.value : ""
-              }</p>`,
-      },
-    });
+    if (props.request.created_by.service_request_response_emails === true) {
+      await $fetch("/api/sendEmail", {
+        method: "post",
+        body: {
+          recipients: [
+            {
+              email: props.request.created_by.email,
+              name:
+                props.request.created_by.first_name +
+                " " +
+                props.request.created_by.last_name,
+            },
+          ],
+          subject:
+            status.value === "accepted"
+              ? `${yard.value.name}: Livery Service Request Accepted`
+              : `${yard.value.name}: Livery Service Request Declined`,
+          text: ``,
+          html:
+            status.value === "accepted"
+              ? `<p>Your service request for "${
+                  props.request.service_name
+                }" on "${DateTime.fromISO(props.request.date).toFormat(
+                  "LLL dd, yyyy"
+                )}" has been accepted!</p><p>${
+                  note.value ? "Notes: " + note.value : ""
+                }</p>`
+              : `<p>Your service request for "${
+                  props.request.service_name
+                }" on "${DateTime.fromISO(props.request.date).toFormat(
+                  "LLL dd, yyyy"
+                )}" has been declined.</p><p>${
+                  note.value ? "Notes: " + note.value : ""
+                }</p>`,
+        },
+      });
+    }
 
     // update local state
     alerts.value.unshift({

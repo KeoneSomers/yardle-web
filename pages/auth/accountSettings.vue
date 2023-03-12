@@ -19,12 +19,23 @@ const profile = useState("profile");
 
 const firstName = ref(null);
 const lastName = ref(null);
-const allowEmailNotfications = ref(true);
+const serviceRequestEmails = ref(true);
+const serviceRequestReponseEmails = ref(true);
+const calendarEventReminderEmails = ref(true);
 
-onMounted(async () => {
+const resetForm = () => {
   firstName.value = profile.value?.first_name;
   lastName.value = profile.value?.last_name;
-  allowEmailNotfications.value = profile.value?.allow_emails;
+
+  serviceRequestEmails.value = profile.value?.service_request_emails;
+  serviceRequestReponseEmails.value =
+    profile.value?.service_request_response_emails;
+  calendarEventReminderEmails.value =
+    profile.value?.calendar_event_reminder_emails;
+};
+
+onMounted(async () => {
+  resetForm();
 });
 
 // save changes
@@ -34,7 +45,9 @@ const saveChanges = async () => {
     .update({
       first_name: firstName.value,
       last_name: lastName.value,
-      allow_emails: allowEmailNotfications.value,
+      service_request_emails: serviceRequestEmails.value,
+      service_request_response_emails: serviceRequestReponseEmails.value,
+      calendar_event_reminder_emails: calendarEventReminderEmails.value,
     })
     .eq("id", profile.value?.id);
 
@@ -54,6 +67,11 @@ const saveChanges = async () => {
   // susccess
   profile.value.first_name = firstName.value;
   profile.value.last_name = lastName.value;
+  profile.value.service_request_emails = serviceRequestEmails.value;
+  profile.value.service_request_response_emails =
+    serviceRequestReponseEmails.value;
+  profile.value.calendar_event_reminder_emails =
+    calendarEventReminderEmails.value;
 
   alerts.value.unshift({
     title: "Changes Saved!",
@@ -61,19 +79,13 @@ const saveChanges = async () => {
     type: "success",
   });
 };
-
-const resetForm = () => {
-  firstName.value = profile.value?.first_name;
-  lastName.value = profile.value?.last_name;
-  allowEmailNotfications.value = profile.value?.allow_emails;
-};
 </script>
 
 <template>
   <div class="md:h-screen md:overflow-y-auto">
-    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 my-10">
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 my-4 md:my-20 px-4">
       <div class="pt-5 border-b pb-4">
-        <p class="text-4xl font-bold mt-20">Account Settings</p>
+        <p class="text-4xl font-bold">Account Settings</p>
       </div>
       <form
         @submit.prevent="saveChanges"
@@ -231,35 +243,6 @@ const resetForm = () => {
                 class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:border-0 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
               />
             </div>
-
-            <!-- <div class="col-span-12">
-              <label
-                for="url"
-                class="block text-sm font-medium leading-6 text-gray-900"
-                >URL</label
-              >
-              <input
-                type="text"
-                name="url"
-                id="url"
-                class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:border-0 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-              />
-            </div>
-
-            <div class="col-span-12 sm:col-span-6">
-              <label
-                for="company"
-                class="block text-sm font-medium leading-6 text-gray-900"
-                >Company</label
-              >
-              <input
-                type="text"
-                name="company"
-                id="company"
-                autocomplete="organization"
-                class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:border-0 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-              />
-            </div> -->
           </div>
         </div>
 
@@ -284,24 +267,92 @@ const resetForm = () => {
                     as="p"
                     class="text-sm font-medium leading-6 text-gray-900"
                     passive
-                    >Allow all email notifications</SwitchLabel
+                    >Service Request Emails</SwitchLabel
                   >
                   <SwitchDescription class="text-sm text-gray-500"
-                    >Enable or disable the sending of notification emails
-                    regarding yards and horses.</SwitchDescription
+                    >The yard owner will receive these emails when a client
+                    requests a service for their horse.</SwitchDescription
                   >
                 </div>
                 <Switch
-                  v-model="allowEmailNotfications"
+                  v-model="serviceRequestEmails"
                   :class="[
-                    allowEmailNotfications ? 'bg-teal-500' : 'bg-gray-200',
+                    serviceRequestEmails ? 'bg-teal-500' : 'bg-gray-200',
                     'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2',
                   ]"
                 >
                   <span
                     aria-hidden="true"
                     :class="[
-                      allowEmailNotfications
+                      serviceRequestEmails ? 'translate-x-5' : 'translate-x-0',
+                      'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                    ]"
+                  />
+                </Switch>
+              </SwitchGroup>
+              <SwitchGroup
+                as="li"
+                class="flex items-center justify-between py-4"
+              >
+                <div class="flex flex-col">
+                  <SwitchLabel
+                    as="p"
+                    class="text-sm font-medium leading-6 text-gray-900"
+                    passive
+                    >Service Request Reponse Emails</SwitchLabel
+                  >
+                  <SwitchDescription class="text-sm text-gray-500"
+                    >You'll receive these emails to let you know when your yard
+                    owner has responded to your service
+                    requests.</SwitchDescription
+                  >
+                </div>
+                <Switch
+                  v-model="serviceRequestReponseEmails"
+                  :class="[
+                    serviceRequestReponseEmails ? 'bg-teal-500' : 'bg-gray-200',
+                    'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2',
+                  ]"
+                >
+                  <span
+                    aria-hidden="true"
+                    :class="[
+                      serviceRequestReponseEmails
+                        ? 'translate-x-5'
+                        : 'translate-x-0',
+                      'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                    ]"
+                  />
+                </Switch>
+              </SwitchGroup>
+              <SwitchGroup
+                as="li"
+                class="flex items-center justify-between py-4"
+              >
+                <div class="flex flex-col">
+                  <SwitchLabel
+                    as="p"
+                    class="text-sm font-medium leading-6 text-gray-900"
+                    passive
+                    >Calendar Event Reminder Emails</SwitchLabel
+                  >
+                  <SwitchDescription class="text-sm text-gray-500"
+                    >You'll receive these emails the day before any of your
+                    upcoming events are scheduled to take
+                    place.</SwitchDescription
+                  >
+                </div>
+                <Switch
+                  v-model="calendarEventReminderEmails"
+                  :class="[
+                    calendarEventReminderEmails ? 'bg-teal-500' : 'bg-gray-200',
+                    'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2',
+                  ]"
+                >
+                  <span
+                    aria-hidden="true"
+                    :class="[
+                      calendarEventReminderEmails
                         ? 'translate-x-5'
                         : 'translate-x-0',
                       'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',

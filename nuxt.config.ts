@@ -3,7 +3,6 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/supabase",
     "@nuxtjs/tailwindcss",
-    "@pinia/nuxt",
     "@nuxt/image-edge",
     "@sidebase/nuxt-pdf",
   ],

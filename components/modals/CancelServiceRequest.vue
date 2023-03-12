@@ -71,6 +71,7 @@ const handleDelete = async () => {
     }
 
     // send email to yard owner
+    // TODO: only if they want this type of email
     await $fetch("/api/sendEmail", {
       method: "post",
       body: {

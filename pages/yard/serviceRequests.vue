@@ -8,7 +8,6 @@ definePageMeta({
 });
 
 const client = useSupabaseClient();
-const alerts = useAlerts();
 const selectedYard = useState("selectedYard");
 const requests = useState("requests", () => []);
 
@@ -19,7 +18,7 @@ const selectedStatus = ref(null);
 const { data: _requests, error } = await client
   .from("service_requests")
   .select(
-    "*, horse_id!inner(yard_id), created_by(first_name, last_name, email)"
+    "*, horse_id!inner(yard_id), created_by(first_name, last_name, email, service_request_response_emails)"
   )
   .eq("horse_id.yard_id", selectedYard.value)
   .filter("canceled_at", "is", null)
