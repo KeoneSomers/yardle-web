@@ -47,8 +47,8 @@ const handleSubmit = async () => {
       .update({ status: status.value, status_note: note.value })
       .eq("id", props.request.id);
 
-    const _request = requests.value.find((r) => r.id === props.request.id);
-    _request.status = status.value;
+    const index = requests.value.findIndex((r) => r.id === props.request.id);
+    requests.value[index].status = status.value;
 
     // send email to user
     if (props.request.created_by.service_request_response_emails === true) {

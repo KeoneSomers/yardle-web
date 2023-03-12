@@ -25,6 +25,14 @@ const { data: _requests, error } = await client
   .order("created_at", { ascending: false });
 
 requests.value = _requests;
+
+const unrespondedRequests = computed(() => {
+  return requests.value.filter((request) => request.status === "pending");
+});
+
+const respondedRequests = computed(() => {
+  return requests.value.filter((request) => request.status !== "pending");
+});
 </script>
 
 <template>
@@ -37,68 +45,72 @@ requests.value = _requests;
           This is a list of all service requests that have been made to your
           yard.
         </p>
-        <ul role="list" class="space-y-3 mt-10 divide-y">
-          <li
-            v-for="request in requests"
-            :key="request.id"
-            class="overflow-hidden bg-white p-2 sm:rounded-md"
-          >
-            <div class="flex justify-between items-center pt-3">
-              <div>
-                <span class="text-blue-700">{{
-                  `${request.created_by.first_name} ${request.created_by.last_name}`
-                }}</span>
-                requested
-                <span class="text-blue-700">{{ request.service_name }}</span>
-                for
-                <span class="text-blue-700"
-                  >{{
-                    DateTime.fromISO(request.date).toLocaleString(
-                      {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      },
-                      { locale: "en-GB" }
-                    )
-                  }}
-                </span>
+        <div v-for="(arr, index) in [unrespondedRequests, respondedRequests]">
+          <p v-if="index === 0" class="mt-10 mb-2">Pending requests</p>
+          <p v-else class="mt-10 mb-2">Responded requests</p>
+          <ul role="list" class="space-y-3 divide-y border-t-2">
+            <li
+              v-for="request in arr"
+              :key="request.id"
+              class="overflow-hidden bg-white p-2 sm:rounded-md"
+            >
+              <div class="flex justify-between items-center pt-3">
+                <div>
+                  <span class="text-blue-700">{{
+                    `${request.created_by.first_name} ${request.created_by.last_name}`
+                  }}</span>
+                  requested
+                  <span class="text-blue-700">{{ request.service_name }}</span>
+                  for
+                  <span class="text-blue-700"
+                    >{{
+                      DateTime.fromISO(request.date).toLocaleString(
+                        {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        },
+                        { locale: "en-GB" }
+                      )
+                    }}
+                  </span>
+                </div>
+                <div class="flex flex-col sm:flex-row">
+                  <button
+                    @click="
+                      selectedRequest = request;
+                      selectedStatus = 'accepted';
+                      modalOpen = true;
+                    "
+                    v-tooltip="'Accept Request'"
+                    class="border rounded-full sm:mr-2 mb-2 sm:mb-0 p-3 hover:bg-gray-50"
+                    :class="{
+                      'bg-green-500 hover:bg-green-600 text-white':
+                        request.status === 'accepted',
+                    }"
+                  >
+                    <CheckIcon class="h-5 w-5" />
+                  </button>
+                  <button
+                    @click="
+                      selectedRequest = request;
+                      selectedStatus = 'declined';
+                      modalOpen = true;
+                    "
+                    v-tooltip="'Decline Request'"
+                    class="border rounded-full p-3 hover:bg-gray-50"
+                    :class="{
+                      'bg-red-500 hover:bg-red-600 text-white':
+                        request.status === 'declined',
+                    }"
+                  >
+                    <XMarkIcon class="h-5 w-5" />
+                  </button>
+                </div>
               </div>
-              <div class="flex flex-col sm:flex-row">
-                <button
-                  @click="
-                    selectedRequest = request;
-                    selectedStatus = 'accepted';
-                    modalOpen = true;
-                  "
-                  v-tooltip="'Accept Request'"
-                  class="border rounded-full sm:mr-2 mb-2 sm:mb-0 p-3 hover:bg-gray-50"
-                  :class="{
-                    'bg-green-500 hover:bg-green-600 text-white':
-                      request.status === 'accepted',
-                  }"
-                >
-                  <CheckIcon class="h-5 w-5" />
-                </button>
-                <button
-                  @click="
-                    selectedRequest = request;
-                    selectedStatus = 'declined';
-                    modalOpen = true;
-                  "
-                  v-tooltip="'Decline Request'"
-                  class="border rounded-full p-3 hover:bg-gray-50"
-                  :class="{
-                    'bg-red-500 hover:bg-red-600 text-white':
-                      request.status === 'declined',
-                  }"
-                >
-                  <XMarkIcon class="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
