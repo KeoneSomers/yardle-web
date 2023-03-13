@@ -22,6 +22,11 @@ const {
   "discount",
   "discountNote",
 ]);
+
+const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
+  style: "currency",
+  currency: yard.region.currency_iso_code,
+});
 </script>
 
 <template>
@@ -118,9 +123,8 @@ const {
               </td>
               <td class="pb-[15px] px-[15px]">
                 <div class="float-right">
-                  <span
-                    >{{ yard.region.currency
-                    }}{{ item.service_price.toFixed(2) }}</span
+                  <span>
+                    {{ currencyFormatter.format(item.service_price) }}</span
                   >
                 </div>
               </td>
@@ -132,25 +136,24 @@ const {
             <tr class="border divide-x">
               <td class="pb-[15px] px-[15px]">Base Rate</td>
               <td class="pb-[15px] px-[15px]">
-                <span class="float-right"
-                  >{{ yard.region.currency }}{{ baseRate.toFixed(2) }}</span
-                >
+                <span class="float-right">{{
+                  currencyFormatter.format(baseRate)
+                }}</span>
               </td>
             </tr>
             <tr class="border divide-x">
               <td class="pb-[15px] px-[15px]">Services</td>
               <td class="pb-[15px] px-[15px]">
-                <span class="float-right"
-                  >{{ yard.region.currency }}{{ subtotal.toFixed(2) }}</span
+                <span class="float-right">
+                  {{ currencyFormatter.format(subtotal) }}</span
                 >
               </td>
             </tr>
             <tr class="border divide-x">
               <td class="pb-[15px] px-[15px]">Subtotal</td>
               <td class="pb-[15px] px-[15px]">
-                <span class="float-right"
-                  >{{ yard.region.currency
-                  }}{{ (subtotal + baseRate).toFixed(2) }}</span
+                <span class="float-right">
+                  {{ currencyFormatter.format(subtotal + baseRate) }}</span
                 >
               </td>
             </tr>
@@ -158,9 +161,11 @@ const {
               <td class="pb-[15px] px-[15px]">Discount</td>
               <td class="pb-[15px] px-[15px]">
                 <span class="float-right"
-                  >{{ discount }}% - {{ yard.region.currency
-                  }}{{
-                    (((subtotal + baseRate) * discount) / 100).toFixed(2)
+                  >{{ discount }}% -
+                  {{
+                    currencyFormatter.format(
+                      ((subtotal + baseRate) * discount) / 100
+                    )
                   }}</span
                 >
               </td>
@@ -168,9 +173,10 @@ const {
             <tr class="border divide-x">
               <td class="pb-[15px] px-[15px]">Total</td>
               <td class="pb-[15px] px-[15px]">
-                <span class="float-right"
-                  >{{ yard.region.currency
-                  }}{{ (subtotal + baseRate - discount).toFixed(2) }}</span
+                <span class="float-right">
+                  {{
+                    currencyFormatter.format(subtotal + baseRate - discount)
+                  }}</span
                 >
               </td>
             </tr>

@@ -7,7 +7,6 @@ import {
 } from "@heroicons/vue/24/outline";
 import RequestServiceModal from "@/components/modals/RequestServiceModal.vue";
 import CancelServiceRequest from "@/components/modals/CancelServiceRequest.vue";
-import ServiceRequestLog from "@/components/ServiceRequestLog.vue";
 import BillingStats from "@/components/BillingStats.vue";
 
 const viewingHistory = ref(false);
@@ -41,6 +40,11 @@ const client = useSupabaseClient();
 const user = useSupabaseUser();
 const profile = useState("profile");
 const horse = useState("horse");
+
+const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
+  style: "currency",
+  currency: yard.value.region.currency_iso_code,
+});
 
 const getEvents = async () => {
   await useAsyncData("services", async () => {
@@ -227,7 +231,7 @@ const goToPreviousWeek = () => {
                     v-tooltip="'Late Booking'"
                     class="h-5 w-5 text-orange-400 mr-2"
                   />
-                  {{ yard.region.currency }}{{ event.service_price.toFixed(2) }}
+                  {{ currencyFormatter.format(event.service_price) }}
                   <TrashIcon
                     @click="
                       selectedService = event;
@@ -246,27 +250,6 @@ const goToPreviousWeek = () => {
           <div class="border-t"></div>
         </div>
       </div>
-    </div>
-    <div v-if="viewingHistory">
-      <div class="sm:flex sm:items-center mb-5 border-b pb-5">
-        <div class="sm:flex-auto">
-          <h1 class="text-xl font-semibold text-gray-900">History</h1>
-          <p class="mt-2 text-sm text-gray-700">
-            A list of all the services you have requested for your horse. Only
-            visible to the Yard owner, Admins and Horse Owner.
-          </p>
-        </div>
-        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            @click="viewingHistory = false"
-            type="button"
-            class="inline-flex mr-2 items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
-          >
-            Back
-          </button>
-        </div>
-      </div>
-      <ServiceRequestLog />
     </div>
     <div v-if="viewingInvoces">
       <div class="sm:flex sm:items-center mb-5 border-b pb-5">

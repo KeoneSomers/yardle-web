@@ -23,6 +23,11 @@ const yard = useState("yard");
 const profile = useState("profile");
 const alerts = useAlerts();
 
+const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
+  style: "currency",
+  currency: yard.value.region.currency_iso_code,
+});
+
 const selectedService = ref(null);
 const date = ref(null);
 
@@ -222,8 +227,8 @@ const handleSubmit = async () => {
                       :key="item.id"
                       :value="item"
                     >
-                      {{ item.name }} - {{ yard.region.currency
-                      }}{{ item.price.toFixed(2) }}
+                      {{ item.name }} -
+                      {{ currencyFormatter.format(item.price) }}
                     </option>
                   </select>
                 </div>

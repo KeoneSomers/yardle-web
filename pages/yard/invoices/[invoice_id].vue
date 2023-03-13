@@ -18,6 +18,11 @@ definePageMeta({
   guards: ["requireAuth", "requireYard"],
 });
 
+const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
+  style: "currency",
+  currency: yard.value.region.currency_iso_code,
+});
+
 const loading = ref(false);
 const itemToDelete = ref(null);
 const invoiceData = ref(null);
@@ -270,28 +275,21 @@ const saveChanges = async () => {
               >Base Rate</label
             >
             <div class="relative mt-1 rounded-md shadow-sm">
-              <div
-                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-              >
-                <span class="text-gray-500 sm:text-sm">{{
-                  yard.region.currency
-                }}</span>
-              </div>
               <input
                 type="number"
                 min="0"
                 v-model="baseRate"
                 name="base-rate"
-                class="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                class="block w-full rounded-md border-gray-300 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="0.00"
                 aria-describedby="price-currency"
               />
               <div
                 class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
               >
-                <span class="text-gray-500 sm:text-sm" id="price-currency"
-                  >GBP</span
-                >
+                <span class="text-gray-500 sm:text-sm" id="price-currency">{{
+                  yard.region.currency_iso_code
+                }}</span>
               </div>
             </div>
           </div>
@@ -484,12 +482,13 @@ const saveChanges = async () => {
                         item.booked_late
                       "
                       class="line-through mr-3 text-gray-400"
-                      >{{ yard.region.currency
-                      }}{{ item.service_price.toFixed(2) / 2 }}</span
                     >
-                    <span
-                      >{{ yard.region.currency
-                      }}{{ item.service_price.toFixed(2) }}</span
+                      {{
+                        currencyFormatter.format(item.service_price / 2)
+                      }}</span
+                    >
+                    <span>
+                      {{ currencyFormatter.format(item.service_price) }}</span
                     >
                   </td>
                   <td
@@ -526,7 +525,7 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-6 pt-6 text-right text-sm text-gray-500 sm:pr-0"
                   >
-                    {{ yard.region.currency }}{{ baseRate.toFixed(2) }}
+                    {{ currencyFormatter.format(baseRate) }}
                   </td>
                 </tr>
                 <tr>
@@ -546,7 +545,7 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
                   >
-                    {{ yard.region.currency }}{{ subtotal.toFixed(2) }}
+                    {{ currencyFormatter.format(subtotal) }}
                   </td>
                 </tr>
                 <tr>
@@ -566,8 +565,7 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
                   >
-                    {{ yard.region.currency
-                    }}{{ (subtotal + baseRate).toFixed(2) }}
+                    {{ currencyFormatter.format(subtotal + baseRate) }}
                   </td>
                 </tr>
                 <tr>
@@ -587,9 +585,11 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
                   >
-                    {{ discount }}% - {{ yard.region.currency
-                    }}{{
-                      (((subtotal + baseRate) * discount) / 100).toFixed(2)
+                    {{ discount }}% -
+                    {{
+                      currencyFormatter.format(
+                        ((subtotal + baseRate) * discount) / 100
+                      )
                     }}
                   </td>
                 </tr>
@@ -610,13 +610,12 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
                   >
-                    {{ yard.region.currency
-                    }}{{
-                      (
+                    {{
+                      currencyFormatter.format(
                         subtotal +
-                        baseRate -
-                        ((subtotal + baseRate) * discount) / 100
-                      ).toFixed(2)
+                          baseRate -
+                          ((subtotal + baseRate) * discount) / 100
+                      )
                     }}
                   </td>
                 </tr>

@@ -140,7 +140,7 @@ const handleSubmit = async () => {
 
                 <div>
                   <label class="block text-sm font-medium text-gray-700"
-                    >Price ({{ yard.region.currency }})</label
+                    >Price ({{ yard.region.currency_iso_code }})</label
                   >
                   <div class="mt-1">
                     <input

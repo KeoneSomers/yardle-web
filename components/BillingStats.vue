@@ -12,6 +12,31 @@ const client = useSupabaseClient();
 const horse = useState("horse");
 const yard = useState("yard");
 
+const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
+  style: "currency",
+  currency: yard.value.region.currency_iso_code,
+});
+
+let test = new Intl.NumberFormat("fr-FR", {
+  style: "currency",
+  currency: "EUR",
+});
+
+let french = new Intl.NumberFormat("fr-FR", {
+  style: "currency",
+  currency: "EUR",
+});
+
+let rupee = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+});
+
+let euro = Intl.NumberFormat("en-DE", {
+  style: "currency",
+  currency: "EUR",
+});
+
 const serviceRequestsLog = useState("service_requests");
 
 // init with fallback values
@@ -458,7 +483,7 @@ watchEffect(async () => {
         <dd
           class="mt-1 text-3xl font-semibold tracking-tight text-gray-700 font-mono"
         >
-          {{ yard.region.currency }}{{ spendThisWeek.toFixed(2) }}
+          {{ currencyFormatter.format(spendThisWeek) }}
         </dd>
       </div>
 
@@ -487,7 +512,7 @@ watchEffect(async () => {
         <dd
           class="mt-1 text-3xl font-semibold tracking-tight text-gray-700 font-mono"
         >
-          {{ yard.region.currency }}{{ nextBill.toFixed(2) }}
+          {{ currencyFormatter.format(nextBill) }}
         </dd>
       </div>
     </dl>

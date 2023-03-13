@@ -30,6 +30,11 @@ const done = ref(false);
 const services = useState("services", () => []);
 const alerts = useAlerts();
 
+const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
+  style: "currency",
+  currency: yard.value.region.currency_iso_code,
+});
+
 const enableLateBookingFee = ref(yard.value.enabled_billing_late_booking_fee);
 
 // save when the user changes the value
@@ -257,7 +262,7 @@ await fetchServices();
                       {{ service.description }}
                     </td>
                     <td class="py-4 pl-4 pr-4 text-sm text-gray-500">
-                      {{ yard.region.currency }}{{ service.price.toFixed(2) }}
+                      {{ currencyFormatter.format(service.price) }}
                     </td>
                     <td class="py-4 pl-4 pr-4 text-sm text-gray-500">
                       <Menu as="div" class="relative inline-block text-left">
