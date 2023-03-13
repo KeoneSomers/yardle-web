@@ -514,36 +514,16 @@ const saveChanges = async () => {
                     colspan="3"
                     class="hidden pl-4 pr-3 pt-6 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                   >
-                    Base Rate
+                    Subtotal
                   </th>
                   <th
                     scope="row"
                     class="pl-6 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:hidden"
                   >
-                    Base Rate
+                    Subtotal
                   </th>
                   <td
                     class="pl-3 pr-6 pt-6 text-right text-sm text-gray-500 sm:pr-0"
-                  >
-                    {{ currencyFormatter.format(baseRate) }}
-                  </td>
-                </tr>
-                <tr>
-                  <th
-                    scope="row"
-                    colspan="3"
-                    class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
-                  >
-                    Services
-                  </th>
-                  <th
-                    scope="row"
-                    class="pl-6 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
-                  >
-                    Services
-                  </th>
-                  <td
-                    class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
                   >
                     {{ currencyFormatter.format(subtotal) }}
                   </td>
@@ -554,38 +534,38 @@ const saveChanges = async () => {
                     colspan="3"
                     class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                   >
-                    Subtotal
+                    Base Rate
                   </th>
                   <th
                     scope="row"
                     class="pl-6 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
                   >
-                    Subtotal
+                    Base Rate
                   </th>
                   <td
                     class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
                   >
-                    {{ currencyFormatter.format(subtotal + baseRate) }}
+                    + {{ currencyFormatter.format(baseRate) }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="discount != 0">
                   <th
                     scope="row"
                     colspan="3"
                     class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                   >
-                    Discount
+                    Discount ({{ discount }}%)
                   </th>
                   <th
                     scope="row"
                     class="pl-6 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
                   >
-                    Discount
+                    Discount ({{ discount }}%)
                   </th>
                   <td
                     class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
                   >
-                    {{ discount }}% -
+                    <span v-if="discount > 0">-</span>
                     {{
                       currencyFormatter.format(
                         ((subtotal + baseRate) * discount) / 100

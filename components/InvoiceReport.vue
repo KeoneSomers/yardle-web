@@ -134,15 +134,7 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
         <div class="w-full">
           <table class="w-[40%] float-right mt-[10px]">
             <tr class="border divide-x">
-              <td class="pb-[15px] px-[15px]">Base Rate</td>
-              <td class="pb-[15px] px-[15px]">
-                <span class="float-right">{{
-                  currencyFormatter.format(baseRate)
-                }}</span>
-              </td>
-            </tr>
-            <tr class="border divide-x">
-              <td class="pb-[15px] px-[15px]">Services</td>
+              <td class="pb-[15px] px-[15px]">Subtotal</td>
               <td class="pb-[15px] px-[15px]">
                 <span class="float-right">
                   {{ currencyFormatter.format(subtotal) }}</span
@@ -150,11 +142,11 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
               </td>
             </tr>
             <tr class="border divide-x">
-              <td class="pb-[15px] px-[15px]">Subtotal</td>
+              <td class="pb-[15px] px-[15px]">Base Rate</td>
               <td class="pb-[15px] px-[15px]">
-                <span class="float-right">
-                  {{ currencyFormatter.format(subtotal + baseRate) }}</span
-                >
+                <span class="float-right">{{
+                  currencyFormatter.format(baseRate)
+                }}</span>
               </td>
             </tr>
             <tr class="border divide-x">
@@ -175,7 +167,11 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
               <td class="pb-[15px] px-[15px]">
                 <span class="float-right">
                   {{
-                    currencyFormatter.format(subtotal + baseRate - discount)
+                    currencyFormatter.format(
+                      subtotal +
+                        baseRate -
+                        ((subtotal + baseRate) * discount) / 100
+                    )
                   }}</span
                 >
               </td>
