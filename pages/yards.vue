@@ -27,7 +27,7 @@ onMounted(async () => {
   // get yards
   const { data: profile, error } = await client
     .from("profiles")
-    .select("yards!profiles_yards(*)")
+    .select("yards!profiles_yards(*, region_id(*))")
     .eq("id", user.value.id) // TODO: Error here: Cannot read properties of null (reading 'id') - happens when creating a new user
     .order("created_at", {
       foreignTable: "yards",
@@ -137,6 +137,10 @@ const handleLeaveYard = async (yardId) => {
               @click.self="handleSelectYard(yard.id)"
               class="flex-1 font-bold text-gray-700"
             >
+              <icon
+                :name="yard.region_id.flag_icon"
+                class="h-4 w-4 flex-shrink-0 block mr-1 -mt-1"
+              />
               {{ yard.name }}
             </div>
             <!-- TODO: this should be based off role and not created_by -->

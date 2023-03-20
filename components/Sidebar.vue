@@ -133,9 +133,19 @@ const handleSignout = async () => {
         <!-- yard widget -->
         <div v-if="yard" class="border-t border-b p-4 bg-gray-50 flex">
           <div class="flex-1">
-            <p class="text-md font-bold text-gray-600">
-              {{ yard.name }}
-            </p>
+            <div class="flex items-center">
+              <icon
+                :name="yard.region.flag_icon"
+                class="h-4 w-4 flex-shrink-0 block mr-1"
+              />
+              <div>
+                <div class="w-52 lg:w-40 truncate">
+                  <p class="text-md font-bold text-gray-600 truncate">
+                    {{ yard.name }}
+                  </p>
+                </div>
+              </div>
+            </div>
             <p
               v-if="profile && profile.active_role"
               class="text-xs text-gray-500"
@@ -287,7 +297,7 @@ const handleSignout = async () => {
                 ]"
                 aria-hidden="true"
               />
-              <span class="flex-1">Settings</span>
+              <span class="flex-1">Yard Settings</span>
             </NuxtLink>
           </div>
         </div>

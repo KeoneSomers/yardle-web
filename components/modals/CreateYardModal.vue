@@ -133,7 +133,7 @@ const createYard = async () => {
 
   // update local state
   if (yards.value) {
-    yards.value.unshift(newYard);
+    yards.value.unshift({ ...newYard, region_id: region.value });
   } else {
     yards.value = [newYard];
   }
