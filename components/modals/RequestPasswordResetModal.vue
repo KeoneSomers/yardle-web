@@ -6,8 +6,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
-import { KeyIcon } from "@heroicons/vue/24/outline";
-import { EnvelopeIcon } from "@heroicons/vue/20/solid";
 
 const loading = ref(false);
 
@@ -98,7 +96,8 @@ const handleResetPassword = async () => {
                   <div
                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 sm:mx-0 sm:h-10 sm:w-10"
                   >
-                    <KeyIcon
+                    <icon
+                      name="heroicons:key"
                       class="h-6 w-6 text-orange-600"
                       aria-hidden="true"
                     />
@@ -118,7 +117,8 @@ const handleResetPassword = async () => {
                       <div
                         class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
                       >
-                        <EnvelopeIcon
+                        <icon
+                          name="heroicons:envelope-solid"
                           class="h-5 w-5 text-gray-400"
                           aria-hidden="true"
                         />

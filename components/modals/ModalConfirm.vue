@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { VueFinalModal } from "vue-final-modal";
-import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 
 const props = defineProps<{
   title?: string;
@@ -32,14 +31,15 @@ const emit = defineEmits<{
         @click="emit('cancel')"
       >
         <span class="sr-only">Close</span>
-        <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+        <icon name="heroicons:x-mark" class="h-6 w-6" aria-hidden="true" />
       </button>
     </div>
     <div class="sm:flex sm:items-start">
       <div
         class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
       >
-        <ExclamationTriangleIcon
+        <icon
+          name="heroicons:exclamation-triangle"
           class="h-6 w-6 text-red-600"
           aria-hidden="true"
         />

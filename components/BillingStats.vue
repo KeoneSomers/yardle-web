@@ -1,6 +1,5 @@
 <script setup>
-import { DateTime, Interval } from "luxon";
-import { PencilIcon } from "@heroicons/vue/24/outline";
+import { DateTime } from "luxon";
 
 const selectedYard = useState("selectedYard");
 const profile = useState("profile");
@@ -456,7 +455,8 @@ watchEffect(async () => {
         ><NuxtLink
           to="/yard/settings"
           class="flex items-center ml-2 text-blue-500"
-          >(Edit <PencilIcon class="h-3 w-3 ml-1" />)</NuxtLink
+          >(Edit
+          <icon name="heroicons:pencil" class="h-3 w-3 ml-1" />)</NuxtLink
         ></span
       >
     </p>

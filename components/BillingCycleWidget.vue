@@ -1,14 +1,10 @@
 <script setup>
 import { DateTime } from "luxon";
-import { PencilSquareIcon } from "@heroicons/vue/24/outline";
 
 const loading2 = ref(false);
 const done2 = ref(false);
 
 const client = useSupabaseClient();
-const user = useSupabaseUser();
-const yardId = useState("selectedYard");
-// const fields = useState("fields");
 const selectedYard = useState("selectedYard");
 const alerts = useAlerts();
 
@@ -349,7 +345,7 @@ const resetStartDate = () => {
           class="ml-2 cursor-pointer"
           v-tooltip="'Edit'"
         >
-          <PencilSquareIcon class="h-5 w-5 text-blue-500" />
+          <icon name="heroicons:pencil-square" class="h-5 w-5 text-blue-500" />
         </div>
       </div>
     </div>

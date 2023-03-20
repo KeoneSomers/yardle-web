@@ -9,11 +9,6 @@ import EditFieldRotationModal from "@/components/modals/EditFieldRotationModal.v
 import DeleteFieldRotationModal from "@/components/modals/DeleteFieldRotationModal.vue";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import {
-  EllipsisVerticalIcon,
-  PlusIcon,
-  ChevronDownIcon,
-} from "@heroicons/vue/20/solid";
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
@@ -212,7 +207,7 @@ const handleFieldChange = async (e) => {
                 v-tooltip="'Add a field rotation'"
                 class="flex items-center cursor-pointer text-gray-500 hover:text-gray-700 hover:bg-indigo-200 rounded-lg whitespace-nowrap p-2 font-medium text-sm"
               >
-                <PlusIcon class="h-5 w-5" />
+                <icon name="heroicons:plus-solid" class="h-5 w-5" />
               </div>
             </div>
           </div>
@@ -241,7 +236,11 @@ const handleFieldChange = async (e) => {
             class="inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium border shadow"
           >
             Rotation Options
-            <ChevronDownIcon class="ml-2 -mr-1 h-5 w-5" aria-hidden="true" />
+            <icon
+              name="heroicons:chevron-down-solid"
+              class="ml-2 -mr-1 h-5 w-5"
+              aria-hidden="true"
+            />
           </MenuButton>
         </div>
 
@@ -366,7 +365,11 @@ const handleFieldChange = async (e) => {
                 class="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
               >
                 <span class="sr-only">Open options</span>
-                <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
+                <icon
+                  name="heroicons:ellipsis-vertical-solid"
+                  class="h-5 w-5"
+                  aria-hidden="true"
+                />
               </MenuButton>
             </div>
 
@@ -443,7 +446,7 @@ const handleFieldChange = async (e) => {
         @click="createModalOpen = true"
         class="w-80 border-4 border-dashed border-gray-100 rounded-lg text-gray-100 hover:bg-gray-50 hover:text-white hover:cursor-pointer flex justify-center items-center"
       >
-        <PlusIcon class="h-24 w-24" />
+        <icon name="heroicons:plus-solid" class="h-24 w-24" />
       </div>
     </div>
   </div>

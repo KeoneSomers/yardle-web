@@ -8,7 +8,6 @@ import {
 } from "@headlessui/vue";
 import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
 import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/vue/20/solid";
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
@@ -220,7 +219,8 @@ const handleRoleChange = async (memberId, roleId) => {
                                 <span class="sr-only"
                                   >Change published status</span
                                 >
-                                <ChevronDownIcon
+                                <icon
+                                  name="heroicons:chevron-down-solid"
                                   class="h-5 w-5"
                                   aria-hidden="true"
                                 />
@@ -294,7 +294,8 @@ const handleRoleChange = async (memberId, roleId) => {
                                             : 'text-indigo-500'
                                         "
                                       >
-                                        <CheckIcon
+                                        <icon
+                                          name="heroicons:check-solid"
                                           class="h-5 w-5"
                                           aria-hidden="true"
                                         />

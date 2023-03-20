@@ -1,8 +1,4 @@
 <script setup>
-import { ref } from "vue";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/24/outline";
-import { XMarkIcon } from "@heroicons/vue/20/solid";
-
 const alerts = useAlerts();
 
 // When an alert is added to the array, start a timer to remove it after 5 seconds
@@ -37,13 +33,15 @@ watch(
         <div class="p-4">
           <div class="flex items-start">
             <div class="flex-shrink-0">
-              <CheckCircleIcon
+              <icon
                 v-if="alert.type === 'success'"
+                name="heroicons:check-circle"
                 class="h-6 w-6 text-green-400"
                 aria-hidden="true"
               />
-              <XCircleIcon
+              <icon
                 v-if="alert.type === 'error'"
+                name="heroicons:x-circle"
                 class="h-6 w-6 text-red-400"
                 aria-hidden="true"
               />
@@ -63,7 +61,12 @@ watch(
                 class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
               >
                 <span class="sr-only">Close</span>
-                <XMarkIcon class="h-5 w-5" aria-hidden="true" />
+                <icon
+                  v-if="alert.type === 'error'"
+                  name="heroicons:x-mark"
+                  class="h-5 w-5"
+                  aria-hidden="true"
+                />
               </button>
             </div>
           </div>

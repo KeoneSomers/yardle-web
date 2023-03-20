@@ -1,6 +1,5 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { MinusSmallIcon, PlusSmallIcon } from "@heroicons/vue/24/outline";
 
 const faqs = [
   {
@@ -64,12 +63,18 @@ const faqs = [
                   faq.question
                 }}</span>
                 <span class="ml-6 flex h-7 items-center">
-                  <MinusSmallIcon
+                  <icon
+                    name="heroicons:minus-small"
                     v-if="!open"
                     class="h-6 w-6"
                     aria-hidden="true"
                   />
-                  <PlusSmallIcon v-else class="h-6 w-6" aria-hidden="true" />
+                  <icon
+                    name="heroicons:plus-small"
+                    v-else
+                    class="h-6 w-6"
+                    aria-hidden="true"
+                  />
                 </span>
               </DisclosureButton>
             </dt>

@@ -1,47 +1,45 @@
 <script setup>
 import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
-import {
-  CalendarIcon,
-  HomeIcon,
-  MagnifyingGlassCircleIcon,
-  UserGroupIcon,
-  RectangleStackIcon,
-  RectangleGroupIcon,
-  ClipboardDocumentListIcon,
-  LinkIcon,
-  Cog8ToothIcon,
-  DocumentTextIcon,
-  InboxIcon,
-} from "@heroicons/vue/24/outline";
-import {
-  EllipsisHorizontalIcon,
-  CheckBadgeIcon,
-} from "@heroicons/vue/20/solid";
 
 const pendingServiceRequestCount = useState("pendingServiceRequestCount");
 
 const inviteLinkModalOpen = ref(false);
 
 const navigation = [
-  { name: "Dashboard", to: "/yard/dashboard", icon: HomeIcon, hint: "Soon" },
+  {
+    name: "Dashboard",
+    to: "/yard/dashboard",
+    icon: "heroicons:home",
+    hint: "Soon",
+  },
   {
     name: "Horses",
     to: "/yard/horses",
-    icon: MagnifyingGlassCircleIcon,
+    icon: "heroicons:magnifying-glass-circle",
     hint: "",
   },
-  { name: "Members", to: "/yard/members", icon: UserGroupIcon, hint: "" },
-  { name: "Calendar", to: "/yard/calendar", icon: CalendarIcon, hint: "" },
+  {
+    name: "Members",
+    to: "/yard/members",
+    icon: "heroicons:user-group",
+    hint: "",
+  },
+  {
+    name: "Calendar",
+    to: "/yard/calendar",
+    icon: "heroicons:calendar",
+    hint: "",
+  },
   {
     name: "Feeds",
     to: "/yard/feeds",
-    icon: ClipboardDocumentListIcon,
+    icon: "heroicons:clipboard-document-list",
   },
   {
     name: "Field Groups",
     to: "/yard/fields",
-    icon: RectangleGroupIcon,
+    icon: "heroicons:rectangle-group",
   },
 ];
 
@@ -205,8 +203,8 @@ const handleSignout = async () => {
                 profile.active_role == 1)
             "
           >
-            <component
-              :is="item.icon"
+            <icon
+              :name="item.icon"
               :class="[
                 item.to == router.currentRoute.value.path
                   ? 'text-gray-500'
@@ -243,7 +241,8 @@ const handleSignout = async () => {
                 'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
               ]"
             >
-              <InboxIcon
+              <icon
+                name="heroicons:inbox"
                 :class="[
                   '/yard/serviceRequests' == router.currentRoute.value.path
                     ? 'text-gray-500'
@@ -268,7 +267,8 @@ const handleSignout = async () => {
                 'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
               ]"
             >
-              <DocumentTextIcon
+              <icon
+                name="heroicons:document-text"
                 :class="[
                   '/yard/invoices' == router.currentRoute.value.path
                     ? 'text-gray-500'
@@ -288,7 +288,8 @@ const handleSignout = async () => {
                 'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
               ]"
             >
-              <Cog8ToothIcon
+              <icon
+                name="heroicons:cog-8-tooth"
                 :class="[
                   '/yard/settings' == router.currentRoute.value.path
                     ? 'text-gray-500'
@@ -307,7 +308,7 @@ const handleSignout = async () => {
             type="button"
             class="flex flex-1 justify-center items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
           >
-            <LinkIcon class="h-5 w-5 mr-2" />
+            <icon name="heroicons:link" class="h-5 w-5 mr-2" />
             Invite
           </button>
         </div>
@@ -340,7 +341,8 @@ const handleSignout = async () => {
               >
                 {{ `${profile.first_name} ${profile.last_name}` }}
               </p>
-              <CheckBadgeIcon
+              <icon
+                name="heroicons:check-badge-solid"
                 v-if="profile.is_early_adopter"
                 class="h-4 w-4 ml-2 text-blue-500"
                 v-tooltip="'Early Adopter'"
@@ -367,7 +369,10 @@ const handleSignout = async () => {
                   <div
                     class="rounded-full p-1 flex items-center justify-center border-2"
                   >
-                    <EllipsisHorizontalIcon class="h-5 w-5 text-gray-500" />
+                    <icon
+                      name="heroicons:ellipsis-horizontal-solid"
+                      class="h-5 w-5 text-gray-500"
+                    />
                   </div>
                 </MenuButton>
               </div>

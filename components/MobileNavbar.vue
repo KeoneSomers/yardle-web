@@ -1,6 +1,4 @@
 <script setup>
-import { Bars3Icon } from "@heroicons/vue/24/outline";
-
 const sidebarOpen = useState("sidebarOpen");
 </script>
 
@@ -16,7 +14,7 @@ const sidebarOpen = useState("sidebarOpen");
         @click="sidebarOpen = true"
       >
         <span class="sr-only">Open sidebar</span>
-        <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+        <icon name="heroicons:bars-3" class="h-6 w-6" aria-hidden="true" />
       </button>
     </div>
   </div>

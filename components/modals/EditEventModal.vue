@@ -13,7 +13,6 @@ import {
   DialogTitle,
 } from "@headlessui/vue";
 import { DateTime } from "luxon";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 
 const loading = ref(false);
 
@@ -309,7 +308,8 @@ const removeSelectedHorse = (i) => {
                       <ComboboxButton
                         class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
                       >
-                        <ChevronUpDownIcon
+                        <icon
+                          name="heroicons:chevron-up-down-solid"
                           class="h-5 w-5 text-gray-400"
                           aria-hidden="true"
                         />
@@ -369,7 +369,11 @@ const removeSelectedHorse = (i) => {
                                 active ? 'text-white' : 'text-indigo-600',
                               ]"
                             >
-                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                              <icon
+                                name="heroicons:check-solid"
+                                class="h-5 w-5"
+                                aria-hidden="true"
+                              />
                             </span>
                           </li>
                         </ComboboxOption>

@@ -6,7 +6,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
-import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 
 const loading = ref(false);
 
@@ -105,7 +104,8 @@ const handleDelete = async () => {
                 <div
                   class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
                 >
-                  <ExclamationTriangleIcon
+                  <icon
+                    name="heroicons:exclamation-triangle"
                     class="h-6 w-6 text-red-600"
                     aria-hidden="true"
                   />

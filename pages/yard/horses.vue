@@ -1,7 +1,5 @@
 <script setup>
-import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/vue/20/solid";
 import CreateHorseModal from "@/components/modals/CreateHorseModal.vue";
-import { DateTime } from "luxon";
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
@@ -114,7 +112,8 @@ const selectHorse = (horseId) => {
               <div
                 class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
               >
-                <MagnifyingGlassIcon
+                <icon
+                  name="heroicons:magnifying-glass-solid"
                   class="h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
@@ -250,7 +249,11 @@ const selectHorse = (horseId) => {
             type="button"
             class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
-            <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            <icon
+              name="heroicons:plus-solid"
+              class="-ml-1 mr-2 h-5 w-5"
+              aria-hidden="true"
+            />
             New Horse
           </button>
         </div>

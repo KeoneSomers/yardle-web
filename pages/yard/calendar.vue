@@ -1,13 +1,7 @@
 <script setup>
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  EllipsisHorizontalIcon,
-  PlusIcon,
-} from "@heroicons/vue/20/solid";
-import { EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
 import { DateTime, Info } from "luxon";
+
 import CreateEventModal from "@/components/modals/CreateEventModal.vue";
 import EditEventModal from "@/components/modals/EditEventModal.vue";
 import DeleteEventModal from "@/components/modals/DeleteEventModal.vue";
@@ -156,7 +150,11 @@ const createEvent = (e, day) => {
           class="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
         >
           <span class="sr-only">Previous month</span>
-          <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
+          <icon
+            name="heroicons:chevron-left-solid"
+            class="h-5 w-5"
+            aria-hidden="true"
+          />
         </button>
         <button
           @click="() => goToNextMonth()"
@@ -164,7 +162,11 @@ const createEvent = (e, day) => {
           class="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
         >
           <span class="sr-only">Next month</span>
-          <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
+          <icon
+            name="heroicons:chevron-right-solid"
+            class="h-5 w-5"
+            aria-hidden="true"
+          />
         </button>
         <button
           @click="createModalOpen = true"
@@ -172,7 +174,11 @@ const createEvent = (e, day) => {
           class="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
         >
           <span class="sr-only">Create event</span>
-          <PlusIcon class="h-5 w-5" aria-hidden="true" />
+          <icon
+            name="heroicons:plus-solid"
+            class="h-5 w-5"
+            aria-hidden="true"
+          />
         </button>
       </div>
       <div
@@ -280,7 +286,11 @@ const createEvent = (e, day) => {
                   class="-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600"
                 >
                   <span class="sr-only">Open options</span>
-                  <EllipsisVerticalIcon class="h-6 w-6" aria-hidden="true" />
+                  <icon
+                    name="heroicons:ellipsis-vertical"
+                    class="h-6 w-6"
+                    aria-hidden="true"
+                  />
                 </MenuButton>
               </div>
 
@@ -351,7 +361,11 @@ const createEvent = (e, day) => {
               class="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
               <span class="sr-only">Previous month</span>
-              <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
+              <icon
+                name="heroicons:chevron-left-solid"
+                class="h-5 w-5"
+                aria-hidden="true"
+              />
             </button>
             <button
               @click="() => goToCurrentMonth()"
@@ -367,7 +381,11 @@ const createEvent = (e, day) => {
               class="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
               <span class="sr-only">Next month</span>
-              <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
+              <icon
+                name="heroicons:chevron-right-solid"
+                class="h-5 w-5"
+                aria-hidden="true"
+              />
             </button>
           </div>
           <div class="hidden md:ml-4 md:flex md:items-center">
@@ -385,7 +403,11 @@ const createEvent = (e, day) => {
               class="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500"
             >
               <span class="sr-only">Open menu</span>
-              <EllipsisHorizontalIcon class="h-5 w-5" aria-hidden="true" />
+              <icon
+                name="heroicons:ellipsis-horizontal-solid"
+                class="h-5 w-5"
+                aria-hidden="true"
+              />
             </MenuButton>
 
             <transition

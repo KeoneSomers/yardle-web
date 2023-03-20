@@ -1,6 +1,5 @@
 <script setup>
 import { DateTime } from "luxon";
-import { PlusIcon, EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
 import {
   Menu,
   MenuButton,
@@ -364,7 +363,8 @@ await fetchServices();
                             class="flex items-center p-2 rounded-full text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                           >
                             <span class="sr-only">Open options</span>
-                            <EllipsisVerticalIcon
+                            <icon
+                              name="heroicons:ellipsis-vertical-solid"
                               class="h-5 w-5"
                               aria-hidden="true"
                             />
@@ -456,7 +456,11 @@ await fetchServices();
               type="button"
               class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              <icon
+                name="heroicons:plus-solid"
+                class="-ml-1 mr-2 h-5 w-5"
+                aria-hidden="true"
+              />
               New Service
             </button>
           </div>

@@ -1,7 +1,5 @@
 <script setup>
 import { DateTime } from "luxon";
-import { CalendarDaysIcon, ArrowRightIcon } from "@heroicons/vue/24/outline";
-import { EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
 import AssignHorseOwnerModal from "@/components/modals/AssignHorseOwnerModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
@@ -246,7 +244,11 @@ const handleUnassignOwner = async () => {
               class="flex items-center p-2 rounded-full text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
             >
               <span class="sr-only">Open options</span>
-              <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
+              <icon
+                name="heroicons:ellipsis-vertical-solid"
+                class="h-5 w-5"
+                aria-hidden="true"
+              />
             </MenuButton>
           </div>
 
@@ -321,7 +323,7 @@ const handleUnassignOwner = async () => {
     <div class="flex mt-10">
       <div>
         <div class="p-2 bg-blue-100 rounded-xl mt-1 mr-3">
-          <CalendarDaysIcon class="h-5 w-5 text-blue-700" />
+          <icon name="heroicons:calendar-days" class="h-5 w-5 text-blue-700" />
         </div>
       </div>
       <div class="flex-1">
@@ -336,7 +338,7 @@ const handleUnassignOwner = async () => {
           to="/yard/calendar"
           class="p-2 bg-blue-500 hover:bg-blue-600 rounded-xl mt-1 block cursor-pointer ml-3"
         >
-          <ArrowRightIcon class="h-5 w-5 text-white" />
+          <icon name="heroicons:arrow-right" class="h-5 w-5 text-white" />
         </NuxtLink>
       </div>
     </div>

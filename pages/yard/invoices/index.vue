@@ -1,5 +1,4 @@
 <script setup>
-import { ChevronRightIcon } from "@heroicons/vue/20/solid";
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
 });
@@ -48,7 +47,7 @@ invoices.value = invoicesData;
           </p>
         </div>
         <div>
-          <ChevronRightIcon class="h-8 w-8 mr-4" />
+          <icon name="heroicons:chevron-right-solid" class="h-8 w-8 mr-4" />
           <!-- <button class="p-2 mr-2 shadow border rounded">
             View / Edit Items
           </button>

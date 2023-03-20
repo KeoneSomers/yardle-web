@@ -1,9 +1,7 @@
 <script setup>
-import { PlusIcon } from "@heroicons/vue/20/solid";
 import BasicModal from "@/components/BasicModal.vue";
 import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
 import { DialogTitle } from "@headlessui/vue";
-import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 
 definePageMeta({
@@ -141,7 +139,11 @@ const handleEditFeed = (feedId) => {
           type="button"
           class="inline-flex whitespace-nowrap w-full md:w-fit justify-center md:mr-2 items-center rounded-md border border-transparent bg-indigo-600 md:px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
-          <PlusIcon class="-ml-1 mr-3 h-5 w-5" aria-hidden="true" />
+          <icon
+            name="heroicons:plus-solid"
+            class="-ml-1 mr-3 h-5 w-5"
+            aria-hidden="true"
+          />
           Add a feed
         </button>
         <DownloadFeedReport />
@@ -357,7 +359,11 @@ const handleEditFeed = (feedId) => {
           type="button"
           class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
-          <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+          <icon
+            name="heroicons:plus-solid"
+            class="-ml-1 mr-2 h-5 w-5"
+            aria-hidden="true"
+          />
           New Feed
         </button>
       </div>
@@ -383,7 +389,8 @@ const handleEditFeed = (feedId) => {
         <div
           class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
         >
-          <ExclamationTriangleIcon
+          <icon
+            name="heroicons:exclamation-triangle"
             class="h-6 w-6 text-red-600"
             aria-hidden="true"
           />

@@ -1,6 +1,5 @@
 <script setup>
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
 
 const props = defineProps(["feeds"]);
 const emits = defineEmits(["editFeed", "deleteFeed"]);
@@ -61,7 +60,8 @@ const emits = defineEmits(["editFeed", "deleteFeed"]);
                         class="flex items-center p-0.5 rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                       >
                         <span class="sr-only">Open options</span>
-                        <EllipsisVerticalIcon
+                        <icon
+                          name="heroicons:ellipsis-vertical-solid"
                           class="h-5 w-5"
                           aria-hidden="true"
                         />

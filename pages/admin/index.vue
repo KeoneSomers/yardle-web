@@ -1,6 +1,5 @@
 <script setup>
 // super admin page
-import { TrashIcon } from "@heroicons/vue/24/outline";
 
 definePageMeta({
   layout: "blank",
@@ -89,7 +88,7 @@ const handleSendEventEmailReminders = async () => {
       </div>
       <div class="p-2">
         <button @click="handleDelete(item.id)">
-          <TrashIcon class="h-4 w-4" />
+          <icon name="heroicons:trash" class="h-4 w-4" />
         </button>
       </div>
     </div>

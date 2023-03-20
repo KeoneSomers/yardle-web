@@ -1,7 +1,6 @@
 <script setup>
 // imports
 import { DateTime } from "luxon";
-import { PencilIcon, TrashIcon } from "@heroicons/vue/24/outline";
 
 // refs
 const { event } = defineProps(["event"]);
@@ -37,14 +36,14 @@ const { data: horses } = await useAsyncData(String(event.id), async () => {
         @click="() => $emit('edit')"
         class="hover:bg-white hover:text-indigo-500 cursor-pointer rounded-full p-3 my-1"
       >
-        <PencilIcon class="h-6 w-6" />
+        <icon name="heroicons:pencil" class="h-6 w-6" />
       </a>
       <a
         v-close-popper.all
         @click="() => $emit('delete')"
         class="hover:bg-white hover:text-red-500 cursor-pointer rounded-full p-3 my-1"
       >
-        <TrashIcon class="h-6 w-6" />
+        <icon name="heroicons:trash" class="h-6 w-6" />
       </a>
     </div>
     <div class="p-5">

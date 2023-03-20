@@ -11,7 +11,6 @@ import {
   ComboboxOptions,
   ComboboxOption,
 } from "@headlessui/vue";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 
 const loading = ref(false);
 
@@ -166,7 +165,8 @@ const handleSubmit = async () => {
                         <ComboboxButton
                           class="absolute inset-y-0 right-0 flex items-center pr-2"
                         >
-                          <ChevronUpDownIcon
+                          <icon
+                            name="heroicons:chevron-up-down-solid"
                             class="h-5 w-5 text-gray-400"
                             aria-hidden="true"
                           />
@@ -221,7 +221,11 @@ const handleSubmit = async () => {
                                   'text-teal-600': !active,
                                 }"
                               >
-                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                                <icon
+                                  name="heroicons:check-solid"
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
                               </span>
                             </li>
                           </ComboboxOption>

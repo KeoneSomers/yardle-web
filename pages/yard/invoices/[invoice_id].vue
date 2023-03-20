@@ -1,10 +1,5 @@
 <script setup>
 import { DateTime } from "luxon";
-import {
-  XMarkIcon,
-  EnvelopeIcon,
-  ChevronLeftIcon,
-} from "@heroicons/vue/20/solid";
 import { useModal } from "vue-final-modal";
 import ModalConfirm from "@/components/modals/ModalConfirm.vue";
 import AddServiceModal from "@/components/modals/AddServiceModal.vue";
@@ -178,7 +173,7 @@ const saveChanges = async () => {
         to="/yard/invoices"
         class="flex items-center hover:underline cursor-pointer"
       >
-        <ChevronLeftIcon class="-ml-3 mr-1 h-6 w-6" />
+        <icon name="heroicons:chevron-left-solid" class="-ml-3 mr-1 h-6 w-6" />
         Back
       </NuxtLink>
     </div>
@@ -251,7 +246,8 @@ const saveChanges = async () => {
               <div
                 class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
               >
-                <EnvelopeIcon
+                <icon
+                  name="heroicons:envelope-solid"
                   class="h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
@@ -502,7 +498,11 @@ const saveChanges = async () => {
                       "
                       class="flex justify-end hover:cursor-pointer"
                     >
-                      <XMarkIcon class="h-6 w-6" v-tooltip="'Remove'" />
+                      <icon
+                        name="heroicons:x-mark-solid"
+                        class="h-6 w-6"
+                        v-tooltip="'Remove'"
+                      />
                     </div>
                   </td>
                 </tr>

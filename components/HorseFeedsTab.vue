@@ -3,7 +3,6 @@
 import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
 import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 import DeleteFeedModal from "@/components/modals/DeleteFeedModal.vue";
-import { PlusIcon, EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 // modal toggles
@@ -205,7 +204,11 @@ const ingredientTypes = [
                     class="flex items-center p-0.5 rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                   >
                     <span class="sr-only">Open options</span>
-                    <EllipsisVerticalIcon class="h-6 w-6" aria-hidden="true" />
+                    <icon
+                      name="heroicons:ellipsis-vertical-solid"
+                      class="h-6 w-6"
+                      aria-hidden="true"
+                    />
                   </MenuButton>
                 </div>
 
@@ -283,7 +286,11 @@ const ingredientTypes = [
             type="button"
             class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
-            <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            <icon
+              name="heroicons:plus-solid"
+              class="-ml-1 mr-2 h-5 w-5"
+              aria-hidden="true"
+            />
             New Feed
           </button>
         </div>

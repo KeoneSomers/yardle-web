@@ -1,15 +1,4 @@
 <script setup>
-import {
-  ChevronLeftIcon,
-  PencilSquareIcon,
-  TrashIcon,
-} from "@heroicons/vue/20/solid";
-import {
-  EllipsisVerticalIcon,
-  CurrencyPoundIcon,
-  ClipboardDocumentIcon,
-  RectangleGroupIcon,
-} from "@heroicons/vue/24/outline";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { useModal } from "vue-final-modal";
 import ModalConfirm from "@/components/modals/ModalConfirm.vue";
@@ -26,11 +15,31 @@ const viewingHorse = useState("viewingHorse");
 
 const selectedTab = useState("horseTab", () => 0);
 const tabs = [
-  { name: "General", component: HorseGeneralTab, icon: RectangleGroupIcon },
-  { name: "Rugs", component: HorseRugsTab, icon: ClipboardDocumentIcon },
-  { name: "Feeds", component: HorseFeedsTab, icon: ClipboardDocumentIcon },
-  { name: "Meds", component: HorseMedicationsTab, icon: ClipboardDocumentIcon },
-  { name: "Services", component: HorseServicesTab, icon: CurrencyPoundIcon },
+  {
+    name: "General",
+    component: HorseGeneralTab,
+    icon: "heroicons:rectangle-group",
+  },
+  {
+    name: "Rugs",
+    component: HorseRugsTab,
+    icon: "heroicons:clipboard-document",
+  },
+  {
+    name: "Feeds",
+    component: HorseFeedsTab,
+    icon: "heroicons:clipboard-document",
+  },
+  {
+    name: "Meds",
+    component: HorseMedicationsTab,
+    icon: "heroicons:clipboard-document",
+  },
+  {
+    name: "Services",
+    component: HorseServicesTab,
+    icon: "heroicons:currency-pound",
+  },
 ];
 
 const client = useSupabaseClient();
@@ -198,7 +207,11 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
         @click="() => (viewingHorse = false)"
         class="inline-flex items-center space-x-1 text-sm font-medium text-blue-500"
       >
-        <ChevronLeftIcon class="-ml-2 h-7 w-7" aria-hidden="true" />
+        <icon
+          name="heroicons:chevron-left-solid"
+          class="-ml-2 h-7 w-7"
+          aria-hidden="true"
+        />
         <span>Horses</span>
       </a>
     </nav>
@@ -255,7 +268,8 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
                       class="-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600"
                     >
                       <span class="sr-only">Open options</span>
-                      <EllipsisVerticalIcon
+                      <icon
+                        name="heroicons:ellipsis-vertical"
                         class="h-6 w-6"
                         aria-hidden="true"
                       />
@@ -354,7 +368,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
           'flex flex-col items-center flex-1 rounded py-1',
         ]"
       >
-        <component :is="tab.icon" class="h-5 w-5 mb-1" />
+        <icon :name="tab.icon" class="h-5 w-5 mb-1" />
         <small class="text-xs">{{ tab.name }}</small>
       </div>
     </nav>

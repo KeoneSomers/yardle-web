@@ -1,6 +1,5 @@
 <script setup>
 import { DateTime } from "luxon";
-import { CheckIcon, XMarkIcon } from "@heroicons/vue/20/solid";
 import RequestResponseModal from "@/components/modals/RequestResponseModal.vue";
 
 definePageMeta({
@@ -47,7 +46,7 @@ const respondedRequests = computed(() => {
         </p>
         <div v-for="(arr, index) in [unrespondedRequests, respondedRequests]">
           <p v-if="index === 0" class="mt-10 mb-2">Pending requests</p>
-          <p v-else class="mt-10 mb-2">Responded requests</p>
+          <p v-else class="mt-20 mb-2">Responded requests</p>
           <ul role="list" class="space-y-3 divide-y border-t-2">
             <li
               v-for="request in arr"
@@ -83,13 +82,13 @@ const respondedRequests = computed(() => {
                       modalOpen = true;
                     "
                     v-tooltip="'Accept Request'"
-                    class="border rounded-full sm:mr-2 mb-2 sm:mb-0 p-3 hover:bg-gray-50"
+                    class="border rounded-full sm:mr-2 mb-2 sm:mb-0 p-3 hover:bg-gray-50 flex"
                     :class="{
                       'bg-green-500 hover:bg-green-600 text-white':
                         request.status === 'accepted',
                     }"
                   >
-                    <CheckIcon class="h-5 w-5" />
+                    <icon name="heroicons:check-solid" class="h-5 w-5" />
                   </button>
                   <button
                     @click="
@@ -98,13 +97,13 @@ const respondedRequests = computed(() => {
                       modalOpen = true;
                     "
                     v-tooltip="'Decline Request'"
-                    class="border rounded-full p-3 hover:bg-gray-50"
+                    class="border rounded-full p-3 hover:bg-gray-50 flex"
                     :class="{
                       'bg-red-500 hover:bg-red-600 text-white':
                         request.status === 'declined',
                     }"
                   >
-                    <XMarkIcon class="h-5 w-5" />
+                    <icon name="heroicons:x-mark-solid" class="h-5 w-5" />
                   </button>
                 </div>
               </div>

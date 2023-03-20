@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogPanel,
 } from "@headlessui/vue";
-import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 const sidebarOpen = useState("sidebarOpen", () => false);
 </script>
@@ -58,7 +57,11 @@ const sidebarOpen = useState("sidebarOpen", () => false);
                   @click="sidebarOpen = false"
                 >
                   <span class="sr-only">Close sidebar</span>
-                  <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
+                  <icon
+                    name="heroicons:x-mark"
+                    class="h-6 w-6 text-white"
+                    aria-hidden="true"
+                  />
                 </button>
               </div>
             </TransitionChild>

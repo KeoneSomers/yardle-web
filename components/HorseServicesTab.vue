@@ -1,10 +1,5 @@
 <script setup>
 import { DateTime } from "luxon";
-import {
-  TrashIcon,
-  LockClosedIcon,
-  ClockIcon,
-} from "@heroicons/vue/24/outline";
 import RequestServiceModal from "@/components/modals/RequestServiceModal.vue";
 import CancelServiceRequest from "@/components/modals/CancelServiceRequest.vue";
 import BillingStats from "@/components/BillingStats.vue";
@@ -226,13 +221,15 @@ const goToPreviousWeek = () => {
                   </div>
                 </div>
                 <div class="flex items-center font-mono text-sm">
-                  <ClockIcon
+                  <icon
+                    name="heroicons:clock"
                     v-if="event.booked_late"
                     v-tooltip="'Late Booking'"
                     class="h-5 w-5 text-orange-400 mr-2"
                   />
                   {{ currencyFormatter.format(event.service_price) }}
-                  <TrashIcon
+                  <icon
+                    name="heroicons:trash"
                     @click="
                       selectedService = event;
                       cancelModalOpen = true;
@@ -301,7 +298,10 @@ const goToPreviousWeek = () => {
   </div>
   <div v-else class="flex w-full my-20 justify-center items-center">
     <div class="text-center">
-      <LockClosedIcon class="mx-auto h-12 w-12 text-gray-400" />
+      <icon
+        name="heroicons:lock-closed"
+        class="mx-auto h-12 w-12 text-gray-400"
+      />
       <h3 class="mt-2 text-sm font-medium text-gray-900">Private</h3>
       <p class="mt-1 text-sm text-gray-500 px-10">
         Only Yard owners, admins and the horse owner can view a horses services.
