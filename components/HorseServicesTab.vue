@@ -107,6 +107,21 @@ const goToPreviousWeek = () => {
   dt.value = DateTime.now().plus({ weeks: offset.value });
   setDays();
 };
+
+// get invoices
+const invoices = useState("invoices", () => []);
+
+const { data: invoiceData, error: invoiceDataError } = await client
+  .from("invoices")
+  .select("*")
+  .eq("horse_id", horse.value.id)
+  .filter("published", "is", true)
+  .order("created_at", { ascending: false });
+
+if (invoiceData) {
+  invoices.value = invoiceData;
+  console.log(invoices.value);
+}
 </script>
 
 <template>
@@ -267,7 +282,10 @@ const goToPreviousWeek = () => {
         </div>
       </div>
       <!-- Empty State -->
-      <div class="my-20 flex w-full items-center justify-center">
+      <div
+        v-if="invoices.length === 0"
+        class="my-20 flex w-full items-center justify-center"
+      >
         <div class="text-center">
           <svg
             class="mx-auto h-12 w-12 text-gray-400"
@@ -294,6 +312,34 @@ const goToPreviousWeek = () => {
           </p>
         </div>
       </div>
+      <NuxtLink
+        v-else
+        v-for="invoice in invoices"
+        :key="invoice.id"
+        :to="`/yard/invoices/${invoice.id * 36}`"
+        target="_blank"
+        class="mb-4 flex items-center justify-between rounded-lg border transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg"
+        :class="{
+          'bg-gray-50': invoice.published,
+          'bg-gray-50': !invoice.published,
+        }"
+      >
+        <div class="p-4">
+          <p>
+            {{ DateTime.fromISO(invoice.start_date).toFormat("DDDD") }} -
+            {{ DateTime.fromISO(invoice.end_date).toFormat("DDDD") }}
+          </p>
+        </div>
+        <div>
+          <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />
+          <!-- <button class="p-2 mr-2 shadow border rounded">
+            View / Edit Items
+          </button>
+          <button class="p-2 mr-2 bg-indigo-500 text-white rounded">
+            Create Invoice
+          </button> -->
+        </div>
+      </NuxtLink>
     </div>
   </div>
   <div v-else class="my-20 flex w-full items-center justify-center">

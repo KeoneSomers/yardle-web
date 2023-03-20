@@ -8,6 +8,7 @@ const params = useRoute().params;
 const invoice_id = params.invoice_id / 36;
 const client = useSupabaseClient();
 const yard = useState("yard");
+const profile = useState("profile");
 
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
@@ -170,6 +171,7 @@ const saveChanges = async () => {
       class="mx-auto flex h-16 max-w-7xl items-center justify-start sm:px-6 lg:px-8"
     >
       <NuxtLink
+        v-if="profile.active_role === 1"
         to="/yard/invoices"
         class="flex cursor-pointer items-center hover:underline"
       >
@@ -180,7 +182,9 @@ const saveChanges = async () => {
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="flex flex-col items-start justify-between md:flex-row">
         <div>
-          <h1 class="mb-4 text-4xl font-bold md:mb-0">Prepare Invoice</h1>
+          <h1 class="mb-4 text-4xl font-bold md:mb-0">
+            {{ profile.active_role === 1 ? "Prepare" : "View" }} Invoice
+          </h1>
         </div>
         <div class="flex items-center">
           <button
@@ -223,7 +227,7 @@ const saveChanges = async () => {
 
       <hr class="mt-5 mb-14" />
 
-      <div class="mb-10 flex flex-wrap">
+      <div v-if="profile.active_role === 1" class="mb-10 flex flex-wrap">
         <div class="mr-3 mb-3 items-center">
           <label for="name" class="block text-sm font-medium text-gray-700"
             >Client Name</label
@@ -323,7 +327,7 @@ const saveChanges = async () => {
           </div>
         </div>
       </div>
-      <div class="flex justify-end py-4">
+      <div v-if="profile.active_role === 1" class="flex justify-end py-4">
         <button
           @click="() => (createModalOpen = true)"
           class="rounded-lg bg-blue-500 px-3 py-2 text-white shadow hover:bg-blue-600"
@@ -436,6 +440,7 @@ const saveChanges = async () => {
                     Price
                   </th>
                   <th
+                    v-if="profile.active_role === 1"
                     id="invoice-web-only"
                     scope="col"
                     class="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
@@ -488,6 +493,7 @@ const saveChanges = async () => {
                     >
                   </td>
                   <td
+                    v-if="profile.active_role === 1"
                     id="invoice-web-only"
                     class="py-4 pl-3 text-right text-sm text-red-500 sm:pr-0"
                   >
