@@ -91,7 +91,10 @@ const addIngredient = () => {
     errors.value.push("Please enter a name");
   }
 
-  if (newIngredient.value.quantity < 1 || newIngredient.value.quantity === "") {
+  if (
+    newIngredient.value.quantity <= 0 ||
+    newIngredient.value.quantity === ""
+  ) {
     errors.value.push("Please enter a quantity");
   }
 
