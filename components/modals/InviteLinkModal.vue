@@ -66,31 +66,38 @@ const copyLinkToClipboard = async () => {
             <DialogPanel
               class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
             >
-              <div class="flex items-end space-x-3">
-                <div class="flex-1">
+              <div class="flex flex-col space-y-4">
+                <div>
                   <label
                     for="company-website"
                     class="block text-sm font-medium text-gray-700"
-                    >Invite someone to this yard with a link!</label
+                    >Invite a friend to this yard with a link!</label
                   >
-                  <div class="mt-1 flex rounded-md shadow-sm">
+                </div>
+                <div>
+                  <div class="flex rounded-md shadow-sm">
                     <span
-                      class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm"
-                      >https://</span
+                      class="inline-flex items-center font-mono rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm"
+                      >https://yardle.app/join/</span
                     >
                     <input
+                      v-if="yard.invite_code"
                       readonly
                       type="text"
-                      :value="link"
-                      class="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      :value="yard.invite_code"
+                      class="block w-full min-w-0 flex-1 font-mono rounded-none rounded-r-md border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
                 </div>
-                <div>
+                <div class="w-full">
                   <button
                     @click="copyLinkToClipboard"
-                    class="bg-indigo-500 px-3 rounded py-2 text-white"
+                    class="bg-indigo-500 px-3 rounded py-2 text-white w-full"
                   >
+                    <icon
+                      name="heroicons:clipboard-document"
+                      class="w-4 h-4 inline-block mr-2"
+                    />
                     {{ copyButtonText }}
                   </button>
                 </div>
