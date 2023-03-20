@@ -64,7 +64,7 @@ const handleDelete = (medicationId) => {
             >
               <table class="w-full divide-y divide-gray-300">
                 <thead class="bg-gray-50">
-                  <tr class="divide-x divide-gray-200 grid grid-cols-4">
+                  <tr class="grid grid-cols-4 divide-x divide-gray-200">
                     <th
                       scope="col"
                       class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
@@ -87,22 +87,22 @@ const handleDelete = (medicationId) => {
                   <tr
                     v-for="medication in medications"
                     :key="medication.id"
-                    class="divide-x divide-gray-200 grid grid-cols-4"
+                    class="grid grid-cols-4 divide-x divide-gray-200"
                   >
                     <td
-                      class="py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6 break-all"
+                      class="break-all py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
                     >
                       {{ medication.name }}
                     </td>
-                    <td class="p-4 text-sm text-gray-500 break-all">
+                    <td class="break-all p-4 text-sm text-gray-500">
                       {{ medication.instructions }}
                     </td>
                     <td
-                      class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6 break-all"
+                      class="break-all py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
                     >
                       <button
                         @click="handleDelete(medication.id)"
-                        class="bg-red-400 rounded px-3 py-1 text-white"
+                        class="rounded bg-red-400 px-3 py-1 text-white"
                       >
                         Delete
                       </button>
@@ -115,7 +115,7 @@ const handleDelete = (medicationId) => {
         </div>
       </div>
     </div>
-    <div v-else class="flex w-full my-20 justify-center items-center">
+    <div v-else class="my-20 flex w-full items-center justify-center">
       <div class="text-center">
         <svg
           class="mx-auto h-12 w-12 text-gray-400"
@@ -133,7 +133,7 @@ const handleDelete = (medicationId) => {
           />
         </svg>
         <h3 class="mt-2 text-sm font-medium text-gray-900">No Medications</h3>
-        <p class="mt-1 text-sm text-gray-500 px-10">
+        <p class="mt-1 px-10 text-sm text-gray-500">
           Medications that belong to your horses will be shown here.
         </p>
         <div class="mt-6">

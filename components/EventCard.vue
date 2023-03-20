@@ -29,25 +29,25 @@ const { data: horses } = await useAsyncData(String(event.id), async () => {
 </script>
 
 <template>
-  <div class="bg-white shadow rounded-lg w-96">
-    <div class="bg-gray-50 mb-2 flex px-3 justify-end items-center">
+  <div class="w-96 rounded-lg bg-white shadow">
+    <div class="mb-2 flex items-center justify-end bg-gray-50 px-3">
       <a
         v-close-popper.all
         @click="() => $emit('edit')"
-        class="hover:bg-white hover:text-indigo-500 cursor-pointer rounded-full p-3 my-1"
+        class="my-1 cursor-pointer rounded-full p-3 hover:bg-white hover:text-indigo-500"
       >
         <icon name="heroicons:pencil" class="h-6 w-6" />
       </a>
       <a
         v-close-popper.all
         @click="() => $emit('delete')"
-        class="hover:bg-white hover:text-red-500 cursor-pointer rounded-full p-3 my-1"
+        class="my-1 cursor-pointer rounded-full p-3 hover:bg-white hover:text-red-500"
       >
         <icon name="heroicons:trash" class="h-6 w-6" />
       </a>
     </div>
     <div class="p-5">
-      <h1 class="font-bold text-xl">{{ event.title }}</h1>
+      <h1 class="text-xl font-bold">{{ event.title }}</h1>
       <p v-if="event.all_day" class="text-sm">
         {{
           DateTime.fromISO(event.date_time).toLocaleString(
@@ -71,14 +71,14 @@ const { data: horses } = await useAsyncData(String(event.id), async () => {
       </p>
       <div
         v-if="horses && horses.length > 0"
-        class="pt-4 border-t border-dashed mt-4 flex flex-wrap"
+        class="mt-4 flex flex-wrap border-t border-dashed pt-4"
       >
         <!-- event horses -->
         <span
           v-for="horse in horses"
           :key="horse.id"
-          class="inline-flex mr-1 mb-1 items-center rounded-full bg-gray-100 pl-0.5 py-0.5 pr-3 text-sm font-medium"
-          ><div class="h-7 w-7 rounded-full overflow-hidden mr-2">
+          class="mr-1 mb-1 inline-flex items-center rounded-full bg-gray-100 py-0.5 pl-0.5 pr-3 text-sm font-medium"
+          ><div class="mr-2 h-7 w-7 overflow-hidden rounded-full">
             <SupabaseImage
               v-if="horse.avatar_url"
               id="horse-avatars"
@@ -86,7 +86,7 @@ const { data: horses } = await useAsyncData(String(event.id), async () => {
             />
             <div
               v-else
-              class="flex items-center justify-center text-white font-bold w-full h-full"
+              class="flex h-full w-full items-center justify-center font-bold text-white"
               :class="
                 horse.avatar_background
                   ? horse.avatar_background
@@ -99,7 +99,7 @@ const { data: horses } = await useAsyncData(String(event.id), async () => {
           {{ horse.name }}</span
         >
       </div>
-      <p v-if="event.notes" class="pt-4 border-t border-dashed mt-4 break-all">
+      <p v-if="event.notes" class="mt-4 break-all border-t border-dashed pt-4">
         {{ event.notes }}
       </p>
     </div>

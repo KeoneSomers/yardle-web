@@ -224,7 +224,7 @@ const handleLogin = async () => {
                 <div class="text-sm">
                   <a
                     @click="() => (requestPasswordResetModalOpen = true)"
-                    class="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer"
+                    class="cursor-pointer font-medium text-indigo-600 hover:text-indigo-500"
                     >Forgot your password?</a
                   >
                 </div>
@@ -242,7 +242,7 @@ const handleLogin = async () => {
               </div>
             </form>
 
-            <div class="mt-4 text-gray-600 text-sm">
+            <div class="mt-4 text-sm text-gray-600">
               <p>
                 Don't have an account?
                 <NuxtLink
@@ -251,7 +251,7 @@ const handleLogin = async () => {
                       ? '/auth/signup'
                       : '/auth/signup?invite_code=' + invite_code
                   "
-                  class="text-pink-500 hover:underline cursor-pointer"
+                  class="cursor-pointer text-pink-500 hover:underline"
                   >Sign up</NuxtLink
                 >
               </p>

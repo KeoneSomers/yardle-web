@@ -127,9 +127,9 @@ const handleDelete = async () => {
               </div>
               <div
                 v-if="errors.length > 0"
-                class="p-4 my-2 bg-red-100 text-red-500 rounded-lg"
+                class="my-2 rounded-lg bg-red-100 p-4 text-red-500"
               >
-                <ul class="list-disc list-inside">
+                <ul class="list-inside list-disc">
                   <li v-for="error in errors" :key="error">
                     {{ error }}
                   </li>

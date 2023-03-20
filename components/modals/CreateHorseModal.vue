@@ -150,7 +150,7 @@ const handleSubmit = async () => {
 
                 <div
                   v-if="error"
-                  class="p-2 my-2 bg-red-100 text-red-500 rounded-lg"
+                  class="my-2 rounded-lg bg-red-100 p-2 text-red-500"
                 >
                   {{ error }}
                 </div>

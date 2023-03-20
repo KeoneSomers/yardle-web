@@ -210,7 +210,7 @@ const handleUpdateFeed = async () => {
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full h-[32rem] max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
+              class="h-[32rem] w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
             >
               <div class="relative">
                 <div class="absolute w-full">
@@ -237,11 +237,11 @@ const handleUpdateFeed = async () => {
                       >
                         Add Ingredient
                       </button>
-                      <div class="flex flex-wrap mb-3">
+                      <div class="mb-3 flex flex-wrap">
                         <span
                           v-for="ing in ingredients"
                           :key="ing"
-                          class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 pl-2 pr-0.5 text-xs font-medium text-indigo-700 mr-3 mb-2"
+                          class="mr-3 mb-2 inline-flex items-center rounded-full bg-indigo-100 py-0.5 pl-2 pr-0.5 text-xs font-medium text-indigo-700"
                         >
                           {{ ingredientTypes[ing.type] }}
                           -
@@ -307,9 +307,9 @@ const handleUpdateFeed = async () => {
 
                         <div
                           v-if="errors.length > 0"
-                          class="p-4 my-2 bg-red-100 text-red-500 rounded-lg"
+                          class="my-2 rounded-lg bg-red-100 p-4 text-red-500"
                         >
-                          <ul class="list-disc list-inside">
+                          <ul class="list-inside list-disc">
                             <li v-for="error in errors" :key="error">
                               {{ error }}
                             </li>
@@ -407,9 +407,9 @@ const handleUpdateFeed = async () => {
                         </div>
                         <div
                           v-if="errors.length > 0"
-                          class="col-span-12 p-4 my-2 bg-red-100 text-red-500 rounded-lg"
+                          class="col-span-12 my-2 rounded-lg bg-red-100 p-4 text-red-500"
                         >
-                          <ul class="list-disc list-inside">
+                          <ul class="list-inside list-disc">
                             <li v-for="error in errors" :key="error">
                               {{ error }}
                             </li>

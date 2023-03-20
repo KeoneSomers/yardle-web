@@ -83,8 +83,8 @@ const saveChanges = async () => {
 
 <template>
   <div class="md:h-screen md:overflow-y-auto">
-    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 my-4 md:my-20 px-4">
-      <div class="pt-5 border-b pb-4">
+    <div class="mx-auto my-4 max-w-7xl px-4 sm:px-6 md:my-20 lg:px-8">
+      <div class="border-b pt-5 pb-4">
         <p class="text-4xl font-bold">Account Settings</p>
       </div>
       <form
@@ -379,7 +379,7 @@ const saveChanges = async () => {
           </div>
         </div>
       </form>
-      <div class="border-2 sm:rounded-lg mt-20">
+      <div class="mt-20 border-2 sm:rounded-lg">
         <div class="px-4 py-5 sm:p-6">
           <h3 class="text-lg font-medium leading-6 text-gray-900">
             Delete your account

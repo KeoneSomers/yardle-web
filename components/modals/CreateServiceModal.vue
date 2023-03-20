@@ -158,7 +158,7 @@ const handleSubmit = async () => {
                   <div
                     v-if="!loading"
                     @click="$emit('close')"
-                    class="cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-gray-600 px-4 py-2 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 sm:text-sm"
+                    class="inline-flex cursor-pointer justify-center rounded-md border border-transparent bg-gray-600 px-4 py-2 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 sm:text-sm"
                   >
                     Cancel
                   </div>

@@ -195,12 +195,12 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
 <template>
   <div
     v-if="horse"
-    class="relative md:block z-0 flex-1 focus:outline-none xl:order-last overflow-y-auto h-[calc(100vh - 16rem)] flex flex-col md:h-screen md:overflow-y-auto"
+    class="h-[calc(100vh - 16rem)] relative z-0 flex flex-1 flex-col overflow-y-auto focus:outline-none md:block md:h-screen md:overflow-y-auto xl:order-last"
     :class="{ hidden: !viewingHorse }"
   >
     <!-- Breadcrumb -->
     <nav
-      class="bg-white fixed top-14 left-0 z-40 w-full flex items-start px-4 py-3 sm:px-6 lg:px-8 md:hidden border-b"
+      class="fixed top-14 left-0 z-40 flex w-full items-start border-b bg-white px-4 py-3 sm:px-6 md:hidden lg:px-8"
       aria-label="Breadcrumb"
     >
       <a
@@ -221,23 +221,23 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
         <!-- Profile header -->
         <div>
           <div>
-            <div class="h-32 w-full object-cover lg:h-48 banner-svg"></div>
+            <div class="banner-svg h-32 w-full object-cover lg:h-48"></div>
           </div>
           <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <div
-              class="-mt-12 sm:-mt-16 sm:items-end border-b md:border-none pb-5 md:pb-0"
+              class="-mt-12 border-b pb-5 sm:-mt-16 sm:items-end md:border-none md:pb-0"
             >
               <div class="flex">
                 <SupabaseImage
                   v-if="horse.avatar_url"
-                  class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 overflow-hidden"
+                  class="h-24 w-24 overflow-hidden rounded-full ring-4 ring-white sm:h-32 sm:w-32"
                   id="horse-avatars"
                   :path="horse.avatar_url"
                   alt=""
                 />
                 <div
                   v-else
-                  class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 flex items-center justify-center text-white text-6xl"
+                  class="flex h-24 w-24 items-center justify-center rounded-full text-6xl text-white ring-4 ring-white sm:h-32 sm:w-32"
                   :class="
                     horse.avatar_background
                       ? horse.avatar_background
@@ -247,7 +247,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
                   {{ horse.name[0].toUpperCase() }}
                 </div>
               </div>
-              <div class="mt-6 flex justify-between items-center">
+              <div class="mt-6 flex items-center justify-between">
                 <div>
                   <h1 class="truncate text-2xl font-bold text-gray-900">
                     {{ horse.name }}
@@ -295,7 +295,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
                               active
                                 ? 'bg-gray-100 text-gray-900'
                                 : 'text-gray-700',
-                              'block px-4 py-2 text-sm w-full text-left',
+                              'block w-full px-4 py-2 text-left text-sm',
                             ]"
                           >
                             Edit
@@ -308,7 +308,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
                               active
                                 ? 'bg-gray-100 text-gray-900'
                                 : 'text-gray-700',
-                              'block px-4 py-2 text-sm w-full text-left',
+                              'block w-full px-4 py-2 text-left text-sm',
                             ]"
                           >
                             Delete
@@ -329,7 +329,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
         </div>
 
         <!-- Desktop Tabs -->
-        <div class="mt-6 sm:mt-2 2xl:mt-5 hidden md:block">
+        <div class="mt-6 hidden sm:mt-2 md:block 2xl:mt-5">
           <div class="border-b border-gray-200">
             <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
               <nav class="-mb-px flex space-x-8" aria-label="Tabs">
@@ -340,8 +340,8 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
                   :class="[
                     index == selectedTab
                       ? 'border-pink-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                    'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                    'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium',
                   ]"
                   :aria-current="tab.current ? 'page' : undefined"
                 >
@@ -357,7 +357,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
     </div>
 
     <nav
-      class="bg-white w-full fixed bottom-0 left-0 z-40 flex justify-around items-center md:hidden border-t p-2"
+      class="fixed bottom-0 left-0 z-40 flex w-full items-center justify-around border-t bg-white p-2 md:hidden"
     >
       <div
         v-for="(tab, index) in tabs"
@@ -365,10 +365,10 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
         @click="() => (selectedTab = index)"
         :class="[
           index == selectedTab ? 'bg-indigo-100 text-indigo-700' : '',
-          'flex flex-col items-center flex-1 rounded py-1',
+          'flex flex-1 flex-col items-center rounded py-1',
         ]"
       >
-        <icon :name="tab.icon" class="h-5 w-5 mb-1" />
+        <icon :name="tab.icon" class="mb-1 h-5 w-5" />
         <small class="text-xs">{{ tab.name }}</small>
       </div>
     </nav>

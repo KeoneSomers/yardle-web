@@ -432,7 +432,7 @@ watchEffect(async () => {
 
 <template>
   <div>
-    <p class="text-xs flex">
+    <p class="flex text-xs">
       Next Billing Date is
       {{ nextBillingDate.toFormat("EEEE, MMMM d, yyyy") }}
       <span
@@ -454,41 +454,41 @@ watchEffect(async () => {
       <span v-if="profile.active_role === 1"
         ><NuxtLink
           to="/yard/settings"
-          class="flex items-center ml-2 text-blue-500"
+          class="ml-2 flex items-center text-blue-500"
           >(Edit
-          <icon name="heroicons:pencil" class="h-3 w-3 ml-1" />)</NuxtLink
+          <icon name="heroicons:pencil" class="ml-1 h-3 w-3" />)</NuxtLink
         ></span
       >
     </p>
     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
       <div
-        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow border sm:p-6"
+        class="overflow-hidden rounded-lg border bg-white px-4 py-5 shadow sm:p-6"
       >
         <dt class="truncate text-sm font-medium text-gray-500">
           Total Requirements This Billing Period
         </dt>
         <dd
-          class="mt-1 text-3xl font-semibold tracking-tight text-gray-700 font-mono"
+          class="mt-1 font-mono text-3xl font-semibold tracking-tight text-gray-700"
         >
           {{ thisPeriodsServices ? thisPeriodsServices.length : 0 }}
         </dd>
       </div>
 
       <div
-        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow border sm:p-6"
+        class="overflow-hidden rounded-lg border bg-white px-4 py-5 shadow sm:p-6"
       >
         <dt class="truncate text-sm font-medium text-gray-500">
           Spend this Week
         </dt>
         <dd
-          class="mt-1 text-3xl font-semibold tracking-tight text-gray-700 font-mono"
+          class="mt-1 font-mono text-3xl font-semibold tracking-tight text-gray-700"
         >
           {{ currencyFormatter.format(spendThisWeek) }}
         </dd>
       </div>
 
       <div
-        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow border sm:p-6"
+        class="overflow-hidden rounded-lg border bg-white px-4 py-5 shadow sm:p-6"
       >
         <dt class="truncate text-sm font-medium text-gray-500">
           Estimated Next Bill
@@ -510,7 +510,7 @@ watchEffect(async () => {
           <span v-else> (Due Today)</span>
         </dt>
         <dd
-          class="mt-1 text-3xl font-semibold tracking-tight text-gray-700 font-mono"
+          class="mt-1 font-mono text-3xl font-semibold tracking-tight text-gray-700"
         >
           {{ currencyFormatter.format(nextBill) }}
         </dd>

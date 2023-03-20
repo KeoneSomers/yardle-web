@@ -134,7 +134,7 @@ const createEvent = (e, day) => {
 <template>
   <div>
     <!-- Mobile Calendar -->
-    <div class="lg:hidden p-4 h-screen pb-20">
+    <div class="h-screen p-4 pb-20 lg:hidden">
       <div class="flex items-center">
         <h2 class="flex-auto text-sm font-semibold text-gray-900">
           {{
@@ -256,7 +256,7 @@ const createEvent = (e, day) => {
                 <div
                   v-for="horse in event.horses"
                   :key="horse.id"
-                  class="flex h-6 w-6 rounded-full ring-2 ring-white text-white items-center justify-center overflow-hidden"
+                  class="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full text-white ring-2 ring-white"
                   :class="horse.avatar_background"
                   v-tooltip="horse.name"
                 >
@@ -313,7 +313,7 @@ const createEvent = (e, day) => {
                           active
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-700',
-                          'block px-4 py-2 text-sm w-full text-left',
+                          'block w-full px-4 py-2 text-left text-sm',
                         ]"
                       >
                         Edit
@@ -326,7 +326,7 @@ const createEvent = (e, day) => {
                           active
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-700',
-                          'block px-4 py-2 text-sm w-full text-left',
+                          'block w-full px-4 py-2 text-left text-sm',
                         ]"
                       >
                         Cancel
@@ -427,7 +427,7 @@ const createEvent = (e, day) => {
                       @click="createEvent"
                       :class="[
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm create-event',
+                        'create-event block px-4 py-2 text-sm',
                       ]"
                       >Create event</a
                     >
@@ -500,7 +500,7 @@ const createEvent = (e, day) => {
           </Menu>
         </div>
       </header>
-      <div class="lg:flex lg:flex-auto lg:flex-col flex-1">
+      <div class="flex-1 lg:flex lg:flex-auto lg:flex-col">
         <!-- Weekday Lables -->
         <div
           class="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none"
@@ -523,7 +523,7 @@ const createEvent = (e, day) => {
               :key="day"
               :class="[
                 day.month == dt.month ? 'bg-white' : 'bg-gray-50 text-gray-500',
-                'create-event relative py-2 px-3 hover:opacity-75 cursor-pointer',
+                'create-event relative cursor-pointer py-2 px-3 hover:opacity-75',
               ]"
             >
               <time
@@ -542,7 +542,7 @@ const createEvent = (e, day) => {
                 <li
                   v-for="event in day.events.slice(0, 2)"
                   :key="event.id"
-                  :class="event.all_day ? 'bg-indigo-100 px-1 rounded' : ''"
+                  :class="event.all_day ? 'rounded bg-indigo-100 px-1' : ''"
                 >
                   <VDropdown placement="right">
                     <!-- This will be the popover target (for the events and position) -->
@@ -588,7 +588,7 @@ const createEvent = (e, day) => {
                     </button>
                     <!-- This will be the content of the popover -->
                     <template #popper>
-                      <div class="bg-white shadow rounded-lg w-64 py-5">
+                      <div class="w-64 rounded-lg bg-white py-5 shadow">
                         <div>
                           <ol>
                             <li
@@ -599,14 +599,14 @@ const createEvent = (e, day) => {
                               :key="event.id"
                               :class="
                                 event.all_day
-                                  ? 'bg-indigo-100 px-1 rounded'
+                                  ? 'rounded bg-indigo-100 px-1'
                                   : ''
                               "
                               class="mb-1 px-5"
                             >
                               <VDropdown placement="right">
                                 <!-- This will be the popover target (for the events and position) -->
-                                <button class="group flex text-left w-full">
+                                <button class="group flex w-full text-left">
                                   <p
                                     class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
                                   >

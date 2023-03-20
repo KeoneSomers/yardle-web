@@ -270,7 +270,7 @@ const removeSelectedHorse = (i) => {
                   <label class="block text-sm font-medium text-gray-700"
                     >All day</label
                   >
-                  <div class="relative flex items-start mt-1">
+                  <div class="relative mt-1 flex items-start">
                     <div class="flex h-5 items-center">
                       <input
                         v-model="all_day"
@@ -357,11 +357,11 @@ const removeSelectedHorse = (i) => {
                                 v-if="horse.avatar_url"
                                 id="horse-avatars"
                                 :path="horse.avatar_url"
-                                class="w-6 h-6 rounded-full overflow-hidden"
+                                class="h-6 w-6 overflow-hidden rounded-full"
                               />
                               <div
                                 v-else
-                                class="h-6 w-6 rounded-full flex items-center justify-center text-white"
+                                class="flex h-6 w-6 items-center justify-center rounded-full text-white"
                                 :class="
                                   horse.avatar_background
                                     ? horse.avatar_background
@@ -402,8 +402,8 @@ const removeSelectedHorse = (i) => {
                     <span
                       v-for="(horse, index) in selectedHorses"
                       :key="horse.id"
-                      class="inline-flex mr-1 mb-1 items-center rounded-full bg-gray-100 pl-0.5 py-0.5 pr-3 text-sm font-medium"
-                      ><div class="h-7 w-7 rounded-full overflow-hidden mr-2">
+                      class="mr-1 mb-1 inline-flex items-center rounded-full bg-gray-100 py-0.5 pl-0.5 pr-3 text-sm font-medium"
+                      ><div class="mr-2 h-7 w-7 overflow-hidden rounded-full">
                         <SupabaseImage
                           v-if="horse.avatar_url"
                           id="horse-avatars"
@@ -411,7 +411,7 @@ const removeSelectedHorse = (i) => {
                         />
                         <div
                           v-else
-                          class="flex items-center justify-center text-white font-bold w-full h-full"
+                          class="flex h-full w-full items-center justify-center font-bold text-white"
                           :class="
                             horse.avatar_background
                               ? horse.avatar_background
@@ -458,7 +458,7 @@ const removeSelectedHorse = (i) => {
 
                 <div
                   v-if="error"
-                  class="p-2 my-2 bg-red-100 text-red-500 rounded-lg"
+                  class="my-2 rounded-lg bg-red-100 p-2 text-red-500"
                 >
                   {{ error }}
                 </div>

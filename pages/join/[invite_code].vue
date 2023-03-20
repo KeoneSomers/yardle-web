@@ -96,9 +96,9 @@ const handleJoinYard = async () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center h-screen text-center">
-    <div class="border p-5 rounded-lg m-5">
-      <div v-if="yard" class="text-2xl mb-3">
+  <div class="flex h-screen items-center justify-center text-center">
+    <div class="m-5 rounded-lg border p-5">
+      <div v-if="yard" class="mb-3 text-2xl">
         You've been invited to join<br /><span class="font-bold">{{
           yard.name
         }}</span>
@@ -107,14 +107,14 @@ const handleJoinYard = async () => {
         <button
           v-if="!loading"
           @click="handleJoinYard"
-          class="bg-indigo-500 hover:bg-indigo-600 p-4 rounded text-white w-full"
+          class="w-full rounded bg-indigo-500 p-4 text-white hover:bg-indigo-600"
         >
           Join
         </button>
         <LoadingButton v-else />
         <div
           v-if="error"
-          class="text-red-500 bg-red-50 mt-3 p-2 border rounded-lg border-red-100"
+          class="mt-3 rounded-lg border border-red-100 bg-red-50 p-2 text-red-500"
         >
           {{ error }}
         </div>
@@ -127,15 +127,15 @@ const handleJoinYard = async () => {
           </p>
         </div>
 
-        <div class="flex space-x-2 jusify-center mt-4">
+        <div class="jusify-center mt-4 flex space-x-2">
           <NuxtLink
             :to="'/auth/login?invite_code=' + invite_code"
-            class="flex-1 bg-pink-500 p-3 rounded text-white"
+            class="flex-1 rounded bg-pink-500 p-3 text-white"
             >Login</NuxtLink
           >
           <NuxtLink
             :to="'/auth/signup?invite_code=' + invite_code"
-            class="flex-1 bg-indigo-500 p-3 rounded text-white"
+            class="flex-1 rounded bg-indigo-500 p-3 text-white"
             >Sign up</NuxtLink
           >
         </div>

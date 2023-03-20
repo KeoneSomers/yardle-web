@@ -185,7 +185,7 @@ const handleSubmit = async () => {
                   </select>
                 </div>
                 <div
-                  class="text-sm text-blue-600 bg-blue-50 p-2 rounded"
+                  class="rounded bg-blue-50 p-2 text-sm text-blue-600"
                   v-if="selectedService && selectedService.description"
                 >
                   {{ selectedService.name }}: {{ selectedService.description }}
@@ -231,7 +231,7 @@ const handleSubmit = async () => {
                   </div>
                 </fieldset>
 
-                <div class="mt-4 pt-4 flex justify-end space-x-2">
+                <div class="mt-4 flex justify-end space-x-2 pt-4">
                   <button
                     v-if="!loading"
                     :disabled="date === null || selectedService === null"

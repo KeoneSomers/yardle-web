@@ -197,12 +197,12 @@ const handleUnassignOwner = async () => {
   <div class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
     <div
       v-if="horse && !horse.owner"
-      class="grid grid-cols-1 gap-4 lg:grid-cols-2 mb-4"
+      class="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-2"
     >
       <div
         v-if="profile.active_role < 3"
         @click="assignOwnerModalOpen = true"
-        class="relative flex items-center justify-center text-blue-500 bg-blue-50 space-x-3 rounded-lg border-2 border-dashed hover:cursor-pointer border-blue-300 px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-blue-400"
+        class="relative flex items-center justify-center space-x-3 rounded-lg border-2 border-dashed border-blue-300 bg-blue-50 px-6 py-5 text-blue-500 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:cursor-pointer hover:border-blue-400"
       >
         <div>
           <p>Assign an owner to this horse</p>
@@ -213,14 +213,14 @@ const handleUnassignOwner = async () => {
         </div>
       </div>
     </div>
-    <div v-else class="grid gap-4 grid-cols-1 lg:grid-cols-2 mb-4">
+    <div v-else class="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
       <div
         class="relative flex items-center rounded-lg border border-gray-300 bg-stone-50 px-6 py-5 shadow-sm"
       >
-        <div class="flex-1 flex space-x-3">
+        <div class="flex flex-1 space-x-3">
           <div class="flex-shrink-0">
             <div
-              class="rounded-full h-10 w-10 text-white flex items-center justify-center bg-pink-500"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-pink-500 text-white"
             >
               {{ horse.owner.first_name[0].toUpperCase() }}
             </div>
@@ -241,7 +241,7 @@ const handleUnassignOwner = async () => {
         >
           <div>
             <MenuButton
-              class="flex items-center p-2 rounded-full text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+              class="flex items-center rounded-full p-2 text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
             >
               <span class="sr-only">Open options</span>
               <icon
@@ -267,7 +267,7 @@ const handleUnassignOwner = async () => {
                 <MenuItem>
                   <button
                     @click="handleUnassignOwner()"
-                    class="block px-4 py-2 text-sm w-full text-left text-gray-600 hover:bg-gray-100"
+                    class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100"
                   >
                     Unassign Horse Owner
                   </button>
@@ -320,9 +320,9 @@ const handleUnassignOwner = async () => {
       </div>
     </dl>
 
-    <div class="flex mt-10">
+    <div class="mt-10 flex">
       <div>
-        <div class="p-2 bg-blue-100 rounded-xl mt-1 mr-3">
+        <div class="mt-1 mr-3 rounded-xl bg-blue-100 p-2">
           <icon name="heroicons:calendar-days" class="h-5 w-5 text-blue-700" />
         </div>
       </div>
@@ -336,7 +336,7 @@ const handleUnassignOwner = async () => {
       <div>
         <NuxtLink
           to="/yard/calendar"
-          class="p-2 bg-blue-500 hover:bg-blue-600 rounded-xl mt-1 block cursor-pointer ml-3"
+          class="mt-1 ml-3 block cursor-pointer rounded-xl bg-blue-500 p-2 hover:bg-blue-600"
         >
           <icon name="heroicons:arrow-right" class="h-5 w-5 text-white" />
         </NuxtLink>
@@ -344,7 +344,7 @@ const handleUnassignOwner = async () => {
     </div>
 
     <dl
-      class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 border rounded-xl mt-3 p-4"
+      class="mt-3 grid grid-cols-1 gap-x-4 gap-y-8 rounded-xl border p-4 sm:grid-cols-2"
     >
       <!-- Farrier -->
       <div class="sm:col-span-1">

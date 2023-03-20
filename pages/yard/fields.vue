@@ -176,9 +176,9 @@ const handleFieldChange = async (e) => {
 
 <template>
   <div
-    class="md:h-screen flex flex-col md:overflow-y-auto w-screen lg:w-[calc(100vw-16rem)]"
+    class="flex w-screen flex-col md:h-screen md:overflow-y-auto lg:w-[calc(100vw-16rem)]"
   >
-    <div class="flex md:items-center md:justify-between pt-6 px-4 md:px-8 pb-0">
+    <div class="flex px-4 pt-6 pb-0 md:items-center md:justify-between md:px-8">
       <div class="min-w-0 flex-1">
         <h2
           class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
@@ -197,15 +197,15 @@ const handleFieldChange = async (e) => {
         </button>
       </div> -->
     </div>
-    <div class="p-4 pb-2 md:p-8 md:pb-4 w-full overflow-x-auto">
+    <div class="w-full overflow-x-auto p-4 pb-2 md:p-8 md:pb-4">
       <div class="border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="field_rotations">
           <div class="py-2">
-            <div class="pr-2 border-r">
+            <div class="border-r pr-2">
               <div
                 @click="createModalOpen2 = true"
                 v-tooltip="'Add a field rotation'"
-                class="flex items-center cursor-pointer text-gray-500 hover:text-gray-700 hover:bg-indigo-200 rounded-lg whitespace-nowrap p-2 font-medium text-sm"
+                class="flex cursor-pointer items-center whitespace-nowrap rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-indigo-200 hover:text-gray-700"
               >
                 <icon name="heroicons:plus-solid" class="h-5 w-5" />
               </div>
@@ -219,8 +219,8 @@ const handleFieldChange = async (e) => {
             :class="[
               rotation === selectedRotation
                 ? 'border-indigo-500 text-indigo-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-              'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex cursor-pointer',
+                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+              'flex cursor-pointer whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium',
             ]"
             :aria-current="rotation.is_current ? 'page' : undefined"
           >
@@ -229,11 +229,11 @@ const handleFieldChange = async (e) => {
         </nav>
       </div>
     </div>
-    <div class="flex justify-end pb-0 md:pb-2 md:px-8 px-4">
+    <div class="flex justify-end px-4 pb-0 md:px-8 md:pb-2">
       <Menu as="div" class="relative inline-block text-left">
         <div>
           <MenuButton
-            class="inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium border shadow"
+            class="inline-flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium shadow"
           >
             Rotation Options
             <icon
@@ -253,7 +253,7 @@ const handleFieldChange = async (e) => {
           leave-to-class="transform scale-95 opacity-0"
         >
           <MenuItems
-            class="absolute z-20 right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            class="absolute right-0 z-20 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
           >
             <div class="px-1 py-1">
               <MenuItem v-slot="{ active }">
@@ -344,12 +344,12 @@ const handleFieldChange = async (e) => {
       <div
         v-for="field in fields"
         :key="field.id"
-        class="bg-gray-100 rounded-lg px-3 py-3 w-80 min-w-max mr-4 overflow-y-auto flex flex-col"
+        class="mr-4 flex w-80 min-w-max flex-col overflow-y-auto rounded-lg bg-gray-100 px-3 py-3"
       >
-        <div class="flex items-center w-48 md:w-80">
+        <div class="flex w-48 items-center md:w-80">
           <div class="flex-1">
             <p
-              class="text-gray-700 font-semibold font-sans tracking-wide text-sm"
+              class="font-sans text-sm font-semibold tracking-wide text-gray-700"
             >
               {{ field.name }}
             </p>
@@ -444,7 +444,7 @@ const handleFieldChange = async (e) => {
       </div>
       <div
         @click="createModalOpen = true"
-        class="w-80 border-4 border-dashed border-gray-100 rounded-lg text-gray-100 hover:bg-gray-50 hover:text-white hover:cursor-pointer flex justify-center items-center"
+        class="flex w-80 items-center justify-center rounded-lg border-4 border-dashed border-gray-100 text-gray-100 hover:cursor-pointer hover:bg-gray-50 hover:text-white"
       >
         <icon name="heroicons:plus-solid" class="h-24 w-24" />
       </div>

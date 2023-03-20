@@ -21,11 +21,11 @@ invoices.value = invoicesData;
 <template>
   <div
     v-if="invoices.length > 0"
-    class="md:overflow-y-auto md:h-screen pb-20 px-4 md:px-0"
+    class="px-4 pb-20 md:h-screen md:overflow-y-auto md:px-0"
   >
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="py-5">
-        <p class="text-4xl font-bold mt-20">Manage Invoices</p>
+        <p class="mt-20 text-4xl font-bold">Manage Invoices</p>
       </div>
       <hr class="my-10" />
 
@@ -34,7 +34,7 @@ invoices.value = invoicesData;
         v-for="invoice in invoices"
         :key="invoice.id"
         :to="`/yard/invoices/${invoice.id * 36}`"
-        class="rounded-lg mb-4 border flex justify-between items-center hover:shadow-lg hover:cursor-pointer transition-all duration-300 ease-in-out"
+        class="mb-4 flex items-center justify-between rounded-lg border transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg"
         :class="{
           'bg-green-50': invoice.published,
           'bg-gray-50': !invoice.published,
@@ -47,7 +47,7 @@ invoices.value = invoicesData;
           </p>
         </div>
         <div>
-          <icon name="heroicons:chevron-right-solid" class="h-8 w-8 mr-4" />
+          <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />
           <!-- <button class="p-2 mr-2 shadow border rounded">
             View / Edit Items
           </button>
@@ -59,7 +59,7 @@ invoices.value = invoicesData;
     </div>
   </div>
   <!-- Empty State -->
-  <div v-else class="flex h-full w-full flex-1 justify-center items-center">
+  <div v-else class="flex h-full w-full flex-1 items-center justify-center">
     <div class="text-center">
       <svg
         class="mx-auto h-12 w-12 text-gray-400"

@@ -109,7 +109,7 @@ const handleRoleChange = async (memberId, roleId) => {
 </script>
 
 <template>
-  <div class="p-4 sm:p-6 lg:p-8 md:overflow-y-auto md:h-screen">
+  <div class="p-4 sm:p-6 md:h-screen md:overflow-y-auto lg:p-8">
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
         <h1 class="text-xl font-semibold text-gray-900">Members</h1>
@@ -154,11 +154,11 @@ const handleRoleChange = async (memberId, roleId) => {
                   class="divide-x divide-gray-200"
                 >
                   <td
-                    class="flex items-center py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6 break-all"
+                    class="flex items-center break-all py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
                   >
                     <div
                       v-if="member.profile.avatar_url"
-                      class="h-9 w-9 rounded-full overflow-hidden mr-3"
+                      class="mr-3 h-9 w-9 overflow-hidden rounded-full"
                     >
                       <SupabaseImage
                         id="avatars"
@@ -167,7 +167,7 @@ const handleRoleChange = async (memberId, roleId) => {
                     </div>
                     <div
                       v-else
-                      class="h-9 w-9 mr-3 bg-indigo-500 rounded-full flex items-center justify-center text-white"
+                      class="mr-3 flex h-9 w-9 items-center justify-center rounded-full bg-indigo-500 text-white"
                     >
                       {{ member.profile.first_name[0].toUpperCase() }}
                     </div>
@@ -179,7 +179,7 @@ const handleRoleChange = async (memberId, roleId) => {
                     >
                   </td>
                   <td class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6">
-                    <div class="flex justify-end items-center">
+                    <div class="flex items-center justify-end">
                       <!-- Only show this button if user is admin or owner and member.role is > role -->
                       <div
                         v-if="
@@ -254,23 +254,23 @@ const handleRoleChange = async (memberId, roleId) => {
                                     'cursor-pointer p-4 text-sm hover:bg-gray-50',
                                     {
                                       // Highlight currenly set role
-                                      'text-white bg-indigo-500 pointer-events-none':
+                                      'pointer-events-none bg-indigo-500 text-white':
                                         member.role == roleOption.id,
                                     },
                                     {
                                       // Can't change someones role if you're not owner or admin
-                                      'opacity-20 pointer-events-none':
+                                      'pointer-events-none opacity-20':
                                         profile.active_role > 2,
                                     },
                                     {
                                       // Can't promote a member to owner
                                       // TODO: remove this so that owner can be transfered
-                                      'opacity-20 pointer-events-none':
+                                      'pointer-events-none opacity-20':
                                         roleOption.id == 1,
                                     },
                                     {
                                       // Can't change owners role!
-                                      'opacity-20 pointer-events-none':
+                                      'pointer-events-none opacity-20':
                                         member.role == 1,
                                     },
                                   ]"

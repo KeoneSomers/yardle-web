@@ -342,7 +342,7 @@ const handleSignup = async () => {
               </div>
             </form>
 
-            <div class="mt-4 text-gray-600 text-sm">
+            <div class="mt-4 text-sm text-gray-600">
               <p>
                 Already have an account?
                 <NuxtLink
@@ -351,7 +351,7 @@ const handleSignup = async () => {
                       ? '/auth/login'
                       : '/auth/login?invite_code=' + invite_code
                   "
-                  class="text-pink-500 hover:underline cursor-pointer"
+                  class="cursor-pointer text-pink-500 hover:underline"
                   >Sign in</NuxtLink
                 >
               </p>

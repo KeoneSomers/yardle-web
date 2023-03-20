@@ -90,11 +90,11 @@ const selectHorse = (horseId) => {
 </script>
 
 <template>
-  <div class="flex flex-1 h-full">
+  <div class="flex h-full flex-1">
     <!-- TODO: HorseDirectory.vue Component -->
     <div
       :class="{ hidden: viewingHorse }"
-      class="flex md:flex flex-col md:h-screen w-full md:w-96 flex-shrink-0 border-r border-gray-200"
+      class="flex w-full flex-shrink-0 flex-col border-r border-gray-200 md:flex md:h-screen md:w-96"
       v-if="horses.length > 0"
     >
       <div class="px-4 pt-6 pb-4">
@@ -153,7 +153,7 @@ const selectHorse = (horseId) => {
             class="relative"
           >
             <div
-              class="sticky top-14 md:top-0 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500"
+              class="sticky top-14 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500 md:top-0"
             >
               <h3>{{ letter }}</h3>
             </div>
@@ -174,13 +174,13 @@ const selectHorse = (horseId) => {
                   <div class="flex-shrink-0">
                     <SupabaseImage
                       v-if="horse.avatar_url"
-                      class="h-10 w-10 rounded-full overflow-hidden"
+                      class="h-10 w-10 overflow-hidden rounded-full"
                       id="horse-avatars"
                       v-model:path="horse.avatar_url"
                     />
                     <div
                       v-else
-                      class="rounded-full h-10 w-10 text-white flex items-center justify-center"
+                      class="flex h-10 w-10 items-center justify-center rounded-full text-white"
                       :class="
                         horse.avatar_background
                           ? horse.avatar_background
@@ -218,7 +218,7 @@ const selectHorse = (horseId) => {
     <!-- Empty State -->
     <div
       v-if="horses.length == 0"
-      class="flex h-full justify-center items-center w-full"
+      class="flex h-full w-full items-center justify-center"
     >
       <div
         v-if="profile.active_role == 1 || profile.active_role == 2"

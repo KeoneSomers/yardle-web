@@ -132,18 +132,18 @@ await fetchServices();
 </script>
 
 <template>
-  <div class="md:overflow-y-auto md:h-screen pb-20 px-4 md:px-0">
+  <div class="px-4 pb-20 md:h-screen md:overflow-y-auto md:px-0">
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="py-5">
-        <p class="text-4xl font-bold mt-20">Yard Settings</p>
+        <p class="mt-20 text-4xl font-bold">Yard Settings</p>
       </div>
       <hr class="my-10" />
       <h1 class="text-xl font-semibold text-gray-900">General</h1>
       <p class="mt-2 text-sm text-gray-700">
         Manage your yards name, address, and other details.
       </p>
-      <div class="sm:col-span-6 mt-10">
-        <label for="url" class="block text-sm font-medium text-blue-gray-900"
+      <div class="mt-10 sm:col-span-6">
+        <label for="url" class="text-blue-gray-900 block text-sm font-medium"
           >Yard Name</label
         >
         <input
@@ -151,7 +151,7 @@ await fetchServices();
           type="text"
           name="url"
           id="url"
-          class="mt-1 block w-full rounded-md border-1 border-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          class="border-1 text-blue-gray-900 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
         />
         <div class="mt-4">
           <Listbox as="div" v-model="region">
@@ -238,7 +238,7 @@ await fetchServices();
           <button
             @click="yardName = yard.name"
             type="button"
-            class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-blue-gray-900 shadow-sm hover:bg-blue-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            class="text-blue-gray-900 hover:bg-blue-gray-50 rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Cancel
           </button>
@@ -250,18 +250,18 @@ await fetchServices();
             Save
           </button>
         </div>
-        <div v-else class="text-green-600 py-2">Changes Saved!</div>
+        <div v-else class="py-2 text-green-600">Changes Saved!</div>
       </div>
       <hr class="my-10" />
       <h1 class="text-xl font-semibold text-gray-900">Services & Billing</h1>
-      <p class="mt-2 text-sm text-gray-700 mb-10">
+      <p class="mt-2 mb-10 text-sm text-gray-700">
         Manage the services you offer to your clients and configure your billing
         settings.
       </p>
 
       <BillingCycleWidget />
 
-      <hr class="my-5 border-dashed border-1" />
+      <hr class="border-1 my-5 border-dashed" />
 
       <SwitchGroup as="li" class="flex items-center justify-between py-4">
         <div class="flex flex-col">
@@ -290,7 +290,7 @@ await fetchServices();
         </Switch>
       </SwitchGroup>
 
-      <hr class="my-5 border-dashed border-1" />
+      <hr class="border-1 my-5 border-dashed" />
 
       <div v-if="services.length > 0">
         <div class="sm:flex sm:items-center">
@@ -360,7 +360,7 @@ await fetchServices();
                       <Menu as="div" class="relative inline-block text-left">
                         <div>
                           <MenuButton
-                            class="flex items-center p-2 rounded-full text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                            class="flex items-center rounded-full p-2 text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                           >
                             <span class="sr-only">Open options</span>
                             <icon
@@ -393,7 +393,7 @@ await fetchServices();
                                     active
                                       ? 'bg-gray-100 text-gray-900'
                                       : 'text-gray-700',
-                                    'block px-4 py-2 text-sm w-full text-left',
+                                    'block w-full px-4 py-2 text-left text-sm',
                                   ]"
                                 >
                                   Edit
@@ -409,7 +409,7 @@ await fetchServices();
                                     active
                                       ? 'bg-gray-100 text-gray-900'
                                       : 'text-gray-700',
-                                    'block px-4 py-2 text-sm w-full text-left',
+                                    'block w-full px-4 py-2 text-left text-sm',
                                   ]"
                                 >
                                   Delete
@@ -427,7 +427,7 @@ await fetchServices();
           </div>
         </div>
       </div>
-      <div v-else class="flex w-full my-20 justify-center items-center">
+      <div v-else class="my-20 flex w-full items-center justify-center">
         <div class="text-center">
           <svg
             class="mx-auto h-12 w-12 text-gray-400"
@@ -447,7 +447,7 @@ await fetchServices();
           <h3 class="mt-2 text-sm font-medium text-gray-900">
             No Livery Services
           </h3>
-          <p class="mt-1 text-sm text-gray-500 px-10">
+          <p class="mt-1 px-10 text-sm text-gray-500">
             Livery Services that you add to your yard will be shown here.
           </p>
           <div class="mt-6">

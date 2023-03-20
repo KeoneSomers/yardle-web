@@ -105,7 +105,7 @@ const handleSubmit = async () => {
 
                 <div
                   v-if="showThankYou"
-                  class="bg-green-100 p-2 text-green-700 rounded-lg"
+                  class="rounded-lg bg-green-100 p-2 text-green-700"
                 >
                   <p>Feedback sent. Thank you!</p>
                 </div>

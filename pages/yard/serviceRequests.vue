@@ -35,10 +35,10 @@ const respondedRequests = computed(() => {
 </script>
 
 <template>
-  <div v-if="requests.length > 0" class="md:overflow-y-auto md:h-screen">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-20">
+  <div v-if="requests.length > 0" class="md:h-screen md:overflow-y-auto">
+    <div class="mx-auto mb-20 max-w-7xl px-4 sm:px-6 lg:px-8">
       <!-- We've used 3xl here, but feel free to try other max-widths based on your needs -->
-      <div class="mx-auto max-w-3xl mt-20">
+      <div class="mx-auto mt-20 max-w-3xl">
         <h1 class="text-2xl font-semibold text-gray-900">Service Requests</h1>
         <p class="text-sm text-gray-500">
           This is a list of all service requests that have been made to your
@@ -53,7 +53,7 @@ const respondedRequests = computed(() => {
               :key="request.id"
               class="overflow-hidden bg-white p-2 sm:rounded-md"
             >
-              <div class="flex justify-between items-center pt-3">
+              <div class="flex items-center justify-between pt-3">
                 <div>
                   <span class="text-blue-700">{{
                     `${request.created_by.first_name} ${request.created_by.last_name}`
@@ -82,9 +82,9 @@ const respondedRequests = computed(() => {
                       modalOpen = true;
                     "
                     v-tooltip="'Accept Request'"
-                    class="border rounded-full sm:mr-2 mb-2 sm:mb-0 p-3 hover:bg-gray-50 flex"
+                    class="mb-2 flex rounded-full border p-3 hover:bg-gray-50 sm:mr-2 sm:mb-0"
                     :class="{
-                      'bg-green-500 hover:bg-green-600 text-white':
+                      'bg-green-500 text-white hover:bg-green-600':
                         request.status === 'accepted',
                     }"
                   >
@@ -97,9 +97,9 @@ const respondedRequests = computed(() => {
                       modalOpen = true;
                     "
                     v-tooltip="'Decline Request'"
-                    class="border rounded-full p-3 hover:bg-gray-50 flex"
+                    class="flex rounded-full border p-3 hover:bg-gray-50"
                     :class="{
-                      'bg-red-500 hover:bg-red-600 text-white':
+                      'bg-red-500 text-white hover:bg-red-600':
                         request.status === 'declined',
                     }"
                   >
@@ -113,7 +113,7 @@ const respondedRequests = computed(() => {
       </div>
     </div>
   </div>
-  <div v-else class="flex h-full w-full flex-1 justify-center items-center">
+  <div v-else class="flex h-full w-full flex-1 items-center justify-center">
     <div class="text-center">
       <svg
         class="mx-auto h-12 w-12 text-gray-400"

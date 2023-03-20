@@ -117,7 +117,7 @@ const goToPreviousWeek = () => {
     class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8"
   >
     <div v-if="viewingHistory === false && viewingInvoces === false">
-      <div class="sm:flex sm:items-center mb-5 border-b pb-5">
+      <div class="mb-5 border-b pb-5 sm:flex sm:items-center">
         <div class="sm:flex-auto">
           <h1 class="text-xl font-semibold text-gray-900">Services</h1>
           <p class="mt-2 text-sm text-gray-700">
@@ -129,7 +129,7 @@ const goToPreviousWeek = () => {
           <button
             @click="viewingInvoces = true"
             type="button"
-            class="inline-flex mr-2 items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
+            class="mr-2 inline-flex items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
           >
             View Invoices
           </button>
@@ -150,11 +150,11 @@ const goToPreviousWeek = () => {
         </div>
       </div>
       <BillingStats />
-      <div class="mt-4 rounded-xl border overflow-hidden">
-        <div class="flex justify-between items-center p-2 bg-gray-50">
+      <div class="mt-4 overflow-hidden rounded-xl border">
+        <div class="flex items-center justify-between bg-gray-50 p-2">
           <div
             @click="goToPreviousWeek"
-            class="border px-3 py-1 rounded-lg hover:bg-blue-600 cursor-pointer bg-blue-500 text-white select-none"
+            class="cursor-pointer select-none rounded-lg border bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
           >
             Previous
           </div>
@@ -165,27 +165,27 @@ const goToPreviousWeek = () => {
           </div>
           <div
             @click="goToNextWeek"
-            class="border px-3 py-1 rounded-lg hover:bg-blue-600 cursor-pointer bg-blue-500 text-white select-none"
+            class="cursor-pointer select-none rounded-lg border bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
           >
             Next
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 divide-x">
+        <div class="grid grid-cols-1 divide-x md:grid-cols-2">
           <div v-for="day in days" :key="day.id">
             <div class="border-t pb-0">
-              <div class="flex items-center bg-gray-50 p-2 space-x-2">
+              <div class="flex items-center space-x-2 bg-gray-50 p-2">
                 <time
                   :datetime="day.date"
                   :class="
                     day.day == trueDateTime.day &&
                     day.month == trueDateTime.month &&
                     day.year == trueDateTime.year
-                      ? 'flex h-6 w-6 items-center justify-center text-xs rounded-full bg-indigo-600 font-semibold text-white'
-                      : 'flex h-6 w-6 items-center justify-center text-xs rounded-full bg-gray-100 font-semibold'
+                      ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 text-xs font-semibold text-white'
+                      : 'flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold'
                   "
                   >{{ day.day }}</time
                 >
-                <p class="font-semibold text-sm">
+                <p class="text-sm font-semibold">
                   {{ weekdays[day.weekday - 1].shortName }}
                 </p>
               </div>
@@ -195,7 +195,7 @@ const goToPreviousWeek = () => {
               <div
                 v-for="event in day.serviceRequests"
                 :key="event.id"
-                class="text-gray-600 border-t p-2 flex justify-between items-center"
+                class="flex items-center justify-between border-t p-2 text-gray-600"
               >
                 <div class="flex items-center">
                   <div class="flex flex-col justify-center">
@@ -225,7 +225,7 @@ const goToPreviousWeek = () => {
                     name="heroicons:clock"
                     v-if="event.booked_late"
                     v-tooltip="'Late Booking'"
-                    class="h-5 w-5 text-orange-400 mr-2"
+                    class="mr-2 h-5 w-5 text-orange-400"
                   />
                   {{ currencyFormatter.format(event.service_price) }}
                   <icon
@@ -235,13 +235,13 @@ const goToPreviousWeek = () => {
                       cancelModalOpen = true;
                     "
                     v-tooltip="'Cancel Service'"
-                    class="h-5 w-5 text-gray-400 cursor-pointer ml-2"
+                    class="ml-2 h-5 w-5 cursor-pointer text-gray-400"
                   />
                 </div>
               </div>
             </div>
             <div v-else class="p-3">
-              <p class="italic text-gray-500 text-xs">No Requests</p>
+              <p class="text-xs italic text-gray-500">No Requests</p>
             </div>
           </div>
           <div class="border-t"></div>
@@ -249,7 +249,7 @@ const goToPreviousWeek = () => {
       </div>
     </div>
     <div v-if="viewingInvoces">
-      <div class="sm:flex sm:items-center mb-5 border-b pb-5">
+      <div class="mb-5 border-b pb-5 sm:flex sm:items-center">
         <div class="sm:flex-auto">
           <h1 class="text-xl font-semibold text-gray-900">Invoces</h1>
           <p class="mt-2 text-sm text-gray-700">
@@ -260,14 +260,14 @@ const goToPreviousWeek = () => {
           <button
             @click="viewingInvoces = false"
             type="button"
-            class="inline-flex mr-2 items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
+            class="mr-2 inline-flex items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
           >
             Back
           </button>
         </div>
       </div>
       <!-- Empty State -->
-      <div class="flex w-full my-20 justify-center items-center">
+      <div class="my-20 flex w-full items-center justify-center">
         <div class="text-center">
           <svg
             class="mx-auto h-12 w-12 text-gray-400"
@@ -287,7 +287,7 @@ const goToPreviousWeek = () => {
           <h3 class="mt-2 text-sm font-medium text-gray-900">
             No Invoices yet
           </h3>
-          <p class="mt-1 text-sm text-gray-500 px-10">
+          <p class="mt-1 px-10 text-sm text-gray-500">
             You have no invoices to display. Invoices will be displayed here<br />
             once they have been generated by the yard owner after each billing
             date.
@@ -296,14 +296,14 @@ const goToPreviousWeek = () => {
       </div>
     </div>
   </div>
-  <div v-else class="flex w-full my-20 justify-center items-center">
+  <div v-else class="my-20 flex w-full items-center justify-center">
     <div class="text-center">
       <icon
         name="heroicons:lock-closed"
         class="mx-auto h-12 w-12 text-gray-400"
       />
       <h3 class="mt-2 text-sm font-medium text-gray-900">Private</h3>
-      <p class="mt-1 text-sm text-gray-500 px-10">
+      <p class="mt-1 px-10 text-sm text-gray-500">
         Only Yard owners, admins and the horse owner can view a horses services.
       </p>
     </div>

@@ -96,7 +96,7 @@ const handleLeaveYard = async (yardId) => {
 
 <template>
   <div v-if="yards && yards.length > 0" class="md:h-screen md:overflow-y-auto">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between sm:my-10 md:my-14">
         <div class="min-w-0 flex-1">
           <h2
@@ -124,12 +124,12 @@ const handleLeaveYard = async (yardId) => {
       <div class="py-4">
         <div
           v-if="yards && yards.length > 0"
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"
+          class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3"
         >
           <div
             v-for="yard in yards"
             :key="yard.id"
-            class="border rounded bg-gray-50 flex h-28 p-4 cursor-pointer hover:bg-indigo-50 hover:shadow transition-all duration-300 ease-in-out"
+            class="flex h-28 cursor-pointer rounded border bg-gray-50 p-4 transition-all duration-300 ease-in-out hover:bg-indigo-50 hover:shadow"
             @click.self="handleSelectYard(yard.id)"
           >
             <div
@@ -138,7 +138,7 @@ const handleLeaveYard = async (yardId) => {
             >
               <icon
                 :name="yard.region_id.flag_icon"
-                class="h-4 w-4 flex-shrink-0 block mr-1 -mt-1"
+                class="mr-1 -mt-1 block h-4 w-4 flex-shrink-0"
               />
               {{ yard.name }}
             </div>
@@ -146,7 +146,7 @@ const handleLeaveYard = async (yardId) => {
             <Menu as="div" class="relative inline-block text-left">
               <div>
                 <MenuButton
-                  class="flex items-center p-2 rounded-full text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                  class="flex items-center rounded-full p-2 text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                 >
                   <span class="sr-only">Open options</span>
                   <icon
@@ -179,7 +179,7 @@ const handleLeaveYard = async (yardId) => {
                           active
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-700',
-                          'block px-4 py-2 text-sm w-full text-left',
+                          'block w-full px-4 py-2 text-left text-sm',
                         ]"
                       >
                         Leave
@@ -192,7 +192,7 @@ const handleLeaveYard = async (yardId) => {
                           active
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-700',
-                          'block px-4 py-2 text-sm w-full text-left',
+                          'block w-full px-4 py-2 text-left text-sm',
                         ]"
                       >
                         Delete
@@ -213,7 +213,7 @@ const handleLeaveYard = async (yardId) => {
       </div>
     </div>
   </div>
-  <div v-else class="h-full w-full flex justify-center items-center">
+  <div v-else class="flex h-full w-full items-center justify-center">
     <div class="text-center">
       <svg
         class="mx-auto h-12 w-12 text-gray-400"

@@ -300,7 +300,7 @@ const handleSubmit = async () => {
                   </Listbox>
                 </div>
 
-                <div class="mt-4 pt-4 flex justify-end space-x-2">
+                <div class="mt-4 flex justify-end space-x-2 pt-4">
                   <button
                     v-if="!loading"
                     type="submit"

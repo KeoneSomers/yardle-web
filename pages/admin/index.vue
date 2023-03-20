@@ -64,25 +64,25 @@ const handleSendEventEmailReminders = async () => {
   <div class="py-20 px-10">
     <button
       @click="handleGenerateInvoices"
-      class="bg-indigo-500 p-4 m-4 rounded text-white"
+      class="m-4 rounded bg-indigo-500 p-4 text-white"
     >
       Manually Generate Todays Invoces
     </button>
     <button
       @click="handleSendEventEmailReminders"
-      class="bg-blue-500 p-4 m-4 rounded text-white"
+      class="m-4 rounded bg-blue-500 p-4 text-white"
     >
       Send event email reminders
     </button>
-    <div class="m-5 text-4xl font-fold">Feedback</div>
+    <div class="font-fold m-5 text-4xl">Feedback</div>
     <div
       v-for="(item, index) in feedback"
       :key="item.id"
-      class="flex items-center border my-2 mx-5 hover:bg-gray-100"
+      class="my-2 mx-5 flex items-center border hover:bg-gray-100"
     >
       <div class="flex-1 border-r">
         <p class="p-2">{{ index + 1 }} - {{ item.message }}</p>
-        <p v-if="item.route" class="font-mono p-1 border-t text-xs bg-blue-50">
+        <p v-if="item.route" class="border-t bg-blue-50 p-1 font-mono text-xs">
           {{ item.route }}
         </p>
       </div>

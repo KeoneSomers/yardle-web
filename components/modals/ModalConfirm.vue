@@ -19,7 +19,7 @@ const emit = defineEmits<{
 
 <template>
   <VueFinalModal
-    class="flex justify-center items-center"
+    class="flex items-center justify-center"
     content-class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl sm:my-8 sm:w-full sm:max-w-lg sm:p-6 m-4"
     overlay-transition="vfm-fade"
     content-transition="vfm-fade"
@@ -64,7 +64,7 @@ const emit = defineEmits<{
       >
         <svg
           v-if="isLoading"
-          class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+          class="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

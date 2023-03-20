@@ -229,7 +229,7 @@ const resetStartDate = () => {
   <div class="mt-4">
     <div class="w-full md:w-1/2">
       <div class="flex items-center">
-        <div class="border bg-gray-100 p-2 w-28 rounded-l-lg">
+        <div class="w-28 rounded-l-lg border bg-gray-100 p-2">
           <p>Every</p>
         </div>
         <div class="flex flex-1">
@@ -239,14 +239,14 @@ const resetStartDate = () => {
               type="number"
               min="1"
               v-model="billingPeriodOptions.every"
-              class="w-full border border-gray-300 border-l-0"
+              class="w-full border border-l-0 border-gray-300"
             />
           </div>
           <div class="flex-1">
             <select
               @change="resetStartDate()"
               v-model="billingPeriodOptions.period"
-              class="w-full rounded-r-lg border border-gray-300 border-l-0"
+              class="w-full rounded-r-lg border border-l-0 border-gray-300"
             >
               <option value="1">
                 Week<span v-if="billingPeriodOptions.every > 1">s</span>
@@ -259,8 +259,8 @@ const resetStartDate = () => {
         </div>
       </div>
 
-      <div class="flex flex-1 items-center mt-2">
-        <div class="border bg-gray-100 p-2 w-28 rounded-l-lg">
+      <div class="mt-2 flex flex-1 items-center">
+        <div class="w-28 rounded-l-lg border bg-gray-100 p-2">
           <p v-if="billingPeriodOptions.period == 1">On a</p>
           <p v-if="billingPeriodOptions.period == 2">On the</p>
         </div>
@@ -269,7 +269,7 @@ const resetStartDate = () => {
             <select
               @change="resetStartDate()"
               v-model="billingPeriodOptions.on_the"
-              class="w-full border border-gray-300 border-l-0"
+              class="w-full border border-l-0 border-gray-300"
             >
               <option value="1">First</option>
               <option value="2">Last</option>
@@ -280,7 +280,7 @@ const resetStartDate = () => {
               required
               @change="resetStartDate()"
               v-model="billingPeriodOptions.day"
-              class="w-full rounded-r-lg border border-gray-300 border-l-0"
+              class="w-full rounded-r-lg border border-l-0 border-gray-300"
             >
               <option value="1" v-if="billingPeriodOptions.period == 2">
                 Day
@@ -313,7 +313,7 @@ const resetStartDate = () => {
             billingPeriodOptions.starting_from =
               possibleBillingDate(item).toISODate()
           "
-          class="px-3 py-2 mr-2 mt-2 border border-dashed rounded-lg text-gray-500 cursor-pointer hover:bg-indigo-100"
+          class="mr-2 mt-2 cursor-pointer rounded-lg border border-dashed px-3 py-2 text-gray-500 hover:bg-indigo-100"
           :class="{
             'bg-indigo-100':
               billingPeriodOptions.starting_from ==
@@ -372,7 +372,7 @@ const resetStartDate = () => {
           Save
         </button>
       </div>
-      <div v-else class="text-green-600 py-2">Changes Saved!</div>
+      <div v-else class="py-2 text-green-600">Changes Saved!</div>
     </div>
   </div>
 </template>

@@ -29,7 +29,7 @@ const downloadImage = async () => {
 </script>
 
 <template>
-  <div class="flex justify-center items-center bg-pink-500">
+  <div class="flex items-center justify-center bg-pink-500">
     <!-- <img v-if="src" :src="src" alt="Image" class="object-cover" /> -->
     <nuxt-img
       v-if="src"

@@ -61,7 +61,7 @@ const handleChangePassword = async () => {
     class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8"
   >
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <Logo class="h-12 w-12 mx-auto" />
+      <Logo class="mx-auto h-12 w-12" />
       <h2
         class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900"
       >
@@ -124,9 +124,9 @@ const handleChangePassword = async () => {
 
         <div
           v-if="errors.length > 0"
-          class="p-4 my-2 bg-red-100 text-red-500 rounded-lg"
+          class="my-2 rounded-lg bg-red-100 p-4 text-red-500"
         >
-          <ul class="list-disc list-inside">
+          <ul class="list-inside list-disc">
             <li v-for="error in errors" :key="error">
               {{ error }}
             </li>

@@ -164,23 +164,23 @@ const saveChanges = async () => {
 <template>
   <div
     v-if="invoiceData"
-    class="md:overflow-y-auto md:h-screen pb-20 px-4 md:px-0 bg-white"
+    class="bg-white px-4 pb-20 md:h-screen md:overflow-y-auto md:px-0"
   >
     <div
-      class="h-16 flex justify-start items-center mx-auto max-w-7xl sm:px-6 lg:px-8"
+      class="mx-auto flex h-16 max-w-7xl items-center justify-start sm:px-6 lg:px-8"
     >
       <NuxtLink
         to="/yard/invoices"
-        class="flex items-center hover:underline cursor-pointer"
+        class="flex cursor-pointer items-center hover:underline"
       >
         <icon name="heroicons:chevron-left-solid" class="-ml-3 mr-1 h-6 w-6" />
         Back
       </NuxtLink>
     </div>
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-      <div class="flex flex-col md:flex-row justify-between items-start">
+      <div class="flex flex-col items-start justify-between md:flex-row">
         <div>
-          <h1 class="text-4xl font-bold mb-4 md:mb-0">Prepare Invoice</h1>
+          <h1 class="mb-4 text-4xl font-bold md:mb-0">Prepare Invoice</h1>
         </div>
         <div class="flex items-center">
           <button
@@ -192,7 +192,7 @@ const saveChanges = async () => {
               discount != invoiceData.discount ||
               discountNote != invoiceData.discount_note
             "
-            class="bg-blue-500 text-white px-3 py-2 rounded-lg mr-2 cursor-pointer hover:bg-blue-600"
+            class="mr-2 cursor-pointer rounded-lg bg-blue-500 px-3 py-2 text-white hover:bg-blue-600"
           >
             Save Changes
           </button>
@@ -203,7 +203,7 @@ const saveChanges = async () => {
                 : ''
             "
             :class="{
-              'opacity-50 cursor-not-allowed':
+              'cursor-not-allowed opacity-50':
                 client_email == '' || client_name == '',
             }"
           >
@@ -224,7 +224,7 @@ const saveChanges = async () => {
       <hr class="mt-5 mb-14" />
 
       <div class="mb-10 flex flex-wrap">
-        <div class="items-center mr-3 mb-3">
+        <div class="mr-3 mb-3 items-center">
           <label for="name" class="block text-sm font-medium text-gray-700"
             >Client Name</label
           >
@@ -237,7 +237,7 @@ const saveChanges = async () => {
             />
           </div>
         </div>
-        <div class="flex items-center mr-3 mb-3">
+        <div class="mr-3 mb-3 flex items-center">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700"
               >Client Email</label
@@ -263,7 +263,7 @@ const saveChanges = async () => {
             </div>
           </div>
         </div>
-        <div class="flex items-center mr-3 mb-3">
+        <div class="mr-3 mb-3 flex items-center">
           <div>
             <label
               for="base-rate"
@@ -290,7 +290,7 @@ const saveChanges = async () => {
             </div>
           </div>
         </div>
-        <div class="flex items-center mr-3 mb-3">
+        <div class="mr-3 mb-3 flex items-center">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700"
               >Discount %</label
@@ -301,11 +301,11 @@ const saveChanges = async () => {
               min="0"
               max="100"
               placeholder="0"
-              class="block mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              class="mt-1 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
         </div>
-        <div v-if="discount > 0" class="flex items-center mb-3">
+        <div v-if="discount > 0" class="mb-3 flex items-center">
           <div>
             <label
               for="discountNote"
@@ -323,16 +323,16 @@ const saveChanges = async () => {
           </div>
         </div>
       </div>
-      <div class="py-4 flex justify-end">
+      <div class="flex justify-end py-4">
         <button
           @click="() => (createModalOpen = true)"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg shadow"
+          class="rounded-lg bg-blue-500 px-3 py-2 text-white shadow hover:bg-blue-600"
         >
           Add Item
         </button>
       </div>
 
-      <div class="border shadow-lg p-2 md:p-10 bg-white">
+      <div class="border bg-white p-2 shadow-lg md:p-10">
         <div
           class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
         ></div>
@@ -477,7 +477,7 @@ const saveChanges = async () => {
                         yard.enabled_billing_late_booking_fee &&
                         item.booked_late
                       "
-                      class="line-through mr-3 text-gray-400"
+                      class="mr-3 text-gray-400 line-through"
                     >
                       {{
                         currencyFormatter.format(item.service_price / 2)
@@ -609,7 +609,7 @@ const saveChanges = async () => {
       </div>
     </div>
   </div>
-  <div class="-z-50 fixed top-50 left-20">
+  <div class="top-50 fixed left-20 -z-50">
     <InvoiceReport
       v-if="invoiceData && itemsData"
       id="invoice-report"

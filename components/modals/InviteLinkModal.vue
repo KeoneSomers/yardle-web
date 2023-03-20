@@ -52,7 +52,7 @@ const copyLinkToClipboard = async () => {
 
       <div class="fixed inset-0 z-10 overflow-y-auto">
         <div
-          class="flex min-h-full justify-center p-4 text-center items-center sm:p-0"
+          class="flex min-h-full items-center justify-center p-4 text-center sm:p-0"
         >
           <TransitionChild
             as="template"
@@ -77,7 +77,7 @@ const copyLinkToClipboard = async () => {
                 <div>
                   <div class="flex rounded-md shadow-sm">
                     <span
-                      class="inline-flex items-center font-mono rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm"
+                      class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 font-mono text-gray-500 sm:text-sm"
                       >https://yardle.app/join/</span
                     >
                     <input
@@ -85,18 +85,18 @@ const copyLinkToClipboard = async () => {
                       readonly
                       type="text"
                       :value="yard.invite_code"
-                      class="block w-full min-w-0 flex-1 font-mono rounded-none rounded-r-md border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      class="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 px-3 py-2 font-mono focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>
                 </div>
                 <div class="w-full">
                   <button
                     @click="copyLinkToClipboard"
-                    class="bg-indigo-500 px-3 rounded py-2 text-white w-full"
+                    class="w-full rounded bg-indigo-500 px-3 py-2 text-white"
                   >
                     <icon
                       name="heroicons:clipboard-document"
-                      class="w-4 h-4 inline-block mr-2"
+                      class="mr-2 inline-block h-4 w-4"
                     />
                     {{ copyButtonText }}
                   </button>

@@ -6,7 +6,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 my-20 prose-sm">
+  <div class="prose-sm mx-auto my-20 max-w-7xl px-4 sm:px-6 lg:px-8">
     <h1>Privacy Policy</h1>
     <p>Last updated: March 10, 2023</p>
     <p>

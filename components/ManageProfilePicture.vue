@@ -87,7 +87,7 @@ watch(path, () => {
     <div class="mt-1 sm:col-span-2 sm:mt-0">
       <div class="flex items-center">
         <span
-          class="h-12 w-12 overflow-hidden rounded-full bg-gray-100 mr-4 mt-2"
+          class="mr-4 mt-2 h-12 w-12 overflow-hidden rounded-full bg-gray-100"
         >
           <div class="w-26 h-26">
             <img v-if="src" :src="src" alt="Avatar" class="object-cover" />

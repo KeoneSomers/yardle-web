@@ -236,7 +236,7 @@ const handleSubmit = async () => {
                 </div>
                 <div
                   v-if="error"
-                  class="p-2 my-2 bg-red-100 text-red-500 rounded-lg"
+                  class="my-2 rounded-lg bg-red-100 p-2 text-red-500"
                 >
                   {{ error }}
                 </div>
@@ -245,7 +245,7 @@ const handleSubmit = async () => {
                   <div
                     v-if="!loading"
                     @click="$emit('close')"
-                    class="cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-gray-600 px-4 py-2 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 sm:text-sm"
+                    class="inline-flex cursor-pointer justify-center rounded-md border border-transparent bg-gray-600 px-4 py-2 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 sm:text-sm"
                   >
                     Cancel
                   </div>

@@ -17,7 +17,7 @@ watch(
 <template>
   <div
     aria-live="assertive"
-    class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6 z-50"
+    class="pointer-events-none fixed inset-0 z-50 flex items-end px-4 py-6 sm:items-start sm:p-6"
   >
     <!-- Notification panel, dynamically insert this into the live region when it needs to be displayed -->
     <TransitionGroup

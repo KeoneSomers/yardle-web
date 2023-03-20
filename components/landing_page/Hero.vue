@@ -1,7 +1,7 @@
 <template>
   <div class="relative isolate overflow-hidden bg-white">
     <svg
-      class="opacity-0 lg:opacity-100 absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+      class="absolute inset-0 -z-10 h-full w-full stroke-gray-200 opacity-0 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)] lg:opacity-100"
       aria-hidden="true"
     >
       <defs>

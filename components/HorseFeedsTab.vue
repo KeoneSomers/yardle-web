@@ -91,18 +91,18 @@ const ingredientTypes = [
           </button>
         </div>
       </div>
-      <div class="grid md:grid-cols-2 mt-5 md:mt-16">
+      <div class="mt-5 grid md:mt-16 md:grid-cols-2">
         <div
           v-for="feed in feeds"
           :key="feed.id"
-          class="overflow-hidden shadow border rounded-lg text-sm font-medium text-gray-900 p-4"
+          class="overflow-hidden rounded-lg border p-4 text-sm font-medium text-gray-900 shadow"
         >
           <div class="flex">
             <div class="flex-1 pr-4">
               <dl class="font-normal">
                 <dd class="mt-1 truncate text-gray-700" v-if="feed.condition">
                   <div
-                    class="bg-gray-50 p-0.5 rounded border whitespace-pre-wrap"
+                    class="whitespace-pre-wrap rounded border bg-gray-50 p-0.5"
                   >
                     Condition:
                     {{ feed.condition }}
@@ -113,7 +113,7 @@ const ingredientTypes = [
                   v-if="feed.instructions"
                 >
                   <div
-                    class="bg-gray-50 p-0.5 rounded border whitespace-pre-wrap"
+                    class="whitespace-pre-wrap rounded border bg-gray-50 p-0.5"
                   >
                     Instructions:
                     {{ feed.instructions }}
@@ -129,7 +129,7 @@ const ingredientTypes = [
                       :key="ingredient.id"
                     >
                       <span
-                        class="inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700 mr-1 mb-1"
+                        class="mr-1 mb-1 inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700"
                       >
                         {{
                           `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
@@ -148,7 +148,7 @@ const ingredientTypes = [
                       :key="ingredient.id"
                     >
                       <span
-                        class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700 mr-1 mb-1"
+                        class="mr-1 mb-1 inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700"
                       >
                         {{
                           `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
@@ -167,7 +167,7 @@ const ingredientTypes = [
                       :key="ingredient.id"
                     >
                       <span
-                        class="inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700 mr-1 mb-1"
+                        class="mr-1 mb-1 inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700"
                       >
                         {{
                           `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
@@ -186,7 +186,7 @@ const ingredientTypes = [
                       :key="ingredient.id"
                     >
                       <span
-                        class="inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700 mr-1 mb-1"
+                        class="mr-1 mb-1 inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700"
                       >
                         {{
                           `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
@@ -201,7 +201,7 @@ const ingredientTypes = [
               <Menu as="div" class="relative inline-block text-left">
                 <div>
                   <MenuButton
-                    class="flex items-center p-0.5 rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                    class="flex items-center rounded-full bg-gray-100 p-0.5 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                   >
                     <span class="sr-only">Open options</span>
                     <icon
@@ -231,7 +231,7 @@ const ingredientTypes = [
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
-                            'block px-4 py-2 text-sm w-full text-left',
+                            'block w-full px-4 py-2 text-left text-sm',
                           ]"
                         >
                           Edit
@@ -244,7 +244,7 @@ const ingredientTypes = [
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
-                            'block px-4 py-2 text-sm w-full text-left',
+                            'block w-full px-4 py-2 text-left text-sm',
                           ]"
                         >
                           Delete
@@ -259,7 +259,7 @@ const ingredientTypes = [
         </div>
       </div>
     </div>
-    <div v-else class="flex w-full my-20 justify-center items-center">
+    <div v-else class="my-20 flex w-full items-center justify-center">
       <div class="text-center">
         <svg
           class="mx-auto h-12 w-12 text-gray-400"
@@ -277,7 +277,7 @@ const ingredientTypes = [
           />
         </svg>
         <h3 class="mt-2 text-sm font-medium text-gray-900">No Feeds</h3>
-        <p class="mt-1 text-sm text-gray-500 px-10">
+        <p class="mt-1 px-10 text-sm text-gray-500">
           Feeds that belong to your horses will be shown here.
         </p>
         <div class="mt-6">
