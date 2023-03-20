@@ -68,7 +68,9 @@ const countServiceRequests = async () => {
   pendingServiceRequestCount.value = _pendingServiceRequestCount || 0;
 };
 
-await countServiceRequests();
+if (selectedYard.value) {
+  await countServiceRequests();
+}
 
 watch(
   () => selectedYard.value,
