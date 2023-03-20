@@ -29,18 +29,12 @@ const downloadImage = async () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center bg-pink-500">
-    <!-- <img v-if="src" :src="src" alt="Image" class="object-cover" /> -->
-    <nuxt-img
-      v-if="src"
-      fit="inside"
-      quality="100"
-      :src="src"
-      alt="Image"
-      width="128"
-      height="128"
-      class="object-cover"
-      format="webp"
-    />
-  </div>
+  <nuxt-img
+    v-if="src"
+    quality="100"
+    :src="src"
+    alt="Image"
+    format="webp"
+    class="block object-cover"
+  />
 </template>
