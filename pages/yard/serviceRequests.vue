@@ -82,7 +82,7 @@ const respondedRequests = computed(() => {
                       modalOpen = true;
                     "
                     v-tooltip="'Accept Request'"
-                    class="mb-2 flex rounded-full border p-3 hover:bg-gray-50 sm:mr-2 sm:mb-0"
+                    class="mb-2 rounded-full border p-3 hover:bg-gray-50 sm:mr-2 sm:mb-0"
                     :class="{
                       'bg-green-500 text-white hover:bg-green-600':
                         request.status === 'accepted',
@@ -97,7 +97,7 @@ const respondedRequests = computed(() => {
                       modalOpen = true;
                     "
                     v-tooltip="'Decline Request'"
-                    class="flex rounded-full border p-3 hover:bg-gray-50"
+                    class="rounded-full border p-3 hover:bg-gray-50"
                     :class="{
                       'bg-red-500 text-white hover:bg-red-600':
                         request.status === 'declined',
