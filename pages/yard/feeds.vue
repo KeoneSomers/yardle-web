@@ -170,7 +170,7 @@ const handleEditFeed = (feedId) => {
                 scope="col"
                 class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
               >
-                Nuts
+                Balancer
               </th>
               <th
                 scope="col"

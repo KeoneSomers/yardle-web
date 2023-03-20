@@ -153,7 +153,7 @@ const emits = defineEmits(["editFeed", "deleteFeed"]);
                   </div>
                 </dd>
                 <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                  <div class="mr-1 mt-1">Nuts:</div>
+                  <div class="mr-1 mt-1">Balancer:</div>
                   <div class="flex flex-wrap">
                     <div
                       v-for="ingredient in feed.ingredients.filter(

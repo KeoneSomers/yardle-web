@@ -32,7 +32,13 @@ await useAsyncData("horses", async () => {
 });
 
 const ingredients = ref([]);
-const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
+const ingredientTypes = [
+  "Pick one",
+  "Chaff",
+  "Balancer",
+  "Extra",
+  "Suppliments",
+];
 const alerts = useAlerts();
 
 const errors = ref([]);

@@ -16,7 +16,13 @@ const client = useSupabaseClient();
 const feeds = useState("feeds");
 const selectedHorseId = useState("selectedHorseId");
 const ingredients = ref([]);
-const ingredientTypes = ["Pick one", "Chaff", "Nuts", "Extra", "Suppliments"];
+const ingredientTypes = [
+  "Pick one",
+  "Chaff",
+  "Balancer",
+  "Extra",
+  "Suppliments",
+];
 const alerts = useAlerts();
 
 const errors = ref([]);

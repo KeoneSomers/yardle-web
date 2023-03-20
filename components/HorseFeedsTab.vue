@@ -64,7 +64,7 @@ const handleEdit = (feedId) => {
 const ingredientTypes = [
   "Pick one",
   "Chaff",
-  "Nuts",
+  "Balancer",
   "Extra",
   "Suppliments",
   "Other",
@@ -140,7 +140,7 @@ const ingredientTypes = [
                   </div>
                 </dd>
                 <dd class="mt-1 truncate text-gray-500">
-                  <div class="mr-1 mt-1">Nuts:</div>
+                  <div class="mr-1 mt-1">Balancer:</div>
                   <div class="flex flex-wrap">
                     <div
                       v-for="ingredient in feed.ingredients.filter(
