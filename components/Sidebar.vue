@@ -6,7 +6,6 @@ import {
   HomeIcon,
   MagnifyingGlassCircleIcon,
   UserGroupIcon,
-  ArrowsRightLeftIcon,
   RectangleStackIcon,
   RectangleGroupIcon,
   ClipboardDocumentListIcon,
@@ -148,7 +147,7 @@ const handleSignout = async () => {
               v-tooltip="'Switch Yard'"
               class="block p-2 text-sm text-gray-500 w-full text-left border rounded-full"
             >
-              <ArrowsRightLeftIcon class="h-5 w-5" />
+              <icon name="heroicons:arrows-right-left" class="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -163,14 +162,14 @@ const handleSignout = async () => {
               'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
             ]"
           >
-            <RectangleStackIcon
+            <icon
+              name="heroicons:rectangle-stack"
               :class="[
                 '/yards' == router.currentRoute.value.path
                   ? 'text-gray-500'
                   : 'text-gray-400 group-hover:text-gray-500',
                 'mr-3 flex-shrink-0 h-6 w-6',
               ]"
-              aria-hidden="true"
             />
             Your Yards
           </NuxtLink>

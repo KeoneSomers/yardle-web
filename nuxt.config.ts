@@ -5,6 +5,8 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@nuxt/image-edge",
     "@sidebase/nuxt-pdf",
+    "@nuxt/devtools",
+    "nuxt-icon",
   ],
   plugins: [{ src: "@/plugins/vercel.ts", mode: "client" }],
   typescript: {
