@@ -109,16 +109,16 @@ const handleRoleChange = async (memberId, roleId) => {
 </script>
 
 <template>
-  <div class="mt-14 px-4 pt-14 md:h-screen md:overflow-y-auto lg:pt-0">
-    <div class="sm:flex sm:items-center">
+  <div>
+    <div class="flex flex-col py-4 px-4 md:flex-row md:items-center lg:h-16">
       <div class="sm:flex-auto">
         <h1 class="text-xl font-semibold text-gray-900">Members</h1>
-        <p class="mt-2 text-sm text-gray-700">
+        <p class="text-xs text-gray-700">
           A list of all the members that are currently in this yard including
-          their name, joined date and role.
+          their name and role.
         </p>
       </div>
-      <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <div class="pt-4 md:pt-0">
         <button
           @click="() => (inviteLinkModalOpen = true)"
           type="button"
@@ -128,13 +128,13 @@ const handleRoleChange = async (memberId, roleId) => {
         </button>
       </div>
     </div>
-    <div class="mt-8">
-      <div class="-my-2 -mx-4 sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-          <div class="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-            <table class="w-full divide-y divide-gray-300">
-              <thead class="bg-gray-50">
-                <tr class="divide-x divide-gray-200">
+    <div>
+      <div>
+        <div class="inline-block min-w-full align-middle">
+          <div class="ring-1 ring-black ring-opacity-5">
+            <table class="w-full border-b">
+              <thead>
+                <tr class="border-b">
                   <th
                     scope="col"
                     class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
@@ -149,9 +149,9 @@ const handleRoleChange = async (memberId, roleId) => {
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
-                  v-for="member in members"
+                  v-for="(member, index) in members"
                   :key="member.profile.id"
-                  class="divide-x divide-gray-200"
+                  :class="index % 2 === 0 ? 'bg-gray-50' : undefined"
                 >
                   <td
                     class="flex items-center break-all py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
@@ -167,15 +167,20 @@ const handleRoleChange = async (memberId, roleId) => {
                     </div>
                     <div
                       v-else
-                      class="mr-3 flex h-9 w-9 items-center justify-center rounded-full bg-indigo-500 text-white"
+                      class="mr-3 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-500 text-sm tracking-tight text-white"
                     >
                       {{ member.profile.first_name[0].toUpperCase() }}
+                      {{
+                        member.profile.last_name &&
+                        member.profile.last_name[0].toUpperCase()
+                      }}
                     </div>
-
-                    {{ member.profile.first_name }}
-                    {{ member.profile.last_name }}
-                    <span v-if="user.id == member.profile.id" class="ml-2">
-                      (You)</span
+                    <span class="truncate"
+                      >{{ member.profile.first_name }}
+                      {{ member.profile.last_name }}
+                      <span v-if="user.id == member.profile.id" class="ml-2">
+                        (You)</span
+                      ></span
                     >
                   </td>
                   <td class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6">
