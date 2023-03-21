@@ -5,15 +5,41 @@ import download from "downloadjs";
 const downloadReportImage = () => {
   const report = document.getElementById("feed-report");
 
+  // const newScale = report.offsetWidth / 4000;
+
   const NodesToRemove = report.querySelectorAll("#feed-report-actions");
 
+  // hide some elements from pdf
   NodesToRemove.forEach((node) => {
     node.style.display = "none";
   });
 
+  // exportToPDF(
+  //   `feedreport.pdf`,
+  //   report,
+  //   {
+  //     orientation: "landscape",
+  //     format: "A4",
+  //   },
+  //   {
+  //     html2canvas: {
+  //       scale: newScale,
+  //       letterRendering: true,
+  //       svgRendering: true,
+  //     },
+  //   }
+  // );
+
+  // // show elements again
+  // NodesToRemove.forEach((node) => {
+  //   node.style.display = "";
+  // });
+
   toPng(report).then(function (dataUrl) {
+    // download image
     download(dataUrl, "feed-report.png");
 
+    // show elements again
     NodesToRemove.forEach((node) => {
       node.style.display = "";
     });

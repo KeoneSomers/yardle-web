@@ -4,8 +4,6 @@ const { isDisabled, fileName } = defineProps(["isDisabled", "fileName"]);
 const downloadReportImage = () => {
   const report = document.getElementById("invoice-report");
 
-  console.log(report.offsetWidth);
-
   // return;
 
   const newScale = report.offsetWidth / 1400;

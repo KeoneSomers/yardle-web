@@ -1,7 +1,13 @@
 <script setup>
 import BasicModal from "@/components/BasicModal.vue";
 import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
-import { DialogTitle } from "@headlessui/vue";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  DialogTitle,
+} from "@headlessui/vue";
 import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 
 definePageMeta({
@@ -11,6 +17,7 @@ definePageMeta({
 const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
 const feeds = useState("feeds");
+const profile = useState("profile");
 
 const createModalOpen = ref(false);
 const editModalOpen = ref(false);
@@ -65,6 +72,16 @@ await useAsyncData("all_feeds", async () => {
   feeds.value = await Promise.all(mappedFeeds);
 });
 
+//
+// const feedsGroupedByHorse = useState("groupedFeeds");
+// compute the feeds grouped by horse
+const feedsGroupedByHorse = computed(() => {
+  return feeds.value.reduce((r, a) => {
+    r[a.horse.id] = [...(r[a.horse.id] || []), a];
+    return r;
+  }, {});
+});
+
 // TODO: why is this here and not handled in the modal?
 const handleDelete = async () => {
   // delete the feeds ingredients
@@ -107,25 +124,15 @@ const handleDelete = async () => {
   deleteModalOpen.value = false;
   selectedFeedId.value = 0;
 };
-
-const handleDeleteFeed = (feedId) => {
-  selectedFeedId.value = feedId;
-  deleteModalOpen.value = true;
-};
-
-const handleEditFeed = (feedId) => {
-  selectedFeedId.value = feedId;
-  editModalOpen.value = true;
-};
 </script>
 
 <template>
   <div
     v-if="feeds.length > 0"
-    class="flex flex-col px-0 sm:px-6 md:h-screen md:overflow-y-auto lg:px-8"
+    class="px-0 sm:px-6 md:h-screen md:overflow-y-auto lg:px-8"
   >
     <!-- Page Heading -->
-    <div class="p-4 sm:flex sm:items-center md:my-16 md:p-0">
+    <div class="p-4 sm:flex sm:items-center md:mt-20 md:mb-10 md:p-0">
       <div class="sm:flex-auto">
         <h1 class="text-xl font-semibold text-gray-900">All Feeds</h1>
         <p class="mt-2 text-sm text-gray-700">
@@ -149,178 +156,235 @@ const handleEditFeed = (feedId) => {
         <DownloadFeedReport />
       </div>
     </div>
-
-    <!-- Desktop Table -->
-    <div class="relative hidden flex-1 overflow-y-auto sm:block">
-      <div
-        class="relative mt-5 overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
-      >
-        <table id="feed-report" class="min-w-full divide-y divide-gray-300">
-          <thead class="bg-gray-50">
-            <tr class="divide-x divide-gray-200">
-              <th
-                scope="col"
-                class="w-1/5 py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              ></th>
-              <th
-                scope="col"
-                class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
-              >
-                Chaff
-              </th>
-              <th
-                scope="col"
-                class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900"
-              >
-                Balancer
-              </th>
-              <th
-                scope="col"
-                class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-6"
-              >
-                Extra
-              </th>
-              <th
-                scope="col"
-                class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-6"
-              >
-                Suppliments
-              </th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-200 bg-white">
-            <tr
-              v-for="(feed, index) in feeds"
-              :key="feed.id"
-              class="divide-x divide-gray-200"
-              :class="index % 2 === 0 ? undefined : 'bg-gray-50'"
-            >
-              <td
-                class="py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
-              >
-                <div class="flex items-center space-x-2">
-                  <SupabaseImage
-                    v-if="feed.horse.avatar_url"
-                    class="h-8 w-8 overflow-hidden rounded-full"
-                    id="horse-avatars"
-                    v-model:path="feed.horse.avatar_url"
-                  />
-                  <div
-                    v-else
-                    class="flex h-8 w-8 items-center justify-center rounded-full text-white"
-                    :class="
-                      feed.horse.avatar_background
-                        ? feed.horse.avatar_background
-                        : 'bg-pink-500'
-                    "
-                  >
-                    {{ feed.horse.name[0].toUpperCase() }}
-                  </div>
-
-                  <div>
-                    <p class="text-2xl font-bold">{{ feed.horse.name }}</p>
-                  </div>
-                </div>
-
-                <div
-                  v-if="feed.condition"
-                  class="max-w-96 mt-3 flex items-center rounded-lg bg-purple-100 p-2 text-purple-700"
+    <!-- New Desktop Table -->
+    <div class="mt-8 hidden overflow-hidden rounded-lg border sm:flow-root">
+      <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <table class="min-w-full">
+            <thead class="bg-white">
+              <tr>
+                <th
+                  scope="col"
+                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
                 >
-                  <p class="break-words">{{ feed.condition }}</p>
-                </div>
-                <div
-                  v-if="feed.instructions"
-                  class="max-w-96 mt-1 flex rounded-lg bg-yellow-100 p-2 text-yellow-700"
+                  Condition &amp; Instructions
+                </th>
+                <th
+                  scope="col"
+                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  <p class="break-words">{{ feed.instructions }}</p>
-                </div>
+                  Chaff
+                </th>
+                <th
+                  scope="col"
+                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  Balancer
+                </th>
+                <th
+                  scope="col"
+                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  Extra
+                </th>
+                <th
+                  scope="col"
+                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  Supplements
+                </th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
+                  <span class="sr-only">Edit</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <template v-for="group in feedsGroupedByHorse" :key="group">
+                <tr class="border-t border-gray-200">
+                  <th
+                    colspan="6"
+                    scope="colgroup"
+                    class="bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                  >
+                    <div class="flex">
+                      <SupabaseImage
+                        v-if="group[0].horse.avatar_url"
+                        class="mr-2 h-5 w-5 overflow-hidden rounded-full"
+                        id="horse-avatars"
+                        v-model:path="group[0].horse.avatar_url"
+                      />
+                      <div
+                        v-else
+                        class="mr-2 flex h-5 w-5 items-center justify-center rounded-full text-white"
+                        :class="
+                          group[0].horse.avatar_background
+                            ? group[0].horse.avatar_background
+                            : 'bg-pink-500'
+                        "
+                      >
+                        {{ group[0].horse.name[0].toUpperCase() }}
+                      </div>
+                      {{ group[0].horse.name }}
+                    </div>
+                  </th>
+                </tr>
+                <tr
+                  v-for="(feed, index) in group"
+                  :key="feed.email"
+                  :class="[
+                    index === 0 ? 'border-gray-300' : 'border-gray-200',
+                    'border-t',
+                  ]"
+                >
+                  <td
+                    class="whitespace-nowrap py-4 pl-4 pr-3 align-top text-sm font-medium text-gray-900 sm:pl-3"
+                  >
+                    <p v-if="feed.condition">
+                      <span class="font-mono text-gray-400">C: </span
+                      >{{ feed.condition }}
+                    </p>
+                    <p v-if="feed.instructions">
+                      <span class="font-mono text-gray-400">I: </span
+                      >{{ feed.instructions }}
+                    </p>
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
+                  >
+                    <div
+                      v-for="ingredient in feed.ingredients.filter(
+                        (i) => i.type === 1
+                      )"
+                      :key="ingredient.id"
+                    >
+                      <span
+                        class="mr-3 mb-2 inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700"
+                      >
+                        {{
+                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                        }}
+                      </span>
+                    </div>
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
+                  >
+                    <div
+                      v-for="ingredient in feed.ingredients.filter(
+                        (i) => i.type === 2
+                      )"
+                      :key="ingredient.id"
+                    >
+                      <span
+                        class="mr-3 mb-2 inline-flex items-center rounded-full bg-blue-100 py-0.5 px-2 text-xs font-medium text-blue-700"
+                      >
+                        {{
+                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                        }}
+                      </span>
+                    </div>
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
+                  >
+                    <div
+                      v-for="ingredient in feed.ingredients.filter(
+                        (i) => i.type === 3
+                      )"
+                      :key="ingredient.id"
+                    >
+                      <span
+                        class="mr-3 mb-2 inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700"
+                      >
+                        {{
+                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                        }}
+                      </span>
+                    </div>
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
+                  >
+                    <div
+                      v-for="ingredient in feed.ingredients.filter(
+                        (i) => i.type === 4
+                      )"
+                      :key="ingredient.id"
+                    >
+                      <span
+                        class="mr-3 mb-2 inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700"
+                      >
+                        {{
+                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                        }}
+                      </span>
+                    </div>
+                  </td>
+                  <td
+                    class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right align-top text-sm font-medium sm:pr-3"
+                  >
+                    <Menu
+                      v-if="profile.active_role < 3"
+                      as="div"
+                      class="relative inline-block text-left"
+                    >
+                      <div>
+                        <MenuButton
+                          class="flex items-center rounded-full p-2 text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                        >
+                          <span class="sr-only">Open options</span>
+                          <icon
+                            name="heroicons:ellipsis-vertical-solid"
+                            class="h-5 w-5"
+                            aria-hidden="true"
+                          />
+                        </MenuButton>
+                      </div>
 
-                <div
-                  id="feed-report-actions"
-                  class="mt-2 flex w-full justify-end"
-                >
-                  <button
-                    @click="handleEditFeed(feed.id)"
-                    class="mr-2 rounded bg-gray-100 py-1 px-2 text-gray-600 hover:text-gray-900"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    @click="handleDeleteFeed(feed.id)"
-                    class="rounded bg-gray-100 py-1 px-2 text-gray-600 hover:text-gray-900"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-              <td class="w-1/5 whitespace-nowrap p-4 text-sm text-gray-500">
-                <div
-                  v-for="ingredient in feed.ingredients.filter(
-                    (i) => i.type === 1
-                  )"
-                  :key="ingredient.id"
-                >
-                  <span
-                    class="mr-3 mb-2 inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700"
-                  >
-                    {{
-                      `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                    }}
-                  </span>
-                </div>
-              </td>
-              <td class="w-1/5 whitespace-nowrap p-4 text-sm text-gray-500">
-                <div class="mb-3 flex flex-wrap">
-                  <span
-                    v-for="ingredient in feed.ingredients.filter(
-                      (i) => i.type === 2
-                    )"
-                    :key="ingredient.id"
-                    class="mr-3 mb-2 inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700"
-                  >
-                    {{
-                      `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                    }}
-                  </span>
-                </div>
-              </td>
-              <td
-                class="w-1/5 whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
-              >
-                <div class="mb-3 flex flex-wrap">
-                  <span
-                    v-for="ingredient in feed.ingredients.filter(
-                      (i) => i.type === 3
-                    )"
-                    :key="ingredient.id"
-                    class="mr-3 mb-2 inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700"
-                  >
-                    {{
-                      `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                    }}
-                  </span>
-                </div>
-              </td>
-              <td
-                class="w-1/5 whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
-              >
-                <div class="mb-3 flex flex-wrap">
-                  <span
-                    v-for="ingredient in feed.ingredients.filter(
-                      (i) => i.type === 4
-                    )"
-                    :key="ingredient.id"
-                    class="mr-3 mb-2 inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700"
-                  >
-                    {{
-                      `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                    }}
-                  </span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                      <transition
+                        enter-active-class="transition ease-out duration-100"
+                        enter-from-class="transform opacity-0 scale-95"
+                        enter-to-class="transform opacity-100 scale-100"
+                        leave-active-class="transition ease-in duration-75"
+                        leave-from-class="transform opacity-100 scale-100"
+                        leave-to-class="transform opacity-0 scale-95"
+                      >
+                        <MenuItems
+                          class="absolute right-10 -top-14 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        >
+                          <div class="py-1">
+                            <MenuItem>
+                              <button
+                                @click="
+                                  selectedFeedId = feed.id;
+                                  editModalOpen = true;
+                                "
+                                class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100"
+                              >
+                                Edit
+                              </button>
+                            </MenuItem>
+                            <MenuItem>
+                              <button
+                                @click="
+                                  selectedFeedId = feed.id;
+                                  deleteModalOpen = true;
+                                "
+                                class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100"
+                              >
+                                Delete
+                              </button>
+                            </MenuItem>
+                          </div>
+                        </MenuItems>
+                      </transition>
+                    </Menu>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -328,8 +392,18 @@ const handleEditFeed = (feedId) => {
     <FeedsTableMobile
       v-show="feeds.length > 0"
       :feeds="feeds"
-      @editFeed="(id) => handleEditFeed(id)"
-      @deleteFeed="(id) => handleDeleteFeed(id)"
+      @editFeed="
+        (id) => {
+          selectedFeedId = id;
+          editModalOpen = true;
+        }
+      "
+      @deleteFeed="
+        (id) => {
+          selectedFeedId = id;
+          deleteModalOpen = true;
+        }
+      "
     />
   </div>
   <div v-else class="flex h-full flex-1 items-center justify-center">
