@@ -94,7 +94,7 @@ const selectHorse = (horseId) => {
     <!-- TODO: HorseDirectory.vue Component -->
     <div
       :class="{ hidden: viewingHorse }"
-      class="flex w-full flex-shrink-0 flex-col border-r border-gray-200 md:flex md:w-96"
+      class="flex w-full flex-shrink-0 flex-col border-r border-gray-200 md:flex lg:w-96"
       v-if="horses.length > 0"
     >
       <div class="px-4 pt-6 pb-4">
@@ -153,7 +153,7 @@ const selectHorse = (horseId) => {
             class="relative"
           >
             <div
-              class="sticky top-0 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500 md:top-0"
+              class="sticky top-14 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500 md:top-0"
             >
               <h3>{{ letter }}</h3>
             </div>
