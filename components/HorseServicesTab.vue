@@ -120,7 +120,6 @@ const { data: invoiceData, error: invoiceDataError } = await client
 
 if (invoiceData) {
   invoices.value = invoiceData;
-  console.log(invoices.value);
 }
 </script>
 
@@ -324,13 +323,26 @@ if (invoiceData) {
           'bg-gray-50': !invoice.published,
         }"
       >
-        <div class="p-4">
-          <p>
-            {{ DateTime.fromISO(invoice.start_date).toFormat("DDDD") }} -
-            {{ DateTime.fromISO(invoice.end_date).toFormat("DDDD") }}
-          </p>
+        <div class="flex items-center">
+          <icon name="heroicons:document" class="mx-4 h-8 w-8" />
+          <div class="py-4 pr-4">
+            <p>
+              {{ DateTime.fromISO(invoice.end_date).toFormat("DDDD") }}
+            </p>
+          </div>
+          <span
+            v-if="invoice.paid === false"
+            class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800"
+            >Unpaid</span
+          >
+          <span
+            v-else
+            class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+            >Paid</span
+          >
         </div>
-        <div>
+
+        <div class="pl-4">
           <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />
           <!-- <button class="p-2 mr-2 shadow border rounded">
             View / Edit Items

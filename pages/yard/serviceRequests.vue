@@ -39,14 +39,21 @@ const respondedRequests = computed(() => {
     <div class="mx-auto mb-20 max-w-7xl px-4 sm:px-6 lg:px-8">
       <!-- We've used 3xl here, but feel free to try other max-widths based on your needs -->
       <div class="mx-auto mt-20 max-w-3xl">
-        <h1 class="text-2xl font-semibold text-gray-900">Service Requests</h1>
-        <p class="text-sm text-gray-500">
-          This is a list of all service requests that have been made to your
-          yard.
-        </p>
+        <div
+          class="sticky top-0 border-b bg-white bg-opacity-70 py-4 backdrop-blur"
+        >
+          <h1 class="text-2xl font-semibold text-gray-900">Service Requests</h1>
+          <p class="text-sm text-gray-500">
+            This is a list of all service requests that have been made to your
+            yard.
+          </p>
+        </div>
+
         <div v-for="(arr, index) in [unrespondedRequests, respondedRequests]">
-          <p v-if="index === 0" class="mt-10 mb-2">Pending requests</p>
-          <p v-else class="mt-20 mb-2">Responded requests</p>
+          <p v-if="index === 0" class="mt-10 mb-2">
+            Pending ({{ arr.length }})
+          </p>
+          <p v-else class="mt-20 mb-2">Responded ({{ arr.length }})</p>
           <ul role="list" class="space-y-3 divide-y border-t-2">
             <li
               v-for="request in arr"
