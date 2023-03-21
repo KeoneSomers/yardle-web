@@ -63,9 +63,7 @@ onMounted(async () => {
   <MobileSidebar />
 
   <!-- page content -->
-  <div
-    class="h-screen w-full overflow-auto pt-14 pl-0 lg:top-0 lg:pt-0 lg:pl-64"
-  >
+  <div class="w-full overflow-auto pt-14 pl-0 lg:pt-0 lg:pl-64">
     <slot />
   </div>
 </template>
