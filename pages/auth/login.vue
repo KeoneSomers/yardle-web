@@ -40,12 +40,21 @@ const handleLogin = async () => {
   });
 
   if (error) {
-    alerts.value.unshift({
-      title: "Error creating account",
-      message: "Please try again later",
-      type: "error",
-    });
-    console.log(error);
+    if (error.message === "Invalid login credentials") {
+      alerts.value.unshift({
+        title: "Incorrect Email or Password",
+        message: "Please try re-entering your email and password",
+        type: "error",
+      });
+    } else {
+      alerts.value.unshift({
+        title: "Error Logging In",
+        message: "Please try again later",
+        type: "error",
+      });
+    }
+
+    console.log(error.message);
     loading.value = false;
     return;
   }
