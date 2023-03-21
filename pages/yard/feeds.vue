@@ -127,380 +127,380 @@ const handleDelete = async () => {
 </script>
 
 <template>
-  <div
-    v-if="feeds.length > 0"
-    class="px-0 sm:px-6 md:h-screen md:overflow-y-auto lg:px-8"
-  >
-    <!-- Page Heading -->
-    <div class="p-4 sm:flex sm:items-center md:mt-20 md:mb-10 md:p-0">
-      <div class="sm:flex-auto">
-        <h1 class="text-xl font-semibold text-gray-900">All Feeds</h1>
-        <p class="mt-2 text-sm text-gray-700">
-          A list of all the feeds for the horses in this yard including their
-          ingredients, instructions and conditions.
-        </p>
-      </div>
-      <div v-show="feeds.length > 0" class="mt-4 flex sm:mt-0 sm:ml-16">
-        <button
-          @click="() => (createModalOpen = true)"
-          type="button"
-          class="inline-flex w-full items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 md:mr-2 md:w-fit md:px-6"
-        >
-          <icon
-            name="heroicons:plus-solid"
-            class="-ml-1 mr-3 h-5 w-5"
-            aria-hidden="true"
-          />
-          Add a feed
-        </button>
-        <DownloadFeedReport />
-      </div>
-    </div>
-    <!-- New Desktop Table -->
-    <div class="mt-8 hidden overflow-hidden rounded-lg border sm:flow-root">
-      <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-          <table class="min-w-full" id="feed-report">
-            <thead class="bg-white">
-              <tr>
-                <th
-                  scope="col"
-                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
-                >
-                  Condition &amp; Instructions
-                </th>
-                <th
-                  scope="col"
-                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Chaff
-                </th>
-                <th
-                  scope="col"
-                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Balancer
-                </th>
-                <th
-                  scope="col"
-                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Extra
-                </th>
-                <th
-                  scope="col"
-                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Supplements
-                </th>
-                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
-                  <span class="sr-only">Edit</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white">
-              <template v-for="group in feedsGroupedByHorse" :key="group">
-                <tr class="border-t border-gray-200">
+  <div>
+    <PageHeading
+      title="Feeds"
+      description="A list of all the feeds for the horses in this yard including their
+          ingredients, instructions and conditions."
+    >
+      <button
+        @click="() => (createModalOpen = true)"
+        type="button"
+        class="inline-flex w-full items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 md:mr-2 md:w-fit md:px-4"
+      >
+        <icon
+          name="heroicons:plus-solid"
+          class="-ml-1 mr-3 h-4 w-4"
+          aria-hidden="true"
+        />
+        Add a feed
+      </button>
+      <DownloadFeedReport v-show="feeds.length > 0" />
+    </PageHeading>
+    <div
+      v-if="feeds.length > 0"
+      class="px-0 sm:px-6 md:h-screen md:overflow-y-auto lg:px-8"
+    >
+      <!-- Page Heading -->
+
+      <!-- Desktop Table -->
+      <div class="mt-8 hidden overflow-hidden rounded-lg border sm:flow-root">
+        <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div
+            class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
+          >
+            <table class="min-w-full" id="feed-report">
+              <thead class="bg-white">
+                <tr>
                   <th
-                    colspan="6"
-                    scope="colgroup"
-                    class="bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                    scope="col"
+                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
                   >
-                    <div class="flex">
-                      <SupabaseImage
-                        v-if="group[0].horse.avatar_url"
-                        class="mr-2 h-5 w-5 overflow-hidden rounded-full"
-                        id="horse-avatars"
-                        v-model:path="group[0].horse.avatar_url"
-                      />
-                      <div
-                        v-else
-                        class="mr-2 flex h-5 w-5 items-center justify-center rounded-full text-white"
-                        :class="
-                          group[0].horse.avatar_background
-                            ? group[0].horse.avatar_background
-                            : 'bg-pink-500'
-                        "
-                      >
-                        {{ group[0].horse.name[0].toUpperCase() }}
-                      </div>
-                      {{ group[0].horse.name }}
-                    </div>
+                    Condition &amp; Instructions
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Chaff
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Balancer
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Extra
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Supplements
+                  </th>
+                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
+                    <span class="sr-only">Edit</span>
                   </th>
                 </tr>
-                <tr
-                  v-for="(feed, index) in group"
-                  :key="feed.email"
-                  :class="[
-                    index === 0 ? 'border-gray-300' : 'border-gray-200',
-                    'border-t',
-                  ]"
-                >
-                  <td
-                    class="whitespace-nowrap py-4 pl-4 pr-3 align-top text-sm font-medium text-gray-900 sm:pl-3"
-                  >
-                    <p v-if="feed.condition">
-                      <span class="font-mono text-gray-400">C: </span
-                      >{{ feed.condition }}
-                    </p>
-                    <p v-if="feed.instructions">
-                      <span class="font-mono text-gray-400">I: </span
-                      >{{ feed.instructions }}
-                    </p>
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
-                  >
-                    <div
-                      v-for="ingredient in feed.ingredients.filter(
-                        (i) => i.type === 1
-                      )"
-                      :key="ingredient.id"
+              </thead>
+              <tbody class="bg-white">
+                <template v-for="group in feedsGroupedByHorse" :key="group">
+                  <tr class="border-t border-gray-200">
+                    <th
+                      colspan="6"
+                      scope="colgroup"
+                      class="bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
                     >
-                      <span
-                        class="mr-3 mb-2 inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700"
-                      >
-                        {{
-                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                        }}
-                      </span>
-                    </div>
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
-                  >
-                    <div
-                      v-for="ingredient in feed.ingredients.filter(
-                        (i) => i.type === 2
-                      )"
-                      :key="ingredient.id"
-                    >
-                      <span
-                        class="mr-3 mb-2 inline-flex items-center rounded-full bg-blue-100 py-0.5 px-2 text-xs font-medium text-blue-700"
-                      >
-                        {{
-                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                        }}
-                      </span>
-                    </div>
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
-                  >
-                    <div
-                      v-for="ingredient in feed.ingredients.filter(
-                        (i) => i.type === 3
-                      )"
-                      :key="ingredient.id"
-                    >
-                      <span
-                        class="mr-3 mb-2 inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700"
-                      >
-                        {{
-                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                        }}
-                      </span>
-                    </div>
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
-                  >
-                    <div
-                      v-for="ingredient in feed.ingredients.filter(
-                        (i) => i.type === 4
-                      )"
-                      :key="ingredient.id"
-                    >
-                      <span
-                        class="mr-3 mb-2 inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700"
-                      >
-                        {{
-                          `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
-                        }}
-                      </span>
-                    </div>
-                  </td>
-                  <td
-                    class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right align-top text-sm font-medium sm:pr-3"
-                  >
-                    <Menu
-                      v-if="profile.active_role < 3"
-                      as="div"
-                      class="relative inline-block text-left"
-                    >
-                      <div>
-                        <MenuButton
-                          class="flex items-center rounded-full p-2 text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                      <div class="flex">
+                        <SupabaseImage
+                          v-if="group[0].horse.avatar_url"
+                          class="mr-2 h-5 w-5 overflow-hidden rounded-full"
+                          id="horse-avatars"
+                          v-model:path="group[0].horse.avatar_url"
+                        />
+                        <div
+                          v-else
+                          class="mr-2 flex h-5 w-5 items-center justify-center rounded-full text-white"
+                          :class="
+                            group[0].horse.avatar_background
+                              ? group[0].horse.avatar_background
+                              : 'bg-pink-500'
+                          "
                         >
-                          <span class="sr-only">Open options</span>
-                          <icon
-                            name="heroicons:ellipsis-vertical-solid"
-                            class="h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        </MenuButton>
+                          {{ group[0].horse.name[0].toUpperCase() }}
+                        </div>
+                        {{ group[0].horse.name }}
                       </div>
-
-                      <transition
-                        enter-active-class="transition ease-out duration-100"
-                        enter-from-class="transform opacity-0 scale-95"
-                        enter-to-class="transform opacity-100 scale-100"
-                        leave-active-class="transition ease-in duration-75"
-                        leave-from-class="transform opacity-100 scale-100"
-                        leave-to-class="transform opacity-0 scale-95"
+                    </th>
+                  </tr>
+                  <tr
+                    v-for="(feed, index) in group"
+                    :key="feed.email"
+                    :class="[
+                      index === 0 ? 'border-gray-300' : 'border-gray-200',
+                      'border-t',
+                    ]"
+                  >
+                    <td
+                      class="whitespace-nowrap py-4 pl-4 pr-3 align-top text-sm font-medium text-gray-900 sm:pl-3"
+                    >
+                      <p v-if="feed.condition">
+                        <span class="font-mono text-gray-400">C: </span
+                        >{{ feed.condition }}
+                      </p>
+                      <p v-if="feed.instructions">
+                        <span class="font-mono text-gray-400">I: </span
+                        >{{ feed.instructions }}
+                      </p>
+                    </td>
+                    <td
+                      class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
+                    >
+                      <div
+                        v-for="ingredient in feed.ingredients.filter(
+                          (i) => i.type === 1
+                        )"
+                        :key="ingredient.id"
                       >
-                        <MenuItems
-                          class="absolute right-10 -top-14 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        <span
+                          class="mr-3 mb-2 inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700"
                         >
-                          <div class="py-1">
-                            <MenuItem>
-                              <button
-                                @click="
-                                  selectedFeedId = feed.id;
-                                  editModalOpen = true;
-                                "
-                                class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100"
-                              >
-                                Edit
-                              </button>
-                            </MenuItem>
-                            <MenuItem>
-                              <button
-                                @click="
-                                  selectedFeedId = feed.id;
-                                  deleteModalOpen = true;
-                                "
-                                class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100"
-                              >
-                                Delete
-                              </button>
-                            </MenuItem>
-                          </div>
-                        </MenuItems>
-                      </transition>
-                    </Menu>
-                  </td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+                          {{
+                            `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                          }}
+                        </span>
+                      </div>
+                    </td>
+                    <td
+                      class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
+                    >
+                      <div
+                        v-for="ingredient in feed.ingredients.filter(
+                          (i) => i.type === 2
+                        )"
+                        :key="ingredient.id"
+                      >
+                        <span
+                          class="mr-3 mb-2 inline-flex items-center rounded-full bg-blue-100 py-0.5 px-2 text-xs font-medium text-blue-700"
+                        >
+                          {{
+                            `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                          }}
+                        </span>
+                      </div>
+                    </td>
+                    <td
+                      class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
+                    >
+                      <div
+                        v-for="ingredient in feed.ingredients.filter(
+                          (i) => i.type === 3
+                        )"
+                        :key="ingredient.id"
+                      >
+                        <span
+                          class="mr-3 mb-2 inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700"
+                        >
+                          {{
+                            `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                          }}
+                        </span>
+                      </div>
+                    </td>
+                    <td
+                      class="whitespace-nowrap px-3 py-4 align-top text-sm text-gray-500"
+                    >
+                      <div
+                        v-for="ingredient in feed.ingredients.filter(
+                          (i) => i.type === 4
+                        )"
+                        :key="ingredient.id"
+                      >
+                        <span
+                          class="mr-3 mb-2 inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700"
+                        >
+                          {{
+                            `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
+                          }}
+                        </span>
+                      </div>
+                    </td>
+                    <td
+                      class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right align-top text-sm font-medium sm:pr-3"
+                    >
+                      <Menu
+                        v-if="profile.active_role < 3"
+                        as="div"
+                        class="relative inline-block text-left"
+                      >
+                        <div>
+                          <MenuButton
+                            class="flex items-center rounded-full p-2 text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                          >
+                            <span class="sr-only">Open options</span>
+                            <icon
+                              name="heroicons:ellipsis-vertical-solid"
+                              class="h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          </MenuButton>
+                        </div>
 
-    <!-- Mobile Table -->
-    <FeedsTableMobile
-      v-show="feeds.length > 0"
-      :feeds="feeds"
-      @editFeed="
-        (id) => {
-          selectedFeedId = id;
-          editModalOpen = true;
-        }
-      "
-      @deleteFeed="
-        (id) => {
-          selectedFeedId = id;
-          deleteModalOpen = true;
-        }
-      "
-    />
-  </div>
-  <div v-else class="flex h-full flex-1 items-center justify-center">
-    <div class="text-center">
-      <svg
-        class="mx-auto h-12 w-12 text-gray-400"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        aria-hidden="true"
-      >
-        <path
-          vector-effect="non-scaling-stroke"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-        />
-      </svg>
-      <h3 class="mt-2 text-sm font-medium text-gray-900">No Feeds</h3>
-      <p class="mt-1 text-sm text-gray-500">
-        Feeds that belong to your horses will be shown here.
-      </p>
-      <div class="mt-6">
-        <button
-          @click="() => (createModalOpen = true)"
-          type="button"
-          class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          <icon
-            name="heroicons:plus-solid"
-            class="-ml-1 mr-2 h-5 w-5"
-            aria-hidden="true"
-          />
-          New Feed
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Create Feed Modal -->
-  <CreateFeedModal
-    :is-open="createModalOpen"
-    :feed-id="selectedFeedId"
-    @close="createModalOpen = false"
-  />
-  <!-- Edit Feed Modal -->
-  <EditFeedModal
-    :is-open="editModalOpen"
-    :feed-id="selectedFeedId"
-    @close="editModalOpen = false"
-  />
-  <!-- Delete Feed Modal -->
-  <BasicModal :is-open="deleteModalOpen" @close="deleteModalOpen = false">
-    <div>
-      <div class="sm:flex sm:items-start">
-        <div
-          class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
-        >
-          <icon
-            name="heroicons:exclamation-triangle"
-            class="h-6 w-6 text-red-600"
-            aria-hidden="true"
-          />
-        </div>
-        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <DialogTitle
-            as="h3"
-            class="text-lg font-medium leading-6 text-gray-900"
-            >Delete Feed</DialogTitle
-          >
-          <div class="mt-2">
-            <p class="text-sm text-gray-500">
-              Are you sure you want to delete this feed? All of it's data will
-              be permanently removed from your yard forever. This action cannot
-              be undone.
-            </p>
+                        <transition
+                          enter-active-class="transition ease-out duration-100"
+                          enter-from-class="transform opacity-0 scale-95"
+                          enter-to-class="transform opacity-100 scale-100"
+                          leave-active-class="transition ease-in duration-75"
+                          leave-from-class="transform opacity-100 scale-100"
+                          leave-to-class="transform opacity-0 scale-95"
+                        >
+                          <MenuItems
+                            class="absolute right-10 -top-14 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                          >
+                            <div class="py-1">
+                              <MenuItem>
+                                <button
+                                  @click="
+                                    selectedFeedId = feed.id;
+                                    editModalOpen = true;
+                                  "
+                                  class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100"
+                                >
+                                  Edit
+                                </button>
+                              </MenuItem>
+                              <MenuItem>
+                                <button
+                                  @click="
+                                    selectedFeedId = feed.id;
+                                    deleteModalOpen = true;
+                                  "
+                                  class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100"
+                                >
+                                  Delete
+                                </button>
+                              </MenuItem>
+                            </div>
+                          </MenuItems>
+                        </transition>
+                      </Menu>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-        <button
-          type="button"
-          class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-          @click="handleDelete"
+
+      <!-- Mobile Table -->
+      <FeedsTableMobile
+        v-show="feeds.length > 0"
+        :feeds="feeds"
+        @editFeed="
+          (id) => {
+            selectedFeedId = id;
+            editModalOpen = true;
+          }
+        "
+        @deleteFeed="
+          (id) => {
+            selectedFeedId = id;
+            deleteModalOpen = true;
+          }
+        "
+      />
+    </div>
+    <div v-else class="flex h-full flex-1 items-center justify-center">
+      <div class="text-center">
+        <svg
+          class="mx-auto h-12 w-12 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
         >
-          Delete
-        </button>
-        <button
-          type="button"
-          class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-          @click="deleteModalOpen = false"
-          ref="cancelButtonRef"
-        >
-          Cancel
-        </button>
+          <path
+            vector-effect="non-scaling-stroke"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+          />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No Feeds</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Feeds that belong to your horses will be shown here.
+        </p>
+        <div class="mt-6">
+          <button
+            @click="() => (createModalOpen = true)"
+            type="button"
+            class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            <icon
+              name="heroicons:plus-solid"
+              class="-ml-1 mr-2 h-5 w-5"
+              aria-hidden="true"
+            />
+            New Feed
+          </button>
+        </div>
       </div>
     </div>
-  </BasicModal>
+
+    <!-- Create Feed Modal -->
+    <CreateFeedModal
+      :is-open="createModalOpen"
+      :feed-id="selectedFeedId"
+      @close="createModalOpen = false"
+    />
+    <!-- Edit Feed Modal -->
+    <EditFeedModal
+      :is-open="editModalOpen"
+      :feed-id="selectedFeedId"
+      @close="editModalOpen = false"
+    />
+    <!-- Delete Feed Modal -->
+    <BasicModal :is-open="deleteModalOpen" @close="deleteModalOpen = false">
+      <div>
+        <div class="sm:flex sm:items-start">
+          <div
+            class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+          >
+            <icon
+              name="heroicons:exclamation-triangle"
+              class="h-6 w-6 text-red-600"
+              aria-hidden="true"
+            />
+          </div>
+          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+            <DialogTitle
+              as="h3"
+              class="text-lg font-medium leading-6 text-gray-900"
+              >Delete Feed</DialogTitle
+            >
+            <div class="mt-2">
+              <p class="text-sm text-gray-500">
+                Are you sure you want to delete this feed? All of it's data will
+                be permanently removed from your yard forever. This action
+                cannot be undone.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+          <button
+            type="button"
+            class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+            @click="handleDelete"
+          >
+            Delete
+          </button>
+          <button
+            type="button"
+            class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+            @click="deleteModalOpen = false"
+            ref="cancelButtonRef"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </BasicModal>
+  </div>
 </template>

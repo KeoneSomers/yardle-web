@@ -52,7 +52,7 @@ const downloadReportImage = () => {
     <button
       @click="downloadReportImage"
       type="button"
-      class="inline-flex items-center whitespace-nowrap rounded-md border border-transparent bg-pink-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+      class="inline-flex items-center whitespace-nowrap rounded-md border border-transparent bg-pink-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
     >
       <icon
         name="heroicons:cloud-arrow-down-solid"
