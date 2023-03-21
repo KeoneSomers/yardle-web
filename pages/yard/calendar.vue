@@ -134,7 +134,7 @@ const createEvent = (e, day) => {
 <template>
   <div>
     <!-- Mobile Calendar -->
-    <div class="h-screen px-4 pt-20 lg:hidden lg:pt-0">
+    <div class="h-screen px-4 pt-4 lg:hidden lg:pt-0">
       <div class="flex items-center">
         <h2 class="flex-auto text-sm font-semibold text-gray-900">
           {{
@@ -343,7 +343,7 @@ const createEvent = (e, day) => {
     <!-- Desktop  -->
     <div class="hidden lg:flex lg:h-screen lg:flex-col">
       <header
-        class="flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none"
+        class="flex h-16 items-center justify-between border-b border-gray-200 p-4 lg:flex-none"
       >
         <h1 class="text-lg font-semibold text-gray-900">
           <time :datetime="dt.toISODate()">{{
@@ -388,7 +388,7 @@ const createEvent = (e, day) => {
               />
             </button>
           </div>
-          <div class="hidden md:ml-4 md:flex md:items-center">
+          <div class="hidden md:flex md:items-center">
             <button
               @click="createEvent"
               type="button"

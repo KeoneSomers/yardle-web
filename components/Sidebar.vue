@@ -124,12 +124,14 @@ const handleSignout = async () => {
     class="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-gray-100"
   >
     <div class="flex flex-1 flex-col overflow-y-auto pb-4">
-      <div class="flex h-16 flex-shrink-0 items-center px-4">
+      <div
+        class="flex h-16 flex-shrink-0 items-center border-b bg-gray-50 px-4"
+      >
         <Logo class="h-8 w-8" />
       </div>
       <nav class="flex-1" aria-label="Sidebar">
         <!-- yard widget -->
-        <div v-if="yard" class="flex border-t border-b bg-gray-50 p-4">
+        <div v-if="yard" class="flex border-b bg-gray-50 p-4">
           <div class="flex-1">
             <div class="flex items-center">
               <icon
