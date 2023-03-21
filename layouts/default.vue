@@ -64,7 +64,7 @@ onMounted(async () => {
 
   <!-- page content -->
   <div
-    class="fixed top-14 left-0 h-[calc(100vh-3.5rem)] w-full overflow-auto lg:top-0 lg:left-64 lg:h-screen lg:w-[calc(100%-16rem)]"
+    class="mt-14 ml-0 h-[calc(100vh-3.5rem)] w-full overflow-auto lg:top-0 lg:mt-0 lg:ml-64 lg:h-screen lg:w-[calc(100%-16rem)]"
   >
     <slot />
   </div>
