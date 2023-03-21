@@ -123,11 +123,11 @@ const handleRoleChange = async (memberId, roleId) => {
         Invite member
       </button>
     </PageHeading>
-    <div>
-      <div>
+    <div class="px-0 sm:px-6 md:h-screen md:overflow-y-auto lg:px-8">
+      <div class="rounded-lg border sm:mt-8">
         <div class="inline-block min-w-full align-middle">
           <div class="ring-1 ring-black ring-opacity-5">
-            <table class="w-full border-b">
+            <table class="w-full">
               <thead>
                 <tr class="border-b">
                   <th
