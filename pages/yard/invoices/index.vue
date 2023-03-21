@@ -1,4 +1,5 @@
 <script setup>
+import { DateTime } from "luxon";
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
 });
@@ -35,16 +36,37 @@ invoices.value = invoicesData;
         :key="invoice.id"
         :to="`/yard/invoices/${invoice.id * 36}`"
         class="mb-4 flex items-center justify-between rounded-lg border transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg"
-        :class="{
-          'bg-green-50': invoice.published,
-          'bg-gray-50': !invoice.published,
-        }"
       >
-        <div class="p-4">
-          <p>
-            {{ invoice.horse_id.name }} -
-            {{ invoice.end_date }}
-          </p>
+        <div class="flex items-center">
+          <icon name="heroicons:document" class="mx-4 h-8 w-8" />
+          <div class="py-4 pr-4">
+            <ClientOnly>
+              <p>
+                {{ invoice.horse_id.name }} -
+                {{ DateTime.fromISO(invoice.end_date).toFormat("DDDD") }}
+              </p>
+            </ClientOnly>
+          </div>
+          <span
+            v-if="invoice.paid === false"
+            class="mr-2 inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800"
+            >Unpaid</span
+          >
+          <span
+            v-else
+            class="mr-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+            >Paid</span
+          >
+          <span
+            v-if="invoice.published === false"
+            class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800"
+            >Unpublished</span
+          >
+          <span
+            v-else
+            class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+            >Published</span
+          >
         </div>
         <div>
           <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />
