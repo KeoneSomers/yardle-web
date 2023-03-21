@@ -90,7 +90,7 @@ const selectHorse = (horseId) => {
 </script>
 
 <template>
-  <div class="flex h-full flex-1">
+  <div class="flex h-full flex-1 lg:h-screen">
     <!-- TODO: HorseDirectory.vue Component -->
     <div
       :class="{ hidden: viewingHorse }"
