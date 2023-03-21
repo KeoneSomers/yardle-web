@@ -53,21 +53,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex h-screen">
+  <div class="flex h-screen w-screen overflow-hidden">
     <!-- desktop sidebar -->
-    <div class="hidden lg:flex lg:flex-shrink-0 w-64 flex-col">
+    <div class="hidden w-64 flex-col lg:flex lg:flex-shrink-0">
       <Sidebar />
     </div>
 
     <!-- page content -->
-    <div class="flex flex-col flex-1 pt-16 lg:pt-0">
-      <MobileNavbar />
-      <div class="flex-1">
-        <slot />
-      </div>
+    <div class="flex-1 overflow-x-auto pt-14 lg:pt-0">
+      <slot />
     </div>
   </div>
 
+  <MobileNavbar />
   <MobileSidebar />
 </template>
 
