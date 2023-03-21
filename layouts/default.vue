@@ -60,7 +60,7 @@ onMounted(async () => {
     </div>
 
     <!-- page content -->
-    <div class="flex-1 overflow-x-auto pt-14 lg:pt-0">
+    <div class="flex-1 overflow-auto">
       <slot />
     </div>
   </div>
