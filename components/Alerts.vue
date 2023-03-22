@@ -71,6 +71,7 @@ watch(
             </div>
           </div>
         </div>
+        <div class="animate-div h-1 w-full bg-indigo-500"></div>
       </div>
     </TransitionGroup>
   </div>
@@ -110,5 +111,19 @@ watch(
       animations can be calculated correctly. */
 .fade-leave-active {
   position: absolute;
+}
+
+.animate-div {
+  animation-name: animateWidth;
+  animation-duration: 6s;
+}
+
+@keyframes animateWidth {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }
 </style>
