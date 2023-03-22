@@ -244,8 +244,8 @@ const handleSubmit = async () => {
                       >Date</label
                     >
                     <div class="mt-1">
-                      <input
-                        :min="
+                      <!-- 
+                                                :min="
                           DateTime.now()
                             .set({
                               hour: 0,
@@ -255,6 +255,8 @@ const handleSubmit = async () => {
                             })
                             .toISODate()
                         "
+                       -->
+                      <input
                         type="date"
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         v-model="date"
