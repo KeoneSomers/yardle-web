@@ -6,7 +6,7 @@ const downloadReportImage = () => {
 
   // return;
 
-  const newScale = report.offsetWidth / 1400;
+  const newScale = report.offsetWidth / 1410;
 
   // save pdf
   exportToPDF(

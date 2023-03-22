@@ -70,7 +70,7 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
             </div>
           </div>
           <div>
-            <div>To: {{ client_name }} - {{ client_email }}</div>
+            <div>Bill to: {{ client_name }} - {{ client_email }}</div>
           </div>
         </div>
       </div>
