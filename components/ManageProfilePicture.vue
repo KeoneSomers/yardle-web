@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(["path"]);
+const props = defineProps(["path", "horseId"]);
 const { path } = toRefs(props);
 
 const emit = defineEmits(["update:path"]);
@@ -28,6 +28,8 @@ const downloadImage = async () => {
   src.value = URL.createObjectURL(data);
 };
 
+console.log(props.horseId);
+
 const uploadAvatar = async (evt) => {
   files.value = evt.target.files;
   try {
@@ -39,28 +41,20 @@ const uploadAvatar = async (evt) => {
 
     const file = files.value[0];
     const fileExt = file.name.split(".").pop();
-    const fileName = `${Math.random()}.${fileExt}`;
+    const fileName = `horse_${props.horseId}_avatar.${fileExt}`;
     const filePath = `${fileName}`;
-
-    // first delete the old image
-    if (path.value) {
-      const { error } = await supabase.storage
-        .from("horse-avatars")
-        .remove([path.value]);
-
-      if (error) {
-        console.error("Error removing old image: ", error.message);
-        return;
-      }
-    }
 
     // upload new image
     let { error: uploadError } = await supabase.storage
       .from("horse-avatars")
-      .upload(filePath, file);
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: true,
+      });
 
     if (uploadError) throw uploadError;
-    emit("update:path", filePath);
+
+    emit("update:path", filePath + "?t=" + Date.now()); // add the timestamp to force a reload on the images
   } catch (error) {
     alert(error.message);
   } finally {

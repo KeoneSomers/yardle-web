@@ -8,8 +8,6 @@ import {
 } from "@headlessui/vue";
 import { DateTime } from "luxon";
 
-const loading = ref(false);
-
 const props = defineProps(["isOpen", "horse"]);
 const { horse } = toRefs(props);
 const emits = defineEmits(["close"]);
@@ -111,7 +109,10 @@ const handleSubmit = async () => {
                 class="mt-4 flex flex-col space-y-3"
               >
                 <div>
-                  <ManageProfilePicture v-model:path="horse.avatar_url" />
+                  <ManageProfilePicture
+                    v-model:path="horse.avatar_url"
+                    :horse-id="horse.id"
+                  />
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700"

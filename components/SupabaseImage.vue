@@ -20,7 +20,9 @@ const downloadImage = async () => {
     const { data, error } = await client.storage
       .from(id.value)
       .download(path.value);
+
     if (error) throw error;
+
     src.value = URL.createObjectURL(data);
   } catch (error) {
     console.error("Error downloading image: ", error.message);
