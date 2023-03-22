@@ -8,7 +8,7 @@ const props = defineProps(["title", "description"]);
   >
     <div class="sm:flex-auto">
       <h1 class="text-xl font-semibold text-gray-900">{{ props.title }}</h1>
-      <p class="text-xs text-gray-700">
+      <p v-if="props.description" class="text-xs text-gray-700">
         {{ props.description }}
       </p>
     </div>

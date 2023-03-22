@@ -175,30 +175,12 @@ const handleFieldChange = async (e) => {
 </script>
 
 <template>
-  <div
-    class="flex w-screen flex-col md:h-screen md:overflow-y-auto lg:w-[calc(100vw-16rem)]"
-  >
-    <div class="flex px-4 pt-6 pb-0 md:items-center md:justify-between md:px-8">
-      <div class="min-w-0 flex-1">
-        <h2
-          class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
-        >
-          Field Groups
-        </h2>
-      </div>
-
-      <!-- <div>
-        <button
-          @click="createModalOpen = true"
-          type="button"
-          class="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          Add a field
-        </button>
-      </div> -->
-    </div>
-    <div class="w-full overflow-x-auto p-4 pb-2 md:p-8 md:pb-4">
-      <div class="border-b border-gray-200">
+  <div class="flex flex-col">
+    <PageHeading title="Field Groups"></PageHeading>
+    <div
+      class="flex w-screen flex-1 flex-col md:h-screen md:overflow-y-auto lg:w-[calc(100vw-16rem)]"
+    >
+      <div class="mb-4 overflow-x-scroll border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="field_rotations">
           <div class="py-2">
             <div class="border-r pr-2">
@@ -228,66 +210,65 @@ const handleFieldChange = async (e) => {
           </div>
         </nav>
       </div>
-    </div>
-    <div class="flex justify-end px-4 pb-0 md:px-8 md:pb-2">
-      <Menu as="div" class="relative inline-block text-left">
-        <div>
-          <MenuButton
-            class="inline-flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium shadow"
-          >
-            Rotation Options
-            <icon
-              name="heroicons:chevron-down-solid"
-              class="ml-2 -mr-1 h-5 w-5"
-              aria-hidden="true"
-            />
-          </MenuButton>
-        </div>
+      <div class="flex justify-end px-4 pb-0 md:pb-2">
+        <Menu as="div" class="relative inline-block text-left">
+          <div>
+            <MenuButton
+              class="inline-flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium shadow"
+            >
+              Rotation Options
+              <icon
+                name="heroicons:chevron-down-solid"
+                class="ml-2 -mr-1 h-5 w-5"
+                aria-hidden="true"
+              />
+            </MenuButton>
+          </div>
 
-        <transition
-          enter-active-class="transition duration-100 ease-out"
-          enter-from-class="transform scale-95 opacity-0"
-          enter-to-class="transform scale-100 opacity-100"
-          leave-active-class="transition duration-75 ease-in"
-          leave-from-class="transform scale-100 opacity-100"
-          leave-to-class="transform scale-95 opacity-0"
-        >
-          <MenuItems
-            class="absolute right-0 z-20 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          <transition
+            enter-active-class="transition duration-100 ease-out"
+            enter-from-class="transform scale-95 opacity-0"
+            enter-to-class="transform scale-100 opacity-100"
+            leave-active-class="transition duration-75 ease-in"
+            leave-from-class="transform scale-100 opacity-100"
+            leave-to-class="transform scale-95 opacity-0"
           >
-            <div class="px-1 py-1">
-              <MenuItem v-slot="{ active }">
-                <a
-                  @click="editModalOpen2 = true"
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  ]"
-                  >Edit</a
-                >
-              </MenuItem>
-              <MenuItem v-slot="{ active }">
-                <a
-                  @click="deleteModalOpen2 = true"
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  ]"
-                  >Delete</a
-                >
-              </MenuItem>
-            </div>
-          </MenuItems>
-        </transition>
-      </Menu>
-      <button
-        @click="createModalOpen = true"
-        type="button"
-        class="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-      >
-        Add field
-      </button>
-      <!-- <Menu as="div" class="text-left">
+            <MenuItems
+              class="absolute right-0 z-20 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            >
+              <div class="px-1 py-1">
+                <MenuItem v-slot="{ active }">
+                  <a
+                    @click="editModalOpen2 = true"
+                    :class="[
+                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                      'block px-4 py-2 text-sm',
+                    ]"
+                    >Edit</a
+                  >
+                </MenuItem>
+                <MenuItem v-slot="{ active }">
+                  <a
+                    @click="deleteModalOpen2 = true"
+                    :class="[
+                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                      'block px-4 py-2 text-sm',
+                    ]"
+                    >Delete</a
+                  >
+                </MenuItem>
+              </div>
+            </MenuItems>
+          </transition>
+        </Menu>
+        <button
+          @click="createModalOpen = true"
+          type="button"
+          class="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+          Add field
+        </button>
+        <!-- <Menu as="div" class="text-left">
         <div>
           <MenuButton
             class="flex ml-2 items-center rounded-full text-gray-300 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
@@ -339,114 +320,119 @@ const handleFieldChange = async (e) => {
           </MenuItems>
         </transition>
       </Menu> -->
-    </div>
-    <div class="flex flex-1 overflow-x-scroll p-4 pt-2 md:px-8">
-      <div
-        v-for="field in fields"
-        :key="field.id"
-        class="mr-4 flex w-80 min-w-max flex-col overflow-y-auto rounded-lg bg-gray-100 px-3 py-3"
-      >
-        <div class="flex w-48 items-center md:w-80">
-          <div class="flex-1">
-            <p
-              class="font-sans text-sm font-semibold tracking-wide text-gray-700"
-            >
-              {{ field.name }}
-            </p>
-          </div>
-
-          <Menu
-            v-if="field.id != 0"
-            as="div"
-            class="relative inline-block text-left"
-          >
-            <div>
-              <MenuButton
-                class="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+      </div>
+      <div class="flex flex-1 overflow-x-scroll p-4 pt-2">
+        <div
+          v-for="field in fields"
+          :key="field.id"
+          class="mr-4 flex w-80 min-w-max flex-col overflow-y-auto rounded-lg bg-gray-100 px-3 py-3"
+        >
+          <div class="flex w-48 items-center md:w-80">
+            <div class="flex-1">
+              <p
+                class="font-sans text-sm font-semibold tracking-wide text-gray-700"
               >
-                <span class="sr-only">Open options</span>
-                <icon
-                  name="heroicons:ellipsis-vertical-solid"
-                  class="h-5 w-5"
-                  aria-hidden="true"
-                />
-              </MenuButton>
+                {{ field.name }}
+              </p>
             </div>
 
-            <transition
-              enter-active-class="transition ease-out duration-100"
-              enter-from-class="transform opacity-0 scale-95"
-              enter-to-class="transform opacity-100 scale-100"
-              leave-active-class="transition ease-in duration-75"
-              leave-from-class="transform opacity-100 scale-100"
-              leave-to-class="transform opacity-0 scale-95"
+            <Menu
+              v-if="field.id != 0"
+              as="div"
+              class="relative inline-block text-left"
             >
-              <MenuItems
-                class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-              >
-                <div class="py-1">
-                  <MenuItem v-slot="{ active }">
-                    <a
-                      @click="
-                        selectedField = field;
-                        editModalOpen = true;
-                      "
-                      :class="[
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm',
-                      ]"
-                      >Edit</a
-                    >
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <a
-                      @click="
-                        selectedField = field;
-                        deleteModalOpen = true;
-                      "
-                      :class="[
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm',
-                      ]"
-                      >Delete</a
-                    >
-                  </MenuItem>
-                </div>
-              </MenuItems>
-            </transition>
-          </Menu>
-        </div>
-        <div class="flex-1">
-          <!-- Draggable component comes from vuedraggable. It provides drag & drop functionality -->
-          <draggable
-            :id="field.id"
-            class="h-full"
-            item-key="id"
-            v-model="field.horses"
-            :animation="200"
-            ghost-class="ghost-card"
-            group="horses"
-            @end="handleFieldChange"
-          >
-            <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
-            <template #item="{ element }">
-              <HorseFieldCard
-                :id="element.id"
-                :key="element.id"
-                :horse="element"
-                class="mt-3 cursor-move"
-              ></HorseFieldCard
-            ></template>
+              <div>
+                <MenuButton
+                  class="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                >
+                  <span class="sr-only">Open options</span>
+                  <icon
+                    name="heroicons:ellipsis-vertical-solid"
+                    class="h-5 w-5"
+                    aria-hidden="true"
+                  />
+                </MenuButton>
+              </div>
 
-            <!-- </transition-group> -->
-          </draggable>
+              <transition
+                enter-active-class="transition ease-out duration-100"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-75"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
+              >
+                <MenuItems
+                  class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                >
+                  <div class="py-1">
+                    <MenuItem v-slot="{ active }">
+                      <a
+                        @click="
+                          selectedField = field;
+                          editModalOpen = true;
+                        "
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'block px-4 py-2 text-sm',
+                        ]"
+                        >Edit</a
+                      >
+                    </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                      <a
+                        @click="
+                          selectedField = field;
+                          deleteModalOpen = true;
+                        "
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'block px-4 py-2 text-sm',
+                        ]"
+                        >Delete</a
+                      >
+                    </MenuItem>
+                  </div>
+                </MenuItems>
+              </transition>
+            </Menu>
+          </div>
+          <div class="flex-1">
+            <!-- Draggable component comes from vuedraggable. It provides drag & drop functionality -->
+            <draggable
+              :id="field.id"
+              class="h-full"
+              item-key="id"
+              v-model="field.horses"
+              :animation="200"
+              ghost-class="ghost-card"
+              group="horses"
+              @end="handleFieldChange"
+            >
+              <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
+              <template #item="{ element }">
+                <HorseFieldCard
+                  :id="element.id"
+                  :key="element.id"
+                  :horse="element"
+                  class="mt-3 cursor-move"
+                ></HorseFieldCard
+              ></template>
+
+              <!-- </transition-group> -->
+            </draggable>
+          </div>
         </div>
-      </div>
-      <div
-        @click="createModalOpen = true"
-        class="flex w-80 items-center justify-center rounded-lg border-4 border-dashed border-gray-100 text-gray-100 hover:cursor-pointer hover:bg-gray-50 hover:text-white"
-      >
-        <icon name="heroicons:plus-solid" class="h-24 w-24" />
+        <div
+          @click="createModalOpen = true"
+          class="flex w-80 items-center justify-center rounded-lg border-4 border-dashed border-gray-100 text-gray-100 hover:cursor-pointer hover:bg-gray-50 hover:text-white"
+        >
+          <icon name="heroicons:plus-solid" class="h-24 w-24" />
+        </div>
       </div>
     </div>
   </div>
