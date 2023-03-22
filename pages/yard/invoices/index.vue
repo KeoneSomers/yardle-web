@@ -47,26 +47,30 @@ invoices.value = invoicesData;
               </p>
             </ClientOnly>
           </div>
-          <span
-            v-if="invoice.paid === false"
-            class="mr-2 inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800"
-            >Unpaid</span
+          <span v-if="invoice.published">
+            <span
+              v-if="invoice.paid === false"
+              class="mr-2 inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800"
+              >Unpaid</span
+            >
+            <span
+              v-else
+              class="mr-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+              >Paid</span
+            ></span
           >
-          <span
-            v-else
-            class="mr-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
-            >Paid</span
-          >
-          <span
-            v-if="invoice.published === false"
-            class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800"
-            >Unpublished</span
-          >
-          <span
-            v-else
-            class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
-            >Published</span
-          >
+          <span v-else>
+            <span
+              v-if="invoice.published === false"
+              class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800"
+              >Unpublished</span
+            >
+            <span
+              v-else
+              class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+              >Published</span
+            >
+          </span>
         </div>
         <div>
           <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />

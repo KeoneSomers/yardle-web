@@ -9,8 +9,12 @@ const {
   yard,
   baseRate,
   subtotal,
+  vat,
   discount,
   discountNote,
+  discountedAmount,
+  vatAmount,
+  totalAmount,
 } = defineProps([
   "invoiceData",
   "itemsData",
@@ -19,8 +23,12 @@ const {
   "yard",
   "baseRate",
   "subtotal",
+  "vat",
   "discount",
   "discountNote",
+  "discountedAmount",
+  "vatAmount",
+  "totalAmount",
 ]);
 
 const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
@@ -149,16 +157,20 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
                 }}</span>
               </td>
             </tr>
-            <tr class="divide-x border">
+            <tr v-if="discount > 0" class="divide-x border">
               <td class="px-[15px] pb-[15px]">Discount</td>
               <td class="px-[15px] pb-[15px]">
                 <span class="float-right"
                   >{{ discount }}% -
-                  {{
-                    currencyFormatter.format(
-                      ((subtotal + baseRate) * discount) / 100
-                    )
-                  }}</span
+                  {{ currencyFormatter.format(discountedAmount) }}</span
+                >
+              </td>
+            </tr>
+            <tr v-if="vat > 0" class="divide-x border">
+              <td class="px-[15px] pb-[15px]">VAT</td>
+              <td class="px-[15px] pb-[15px]">
+                <span class="float-right"
+                  >{{ vat }}% - {{ currencyFormatter.format(vatAmount) }}</span
                 >
               </td>
             </tr>
@@ -166,13 +178,7 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
               <td class="px-[15px] pb-[15px]">Total</td>
               <td class="px-[15px] pb-[15px]">
                 <span class="float-right">
-                  {{
-                    currencyFormatter.format(
-                      subtotal +
-                        baseRate -
-                        ((subtotal + baseRate) * discount) / 100
-                    )
-                  }}</span
+                  {{ currencyFormatter.format(totalAmount) }}</span
                 >
               </td>
             </tr>

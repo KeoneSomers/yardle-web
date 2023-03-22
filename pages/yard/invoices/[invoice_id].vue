@@ -25,10 +25,12 @@ const invoiceData = ref(null);
 const itemsData = useState("itemsData", () => []);
 const subtotal = useState("subtotal", () => 0.0);
 
-const client_name = ref("");
+const client_first_name = ref("");
+const client_last_name = ref("");
 const client_email = ref("");
 const baseRate = ref(0);
 const discount = ref(0);
+const vat = ref(0);
 const discountNote = ref("");
 
 const createModalOpen = ref(false);
@@ -56,10 +58,12 @@ onMounted(async () => {
     return;
   }
 
-  client_name.value = _invoiceData.client_name;
+  client_first_name.value = _invoiceData.client_first_name;
+  client_last_name.value = _invoiceData.client_last_name;
   client_email.value = _invoiceData.client_email;
   baseRate.value = _invoiceData.base_rate;
   discount.value = _invoiceData.discount;
+  vat.value = _invoiceData.vat;
   discountNote.value = _invoiceData.discount_note;
 
   invoiceData.value = _invoiceData;
@@ -85,7 +89,10 @@ const removeItem = async () => {
   const { data, error } = await client
     .from("service_requests")
     .delete()
-    .eq("id", item_id);
+    .eq("id", item_id)
+    .select()
+    .single();
+
   if (error) {
     console.log(error);
   } else {
@@ -93,6 +100,9 @@ const removeItem = async () => {
 
     // remove from the itemsData
     itemsData.value = itemsData.value.filter((item) => item.id !== item_id);
+
+    console.log(data);
+    subtotal.value -= data.service_price;
 
     closeDeleteItemModal();
   }
@@ -134,9 +144,11 @@ const saveChanges = async () => {
   const { data, error } = await client
     .from("invoices")
     .update({
-      client_name: client_name.value,
+      client_first_name: client_first_name.value,
+      client_last_name: client_last_name.value,
       client_email: client_email.value,
       base_rate: baseRate.value,
+      vat: vat.value,
       discount: discount.value,
       discount_note: discountNote.value,
     })
@@ -160,6 +172,23 @@ const saveChanges = async () => {
     type: "success",
   });
 };
+
+const discountedAmount = computed(() => {
+  return ((subtotal.value + baseRate.value) * discount.value) / 100;
+});
+
+const vatAmount = computed(() => {
+  return (
+    ((subtotal.value + baseRate.value - discountedAmount.value) * vat.value) /
+    100
+  );
+});
+
+const totalAmount = computed(() => {
+  return (
+    subtotal.value + baseRate.value - discountedAmount.value + vatAmount.value
+  );
+});
 </script>
 
 <template>
@@ -190,9 +219,11 @@ const saveChanges = async () => {
           <button
             @click="saveChanges"
             v-if="
-              client_name != invoiceData.client_name ||
+              client_first_name != invoiceData.client_first_name ||
+              client_last_name != invoiceData.client_last_name ||
               client_email != invoiceData.client_email ||
               baseRate != invoiceData.base_rate ||
+              vat != invoiceData.vat ||
               discount != invoiceData.discount ||
               discountNote != invoiceData.discount_note
             "
@@ -202,13 +233,17 @@ const saveChanges = async () => {
           </button>
           <div
             v-tooltip="
-              client_email == '' || client_name == ''
+              client_email == '' ||
+              client_first_name == '' ||
+              client_last_name == ''
                 ? 'Please provide a client name and email'
                 : ''
             "
             :class="{
               'cursor-not-allowed opacity-50':
-                client_email == '' || client_name == '',
+                client_email == '' ||
+                client_first_name == '' ||
+                client_last_name == '',
             }"
           >
             <DownloadInvoice
@@ -219,7 +254,11 @@ const saveChanges = async () => {
                   'EEEE, MMMM d, yyyy'
                 )
               "
-              :is-disabled="client_email == '' || client_name == ''"
+              :is-disabled="
+                client_email == '' ||
+                client_first_name == '' ||
+                client_last_name == ''
+              "
             />
           </div>
         </div>
@@ -230,14 +269,25 @@ const saveChanges = async () => {
       <div v-if="profile.active_role === 1" class="mb-10 flex flex-wrap">
         <div class="mr-3 mb-3 items-center">
           <label for="name" class="block text-sm font-medium text-gray-700"
-            >Client Name</label
+            >Client First Name</label
           >
           <div class="mt-1">
             <input
-              v-model="client_name"
+              v-model="client_first_name"
               type="text"
               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              placeholder="you@example.com"
+            />
+          </div>
+        </div>
+        <div class="mr-3 mb-3 items-center">
+          <label for="name" class="block text-sm font-medium text-gray-700"
+            >Client Last Name</label
+          >
+          <div class="mt-1">
+            <input
+              v-model="client_last_name"
+              type="text"
+              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
         </div>
@@ -292,6 +342,21 @@ const saveChanges = async () => {
                 }}</span>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="mr-3 mb-3 flex items-center">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700"
+              >VAT %</label
+            >
+            <input
+              v-model="vat"
+              type="number"
+              min="0"
+              max="100"
+              placeholder="0"
+              class="mt-1 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
           </div>
         </div>
         <div class="mr-3 mb-3 flex items-center">
@@ -374,7 +439,10 @@ const saveChanges = async () => {
               </div>
               <div class="flex justify-between">
                 <div class="mr-5">To:</div>
-                <div>{{ client_name }} - {{ client_email }}</div>
+                <div>
+                  {{ client_first_name }} {{ client_last_name }} -
+                  {{ client_email }}
+                </div>
               </div>
             </div>
           </div>
@@ -572,11 +640,28 @@ const saveChanges = async () => {
                     class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
                   >
                     <span v-if="discount > 0">-</span>
-                    {{
-                      currencyFormatter.format(
-                        ((subtotal + baseRate) * discount) / 100
-                      )
-                    }}
+                    {{ currencyFormatter.format(discountedAmount) }}
+                  </td>
+                </tr>
+                <tr v-if="vat != 0">
+                  <th
+                    scope="row"
+                    colspan="3"
+                    class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
+                  >
+                    VAT ({{ vat }}%)
+                  </th>
+                  <th
+                    scope="row"
+                    class="pl-6 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
+                  >
+                    VAT ({{ vat }}%)
+                  </th>
+                  <td
+                    class="pl-3 pr-6 pt-4 text-right text-sm text-gray-500 sm:pr-0"
+                  >
+                    +
+                    {{ currencyFormatter.format(vatAmount) }}
                   </td>
                 </tr>
                 <tr>
@@ -596,13 +681,7 @@ const saveChanges = async () => {
                   <td
                     class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
                   >
-                    {{
-                      currencyFormatter.format(
-                        subtotal +
-                          baseRate -
-                          ((subtotal + baseRate) * discount) / 100
-                      )
-                    }}
+                    {{ currencyFormatter.format(totalAmount) }}
                   </td>
                 </tr>
               </tfoot>
@@ -622,13 +701,17 @@ const saveChanges = async () => {
       class="w-[21cm] overflow-hidden p-[10px]"
       :invoice-data="invoiceData"
       :items-data="itemsData"
-      :client_name="client_name"
+      :client_name="client_first_name + ' ' + client_last_name"
       :client_email="client_email"
       :yard="yard"
       :base-rate="baseRate"
       :subtotal="subtotal"
+      :vat="vat"
       :discount="discount"
       :discount-note="discountNote"
+      :discounted-amount="discountedAmount"
+      :vat-amount="vatAmount"
+      :total-amount="totalAmount"
     />
   </div>
 
