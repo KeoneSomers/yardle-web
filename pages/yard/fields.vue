@@ -438,30 +438,36 @@ const handleFieldChange = async (e) => {
   </div>
 
   <CreateFieldModal
+    v-if="createModalOpen"
     :is-open="createModalOpen"
     @close="createModalOpen = false"
   />
   <EditFieldModal
+    v-if="editModalOpen"
     :is-open="editModalOpen"
     :field="selectedField"
     @close="editModalOpen = false"
   />
   <DeleteFieldModal
+    v-if="deleteModalOpen"
     :is-open="deleteModalOpen"
     :field="selectedField"
     @close="deleteModalOpen = false"
   />
 
   <CreateFieldRotationModal
+    v-if="createModalOpen2"
     :is-open="createModalOpen2"
     @close="createModalOpen2 = false"
   />
   <EditFieldRotationModal
+    v-if="editModalOpen2"
     :is-open="editModalOpen2"
     :field="selectedRotation"
     @close="editModalOpen2 = false"
   />
   <DeleteFieldRotationModal
+    v-if="deleteModalOpen2"
     :is-open="deleteModalOpen2"
     :field="selectedRotation"
     @close="deleteModalOpen2 = false"

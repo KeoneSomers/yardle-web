@@ -445,18 +445,24 @@ const handleDelete = async () => {
 
     <!-- Create Feed Modal -->
     <CreateFeedModal
+      v-if="createModalOpen"
       :is-open="createModalOpen"
       :feed-id="selectedFeedId"
       @close="createModalOpen = false"
     />
     <!-- Edit Feed Modal -->
     <EditFeedModal
+      v-if="editModalOpen"
       :is-open="editModalOpen"
       :feed-id="selectedFeedId"
       @close="editModalOpen = false"
     />
     <!-- Delete Feed Modal -->
-    <BasicModal :is-open="deleteModalOpen" @close="deleteModalOpen = false">
+    <BasicModal
+      v-if="deleteModalOpen"
+      :is-open="deleteModalOpen"
+      @close="deleteModalOpen = false"
+    >
       <div>
         <div class="sm:flex sm:items-start">
           <div

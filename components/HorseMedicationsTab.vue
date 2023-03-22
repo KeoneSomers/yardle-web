@@ -155,10 +155,12 @@ const handleDelete = (medicationId) => {
   </div>
   <!-- Modals -->
   <CreateMedicationModal
+    v-if="createModalOpen"
     :is-open="createModalOpen"
     @close="createModalOpen = false"
   />
   <DeleteMedicationModal
+    v-if="deleteModalOpen"
     :is-open="deleteModalOpen"
     :medication-id="medicationToDelete"
     @close="deleteModalOpen = false"

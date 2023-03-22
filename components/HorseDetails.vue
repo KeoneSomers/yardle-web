@@ -9,6 +9,7 @@ import HorseRugsTab from "@/components/HorseRugsTab.vue";
 import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
 import HorseMedicationsTab from "@/components/HorseMedicationsTab.vue";
 import HorseServicesTab from "@/components/HorseServicesTab.vue";
+
 import { useScroll } from "@vueuse/core";
 
 const viewingHorse = useState("viewingHorse");
@@ -376,7 +377,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
 
   <!-- Modals -->
   <EditHorseModal
-    v-if="horse"
+    v-if="editModalOpen"
     :is-open="editModalOpen"
     :horse="horse"
     @close="editModalOpen = false"

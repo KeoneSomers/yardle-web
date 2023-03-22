@@ -253,8 +253,9 @@ const handleLeaveYard = async (yardId) => {
   </div>
 
   <!-- Modals -->
-  <CreateYardModal :is-open="isOpen" @close="isOpen = false" />
+  <CreateYardModal v-if="isOpen" :is-open="isOpen" @close="isOpen = false" />
   <DeleteYardModal
+    v-if="deleteYardModalOpen"
     :is-open="deleteYardModalOpen"
     :yard-id="yardToDelete"
     @close="deleteYardModalOpen = false"

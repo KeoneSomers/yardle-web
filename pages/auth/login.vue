@@ -283,6 +283,7 @@ const handleLogin = async () => {
 
   <!-- Modals -->
   <RequestPasswordResetModal
+    v-if="requestPasswordResetModalOpen"
     :is-open="requestPasswordResetModalOpen"
     @close="requestPasswordResetModalOpen = false"
   />

@@ -5,35 +5,12 @@ const selectedYard = useState("selectedYard");
 const profile = useState("profile");
 const nextBillingDate = ref(null);
 const previousBillingDate = ref(null);
-
-const days = useState("weekdays", () => []);
 const client = useSupabaseClient();
-const horse = useState("horse");
 const yard = useState("yard");
 
 const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
   style: "currency",
   currency: yard.value.region.currency_iso_code,
-});
-
-let test = new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-});
-
-let french = new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-});
-
-let rupee = new Intl.NumberFormat("en-IN", {
-  style: "currency",
-  currency: "INR",
-});
-
-let euro = Intl.NumberFormat("en-DE", {
-  style: "currency",
-  currency: "EUR",
 });
 
 const serviceRequestsLog = useState("service_requests");

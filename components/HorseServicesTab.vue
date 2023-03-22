@@ -253,10 +253,12 @@ const goToPreviousWeek = () => {
   </div>
 
   <RequestServiceModal
+    v-if="createModalOpen"
     :is-open="createModalOpen"
     @close="createModalOpen = false"
   />
   <CancelServiceRequest
+    v-if="cancelModalOpen"
     :is-open="cancelModalOpen"
     :service="selectedService"
     @close="cancelModalOpen = false"

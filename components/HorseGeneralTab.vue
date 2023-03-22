@@ -613,7 +613,7 @@ const handleUnassignOwner = async () => {
     </dl>
   </div>
   <AssignHorseOwnerModal
-    v-if="horse"
+    v-if="assignOwnerModalOpen"
     :is-open="assignOwnerModalOpen"
     @close="assignOwnerModalOpen = false"
   />

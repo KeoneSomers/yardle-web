@@ -331,11 +331,13 @@ const handleRoleChange = async (memberId, roleId) => {
 
   <!-- Modals -->
   <RemoveMemberModal
+    v-if="removeMemberModalOpen"
     :is-open="removeMemberModalOpen"
     :member-id="memberToRemove"
     @close="removeMemberModalOpen = false"
   />
   <InviteLinkModal
+    v-if="inviteLinkModalOpen"
     :is-open="inviteLinkModalOpen"
     @close="inviteLinkModalOpen = false"
   />

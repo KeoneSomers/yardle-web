@@ -653,15 +653,18 @@ const createEvent = (e, day) => {
 
   <!-- Modals -->
   <CreateEventModal
+    v-if="createModalOpen"
     :is-open="createModalOpen"
     @close="createModalOpen = false"
   />
   <EditEventModal
+    v-if="editModalOpen"
     :is-open="editModalOpen"
     @close="editModalOpen = false"
     :event="selectedEvent"
   />
   <DeleteEventModal
+    v-if="deleteModalOpen"
     :is-open="deleteModalOpen"
     @close="deleteModalOpen = false"
     :eventId="selectedEvent"

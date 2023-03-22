@@ -145,6 +145,7 @@ const respondedRequests = computed(() => {
   </div>
 
   <RequestResponseModal
+    v-if="modalOpen"
     :is-open="modalOpen"
     :request="selectedRequest"
     :status="selectedStatus"

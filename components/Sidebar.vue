@@ -414,7 +414,7 @@ const handleSignout = async () => {
     <SidebarFooter />
 
     <InviteLinkModal
-      v-if="yard"
+      v-if="inviteLinkModalOpen"
       :is-open="inviteLinkModalOpen"
       @close="inviteLinkModalOpen = false"
     />

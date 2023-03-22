@@ -300,15 +300,18 @@ const ingredientTypes = [
 
   <!-- Modals -->
   <CreateFeedModal
+    v-if="createModalOpen"
     :is-open="createModalOpen"
     @close="createModalOpen = false"
   />
   <EditFeedModal
+    v-if="editModalOpen"
     :is-open="editModalOpen"
     :feed-id="selectedFeedId"
     @close="editModalOpen = false"
   />
   <DeleteFeedModal
+    v-if="deleteModalOpen"
     :is-open="deleteModalOpen"
     :feed-id="selectedFeedId"
     @close="deleteModalOpen = false"

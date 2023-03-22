@@ -153,8 +153,13 @@ const handleDelete = (rugId) => {
     </div>
   </div>
   <!-- Modals -->
-  <CreateRugModal :is-open="createModalOpen" @close="createModalOpen = false" />
+  <CreateRugModal
+    v-if="createModalOpen"
+    :is-open="createModalOpen"
+    @close="createModalOpen = false"
+  />
   <DeleteRugModal
+    v-if="deleteModalOpen"
     :is-open="deleteModalOpen"
     :rug-id="rugToDelete"
     @close="deleteModalOpen = false"

@@ -633,7 +633,7 @@ const saveChanges = async () => {
   </div>
 
   <AddServiceModal
-    v-if="invoiceData"
+    v-if="createModalOpen"
     :is-open="createModalOpen"
     :horse-id="invoiceData.horse_id.id"
     :start-date="invoiceData.start_date"

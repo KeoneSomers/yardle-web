@@ -470,15 +470,18 @@ await fetchServices();
     </div>
   </div>
   <CreateServiceModal
+    v-if="createModalOpen"
     :is-open="createModalOpen"
     @close="createModalOpen = false"
   />
   <EditServiceModal
+    v-if="editModalOpen"
     :is-open="editModalOpen"
     :service="selectedService"
     @close="editModalOpen = false"
   />
   <DeleteServiceModal
+    v-if="deleteModalOpen"
     :is-open="deleteModalOpen"
     :service="selectedService"
     @close="deleteModalOpen = false"

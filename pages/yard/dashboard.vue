@@ -4,7 +4,6 @@ definePageMeta({
 });
 
 const client = useSupabaseClient();
-const user = useSupabaseUser();
 const selectedYard = useState("selectedYard");
 
 // get data for selected yard

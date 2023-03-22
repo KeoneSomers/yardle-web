@@ -406,6 +406,7 @@ const saveChanges = async () => {
 
   <!-- Modals -->
   <DeleteUserAccountModal
+    v-if="deleteUserAccountModalOpen"
     :is-open="deleteUserAccountModalOpen"
     @close="deleteUserAccountModalOpen = false"
   />

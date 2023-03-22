@@ -263,7 +263,7 @@ const selectHorse = (horseId) => {
 
   <!-- Modals -->
   <CreateHorseModal
-    v-if="profile.active_role == 1 || profile.active_role == 2"
+    v-if="(profile.active_role == 1 || profile.active_role == 2) && isOpen"
     :is-open="isOpen"
     @close="isOpen = false"
   />
