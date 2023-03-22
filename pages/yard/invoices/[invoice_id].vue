@@ -31,6 +31,7 @@ const client_email = ref("");
 const baseRate = ref(0);
 const discount = ref(0);
 const vat = ref(0);
+const vatNumber = ref(0);
 const discountNote = ref("");
 
 const createModalOpen = ref(false);
@@ -65,6 +66,7 @@ onMounted(async () => {
   discount.value = _invoiceData.discount;
   vat.value = _invoiceData.vat;
   discountNote.value = _invoiceData.discount_note;
+  vatNumber.value = _invoiceData.vat_number;
 
   invoiceData.value = _invoiceData;
 
@@ -149,6 +151,7 @@ const saveChanges = async () => {
       client_email: client_email.value,
       base_rate: baseRate.value,
       vat: vat.value,
+      vat_number: vatNumber.value,
       discount: discount.value,
       discount_note: discountNote.value,
     })
@@ -224,6 +227,7 @@ const totalAmount = computed(() => {
               client_email != invoiceData.client_email ||
               baseRate != invoiceData.base_rate ||
               vat != invoiceData.vat ||
+              vatNumber != invoiceData.vat_number ||
               discount != invoiceData.discount ||
               discountNote != invoiceData.discount_note
             "
@@ -357,6 +361,22 @@ const totalAmount = computed(() => {
               placeholder="0"
               class="mt-1 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
+          </div>
+        </div>
+        <div v-if="vat > 0" class="mr-3 mb-3 flex items-center">
+          <div>
+            <label
+              for="vatNumber"
+              class="block text-sm font-medium text-gray-700"
+              >VAT Number</label
+            >
+            <div class="mt-1">
+              <input
+                v-model="vatNumber"
+                type="text"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              />
+            </div>
           </div>
         </div>
         <div class="mr-3 mb-3 flex items-center">
@@ -689,6 +709,9 @@ const totalAmount = computed(() => {
             <div v-if="discountNote" class="text-gray-700">
               <p>Discount Note: {{ discountNote }}</p>
             </div>
+            <div v-if="vat > 0 && vatNumber" class="text-gray-700">
+              <p>VAT Number: {{ vatNumber }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -707,6 +730,7 @@ const totalAmount = computed(() => {
       :base-rate="baseRate"
       :subtotal="subtotal"
       :vat="vat"
+      :vat-number="vatNumber"
       :discount="discount"
       :discount-note="discountNote"
       :discounted-amount="discountedAmount"

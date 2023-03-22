@@ -10,6 +10,7 @@ const {
   baseRate,
   subtotal,
   vat,
+  vatNumber,
   discount,
   discountNote,
   discountedAmount,
@@ -24,6 +25,7 @@ const {
   "baseRate",
   "subtotal",
   "vat",
+  "vatNumber",
   "discount",
   "discountNote",
   "discountedAmount",
@@ -186,6 +188,9 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
         </div>
         <div v-if="discountNote" class="text-gray-700">
           <p>Discount Note: {{ discountNote }}</p>
+        </div>
+        <div v-if="vat > 0 && vatNumber" class="text-gray-700">
+          <p>VAT Number: {{ vatNumber }}</p>
         </div>
       </div>
     </div>
