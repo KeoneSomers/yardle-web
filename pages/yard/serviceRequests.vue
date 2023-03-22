@@ -120,7 +120,7 @@ const respondedRequests = computed(() => {
       </div>
     </div>
   </div>
-  <div v-else class="flex h-full w-full flex-1 items-center justify-center">
+  <div v-else class="flex h-screen w-full flex-1 items-center justify-center">
     <div class="text-center">
       <svg
         class="mx-auto h-12 w-12 text-gray-400"

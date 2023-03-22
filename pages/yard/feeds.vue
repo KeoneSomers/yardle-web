@@ -405,7 +405,7 @@ const handleDelete = async () => {
         "
       />
     </div>
-    <div v-else class="flex h-full flex-1 items-center justify-center">
+    <div v-else class="flex h-screen flex-1 items-center justify-center">
       <div class="text-center">
         <svg
           class="mx-auto h-12 w-12 text-gray-400"

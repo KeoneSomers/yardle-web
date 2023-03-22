@@ -213,7 +213,7 @@ const handleLeaveYard = async (yardId) => {
       </div>
     </div>
   </div>
-  <div v-else class="flex h-full w-full items-center justify-center">
+  <div v-else class="flex h-screen w-full items-center justify-center">
     <div class="text-center">
       <svg
         class="mx-auto h-12 w-12 text-gray-400"
