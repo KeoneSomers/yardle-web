@@ -62,42 +62,57 @@ export default defineEventHandler(async (event) => {
       const { data: serviceRequests, error: errorServiceRequests } =
         await client
           .from("service_requests")
-          .select("*, horse_id!inner(id, yard_id)")
+          .select("*, horse_id!inner(id, yard_id, owner)")
           .eq("horse_id.yard_id", billingCycle.yard_id.id)
           .gt("date", start)
           .lte("date", end)
           .filter("status", "eq", "accepted")
           .filter("canceled_at", "is", null);
 
-      console.log(serviceRequests);
-      console.log(errorServiceRequests);
-      return; // good so far
-
-      // split the service_requests into groups by horse_id
-      const ServiceRequestsGroupedByHorse = serviceRequests.reduce(
-        (acc, cur) => {
-          const horseId = cur.horse_id.id;
-          acc[horseId] = acc[horseId] || [];
-          acc[horseId].push(cur);
+      // split the service_requests into groups by horse owner
+      const ServiceRequestsGroupedByHorseOwner = serviceRequests.reduce(
+        (acc, item) => {
+          const ownerArr = acc.find(
+            (a) => a[0].horse_id.owner === item.horse_id.owner
+          );
+          if (ownerArr) {
+            ownerArr.push(item);
+          } else {
+            acc.push([item]);
+          }
           return acc;
         },
-        {}
+        []
       );
 
-      // loop though the horse_id groups and create an invoice for each horse
-      for (const horseId in ServiceRequestsGroupedByHorse) {
+      // console.log(ServiceRequestsGroupedByHorseOwner);
+
+      // loop though the groups and create an invoice for each client (uneque horse owner)
+      ServiceRequestsGroupedByHorseOwner.forEach(async (requests) => {
+        // each client
+        const clientId = requests[0].horse_id.owner;
+        console.log(`Items for ownerId ${clientId}:`);
+
         // save the invoice to the database
         const { data: invoiceData, error: errorInvoiceData } = await client
           .from("invoices")
           .insert({
-            yard_id: billingCycle.yard_id,
-            horse_id: horseId,
+            yard_id: billingCycle.yard_id.id,
+            client_id: clientId,
             start_date: start,
             end_date: end,
           })
           .select()
           .single();
 
+        if (errorInvoiceData) {
+          console.log(errorInvoiceData);
+          return;
+        }
+
+        // good so far!
+
+        // dont need to loop here - can just update all at once where same client_id
         // update the service_requests with the invoice_id
         const { data: serviceRequestData, error: errorServiceRequestData } =
           await client
@@ -105,12 +120,14 @@ export default defineEventHandler(async (event) => {
             .update({
               invoice_id: invoiceData.id,
             })
-            .eq("horse_id", horseId)
+            .eq("client_id", clientId)
             .gt("date", start)
             .lte("date", end)
             .filter("status", "eq", "accepted")
             .filter("canceled_at", "is", null);
-      }
+
+        console.log(errorServiceRequestData);
+      });
     } else {
       console.log(billingCycle.yard_id + " - No invoices to generate.");
     }

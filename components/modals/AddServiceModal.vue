@@ -24,6 +24,7 @@ const user = useSupabaseUser();
 const yardId = useState("selectedYard");
 const liveryServices = ref([]);
 const yard = useState("yard");
+const horse = useState("horse");
 const itemsData = useState("itemsData");
 const subtotal = useState("subtotal");
 const alerts = useAlerts();
@@ -85,6 +86,7 @@ const handleSubmit = async () => {
       invoice_id: props.invoiceId,
       status: "accepted",
       horse_id: props.horseId,
+      client_id: horse.value.owner.id,
       date: date.value,
       service_id: selectedService.value.id,
       service_name: selectedService.value.name,
