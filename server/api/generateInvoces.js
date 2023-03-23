@@ -110,9 +110,6 @@ export default defineEventHandler(async (event) => {
           return;
         }
 
-        // good so far!
-
-        // dont need to loop here - can just update all at once where same client_id
         // update the service_requests with the invoice_id
         const { data: serviceRequestData, error: errorServiceRequestData } =
           await client

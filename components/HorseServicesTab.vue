@@ -115,13 +115,13 @@ const goToPreviousWeek = () => {
           </p>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
+          <!-- <button
             @click="viewingInvoces = true"
             type="button"
             class="mr-2 inline-flex items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none sm:w-auto"
           >
             View Invoices
-          </button>
+          </button> -->
           <!-- <button
             @click="viewingHistory = true"
             type="button"
