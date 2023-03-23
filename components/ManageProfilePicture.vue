@@ -42,19 +42,27 @@ const uploadAvatar = async (evt) => {
     const file = files.value[0];
     const fileExt = file.name.split(".").pop();
     const fileName = `horse_${props.horseId}_avatar.${fileExt}`;
-    const filePath = `${fileName}`;
+
+    // delete old image (if it exists and is diff file type (upsert will handle same file type))
+    if (path.value && path.value.split(".").pop() !== fileExt) {
+      let { error: deleteError } = await supabase.storage
+        .from("horse-avatars")
+        .remove([path.value.split("?")[0]]);
+
+      if (deleteError) throw deleteError;
+    }
 
     // upload new image
     let { error: uploadError } = await supabase.storage
       .from("horse-avatars")
-      .upload(filePath, file, {
+      .upload(fileName, file, {
         cacheControl: "3600",
         upsert: true,
       });
 
     if (uploadError) throw uploadError;
 
-    emit("update:path", filePath + "?t=" + Date.now()); // add the timestamp to force a reload on the images
+    emit("update:path", fileName + "?t=" + Date.now()); // add the timestamp to force a reload on the images
   } catch (error) {
     alert(error.message);
   } finally {
