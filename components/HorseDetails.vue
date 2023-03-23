@@ -95,10 +95,12 @@ const handleDeleteHorse = async () => {
     // delete horse image
     const index = horses.value.map((e) => e.id).indexOf(horse.value.id);
 
+    console.log(horses.value[index].avatar_url);
+
     if (horses.value[index].avatar_url) {
       const { error } = await client.storage
         .from("horse-avatars")
-        .remove([horses.value[index].avatar_url]);
+        .remove([horses.value[index].avatar_url.split("?")[0]]);
 
       if (error) {
         console.log(error);
@@ -115,6 +117,10 @@ const handleDeleteHorse = async () => {
     await client.from("ingredients").delete().eq("horse_id", horse.value.id);
     await client.from("feeds").delete().eq("horse_id", horse.value.id);
     await client.from("medications").delete().eq("horse_id", horse.value.id);
+    await client
+      .from("field_rotation_horses")
+      .delete()
+      .eq("horse_id", horse.value.id);
 
     // second, delete horse from calendar events
     const { error: delError } = await client

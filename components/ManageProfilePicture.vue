@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(["path", "horseId"]);
+const props = defineProps(["path", "horseId", "yardId"]);
 const { path } = toRefs(props);
 
 const emit = defineEmits(["update:path"]);
@@ -41,7 +41,7 @@ const uploadAvatar = async (evt) => {
 
     const file = files.value[0];
     const fileExt = file.name.split(".").pop();
-    const fileName = `${props.horseId}.${fileExt}`;
+    const fileName = `${props.yardId}/${props.horseId}.${fileExt}`;
 
     // delete old image (if it exists)
     if (path.value) {

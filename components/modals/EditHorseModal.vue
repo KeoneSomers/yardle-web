@@ -15,6 +15,7 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const horses = useState("horses");
+const yard = useState("yard");
 const isLoading = useState("isLoading");
 const alerts = useAlerts();
 
@@ -112,6 +113,7 @@ const handleSubmit = async () => {
                   <ManageProfilePicture
                     v-model:path="horse.avatar_url"
                     :horse-id="horse.id"
+                    :yard-id="yard.id"
                   />
                 </div>
                 <div>
