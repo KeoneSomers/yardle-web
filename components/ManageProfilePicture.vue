@@ -41,7 +41,7 @@ const uploadAvatar = async (evt) => {
 
     const file = files.value[0];
     const fileExt = file.name.split(".").pop();
-    const fileName = `horse_${props.horseId}_avatar.${fileExt}`;
+    const fileName = `${props.horseId}.${fileExt}`;
 
     // delete old image (if it exists)
     if (path.value) {
