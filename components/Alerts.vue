@@ -28,7 +28,7 @@ watch(
       <div
         v-for="(alert, index) in alerts"
         :key="alert"
-        class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5"
+        class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white bg-opacity-70 shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur"
       >
         <div class="p-4">
           <div class="flex items-start">
@@ -58,11 +58,10 @@ watch(
               <button
                 type="button"
                 @click="alerts.splice(index, 1)"
-                class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
+                class="inline-flex rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
               >
                 <span class="sr-only">Close</span>
                 <icon
-                  v-if="alert.type === 'error'"
                   name="heroicons:x-mark"
                   class="h-5 w-5"
                   aria-hidden="true"
