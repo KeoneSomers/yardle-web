@@ -7,58 +7,71 @@ export default defineEventHandler(async (event) => {
   // get all billing cycles
   const { data: billingCycles, error: errorBillingCycles } = await client
     .from("yard_billing_cycles")
-    .select("*");
+    .select("*, yard_id!inner(id, name)");
 
   // check what yard billing cycles landed on yestrday
   billingCycles.forEach(async (billingCycle) => {
-    const nextBillingDay = await $fetch("/api/getNextBillingDate", {
+    const _nextBillingDate = await $fetch("/api/getNextBillingDate", {
       method: "POST",
       body: {
         billingCycle: billingCycle,
       },
     });
 
-    const latestBillingDay = await $fetch("/api/getPreviousBillingDate", {
+    const _lastBillingDate = await $fetch("/api/getPreviousBillingDate", {
       method: "POST",
       body: {
         offset: 1,
-        nextBillingDate: nextBillingDay,
+        nextBillingDate: _nextBillingDate,
         billingCycle: billingCycle,
       },
     });
+    const lastBillingDate = DateTime.fromISO(_lastBillingDate);
 
-    // testing - stop here
-    return;
+    // console.log(
+    //   `Between Dates: ${lastBillingDate.toISODate()} and: ${DateTime.fromISO(
+    //     _nextBillingDate
+    //   ).toISODate()} -- (${billingCycle.yard_id.id})${
+    //     billingCycle.yard_id.name
+    //   }`
+    // );
 
     // if yesterday was their billing day
     if (
-      latestBillingDay.toISODate() ===
-      DateTime.now().minus({ days: 1 }).toISODate()
+      lastBillingDate.toISODate() ===
+      DateTime.now().minus({ days: 1 }).toISODate() // yesterday
     ) {
-      console.log(billingCycle.yard_id + " - Generating invoices...");
-      console.log(latestBillingDay.toFormat("EEEE, MMMM d, yyyy"));
+      console.log(
+        `Generating invoices for yard: (${billingCycle.yard_id.id}) ${billingCycle.yard_id.name}`
+      );
 
       // calculate the periods start and end dates
-      const start = await $fetch("/api/getPreviousBillingDate", {
+      const _start = await $fetch("/api/getPreviousBillingDate", {
         method: "POST",
         body: {
           offset: 1,
-          nextBillingDate: latestBillingDay,
+          nextBillingDate: lastBillingDate,
           billingCycle: billingCycle,
         },
       });
-      const end = latestBillingDay.toISODate();
+
+      const start = DateTime.fromISO(_start).toISODate(); // e.g. 2023-03-15
+      const end = lastBillingDate.toISODate(); // e.g. 2023-03-22
 
       // get all the service_requests after the start date and before or equal to the end date
       const { data: serviceRequests, error: errorServiceRequests } =
         await client
           .from("service_requests")
           .select("*, horse_id!inner(id, yard_id)")
-          .eq("horse_id.yard_id", billingCycle.yard_id)
-          .gt("date", start.toISODate())
+          .eq("horse_id.yard_id", billingCycle.yard_id.id)
+          .gt("date", start)
           .lte("date", end)
           .filter("status", "eq", "accepted")
           .filter("canceled_at", "is", null);
+
+      console.log(serviceRequests);
+      console.log(errorServiceRequests);
+      return; // good so far
 
       // split the service_requests into groups by horse_id
       const ServiceRequestsGroupedByHorse = serviceRequests.reduce(
@@ -79,7 +92,7 @@ export default defineEventHandler(async (event) => {
           .insert({
             yard_id: billingCycle.yard_id,
             horse_id: horseId,
-            start_date: start.toISODate(),
+            start_date: start,
             end_date: end,
           })
           .select()
@@ -93,7 +106,7 @@ export default defineEventHandler(async (event) => {
               invoice_id: invoiceData.id,
             })
             .eq("horse_id", horseId)
-            .gt("date", start.toISODate())
+            .gt("date", start)
             .lte("date", end)
             .filter("status", "eq", "accepted")
             .filter("canceled_at", "is", null);

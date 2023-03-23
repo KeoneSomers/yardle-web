@@ -2,7 +2,7 @@
 // super admin page
 
 definePageMeta({
-  layout: "blank",
+  layout: "admin",
   guards: [],
 });
 
@@ -61,28 +61,30 @@ const handleSendEventEmailReminders = async () => {
 </script>
 
 <template>
-  <div class="py-20 px-10">
+  <div class="p-10">
+    <h1 class="mb-10 text-3xl">Admin Page</h1>
     <button
       @click="handleGenerateInvoices"
-      class="m-4 rounded bg-indigo-500 p-4 text-white"
+      class="my-4 mr-4 rounded bg-indigo-500 p-4 text-white"
     >
       Manually Generate Todays Invoces
     </button>
     <button
+      disabled
       @click="handleSendEventEmailReminders"
-      class="m-4 rounded bg-blue-500 p-4 text-white"
+      class="my-4 rounded bg-blue-500 p-4 text-white"
     >
-      Send event email reminders
+      Manually Send event email reminders
     </button>
-    <div class="font-fold m-5 text-4xl">Feedback</div>
+    <div class="font-fold my-5 text-xl">Feedback</div>
     <div
       v-for="(item, index) in feedback"
       :key="item.id"
-      class="my-2 mx-5 flex items-center border hover:bg-gray-100"
+      class="my-2 flex items-center border border-zinc-800 hover:bg-zinc-800"
     >
-      <div class="flex-1 border-r">
+      <div class="flex-1 border-r border-zinc-800">
         <p class="p-2">{{ index + 1 }} - {{ item.message }}</p>
-        <p v-if="item.route" class="border-t bg-blue-50 p-1 font-mono text-xs">
+        <p v-if="item.route" class="bg-zinc-800 p-1 font-mono text-xs">
           {{ item.route }}
         </p>
       </div>
