@@ -11,7 +11,7 @@ const invoices = ref([]);
 
 const { data: invoicesData, error: invoicesError } = await client
   .from("invoices")
-  .select("*, horse_id (name)")
+  .select("*, client_id (first_name, last_name)")
   .eq("yard_id", selectedYard.value)
   .order("created_at", { ascending: false })
   .order("published", { ascending: false });
@@ -42,7 +42,8 @@ invoices.value = invoicesData;
           <div class="py-4 pr-4">
             <ClientOnly>
               <p>
-                {{ invoice.horse_id.name }} -
+                {{ invoice.client_id.first_name }}
+                {{ invoice.client_id.last_name }} -
                 {{ DateTime.fromISO(invoice.end_date).toFormat("DDDD") }}
               </p>
             </ClientOnly>
