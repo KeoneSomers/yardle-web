@@ -754,11 +754,10 @@ const totalAmount = computed(() => {
     />
   </div>
 
-  <!-- TODO: horse id is wrong here -->
   <AddServiceModal
     v-if="createModalOpen"
     :is-open="createModalOpen"
-    :horse-id="invoiceData.client_id.id"
+    :client-id="invoiceData.client_id.id"
     :start-date="invoiceData.start_date"
     :end-date="invoiceData.end_date"
     :invoice-id="invoiceData.id"

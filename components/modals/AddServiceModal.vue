@@ -12,7 +12,7 @@ const loading = ref(false);
 
 const props = defineProps([
   "isOpen",
-  "horseId",
+  "clientId",
   "startDate",
   "endDate",
   "invoiceId",
@@ -23,11 +23,13 @@ const client = useSupabaseClient();
 const user = useSupabaseUser();
 const yardId = useState("selectedYard");
 const liveryServices = ref([]);
+const clientHorses = ref([]);
 const yard = useState("yard");
 const horse = useState("horse");
 const itemsData = useState("itemsData");
 const subtotal = useState("subtotal");
 const alerts = useAlerts();
+const selectedHorse = ref(null);
 
 const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
   style: "currency",
@@ -42,6 +44,7 @@ watch(
   () => props.isOpen,
   (isOpen) => {
     selectedService.value = null;
+    selectedHorse.value = null;
   }
 );
 
@@ -57,6 +60,20 @@ const fetchLiveryServices = async () => {
 };
 
 await fetchLiveryServices();
+
+const fetchClientsHorses = async () => {
+  const { data, error } = await client
+    .from("horses")
+    .select()
+    .eq("yard_id", yard.value.id)
+    .eq("owner", props.clientId);
+
+  if (!error) {
+    clientHorses.value = data;
+  }
+};
+
+await fetchClientsHorses();
 
 const daysNotice = ref(null);
 
@@ -79,14 +96,17 @@ const handleSubmit = async () => {
   if (daysNotice.value === null) {
     return;
   }
+  if (selectedHorse.value === null) {
+    return;
+  }
   const { data, error } = await client
     .from("service_requests")
     .insert({
       created_by: user.value.id,
       invoice_id: props.invoiceId,
       status: "accepted",
-      horse_id: props.horseId,
-      client_id: horse.value.owner.id,
+      client_id: props.clientId,
+      horse_id: selectedHorse.value.id,
       date: date.value,
       service_id: selectedService.value.id,
       service_name: selectedService.value.name,
@@ -108,6 +128,10 @@ const handleSubmit = async () => {
   // update itemsData locally
   itemsData.value.push({
     ...data,
+    horse_id: {
+      id: selectedHorse.value.id,
+      name: selectedHorse.value.name,
+    },
     livery_services: {
       name: selectedService.value.name,
       price: selectedService.value.price,
@@ -167,6 +191,24 @@ const handleSubmit = async () => {
                 @submit.prevent="handleSubmit"
                 class="mt-4 flex flex-col space-y-4"
               >
+                <div>
+                  <label class="block text-sm font-medium text-gray-700"
+                    >Horse</label
+                  >
+                  <select
+                    v-model="selectedHorse"
+                    required
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  >
+                    <option
+                      v-for="item in clientHorses"
+                      :key="item.id"
+                      :value="item"
+                    >
+                      {{ item.name }}
+                    </option>
+                  </select>
+                </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700"
                     >Service</label
