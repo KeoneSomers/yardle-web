@@ -41,6 +41,11 @@ const navigation = [
     to: "/yard/fields",
     icon: "heroicons:rectangle-group",
   },
+  {
+    name: "My Invoices",
+    to: "/yard/myInvoices",
+    icon: "heroicons:document-text",
+  },
 ];
 
 const supabaseAuthClient = useSupabaseAuthClient();

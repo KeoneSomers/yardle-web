@@ -44,7 +44,7 @@ invoices.value = invoicesData;
               <p>
                 {{ invoice.client_id.first_name }}
                 {{ invoice.client_id.last_name }} -
-                {{ DateTime.fromISO(invoice.end_date).toFormat("DDDD") }}
+                {{ DateTime.fromISO(invoice.end_date).toLocaleString() }}
               </p>
             </ClientOnly>
           </div>
