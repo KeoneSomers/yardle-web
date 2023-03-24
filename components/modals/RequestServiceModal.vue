@@ -68,7 +68,7 @@ const handleSubmit = async () => {
 
     loading.value = true;
 
-    if (dates.value.length === 0) {
+    if (dates.value === null || dates.value.length === 0) {
       loading.value = false;
       return;
     }
@@ -294,7 +294,9 @@ const handleSubmit = async () => {
                 <div class="mt-4 flex justify-end space-x-2 pt-4">
                   <button
                     v-if="!loading"
-                    :disabled="dates.length === 0 || selectedService === null"
+                    :disabled="
+                      !dates || dates.length === 0 || selectedService === null
+                    "
                     type="submit"
                     class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
                   >
