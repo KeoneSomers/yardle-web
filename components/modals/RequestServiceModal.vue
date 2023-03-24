@@ -200,7 +200,7 @@ const handleSubmit = async () => {
 
       <div class="fixed inset-0">
         <div
-          class="flex min-h-full items-center justify-center p-4 text-center"
+          class="mt-16 flex min-h-full items-start justify-center p-4 text-center md:mt-0 md:items-center"
         >
           <TransitionChild
             as="template"
