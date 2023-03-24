@@ -261,6 +261,8 @@ const handleSubmit = async () => {
                         :enable-time-picker="false"
                         :utc="true"
                         required
+                        auto-apply
+                        :close-on-auto-apply="false"
                       />
                     </div>
                   </div>
