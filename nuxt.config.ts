@@ -12,6 +12,9 @@ export default defineNuxtConfig({
   typescript: {
     shim: false,
   },
+  build: {
+    transpile: ["@vuepic/vue-datepicker"],
+  },
   css: ["@/assets/css/main.css", "vue-final-modal/style.css"],
   app: {
     head: {

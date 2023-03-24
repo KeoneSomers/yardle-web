@@ -8,6 +8,9 @@ import {
 } from "@headlessui/vue";
 import { DateTime, Interval } from "luxon";
 
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
+
 const loading = ref(false);
 
 const props = defineProps(["isOpen"]);
@@ -29,14 +32,14 @@ const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
 });
 
 const selectedService = ref(null);
-const date = ref(null);
+const dates = ref([]);
 
 watch(
   () => props.isOpen,
   (isOpen) => {
     if ((isOpen = true)) {
       selectedService.value = null;
-      date.value = null;
+      dates.value = [];
       loading.value = false;
     }
   }
@@ -55,65 +58,78 @@ const fetchLiveryServices = async () => {
 
 await fetchLiveryServices();
 
-const daysNotice = ref(null);
-
-watch(date, async (newValue, oldValue) => {
-  if (newValue !== oldValue) {
-    let interval = Interval.fromDateTimes(
-      DateTime.now().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }),
-      DateTime.fromISO(date.value).set({
-        hour: 0,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-      })
-    );
-    daysNotice.value = interval.length("days");
-  }
-});
-
 const yardOwner = ref(null);
 
 const handleSubmit = async () => {
   try {
-    if (daysNotice.value === null) {
-      return;
-    }
-
     if (loading.value === true) {
       return;
     }
 
     loading.value = true;
 
-    const { data, error } = await client
-      .from("service_requests")
-      .insert({
-        created_by: user.value.id,
-        horse_id: horse.value.id,
-        client_id: horse.value.owner.id,
-        date: date.value,
-        service_id: selectedService.value.id,
-        service_name: selectedService.value.name,
-        service_price:
-          yard.value.enabled_billing_late_booking_fee === true &&
-          daysNotice.value <= 1
-            ? selectedService.value.price * 2 // TODO - the multiplier should not be hard coded - should be an option in the yard settings
-            : selectedService.value.price,
-        booked_late:
-          yard.value.enabled_billing_late_booking_fee === true &&
-          daysNotice.value <= 1,
-      })
-      .select()
-      .single();
+    if (dates.value.length === 0) {
+      loading.value = false;
+      return;
+    }
 
-    // update horseServices locally
-    serviceRequests.value.push({
-      ...data,
-      livery_services: {
-        name: selectedService.value.name,
-        price: selectedService.value.price,
-      },
+    dates.value.forEach(async (date) => {
+      // for each date picked -  create a service request (and evaluate if late booking fee should be applied)
+      const dateObj = new Date(date);
+      const year = dateObj.getUTCFullYear();
+      const month = dateObj.getUTCMonth() + 1;
+      const day = dateObj.getUTCDate();
+
+      const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day
+        .toString()
+        .padStart(2, "0")}`;
+
+      // calculate days notice
+      let interval = Interval.fromDateTimes(
+        DateTime.now().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }),
+        DateTime.fromISO(date).set({
+          hour: 0,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+        })
+      );
+      const daysNotice = interval.length("days");
+
+      const { data, error } = await client
+        .from("service_requests")
+        .insert({
+          created_by: user.value.id,
+          horse_id: horse.value.id,
+          client_id: horse.value.owner.id,
+          date: formattedDate,
+          service_id: selectedService.value.id,
+          service_name: selectedService.value.name,
+          service_price:
+            yard.value.enabled_billing_late_booking_fee === true &&
+            daysNotice <= 1
+              ? selectedService.value.price * 2 // TODO - the multiplier should not be hard coded - should be an option in the yard settings
+              : selectedService.value.price,
+          booked_late:
+            yard.value.enabled_billing_late_booking_fee === true &&
+            daysNotice <= 1,
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.log(error);
+        throw new Error(error.message);
+      }
+
+      // update horseServices locally
+      serviceRequests.value.push({
+        ...data,
+        livery_services: {
+          name: selectedService.value.name,
+          price: selectedService.value.price,
+        },
+      });
     });
 
     // get yard owner (If it hasn't been fetched already)
@@ -144,24 +160,18 @@ const handleSubmit = async () => {
                 yardOwner.value.profile_id.last_name,
             },
           ],
-          subject: `${yard.value.name}: You've got a Livery Service Request!`,
+          subject: `${yard.value.name}: New Livery Service Request!`,
           text: ``,
-          html: `<p>${profile.value.first_name} ${
-            profile.value.last_name
-          } has requested a service for ${horse.value.name} at ${
-            yard.value.name
-          } for ${DateTime.fromISO(date.value).toFormat(
-            "LLL dd, yyyy"
-          )}. Please log in to your account to accept or reject the request.</p>
-          <br/>
-          <small>To unsubscribe from these types of emails, please visit yardle.app/auth/accountSettings</small>`,
+          html: `<p>${profile.value.first_name} ${profile.value.last_name} has requested services for ${horse.value.name} at ${yard.value.name}. Please log in to your account to accept or reject the request.</p>
+        <br/>
+        <small>To unsubscribe from these types of emails, please visit yardle.app/auth/accountSettings</small>`,
         },
       });
     }
 
     alerts.value.unshift({
       title: "Request Submitted!",
-      message: "The yard owner will be notified.",
+      message: "Your yard owner will be notified.",
       type: "success",
     });
 
@@ -188,7 +198,7 @@ const handleSubmit = async () => {
         <div class="fixed inset-0 bg-black bg-opacity-25" />
       </TransitionChild>
 
-      <div class="fixed inset-0 overflow-y-auto">
+      <div class="fixed inset-0">
         <div
           class="flex min-h-full items-center justify-center p-4 text-center"
         >
@@ -202,7 +212,7 @@ const handleSubmit = async () => {
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              class="w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
             >
               <DialogTitle
                 as="h3"
@@ -242,7 +252,7 @@ const handleSubmit = async () => {
                 <div class="flex space-x-2">
                   <div class="flex-1">
                     <label class="block text-sm font-medium text-gray-700"
-                      >Date</label
+                      >Dates</label
                     >
                     <div class="mt-1">
                       <!-- 
@@ -257,32 +267,34 @@ const handleSubmit = async () => {
                             .toISODate()
                         "
                        -->
-                      <input
+                      <VueDatePicker
+                        v-model="dates"
+                        multi-dates
+                        :enable-time-picker="false"
+                        :utc="true"
+                      />
+                      <!-- <input
                         type="date"
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        v-model="date"
+                        v-model="dates"
                         required
-                      />
+                      /> -->
                     </div>
                   </div>
                 </div>
 
                 <div
-                  class="rounded bg-orange-50 p-2 text-sm text-orange-600"
-                  v-if="
-                    yard.enabled_billing_late_booking_fee &&
-                    daysNotice !== null &&
-                    daysNotice <= 1
-                  "
+                  class="rounded bg-gray-50 p-2 text-sm text-gray-600"
+                  v-if="yard.enabled_billing_late_booking_fee"
                 >
-                  Notice: Booking a service on this date will encur a x2 late
-                  booking fee
+                  Notice: This yard has enabled late booking fees. Any bookings
+                  made with less than 1 day notice will be charged at a 2x rate.
                 </div>
 
                 <div class="mt-4 flex justify-end space-x-2 pt-4">
                   <button
                     v-if="!loading"
-                    :disabled="date === null || selectedService === null"
+                    :disabled="dates.length === 0 || selectedService === null"
                     type="submit"
                     class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
                   >

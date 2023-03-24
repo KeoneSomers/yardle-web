@@ -62,7 +62,6 @@ const { data: _previousBillingDate } = await useFetch(
     },
   }
 );
-console.log(_previousBillingDate.value);
 previousBillingDate.value = DateTime.fromISO(_previousBillingDate.value); // TODO: do this in the line above (single line (if you can))
 
 const thisWeekServices = ref(null);
