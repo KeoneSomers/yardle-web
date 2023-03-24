@@ -255,30 +255,13 @@ const handleSubmit = async () => {
                       >Dates</label
                     >
                     <div class="mt-1">
-                      <!-- 
-                                                :min="
-                          DateTime.now()
-                            .set({
-                              hour: 0,
-                              minute: 0,
-                              second: 0,
-                              millisecond: 0,
-                            })
-                            .toISODate()
-                        "
-                       -->
                       <VueDatePicker
                         v-model="dates"
                         multi-dates
                         :enable-time-picker="false"
                         :utc="true"
-                      />
-                      <!-- <input
-                        type="date"
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        v-model="dates"
                         required
-                      /> -->
+                      />
                     </div>
                   </div>
                 </div>
@@ -312,3 +295,9 @@ const handleSubmit = async () => {
     </Dialog>
   </TransitionRoot>
 </template>
+
+<style>
+.dp__selection_preview {
+  display: none !important;
+}
+</style>
