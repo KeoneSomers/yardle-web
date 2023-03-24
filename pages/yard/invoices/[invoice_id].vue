@@ -41,9 +41,7 @@ onMounted(async () => {
   // get the invoice
   const { data: _invoiceData, error: invoiceError } = await client
     .from("invoices")
-    .select(
-      "*, horse_id (id, name, owner(email, first_name, last_name)), yard_id (name)"
-    )
+    .select("*, client_id (id, first_name, last_name, email), yard_id (name)")
     .eq("id", invoice_id)
     .single();
 
@@ -59,9 +57,12 @@ onMounted(async () => {
     return;
   }
 
-  client_first_name.value = _invoiceData.client_first_name;
-  client_last_name.value = _invoiceData.client_last_name;
-  client_email.value = _invoiceData.client_email;
+  client_first_name.value =
+    _invoiceData.client_first_name || _invoiceData.client_id.first_name;
+  client_last_name.value =
+    _invoiceData.client_last_name || _invoiceData.client_id.last_name;
+  client_email.value =
+    _invoiceData.client_email || _invoiceData.client_id.email;
   baseRate.value = _invoiceData.base_rate;
   discount.value = _invoiceData.discount;
   vat.value = _invoiceData.vat;
@@ -72,7 +73,7 @@ onMounted(async () => {
 
   const { data: _itemsData, error: itemsError } = await client
     .from("service_requests")
-    .select("*")
+    .select("*, horse_id (id, name)")
     .eq("invoice_id", invoice_id)
     .filter("canceled_at", "is", null)
     .order("date", { ascending: true });
@@ -156,9 +157,7 @@ const saveChanges = async () => {
       discount_note: discountNote.value,
     })
     .eq("id", invoice_id)
-    .select(
-      "*, horse_id (id, name, owner(email, first_name, last_name)), yard_id (name)"
-    )
+    .select("*, client_id (id, first_name, last_name, email), yard_id (name)")
     .single();
 
   if (error) {
@@ -252,7 +251,9 @@ const totalAmount = computed(() => {
           >
             <DownloadInvoice
               :fileName="
-                invoiceData.horse_id.name +
+                invoiceData.client_id.first_name +
+                ' ' +
+                invoiceData.client_id.last_name +
                 ' Invoice: ' +
                 DateTime.fromISO(invoiceData.created_at).toFormat(
                   'EEEE, MMMM d, yyyy'
@@ -477,7 +478,8 @@ const totalAmount = computed(() => {
               </h1>
 
               <p class="mt-2 text-sm text-gray-700">
-                Livery services for {{ invoiceData.horse_id.name }} from
+                Livery services for {{ invoiceData.client_id.first_name }}
+                {{ invoiceData.client_id.last_name }} from
                 <time :datetime="invoiceData.start_date"
                   >{{
                     DateTime.fromISO(invoiceData.start_date).toFormat(
@@ -502,6 +504,12 @@ const totalAmount = computed(() => {
             <table class="min-w-full divide-y divide-gray-300">
               <thead>
                 <tr>
+                  <th
+                    scope="col"
+                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                  >
+                    Horse
+                  </th>
                   <th
                     scope="col"
                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
@@ -541,6 +549,13 @@ const totalAmount = computed(() => {
                   :key="item.id"
                   class="border-b border-gray-200"
                 >
+                  <td class="py-4 pl-4 pr-3 text-sm sm:pl-0">
+                    <div class="font-medium text-gray-900">
+                      <p class="truncate whitespace-pre-wrap">
+                        {{ item.horse_id.name }}
+                      </p>
+                    </div>
+                  </td>
                   <td class="py-4 pl-4 pr-3 text-sm sm:pl-0">
                     <div class="font-medium text-gray-900">
                       <p class="truncate whitespace-pre-wrap">
@@ -605,7 +620,7 @@ const totalAmount = computed(() => {
                 <tr>
                   <th
                     scope="row"
-                    colspan="3"
+                    colspan="4"
                     class="hidden pl-4 pr-3 pt-6 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                   >
                     Subtotal
@@ -625,7 +640,7 @@ const totalAmount = computed(() => {
                 <tr>
                   <th
                     scope="row"
-                    colspan="3"
+                    colspan="4"
                     class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                   >
                     Base Rate
@@ -645,7 +660,7 @@ const totalAmount = computed(() => {
                 <tr v-if="discount != 0">
                   <th
                     scope="row"
-                    colspan="3"
+                    colspan="4"
                     class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                   >
                     Discount ({{ discount }}%)
@@ -666,7 +681,7 @@ const totalAmount = computed(() => {
                 <tr v-if="vat != 0">
                   <th
                     scope="row"
-                    colspan="3"
+                    colspan="4"
                     class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                   >
                     VAT ({{ vat }}%)
@@ -687,7 +702,7 @@ const totalAmount = computed(() => {
                 <tr>
                   <th
                     scope="row"
-                    colspan="3"
+                    colspan="4"
                     class="hidden pl-4 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell sm:pl-0"
                   >
                     Total
@@ -739,10 +754,11 @@ const totalAmount = computed(() => {
     />
   </div>
 
+  <!-- TODO: horse id is wrong here -->
   <AddServiceModal
     v-if="createModalOpen"
     :is-open="createModalOpen"
-    :horse-id="invoiceData.horse_id.id"
+    :horse-id="invoiceData.client_id.id"
     :start-date="invoiceData.start_date"
     :end-date="invoiceData.end_date"
     :invoice-id="invoiceData.id"

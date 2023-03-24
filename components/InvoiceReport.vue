@@ -82,7 +82,9 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
       <div>
         <div class="my-[10px] border px-[15px] pb-[15px]">
           <p>
-            Invoice - Livery services for {{ invoiceData.horse_id.name }} from
+            Invoice - Livery services for
+            {{ invoiceData.client_id.first_name }}
+            {{ invoiceData.client_id.last_name }} from
             <time :datetime="invoiceData.start_date">{{
               DateTime.fromISO(invoiceData.start_date).toFormat("MMMM d, yyyy")
             }}</time>
@@ -98,6 +100,7 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
         <table class="w-full">
           <thead>
             <tr class="divide-x border bg-gray-50">
+              <th class="pb-[15px]">Horse</th>
               <th class="pb-[15px]">Service</th>
               <th class="pb-[15px]">booked for</th>
               <th
@@ -115,6 +118,13 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
               :key="item.id"
               class="divide-x border"
             >
+              <td class="px-[15px] pb-[15px]">
+                <div>
+                  <p>
+                    {{ item.horse_id.name }}
+                  </p>
+                </div>
+              </td>
               <td class="w-[40%] px-[15px] pb-[15px]">
                 <div>
                   <p>
