@@ -1,6 +1,7 @@
 <script setup>
 import { DateTime } from "luxon";
 import { useModal } from "vue-final-modal";
+import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 import ModalConfirm from "@/components/modals/ModalConfirm.vue";
 import AddServiceModal from "@/components/modals/AddServiceModal.vue";
 
@@ -33,6 +34,8 @@ const discount = ref(0);
 const vat = ref(0);
 const vatNumber = ref(0);
 const discountNote = ref("");
+const published = ref(false);
+const paid = ref(false);
 
 const createModalOpen = ref(false);
 const alerts = useAlerts();
@@ -57,6 +60,9 @@ onMounted(async () => {
     return;
   }
 
+  // seet starting values
+  published.value = _invoiceData.published;
+  paid.value = _invoiceData.paid;
   client_first_name.value =
     _invoiceData.client_first_name || _invoiceData.client_id.first_name;
   client_last_name.value =
@@ -118,7 +124,7 @@ const removeItem = async () => {
   });
 };
 
-// Delete Horse Modal
+// Delete Item Modal
 const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
   component: ModalConfirm,
   attrs: {
@@ -151,6 +157,8 @@ const saveChanges = async () => {
       client_last_name: client_last_name.value,
       client_email: client_email.value,
       base_rate: baseRate.value,
+      published: published.value,
+      paid: paid.value,
       vat: vat.value,
       vat_number: vatNumber.value,
       discount: discount.value,
@@ -218,9 +226,55 @@ const totalAmount = computed(() => {
           </h1>
         </div>
         <div class="flex items-center">
+          <SwitchGroup as="div" class="mr-3 flex w-56 items-center">
+            <Switch
+              v-model="published"
+              :class="[
+                published ? 'bg-indigo-600' : 'bg-gray-200',
+                'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2',
+              ]"
+            >
+              <span
+                aria-hidden="true"
+                :class="[
+                  published ? 'translate-x-5' : 'translate-x-0',
+                  'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                ]"
+              />
+            </Switch>
+            <SwitchLabel as="span" class="ml-3 text-sm">
+              <span v-if="published" class="font-medium text-gray-900"
+                >Published!</span
+              >
+              <span v-else class="font-medium text-gray-900">Unpublished</span>
+            </SwitchLabel>
+          </SwitchGroup>
+          <SwitchGroup as="div" class="mr-3 flex w-56 items-center">
+            <Switch
+              v-model="paid"
+              :class="[
+                paid ? 'bg-indigo-600' : 'bg-gray-200',
+                'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2',
+              ]"
+            >
+              <span
+                aria-hidden="true"
+                :class="[
+                  paid ? 'translate-x-5' : 'translate-x-0',
+                  'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                ]"
+              />
+            </Switch>
+            <SwitchLabel as="span" class="ml-3 text-sm">
+              <span v-if="paid" class="font-medium text-gray-900">Paid!</span>
+              <span v-else class="font-medium text-gray-900">Unpaid</span>
+            </SwitchLabel>
+          </SwitchGroup>
           <button
             @click="saveChanges"
             v-if="
+              published != invoiceData.published ||
+              paid != invoiceData.paid ||
               client_first_name != invoiceData.client_first_name ||
               client_last_name != invoiceData.client_last_name ||
               client_email != invoiceData.client_email ||
