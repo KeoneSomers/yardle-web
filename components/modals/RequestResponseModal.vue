@@ -17,9 +17,9 @@ const emits = defineEmits(["close"]);
 const requests = useState("requests");
 const yard = useState("yard");
 
-const client = useSupabaseClient();
-const user = useSupabaseUser();
+const selectedRequests = useState("selectedRequests");
 
+const client = useSupabaseClient();
 const status = ref("");
 const note = ref("");
 
@@ -29,7 +29,7 @@ watch(
   () => props.isOpen,
   (isOpen) => {
     if (isOpen === true) {
-      status.value = props.status;
+      // status.value = props.status;
       note.value = "";
       loading.value = false;
     }
@@ -44,6 +44,44 @@ const handleSubmit = async () => {
 
     loading.value = true;
 
+    // bulk update
+    if (selectedRequests.value.length > 0) {
+      console.log("bulk");
+
+      const { error } = await client
+        .from("service_requests")
+        .update({ status: status.value, status_note: note.value })
+        .in("id", selectedRequests.value);
+
+      if (error) {
+        console.log("error: " + error.message);
+        return;
+      }
+
+      // update local state
+      selectedRequests.value.forEach((id) => {
+        const index = requests.value.findIndex((r) => r.id === id);
+        requests.value[index].status = status.value;
+      });
+
+      // clear selection when done
+      selectedRequests.value = [];
+
+      // post alert to user
+      alerts.value.unshift({
+        title:
+          status.value === "accepted"
+            ? "Requests Accepted!"
+            : "Requests Declined!",
+        message: "These requests have been updated.",
+        type: "success",
+      });
+
+      emits("close");
+      return;
+    }
+
+    // single update
     const { error } = await client
       .from("service_requests")
       .update({ status: status.value, status_note: note.value })
@@ -100,12 +138,12 @@ const handleSubmit = async () => {
       });
     }
 
-    // update local state
+    // post alert to user
     alerts.value.unshift({
       title:
         status.value === "accepted" ? "Request Accepted!" : "Request Declined!",
       message: "The request has been updated and the user will be notified.",
-      type: status.value === "accepted" ? "success" : "error",
+      type: "success",
     });
 
     emits("close");
@@ -156,7 +194,10 @@ const handleSubmit = async () => {
                 as="h3"
                 class="text-lg font-medium leading-6 text-gray-900"
               >
-                Respond to Request
+                <span v-if="selectedRequests.length > 0"
+                  >Respond to {{ selectedRequests.length }} Requests</span
+                >
+                <span v-else>Respond to Request</span>
               </DialogTitle>
               <form
                 @submit.prevent="handleSubmit"
