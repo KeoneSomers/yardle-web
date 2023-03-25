@@ -130,9 +130,23 @@ const goToPreviousWeek = () => {
             Order History
           </button> -->
           <button
-            @click="() => (createModalOpen = true)"
+            @click="
+              () => {
+                horse.owner !== null ? (createModalOpen = true) : null;
+              }
+            "
             type="button"
-            class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+            :class="{
+              'bg-gray-300': horse.owner === null,
+              'bg-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2':
+                horse.owner !== null,
+            }"
+            v-tooltip="
+              horse.owner === null
+                ? 'This horse does not have an owner yet.'
+                : ''
+            "
+            class="inline-flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none sm:w-auto"
           >
             Book Service
           </button>
