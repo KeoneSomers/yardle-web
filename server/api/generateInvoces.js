@@ -67,7 +67,8 @@ export default defineEventHandler(async (event) => {
           .gt("date", start)
           .lte("date", end)
           .filter("status", "eq", "accepted")
-          .filter("canceled_at", "is", null);
+          .filter("canceled_at", "is", null)
+          .not("horse_id.owner", "is", null);
 
       // split the service_requests into groups by horse owner
       const ServiceRequestsGroupedByHorseOwner = serviceRequests.reduce(
@@ -86,6 +87,7 @@ export default defineEventHandler(async (event) => {
       );
 
       // console.log(ServiceRequestsGroupedByHorseOwner);
+      // return;
 
       // loop though the groups and create an invoice for each client (uneque horse owner)
       ServiceRequestsGroupedByHorseOwner.forEach(async (requests) => {
