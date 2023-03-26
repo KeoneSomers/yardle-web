@@ -101,7 +101,6 @@ const handleSubmit = async () => {
         .insert({
           created_by: user.value.id,
           horse_id: horse.value.id,
-          client_id: horse.value.owner.id,
           date: formattedDate,
           service_id: selectedService.value.id,
           service_name: selectedService.value.name,

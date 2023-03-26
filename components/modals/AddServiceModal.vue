@@ -105,7 +105,6 @@ const handleSubmit = async () => {
       created_by: user.value.id,
       invoice_id: props.invoiceId,
       status: "accepted",
-      client_id: props.clientId,
       horse_id: selectedHorse.value.id,
       date: date.value,
       service_id: selectedService.value.id,
