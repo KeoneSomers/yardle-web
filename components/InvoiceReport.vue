@@ -196,7 +196,7 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
             </tr>
           </table>
         </div>
-        <div v-if="discountNote" class="text-gray-700">
+        <div v-if="discount > 0 && discountNote" class="text-gray-700">
           <p>Discount Note: {{ discountNote }}</p>
         </div>
         <div v-if="vat > 0 && vatNumber" class="text-gray-700">

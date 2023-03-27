@@ -1,16 +1,29 @@
 <script setup>
-const props = defineProps(["title", "description"]);
+const props = defineProps(["title", "description", "backLink"]);
 </script>
 
 <template>
   <div
-    class="flex flex-col border-b py-4 px-4 md:flex-row md:items-center lg:h-16"
+    class="flex flex-col justify-between border-b py-4 px-4 md:flex-row md:items-center lg:h-16"
   >
-    <div class="sm:flex-auto">
-      <h1 class="text-xl font-semibold text-gray-900">{{ props.title }}</h1>
-      <p v-if="props.description" class="text-xs text-gray-700">
-        {{ props.description }}
-      </p>
+    <div class="flex">
+      <NuxtLink
+        v-if="props.backLink"
+        v-tooltip="'Back'"
+        to="/yard/invoices"
+        class="mr-4 flex h-6 w-6 shrink-0 items-center justify-center rounded bg-gray-100 md:h-12 md:w-12"
+      >
+        <icon
+          name="heroicons:chevron-left-solid"
+          class="h-4 w-4 md:h-6 md:w-6"
+        />
+      </NuxtLink>
+      <div class="sm:flex-auto">
+        <h1 class="text-xl font-semibold text-gray-900">{{ props.title }}</h1>
+        <p v-if="props.description" class="text-xs text-gray-700">
+          {{ props.description }}
+        </p>
+      </div>
     </div>
     <div class="flex pt-4 md:pt-0">
       <slot />
