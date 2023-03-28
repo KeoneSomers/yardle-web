@@ -87,11 +87,31 @@ watchEffect(async () => {
       spendThisWeek.value += item.service_price;
     });
 
+    // console.log(
+    //   DateTime.fromISO(previousBillingDate.value).toFormat("yyyy-MM-dd")
+    // );
+    // console.log(DateTime.fromISO(nextBillingDate.value).toFormat("yyyy-MM-dd"));
+
     // get periods services
     thisPeriodsServices.value = serviceRequestsLog.value.filter((item) => {
+      // console.log(DateTime.fromISO(item.date));
+      // console.log(
+      //   nextBillingDate.value.set({
+      //     hour: 23,
+      //     minute: 59,
+      //     second: 59,
+      //     millisecond: 999,
+      //   })
+      // );
       return (
-        DateTime.fromISO(item.date) >= previousBillingDate.value &&
-        DateTime.fromISO(item.date) <= nextBillingDate.value &&
+        DateTime.fromISO(item.date) > previousBillingDate.value &&
+        DateTime.fromISO(item.date) <=
+          nextBillingDate.value.set({
+            hour: 23,
+            minute: 59,
+            second: 59,
+            millisecond: 999,
+          }) &&
         item.canceled_at === null &&
         item.status === "accepted"
       );
