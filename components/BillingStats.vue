@@ -92,14 +92,13 @@ watchEffect(async () => {
     // );
     // console.log(DateTime.fromISO(nextBillingDate.value).toFormat("yyyy-MM-dd"));
 
+    console.log("prev date");
+    console.log(previousBillingDate.value.toFormat("yyyy-MM-dd"));
+    console.log("next date");
+    console.log(nextBillingDate.value.toFormat("yyyy-MM-dd"));
+
     // get periods services
     thisPeriodsServices.value = serviceRequestsLog.value.filter((item) => {
-      console.log("item.date");
-      console.log(DateTime.fromISO(item.date));
-      console.log("prev date");
-      console.log(previousBillingDate.value);
-      console.log("next date");
-      console.log(nextBillingDate.value);
       // console.log(
       //   nextBillingDate.value.set({
       //     hour: 23,
