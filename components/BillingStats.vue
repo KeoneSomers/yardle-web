@@ -144,7 +144,7 @@ watchEffect(async () => {
       >
         (in
         {{
-          Math.floor(
+          Math.ceil(
             nextBillingDate.diff(DateTime.now(), "days").toObject().days
           )
         }}
