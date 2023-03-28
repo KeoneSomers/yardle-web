@@ -3,7 +3,8 @@ import { DateTime } from "luxon";
 export default defineEventHandler(async (event) => {
   const { billingCycle } = await readBody(event);
 
-  const now = DateTime.now();
+  const now = DateTime.utc();
+  console.log(now);
   const interval = billingCycle.every;
   const weekly = billingCycle.period === 1;
   const monthly = billingCycle.period === 2;
@@ -48,11 +49,12 @@ export default defineEventHandler(async (event) => {
         // return anyday - if you're already on the last day of the month, add 1 day so you get the next months billing date
         if (firstOrLast === 2) {
           // last
-          return now
-            .plus({
-              days: now === now.endOf("month") ? 1 : 0,
-            })
-            .endOf("month");
+          // return now
+          //   .plus({
+          //     days: now === now.endOf("month") ? 1 : 0,
+          //   })
+          //   .endOf("month");
+          return now.endOf("month").set({ hour: 12 }); // TODO: make this less jankey!! quick fix for sam
         } else {
           // first
           return now.plus({ months: 1 }).startOf("month");
