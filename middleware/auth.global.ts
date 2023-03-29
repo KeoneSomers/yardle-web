@@ -28,19 +28,12 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
     isFirstLoad.value = false;
   }
 
+  const _guards = to.meta.guards as string[];
   const guards = {
-    requireAuth: to.meta.guards
-      ? to.meta.guards.includes("requireAuth")
-      : false,
-    requireNoAuth: to.meta.guards
-      ? to.meta.guards.includes("requireNoAuth")
-      : false,
-    requireYard: to.meta.guards
-      ? to.meta.guards.includes("requireYard")
-      : false,
-    requireNoYard: to.meta.guards
-      ? to.meta.guards.includes("requireNoYard")
-      : false,
+    requireAuth: _guards ? _guards.includes("requireAuth") : false,
+    requireNoAuth: _guards ? _guards.includes("requireNoAuth") : false,
+    requireYard: _guards ? _guards.includes("requireYard") : false,
+    requireNoYard: _guards ? _guards.includes("requireNoYard") : false,
   };
 
   // Logged out
