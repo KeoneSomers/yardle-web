@@ -219,64 +219,62 @@ const totalAmount = computed(() => {
         profile.active_role === 1 ? '/yard/invoices' : '/yard/myInvoices'
       "
     >
-      <div class="flex flex-col lg:flex-row">
-        <button
-          @click="saveChanges"
-          v-if="
-            published != invoiceData.published ||
-            paid != invoiceData.paid ||
-            client_first_name != invoiceData.client_first_name ||
-            client_last_name != invoiceData.client_last_name ||
-            client_email != invoiceData.client_email ||
-            baseRate != invoiceData.base_rate ||
-            vat != invoiceData.vat ||
-            vatNumber != invoiceData.vat_number ||
-            discount != invoiceData.discount ||
-            discountNote != invoiceData.discount_note
+      <button
+        @click="saveChanges"
+        v-if="
+          published != invoiceData.published ||
+          paid != invoiceData.paid ||
+          client_first_name != invoiceData.client_first_name ||
+          client_last_name != invoiceData.client_last_name ||
+          client_email != invoiceData.client_email ||
+          baseRate != invoiceData.base_rate ||
+          vat != invoiceData.vat ||
+          vatNumber != invoiceData.vat_number ||
+          discount != invoiceData.discount ||
+          discountNote != invoiceData.discount_note
+        "
+        class="mr-2 mt-2 cursor-pointer rounded-lg bg-blue-500 px-3 py-2 text-white hover:bg-blue-600 md:mt-0"
+      >
+        Save Changes
+      </button>
+      <button
+        v-if="profile.active_role === 1"
+        @click="() => (createModalOpen = true)"
+        class="mr-2 mt-2 cursor-pointer rounded-lg border bg-white px-3 py-2 hover:bg-gray-100 md:mt-0"
+      >
+        Add Service
+      </button>
+      <div
+        v-tooltip="
+          client_email == '' ||
+          client_first_name == '' ||
+          client_last_name == ''
+            ? 'Please provide a client name and email'
+            : ''
+        "
+        :class="{
+          'w-full cursor-not-allowed opacity-50':
+            client_email == '' ||
+            client_first_name == '' ||
+            client_last_name == '',
+        }"
+      >
+        <DownloadInvoice
+          :fileName="
+            invoiceData.client_id.first_name +
+            ' ' +
+            invoiceData.client_id.last_name +
+            ' Invoice: ' +
+            DateTime.fromISO(invoiceData.created_at).toFormat(
+              'EEEE, MMMM d, yyyy'
+            )
           "
-          class="mr-2 cursor-pointer rounded-lg bg-blue-500 px-3 py-2 text-white hover:bg-blue-600"
-        >
-          Save Changes
-        </button>
-        <button
-          v-if="profile.active_role === 1"
-          @click="() => (createModalOpen = true)"
-          class="mr-2 cursor-pointer rounded-lg bg-white px-3 py-2 shadow hover:bg-gray-100"
-        >
-          Add Item
-        </button>
-        <div
-          v-tooltip="
+          :is-disabled="
             client_email == '' ||
             client_first_name == '' ||
             client_last_name == ''
-              ? 'Please provide a client name and email'
-              : ''
           "
-          :class="{
-            'w-full cursor-not-allowed opacity-50':
-              client_email == '' ||
-              client_first_name == '' ||
-              client_last_name == '',
-          }"
-        >
-          <DownloadInvoice
-            :fileName="
-              invoiceData.client_id.first_name +
-              ' ' +
-              invoiceData.client_id.last_name +
-              ' Invoice: ' +
-              DateTime.fromISO(invoiceData.created_at).toFormat(
-                'EEEE, MMMM d, yyyy'
-              )
-            "
-            :is-disabled="
-              client_email == '' ||
-              client_first_name == '' ||
-              client_last_name == ''
-            "
-          />
-        </div>
+        />
       </div>
     </PageHeading>
     <div class="flex flex-col lg:h-[calc(100vh-4rem)] lg:flex-row">
@@ -435,6 +433,9 @@ const totalAmount = computed(() => {
                 placeholder="0"
                 class="mt-1 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
+              <p class="mt-2 text-sm text-gray-500" id="email-description">
+                Only included in the invoice if value is greater than 0.
+              </p>
             </div>
           </div>
           <div v-if="vat > 0" class="mb-3 flex items-center">
@@ -466,6 +467,9 @@ const totalAmount = computed(() => {
                 placeholder="0"
                 class="mt-1 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
+              <p class="mt-2 text-sm text-gray-500" id="email-description">
+                Only included in the invoice if value is greater than 0.
+              </p>
             </div>
           </div>
           <div v-if="discount > 0" class="flex items-center">

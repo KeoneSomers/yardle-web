@@ -6,7 +6,7 @@ const props = defineProps(["title", "description", "backLink"]);
   <div
     class="flex flex-col justify-between border-b py-4 px-4 md:flex-row md:items-center lg:h-16"
   >
-    <div class="flex">
+    <div class="flex flex-1">
       <NuxtLink
         v-if="props.backLink"
         v-tooltip="'Back'"
@@ -25,7 +25,7 @@ const props = defineProps(["title", "description", "backLink"]);
         </p>
       </div>
     </div>
-    <div class="flex pt-4 md:pt-0">
+    <div class="flex flex-1 flex-wrap justify-end pt-4 md:pt-0">
       <slot />
     </div>
   </div>
