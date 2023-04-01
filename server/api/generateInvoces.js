@@ -95,6 +95,23 @@ export default defineEventHandler(async (event) => {
         const clientId = requests[0].horse_id.owner;
         console.log(`Items for ownerId ${clientId}:`);
 
+        // console.log("requests");
+        // console.log(requests);
+
+        // get an array of all the uneque horse ids
+        const horseIds = requests.reduce((acc, item) => {
+          const horseArr = acc.find((a) => a === item.horse_id.id);
+          if (!horseArr) {
+            acc.push(item.horse_id.id);
+          }
+          return acc;
+        }, []);
+
+        console.log("... For the following horses:");
+        console.log(horseIds);
+
+        return;
+
         // save the invoice to the database
         const { data: invoiceData, error: errorInvoiceData } = await client
           .from("invoices")
@@ -119,7 +136,7 @@ export default defineEventHandler(async (event) => {
             .update({
               invoice_id: invoiceData.id,
             })
-            .eq("client_id", clientId)
+            .eq("client_id", clientId) // FIXME: 'column service_requests.client_id does not exist'
             .gt("date", start)
             .lte("date", end)
             .filter("status", "eq", "accepted")
