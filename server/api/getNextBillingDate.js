@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const { billingCycle } = await readBody(event);
 
   const now = DateTime.utc();
-  console.log(now);
+  // console.log(now);
   const interval = billingCycle.every;
   const weekly = billingCycle.period === 1;
   const monthly = billingCycle.period === 2;

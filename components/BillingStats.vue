@@ -132,7 +132,7 @@ watchEffect(async () => {
 
 <template>
   <div>
-    <p class="flex text-xs">
+    <!-- <p class="flex text-xs">
       Next Billing Date is
       {{ nextBillingDate.toFormat("EEEE, MMMM d, yyyy") }}
       <span
@@ -159,7 +159,7 @@ watchEffect(async () => {
           <icon name="heroicons:pencil" class="ml-1 h-3 w-3" />)</NuxtLink
         ></span
       >
-    </p>
+    </p> -->
     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
       <div
         class="overflow-hidden rounded-lg border bg-white px-4 py-5 shadow sm:p-6"
