@@ -862,6 +862,7 @@ const totalAmount = computed(() => {
         :discounted-amount="discountedAmount"
         :vat-amount="vatAmount"
         :total-amount="totalAmount"
+        :number-of-days-due="numberOfDaysDue"
       />
     </div>
 

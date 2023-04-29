@@ -16,6 +16,7 @@ const {
   discountedAmount,
   vatAmount,
   totalAmount,
+  numberOfDaysDue,
 } = defineProps([
   "invoiceData",
   "itemsData",
@@ -31,6 +32,7 @@ const {
   "discountedAmount",
   "vatAmount",
   "totalAmount",
+  "numberOfDaysDue",
 ]);
 
 const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
@@ -66,7 +68,7 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
               Due Date:
               {{
                 DateTime.fromISO(invoiceData.created_at)
-                  .plus({ weeks: 2 })
+                  .plus({ days: numberOfDaysDue })
                   .toFormat("EEEE, MMMM d, yyyy")
               }}
             </div>
