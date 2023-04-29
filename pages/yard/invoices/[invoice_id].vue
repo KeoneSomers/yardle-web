@@ -41,6 +41,7 @@ const vatNumber = ref(0);
 const discountNote = ref("");
 const published = ref(false);
 const paid = ref(false);
+const numberOfDaysDue = ref(14);
 
 const createModalOpen = ref(false);
 const alerts = useAlerts();
@@ -65,7 +66,7 @@ onMounted(async () => {
     return;
   }
 
-  // seet starting values
+  // set starting values
   published.value = _invoiceData.published;
   paid.value = _invoiceData.paid;
   client_first_name.value =
@@ -79,6 +80,7 @@ onMounted(async () => {
   vat.value = _invoiceData.vat;
   discountNote.value = _invoiceData.discount_note;
   vatNumber.value = _invoiceData.vat_number;
+  numberOfDaysDue.value = _invoiceData.number_of_days_due;
 
   invoiceData.value = _invoiceData;
 
@@ -168,6 +170,7 @@ const saveChanges = async () => {
       vat_number: vatNumber.value,
       discount: discount.value,
       discount_note: discountNote.value,
+      number_of_days_due: numberOfDaysDue.value,
     })
     .eq("id", invoice_id)
     .select("*, client_id (id, first_name, last_name, email), yard_id (name)")
@@ -231,7 +234,8 @@ const totalAmount = computed(() => {
           vat != invoiceData.vat ||
           vatNumber != invoiceData.vat_number ||
           discount != invoiceData.discount ||
-          discountNote != invoiceData.discount_note
+          discountNote != invoiceData.discount_note ||
+          numberOfDaysDue != invoiceData.number_of_days_due
         "
         class="mr-2 mt-2 cursor-pointer rounded-lg bg-blue-500 px-3 py-2 text-white hover:bg-blue-600 md:mt-0"
       >
@@ -398,6 +402,31 @@ const totalAmount = computed(() => {
               <label
                 for="base-rate"
                 class="block text-sm font-medium text-gray-700"
+                >Due in</label
+              >
+              <div class="relative mt-1 rounded-md shadow-sm">
+                <input
+                  type="number"
+                  min="0"
+                  required
+                  v-model="numberOfDaysDue"
+                  class="block w-full rounded-md border-gray-300 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
+                >
+                  <span class="text-gray-500 sm:text-sm" id="price-currency"
+                    >Days</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3 flex items-center">
+            <div class="w-full">
+              <label
+                for="base-rate"
+                class="block text-sm font-medium text-gray-700"
                 >Base Rate</label
               >
               <div class="relative mt-1 rounded-md shadow-sm">
@@ -529,7 +558,7 @@ const totalAmount = computed(() => {
                     <div>
                       {{
                         DateTime.fromISO(invoiceData.created_at)
-                          .plus({ weeks: 2 })
+                          .plus({ days: numberOfDaysDue })
                           .toFormat("EEEE, MMMM d, yyyy")
                       }}
                     </div>
