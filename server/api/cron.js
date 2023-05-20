@@ -17,9 +17,14 @@ export default defineEventHandler(async () => {
   await $fetch("/api/sendEventEmailReminders", {
     method: "POST",
   });
-  console.log("Done");
+  console.log("Reminders Done!");
 
-  // TODO: generate invoices
+  // generate invoices
+  console.log("Generating invoices...");
+  await $fetch("/api/generateInvoces", {
+    method: "POST",
+  });
+  console.log("Invoices Done!");
 
   return "Cron Job ran successfully!";
 });
