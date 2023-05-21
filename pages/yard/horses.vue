@@ -130,7 +130,11 @@ const selectHorse = (horseId) => {
             </div>
           </div>
           <button
-            v-if="profile.active_role == 1 || profile.active_role == 2"
+            v-if="
+              profile &&
+              profile.active_role &&
+              (profile.active_role == 1 || profile.active_role == 2)
+            "
             @click="() => (isOpen = true)"
             type="submit"
             class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
@@ -221,7 +225,11 @@ const selectHorse = (horseId) => {
       class="flex h-full w-full items-center justify-center"
     >
       <div
-        v-if="profile.active_role == 1 || profile.active_role == 2"
+        v-if="
+          profile &&
+          profile.active_role &&
+          (profile.active_role == 1 || profile.active_role == 2)
+        "
         class="text-center"
       >
         <svg
@@ -263,7 +271,12 @@ const selectHorse = (horseId) => {
 
   <!-- Modals -->
   <CreateHorseModal
-    v-if="(profile.active_role == 1 || profile.active_role == 2) && isOpen"
+    v-if="
+      profile &&
+      profile.active_role &&
+      (profile.active_role == 1 || profile.active_role == 2) &&
+      isOpen
+    "
     :is-open="isOpen"
     @close="isOpen = false"
   />
