@@ -8,12 +8,6 @@ const inviteLinkModalOpen = ref(false);
 
 const navigation = [
   {
-    name: "Dashboard",
-    to: "/yard/dashboard",
-    icon: "heroicons:home",
-    hint: "Soon",
-  },
-  {
     name: "Horses",
     to: "/yard/horses",
     icon: "heroicons:magnifying-glass-circle",
@@ -239,6 +233,27 @@ const handleSignout = async () => {
             <p class="pl-2 pt-4 pb-2 text-xs font-semibold text-gray-600">
               Admin
             </p>
+            <NuxtLink
+              to="/yard/dashboard"
+              :class="[
+                '/yard/dashboard' == router.currentRoute.value.path
+                  ? 'bg-gray-200 text-gray-900'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                'group flex items-center rounded-md px-2 py-2 text-sm font-medium',
+              ]"
+            >
+              <icon
+                name="heroicons:rectangle-group"
+                :class="[
+                  '/yard/dashboard' == router.currentRoute.value.path
+                    ? 'text-gray-500'
+                    : 'text-gray-400 group-hover:text-gray-500',
+                  'mr-3 h-6 w-6 flex-shrink-0',
+                ]"
+                aria-hidden="true"
+              />
+              <span class="flex-1">Admin Dashboard</span>
+            </NuxtLink>
             <NuxtLink
               to="/yard/serviceRequests"
               :class="[

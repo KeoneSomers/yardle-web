@@ -46,6 +46,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   if (
     to.path === "/yard/settings" ||
     to.path === "/yard/invoices" ||
+    to.path === "/yard/dashboard" ||
     to.path.includes("/yard/servicerequests")
   ) {
     if (!user.value || !selectedYardId.value || selectedYardId.value === 0) {

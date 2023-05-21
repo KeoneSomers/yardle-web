@@ -1,48 +1,50 @@
 <script setup>
+import { DateTime } from "luxon";
+
 definePageMeta({
   guards: ["requireAuth", "requireYard"],
 });
 
 const client = useSupabaseClient();
-const selectedYard = useState("selectedYard");
+const yard_id = useState("selectedYard");
 
-// get data for selected yard
-const { data: yard } = await useAsyncData("yard", async () => {
-  const { data } = await client
-    .from("yards")
-    .select()
-    .eq("id", selectedYard.value)
-    .single();
+console.log(yard_id.value);
 
-  return data;
+const tasks = ref([]);
+
+onMounted(async () => {
+  const start = DateTime.now().toISODate(); // e.g. 2023-03-15
+
+  console.log(start);
+
+  const { data: _tasks } = await client
+    .from("service_requests")
+    .select("*, horse_id!inner(yard_id, name)")
+    .gte("date", start)
+    .eq("status", "accepted")
+    .eq("horse_id.yard_id", yard_id.value)
+    .order("date", { ascending: true });
+
+  tasks.value = _tasks;
 });
 </script>
 
 <template>
-  <div v-if="yard">
-    <div class="md:flex md:items-center md:justify-between">
-      <div class="min-w-0 flex-1">
-        <h2
-          class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
-        >
-          {{ yard.name }}
-        </h2>
-      </div>
-      <div class="mt-4 flex md:mt-0 md:ml-4">
-        <!-- <button
-                    type="button"
-                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Edit
-                </button>
-                <button
-                    type="button"
-                    class="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Publish
-                </button> -->
+  <div>
+    <div class="py-4 px-4">
+      <p class="mb-5 mt-5 text-4xl">Your upcoming tasks</p>
+      <div
+        v-for="task in tasks"
+        :key="task.id"
+        class="mb-4 rounded border bg-gray-50 p-4"
+      >
+        <p>
+          Due {{ DateTime.fromISO(task.date).toLocaleString() }} ({{
+            DateTime.fromISO(task.date).toRelativeCalendar()
+          }})
+        </p>
+        <p>{{ task.service_name }} for {{ task.horse_id.name }}.</p>
       </div>
     </div>
-    <div class="py-4"></div>
   </div>
 </template>
