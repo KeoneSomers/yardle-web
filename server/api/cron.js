@@ -20,11 +20,11 @@ export default defineEventHandler(async () => {
   console.log("Reminders Done!");
 
   // generate invoices
-  console.log("Generating invoices...");
-  await $fetch("/api/generateInvoces", {
-    method: "POST",
-  });
-  console.log("Invoices Done!");
+  // console.log("Generating invoices...");
+  // await $fetch("/api/generateInvoces", {
+  //   method: "POST",
+  // });
+  // console.log("Invoices Done!");
 
   return "Cron Job ran successfully!";
 });
