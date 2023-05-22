@@ -321,7 +321,11 @@ const handleDelete = async () => {
                       class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right align-top text-sm font-medium sm:pr-3"
                     >
                       <Menu
-                        v-if="profile.active_role < 3"
+                        v-if="
+                          profile &&
+                          profile.active_role &&
+                          profile.active_role < 3
+                        "
                         as="div"
                         class="relative inline-block text-left"
                       >

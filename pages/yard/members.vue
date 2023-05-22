@@ -108,7 +108,8 @@ const handleRoleChange = async (memberId, roleId) => {
 </script>
 
 <template>
-  <div>
+  <div v-if="profile &&
+          profile.active_role">
     <PageHeading
       title="Members"
       description="A list of all the members that are currently in this yard including
