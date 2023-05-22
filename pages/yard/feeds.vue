@@ -469,11 +469,9 @@ const handleDelete = async () => {
                 aria-hidden="true"
               />
             </div>
-            <DialogTitle
-              as="h3"
-              class="text-lg font-medium leading-6 text-gray-900"
-              >Delete Feed</DialogTitle
-            >
+            <h3 class="text-lg font-medium leading-6 text-gray-900">
+              Delete Feed
+            </h3>
           </div>
         </template>
 
