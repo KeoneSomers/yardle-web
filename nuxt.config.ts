@@ -2,12 +2,13 @@
 export default defineNuxtConfig({
   modules: [
     "@nuxtjs/supabase",
-    "@nuxtjs/tailwindcss",
     "@nuxt/image-edge",
     "@sidebase/nuxt-pdf",
     "@nuxt/devtools",
     "nuxt-icon",
+    "@nuxthq/ui",
   ],
+  colorMode: { preference: "light" },
   plugins: [{ src: "@/plugins/vercel.ts", mode: "client" }],
   typescript: {
     shim: false,

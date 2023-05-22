@@ -75,16 +75,18 @@ onUnmounted(() => {
 
       <a
         href="mailto:keone@yardle.app"
-        class="z-50 inline-flex cursor-pointer fixed top-3 md:top-auto right-16 md:bottom-5 text-sm md:text-base md:right-5 items-center rounded-full border border-transparent bg-pink-400 p-1 px-3 md:p-4 md:px-4 text-white hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2"
+        class="fixed top-3 right-16 z-50 inline-flex cursor-pointer items-center rounded-full border border-transparent bg-pink-400 p-1 px-3 text-sm text-white hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2 md:top-auto md:bottom-5 md:right-5 md:p-4 md:px-4 md:text-base"
       >
         <icon
           name="heroicons:envelope"
-          class="h-4 w-4 md:h-6 md:w-6 mr-1 md:mr-3"
+          class="mr-1 h-4 w-4 md:mr-3 md:h-6 md:w-6"
         />
         Get in touch!
       </a>
     </div>
-    <Alerts />
+    <!-- <Alerts /> -->
     <ModalsContainer />
+
+    <UNotifications />
   </div>
 </template>
