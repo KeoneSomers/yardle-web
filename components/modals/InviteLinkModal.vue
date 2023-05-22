@@ -12,7 +12,7 @@ const emits = defineEmits(["close"]);
 const yard = useState("yard");
 const copyButtonText = ref("Copy");
 const link = ref("");
-// const alerts = useAlerts();
+
 const toast = useToast();
 
 onMounted(() => {

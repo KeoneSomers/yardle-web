@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { ModalsContainer } from "vue-final-modal";
-import Alerts from "@/components/Alerts.vue";
 
 useRouteManager();
 
-const feedbackModalOpen = ref(false);
 const user = useSupabaseUser();
 const client = useSupabaseClient();
 let realtimeChannel: RealtimeChannel;
@@ -84,9 +82,8 @@ onUnmounted(() => {
         Get in touch!
       </a>
     </div>
-    <!-- <Alerts /> -->
-    <ModalsContainer />
 
+    <ModalsContainer />
     <UNotifications />
   </div>
 </template>

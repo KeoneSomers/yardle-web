@@ -14,7 +14,7 @@ const emits = defineEmits(["close"]);
 const client = useSupabaseClient();
 const members = useState("members");
 const yard = useState("yard");
-const alerts = useAlerts();
+const toast = useToast();
 
 const handleRemoveMember = async () => {
   await client
@@ -35,10 +35,9 @@ const handleRemoveMember = async () => {
       .indexOf(props.memberId);
     members.value.splice(index, 1);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Member Removed!",
-      message: "The member has been removed from this yard",
-      type: "success",
+      description: "The member has been removed from this yard",
     });
 
     // close the modal
@@ -46,10 +45,9 @@ const handleRemoveMember = async () => {
   } else {
     console.log(error);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Removing Member!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
   }
 };

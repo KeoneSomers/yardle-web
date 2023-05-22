@@ -46,7 +46,7 @@ const selectedYard = useState("selectedYard");
 const inviteLinkModalOpen = ref(false);
 const removeMemberModalOpen = ref(false);
 const memberToRemove = ref(0);
-const alerts = useAlerts();
+const toast = useToast();
 
 const handleRemoveMember = (memberId) => {
   memberToRemove.value = memberId;
@@ -98,12 +98,11 @@ const handleRoleChange = async (memberId, roleId) => {
   const index = members.value.map((e) => e.profile.id).indexOf(memberId);
   members.value[index].role = roleId;
 
-  alerts.value.unshift({
+  toast.add({
     title: "Updated Role!",
-    message: `${members.value[index].profile.first_name} ${
+    description: `${members.value[index].profile.first_name} ${
       members.value[index].profile.last_name
     } is now a ${roles.find((role) => role.id == roleId).name}`,
-    type: "success",
   });
 };
 </script>

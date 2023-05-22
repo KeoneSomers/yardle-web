@@ -44,7 +44,7 @@ const paid = ref(false);
 const numberOfDaysDue = ref(14);
 
 const createModalOpen = ref(false);
-const alerts = useAlerts();
+const toast = useToast();
 
 onMounted(async () => {
   // get the invoice
@@ -124,10 +124,9 @@ const removeItem = async () => {
   }
   loading.value = false;
 
-  alerts.value.unshift({
+  toast.add({
     title: "Service Removed!",
-    message: "This item has been removed from the invoice.",
-    type: "success",
+    description: "This item has been removed from the invoice.",
   });
 };
 
@@ -184,10 +183,9 @@ const saveChanges = async () => {
   // sync the data locally
   invoiceData.value = data;
 
-  alerts.value.unshift({
+  toast.add({
     title: "Changes Saved!",
-    message: "Your changes have been saved.",
-    type: "success",
+    description: "Your changes have been saved.",
   });
 };
 

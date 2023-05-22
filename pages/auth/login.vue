@@ -8,7 +8,7 @@ definePageMeta({
 
 const loading = ref(false);
 
-const alerts = useAlerts();
+const toast = useToast();
 const route = useRoute();
 const { invite_code } = route.query;
 
@@ -24,10 +24,9 @@ const handleLogin = async () => {
   loading.value = true;
 
   if (!email.value || !password.value) {
-    alerts.value.unshift({
+    toast.add({
       title: "Error",
-      message: "Please enter your email and password",
-      type: "error",
+      description: "Please enter your email and password",
     });
 
     loading.value = false;
@@ -41,16 +40,14 @@ const handleLogin = async () => {
 
   if (error) {
     if (error.message === "Invalid login credentials") {
-      alerts.value.unshift({
+      toast.add({
         title: "Incorrect Email or Password",
-        message: "Please try re-entering your email and password",
-        type: "error",
+        description: "Please try re-entering your email and password",
       });
     } else {
-      alerts.value.unshift({
+      toast.add({
         title: "Error Logging In",
-        message: "Please try again later",
-        type: "error",
+        description: "Please try again later",
       });
     }
 

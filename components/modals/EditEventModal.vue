@@ -24,7 +24,7 @@ const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
 const events = useState("events");
 const horses = useState("horses");
-const alerts = useAlerts();
+const toast = useToast();
 
 const date = ref("");
 const time = ref("");
@@ -149,20 +149,18 @@ const handleSubmit = async () => {
       horses: selectedHorses.value,
     };
 
-    alerts.value.unshift({
+    toast.add({
       title: "Event Updated!",
-      message: "Your event has been updated.",
-      type: "success",
+      description: "Your event has been updated.",
     });
 
     emits("close");
   } else {
     // error.value = createError.message + createError.hint;
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Updating Event!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
   }
 };

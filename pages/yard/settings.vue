@@ -32,7 +32,7 @@ const yard = useState("yard");
 const loading = ref(false);
 const done = ref(false);
 const services = useState("services", () => []);
-const alerts = useAlerts();
+const toast = useToast();
 
 const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
   style: "currency",
@@ -60,10 +60,9 @@ watch(enableLateBookingFee, async (newValue) => {
 
   yard.value.enabled_billing_late_booking_fee = newValue;
 
-  alerts.value.unshift({
+  toast.add({
     title: "Changes Saved!",
-    message: "Your changes have been saved.",
-    type: "success",
+    description: "Your changes have been saved.",
   });
 });
 
@@ -96,10 +95,9 @@ const updateYard = async () => {
     loading.value = false;
     done.value = true;
 
-    alerts.value.unshift({
+    toast.add({
       title: "Changes Saved!",
-      message: "Your changes have been saved.",
-      type: "success",
+      description: "Your changes have been saved.",
     });
 
     setTimeout(() => {

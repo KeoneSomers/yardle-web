@@ -24,7 +24,7 @@ const horse = useState("horse");
 const liveryServices = ref([]);
 const yard = useState("yard");
 const profile = useState("profile");
-const alerts = useAlerts();
+const toast = useToast();
 
 const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
   style: "currency",
@@ -168,10 +168,9 @@ const handleSubmit = async () => {
       });
     }
 
-    alerts.value.unshift({
+    toast.add({
       title: "Request Submitted!",
-      message: "Your yard owner will be notified.",
-      type: "success",
+      description: "Your yard owner will be notified.",
     });
 
     emits("close");

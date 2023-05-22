@@ -14,7 +14,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const events = useState("events");
-const alerts = useAlerts();
+const toast = useToast();
 
 const handleDelete = async () => {
   // first delete the horses
@@ -35,10 +35,9 @@ const handleDelete = async () => {
     const index = events.value.map((e) => e.id).indexOf(props.eventId);
     events.value.splice(index, 1);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Event Deleted!",
-      message: "Your event has been deleted.",
-      type: "success",
+      description: "Your event has been deleted.",
     });
 
     // close the modal
@@ -49,10 +48,9 @@ const handleDelete = async () => {
     // somthing went wrong!
     console.log(error);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Deleting Event!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
   }
 };

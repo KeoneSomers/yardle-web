@@ -9,7 +9,8 @@ const yard = useState("yard");
 const profile = useState("profile");
 const client = useSupabaseClient();
 const assignOwnerModalOpen = ref(false);
-const alerts = useAlerts();
+
+const toast = useToast();
 
 const todaysDateString = DateTime.fromMillis(DateTime.now().ts)
   .toISO()
@@ -172,10 +173,9 @@ const handleUnassignOwner = async () => {
     .eq("id", horse.value.id);
 
   if (!error) {
-    alerts.value.unshift({
+    toast.add({
       title: "Owner Unassigned!",
-      message: `${horse.value.owner.first_name} ${horse.value.owner.last_name} has been unassigned as the owner of ${horse.value.name}.`,
-      type: "success",
+      description: `${horse.value.owner.first_name} ${horse.value.owner.last_name} has been unassigned as the owner of ${horse.value.name}.`,
     });
 
     // update horse
@@ -184,10 +184,9 @@ const handleUnassignOwner = async () => {
     // update horses list
     horses.value.find((h) => h.id === horse.value.id).owner = null;
   } else {
-    alerts.value.unshift({
+    toast.add({
       title: "Error",
-      message: "There was an error unassigning the owner.",
-      type: "error",
+      description: "There was an error unassigning the owner.",
     });
   }
 };

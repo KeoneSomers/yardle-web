@@ -16,7 +16,7 @@ const client = useSupabaseClient();
 const user = useSupabaseUser();
 const yardId = useState("selectedYard");
 const fields = useState("fields");
-const alerts = useAlerts();
+const toast = useToast();
 
 const name = ref("");
 
@@ -49,10 +49,9 @@ const handleSubmit = async () => {
     horses: [],
   });
 
-  alerts.value.unshift({
+  toast.add({
     title: "Field Created!",
-    message: "Your field has been created.",
-    type: "success",
+    description: "Your field has been created.",
   });
 
   emits("close");

@@ -26,7 +26,7 @@ const events = useState("events");
 const yard = useState("yard");
 const horses = useState("horses");
 const selDay = useState("selDay");
-const alerts = useAlerts();
+const toast = useToast();
 
 await useAsyncData("horses", async () => {
   const { data } = await client
@@ -151,10 +151,9 @@ const handleSubmit = async () => {
       notes.value = "";
       all_day.value = false;
 
-      alerts.value.unshift({
+      toast.add({
         title: "Event Created!",
-        message: "Your event has been created.",
-        type: "success",
+        description: "Your event has been created.",
       });
 
       loading.value = false;
@@ -164,10 +163,9 @@ const handleSubmit = async () => {
     loading.value = false;
     error.value = err.message;
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Creating Event!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
   }
 };

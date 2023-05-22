@@ -6,7 +6,7 @@ const done2 = ref(false);
 
 const client = useSupabaseClient();
 const selectedYard = useState("selectedYard");
-const alerts = useAlerts();
+const toast = useToast();
 
 const billingPeriodOptions = ref({
   yard_id: selectedYard.value,
@@ -165,10 +165,9 @@ const handleBillingCycleSave = async () => {
     loading2.value = false;
     done2.value = true;
 
-    alerts.value.unshift({
+    toast.add({
       title: "Changes Saved!",
-      message: "Your changes have been saved.",
-      type: "success",
+      description: "Your changes have been saved.",
     });
 
     setTimeout(() => {
@@ -178,10 +177,9 @@ const handleBillingCycleSave = async () => {
     loading2.value = false;
     console.error(err);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Saving Changes!",
-      message: "There was an error saving your changes.",
-      type: "error",
+      description: "There was an error saving your changes.",
     });
   }
 };

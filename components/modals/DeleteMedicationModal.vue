@@ -14,7 +14,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const medications = useState("medications");
-const alerts = useAlerts();
+const toast = useToast();
 
 const handleDelete = async () => {
   const { data, error } = await client
@@ -30,10 +30,9 @@ const handleDelete = async () => {
       .indexOf(props.medicationId);
     medications.value.splice(index, 1);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Medication Deleted!",
-      message: "Your medication has been deleted.",
-      type: "success",
+      description: "Your medication has been deleted.",
     });
 
     // close the modal
@@ -44,10 +43,9 @@ const handleDelete = async () => {
     // somthing went wrong!
     console.log(error);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Deleting Medication!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
   }
 };

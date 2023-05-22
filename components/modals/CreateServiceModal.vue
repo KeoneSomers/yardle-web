@@ -21,7 +21,7 @@ const yard = useState("yard");
 const name = ref("");
 const description = ref("");
 const price = ref(0.0);
-const alerts = useAlerts();
+const toast = useToast();
 
 watch(
   () => props.isOpen,
@@ -59,10 +59,9 @@ const handleSubmit = async () => {
     price: price.value,
   });
 
-  alerts.value.unshift({
+  toast.add({
     title: "Service Created!",
-    message: "Your service has been created.",
-    type: "success",
+    description: "Your service has been created.",
   });
 
   emits("close");

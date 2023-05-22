@@ -16,7 +16,7 @@ const client = useSupabaseClient();
 const user = useSupabaseUser();
 const rugs = useState("rugs");
 const selectedHorseId = useState("selectedHorseId");
-const alerts = useAlerts();
+const toast = useToast();
 
 const type = ref("");
 const description = ref("");
@@ -48,20 +48,18 @@ const handleSubmit = async () => {
     type.value = "";
     description.value = "";
 
-    alerts.value.unshift({
+    toast.add({
       title: "Rug Created!",
-      message: "Your rug has been created.",
-      type: "success",
+      description: "Your rug has been created.",
     });
 
     emits("close");
   } else {
     error.value = createError.message + createError.hint;
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Creating Rug!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
   }
 };

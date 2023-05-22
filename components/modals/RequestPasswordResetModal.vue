@@ -15,7 +15,7 @@ const emits = defineEmits(["close"]);
 const email = ref("");
 const errorMessage = ref("");
 const successMessage = ref("");
-const alerts = useAlerts();
+const toast = useToast();
 
 watchEffect(async () => {
   if (props.isOpen) {
@@ -38,21 +38,19 @@ const handleResetPassword = async () => {
 
   if (!error) {
     loading.value = false;
-    alerts.value.unshift({
+    toast.add({
       title: "Success!",
-      message:
+      description:
         "Please check your email. You should receive an email within a few minutes.",
-      type: "success",
     });
 
     emits("close");
   } else {
     // errorMessage.value = error.message;
     loading.value = false;
-    alerts.value.unshift({
+    toast.add({
       title: "Error!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
   }
 };

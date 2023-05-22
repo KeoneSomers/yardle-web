@@ -23,7 +23,7 @@ const ingredientTypes = [
   "Extra",
   "Suppliments",
 ];
-const alerts = useAlerts();
+const toast = useToast();
 
 const errors = ref([]);
 
@@ -171,10 +171,9 @@ const handleUpdateFeed = async () => {
   feeds.value[i].instructions = data.instructions;
   feeds.value[i] = { ...data, horse: feeds.value[i].horse };
 
-  alerts.value.unshift({
+  toast.add({
     title: "Feed Updated!",
-    message: "Your feed has been updated.",
-    type: "success",
+    description: "Your feed has been updated.",
   });
 
   // cleanup

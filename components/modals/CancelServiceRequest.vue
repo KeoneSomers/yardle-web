@@ -18,7 +18,7 @@ const user = useSupabaseUser();
 const serviceRequests = useState("service_requests");
 const yard = useState("yard");
 const profile = useState("profile");
-const alerts = useAlerts();
+const toast = useToast();
 const yardOwner = ref(null);
 const horse = useState("horse");
 
@@ -101,10 +101,9 @@ const handleDelete = async () => {
       },
     });
 
-    alerts.value.unshift({
+    toast.add({
       title: "Request Canceled!",
-      message: "The yard owner will be notified.",
-      type: "success",
+      description: "The yard owner will be notified.",
     });
 
     // close the modal
@@ -112,10 +111,10 @@ const handleDelete = async () => {
   } catch (error) {
     console.log(error);
     loading.value = false;
-    alerts.value.unshift({
+
+    toast.add({
       title: "Error!",
-      message: "There was an error cancelling this request.",
-      type: "error",
+      description: "There was an error cancelling this request.",
     });
   }
 };

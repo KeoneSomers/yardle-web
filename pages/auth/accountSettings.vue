@@ -14,7 +14,7 @@ definePageMeta({
 const deleteUserAccountModalOpen = ref(false);
 
 const client = useSupabaseClient();
-const alerts = useAlerts();
+const toast = useToast();
 const profile = useState("profile");
 
 const firstName = ref(null);
@@ -55,10 +55,9 @@ const saveChanges = async () => {
   if (error) {
     console.log(error);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Saving Changes!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
 
     return;
@@ -73,10 +72,9 @@ const saveChanges = async () => {
   profile.value.calendar_event_reminder_emails =
     calendarEventReminderEmails.value;
 
-  alerts.value.unshift({
+  toast.add({
     title: "Changes Saved!",
-    message: "Your account has been updated.",
-    type: "success",
+    description: "Your account has been updated.",
   });
 };
 </script>

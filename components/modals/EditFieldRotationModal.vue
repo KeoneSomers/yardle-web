@@ -14,7 +14,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const field_rotations = useState("field_rotations");
-const alerts = useAlerts();
+const toast = useToast();
 
 const name = ref("");
 
@@ -42,10 +42,9 @@ const handleSubmit = async () => {
   const i = field_rotations.value.map((e) => e.id).indexOf(props.field.id);
   field_rotations.value[i].name = name.value;
 
-  alerts.value.unshift({
+  toast.add({
     title: "Field Rotation Updated!",
-    message: "Your field rotation has been updated.",
-    type: "success",
+    description: "Your field rotation has been updated.",
   });
 
   emits("close");

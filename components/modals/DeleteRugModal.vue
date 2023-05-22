@@ -14,7 +14,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 
-const alerts = useAlerts();
+const toast = useToast();
 
 // todo - this should be using props and not state (same for delete horse modal)
 const rugs = useState("rugs");
@@ -31,10 +31,9 @@ const handleDelete = async () => {
     const index = rugs.value.map((e) => e.id).indexOf(props.rugId);
     rugs.value.splice(index, 1);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Rug Deleted!",
-      message: "Your rug has been deleted.",
-      type: "success",
+      description: "Your rug has been deleted.",
     });
 
     // close the modal
@@ -45,10 +44,9 @@ const handleDelete = async () => {
     // somthing went wrong!
     console.log(error);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Deleting Rug!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
   }
 };

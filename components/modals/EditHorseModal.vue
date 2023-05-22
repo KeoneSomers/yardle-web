@@ -17,7 +17,7 @@ const user = useSupabaseUser();
 const horses = useState("horses");
 const yard = useState("yard");
 const isLoading = useState("isLoading");
-const alerts = useAlerts();
+const toast = useToast();
 
 const error = ref("");
 
@@ -50,19 +50,17 @@ const handleSubmit = async () => {
     horses.value[index].avatar_url = horse.value.avatar_url;
     horses.value[index].updated_at = DateTime.now();
 
-    alerts.value.unshift({
+    toast.add({
       title: "Changes Saved!",
-      message: "Your changes have been saved.",
-      type: "success",
+      description: "Your changes have been saved.",
     });
     emits("close");
   } else {
     error.value = createError.message + createError.hint;
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Editing Horse!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
   }
 };

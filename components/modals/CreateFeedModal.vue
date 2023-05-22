@@ -39,7 +39,7 @@ const ingredientTypes = [
   "Extra",
   "Suppliments",
 ];
-const alerts = useAlerts();
+const toast = useToast();
 
 const errors = ref([]);
 
@@ -182,10 +182,9 @@ const handleCreateFeed = async () => {
     feeds.value = [data];
   }
 
-  alerts.value.unshift({
+  toast.add({
     title: "Feed Created!",
-    message: "Your feed has been created.",
-    type: "success",
+    description: "Your feed has been created.",
   });
 
   // cleanup

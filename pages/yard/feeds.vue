@@ -23,7 +23,7 @@ const createModalOpen = ref(false);
 const editModalOpen = ref(false);
 const deleteModalOpen = ref(false);
 const selectedFeedId = ref(0);
-const alerts = useAlerts();
+const toast = useToast();
 
 // TODO: this need to use the feeds state
 // fetch feeds
@@ -114,10 +114,9 @@ const handleDelete = async () => {
   const index = feeds.value.map((e) => e.id).indexOf(selectedFeedId.value);
   feeds.value.splice(index, 1);
 
-  alerts.value.unshift({
+  toast.add({
     title: "Feed Deleted!",
-    message: "Your feed has been deleted.",
-    type: "success",
+    description: "Your feed has been deleted.",
   });
 
   // close the modal

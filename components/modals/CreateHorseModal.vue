@@ -17,7 +17,7 @@ const user = useSupabaseUser();
 const selectedYard = useState("selectedYard");
 const horses = useState("horses");
 const selectedHorseId = useState("selectedHorseId");
-const alerts = useAlerts();
+const toast = useToast();
 
 const name = ref("");
 
@@ -75,10 +75,9 @@ const handleSubmit = async () => {
       selectedHorseId.value = newHorse.id;
 
       // tell the user the horse was created successfully
-      alerts.value.unshift({
+      toast.add({
         title: "Horse Created!",
-        message: "You have added a horse to the yard.",
-        type: "success",
+        description: "You have added a horse to the yard.",
       });
 
       // end the loading animation
@@ -88,11 +87,11 @@ const handleSubmit = async () => {
       emits("close");
     }
   } catch (err) {
-    alerts.value.unshift({
+    toast.add({
       title: "Error Creating Horse!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
+
     loading.value = false;
   }
 };

@@ -22,7 +22,7 @@ const user = useSupabaseUser();
 const yards = useState("yards");
 const yardName = ref("");
 const error = ref("");
-const alerts = useAlerts();
+const toast = useToast();
 const region = ref(null);
 
 watch(
@@ -47,10 +47,9 @@ function capitalizeFirstLetter(string) {
 
 const createYard = async () => {
   if (region.value === null) {
-    alerts.value.unshift({
+    toast.add({
       title: "Error",
-      message: "Please select a region",
-      type: "error",
+      description: "Please select a region",
     });
     loading.value = false;
     return;
@@ -138,10 +137,9 @@ const createYard = async () => {
     yards.value = [newYard];
   }
 
-  alerts.value.unshift({
+  toast.add({
     title: "Yard created!",
-    message: "Your new yard has been created.",
-    type: "success",
+    description: "Your new yard has been created.",
   });
 
   // close the modal
@@ -155,10 +153,10 @@ const handleSubmit = async () => {
       await createYard();
     } catch (e) {
       error.value = e.message;
-      alerts.value.unshift({
+
+      toast.add({
         title: "Error Creating Yard!",
-        message: "Please try again, or contact support.",
-        type: "error",
+        description: "Please try again, or contact support.",
       });
       loading.value = false;
     }

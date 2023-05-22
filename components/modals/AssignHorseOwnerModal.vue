@@ -26,7 +26,7 @@ const owner = ref(null);
 const members = useState("members");
 const selectedYard = useState("selectedYard");
 const query = ref("");
-const alerts = useAlerts();
+const toast = useToast();
 
 await useAsyncData("members", async () => {
   const { data, error } = await client
@@ -81,10 +81,9 @@ const handleSubmit = async () => {
         last_name: owner.value.profile.last_name,
       };
 
-      alerts.value.unshift({
+      toast.add({
         title: "Owner Assigned!",
-        message: `${owner.value.profile.first_name} ${owner.value.profile.last_name} has been assigned to ${horse.value.name}.`,
-        type: "success",
+        description: `${owner.value.profile.first_name} ${owner.value.profile.last_name} has been assigned to ${horse.value.name}.`,
       });
 
       loading.value = false;
@@ -93,10 +92,9 @@ const handleSubmit = async () => {
   } catch (error) {
     console.log(error);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Assigning Owner!",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
 
     loading.value = false;

@@ -50,7 +50,8 @@ const editModalOpen = ref(false);
 const profile = useState("profile");
 const horses = useState("horses");
 const loading = ref(false);
-const alerts = useAlerts();
+
+const toast = useToast();
 
 const horseDetailsElement = ref(null);
 const { x, y } = useScroll(horseDetailsElement);
@@ -152,10 +153,9 @@ const handleDeleteHorse = async () => {
       selectedHorseId.value = 0;
     }
 
-    alerts.value.unshift({
-      type: "success",
+    toast.add({
       title: "Horse deleted!",
-      message: 'Horse "' + horse.value.name + '" has been deleted',
+      description: 'Horse "' + horse.value.name + '" has been deleted',
     });
 
     viewingHorse.value = false;
@@ -165,10 +165,9 @@ const handleDeleteHorse = async () => {
     console.log(error);
     loading.value = false;
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error Deleting Horse",
-      message: "Please try again, or contact support.",
-      type: "error",
+      description: "Please try again, or contact support.",
     });
   }
 };

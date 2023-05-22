@@ -9,7 +9,7 @@ import {
 import { DateTime } from "luxon";
 
 const loading = ref(false);
-const alerts = useAlerts();
+const toast = useToast();
 
 const props = defineProps(["isOpen", "request", "status"]);
 const emits = defineEmits(["close"]);
@@ -68,13 +68,12 @@ const handleSubmit = async () => {
       selectedRequests.value = [];
 
       // post alert to user
-      alerts.value.unshift({
+      toast.add({
         title:
           status.value === "accepted"
             ? "Requests Accepted!"
             : "Requests Declined!",
-        message: "These requests have been updated.",
-        type: "success",
+        description: "These requests have been updated.",
       });
 
       emits("close");
@@ -139,21 +138,20 @@ const handleSubmit = async () => {
     }
 
     // post alert to user
-    alerts.value.unshift({
+    toast.add({
       title:
         status.value === "accepted" ? "Request Accepted!" : "Request Declined!",
-      message: "The request has been updated and the user will be notified.",
-      type: "success",
+      description:
+        "The request has been updated and the user will be notified.",
     });
 
     emits("close");
   } catch (error) {
     loading.value = false;
     console.error(error);
-    alerts.value.unshift({
+    toast.add({
       title: "Error!",
-      message: "There was an error responding to this request.",
-      type: "error",
+      description: "There was an error responding to this request.",
     });
   }
 };

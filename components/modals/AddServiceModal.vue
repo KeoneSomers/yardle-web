@@ -28,7 +28,7 @@ const yard = useState("yard");
 const horse = useState("horse");
 const itemsData = useState("itemsData");
 const subtotal = useState("subtotal");
-const alerts = useAlerts();
+const toast = useToast();
 const selectedHorse = ref(null);
 
 const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
@@ -139,10 +139,9 @@ const handleSubmit = async () => {
 
   subtotal.value += data.service_price;
 
-  alerts.value.unshift({
+  toast.add({
     title: "Service Added!",
-    message: "This item has been added to the invoice.",
-    type: "success",
+    description: "This item has been added to the invoice.",
   });
 
   emits("close");

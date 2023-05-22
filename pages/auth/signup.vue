@@ -8,7 +8,7 @@ const loading = ref(false);
 
 const route = useRoute();
 const { invite_code } = route.query;
-const alerts = useAlerts();
+const toast = useToast();
 
 const supabaseAuthClient = useSupabaseAuthClient();
 
@@ -21,60 +21,54 @@ const passwordConfirm = ref("");
 const handleSignup = async () => {
   loading.value = true;
   if (password.value != passwordConfirm.value) {
-    alerts.value.unshift({
+    toast.add({
       title: "Error",
-      message: "Passwords do not match!",
-      type: "error",
+      description: "Passwords do not match!",
     });
     loading.value = false;
     return;
   }
 
   if (email.value == "") {
-    alerts.value.unshift({
+    toast.add({
       title: "Error",
-      message: "Please enter an email address",
-      type: "error",
+      description: "Please enter an email address",
     });
     loading.value = false;
     return;
   }
 
   if (password.value == "") {
-    alerts.value.unshift({
+    toast.add({
       title: "Error",
-      message: "Please enter a password",
-      type: "error",
+      description: "Please enter a password",
     });
     loading.value = false;
     return;
   }
 
   if (firstName.value == "" || lastName.value == "") {
-    alerts.value.unshift({
+    toast.add({
       title: "Error",
-      message: "Please enter a frist and last name",
-      type: "error",
+      description: "Please enter a frist and last name",
     });
     loading.value = false;
     return;
   }
 
   if (firstName.value.length < 3) {
-    alerts.value.unshift({
+    toast.add({
       title: "Error",
-      message: "First Name too short",
-      type: "error",
+      description: "First Name too short",
     });
     loading.value = false;
     return;
   }
 
   if (lastName.value.length < 3) {
-    alerts.value.unshift({
+    toast.add({
       title: "Error",
-      message: "Last Name too short",
-      type: "error",
+      description: "Last Name too short",
     });
     loading.value = false;
     return;
@@ -94,10 +88,9 @@ const handleSignup = async () => {
   if (error) {
     console.log(error);
 
-    alerts.value.unshift({
+    toast.add({
       title: "Error creating account",
-      message: "Please try again later",
-      type: "error",
+      description: "Please try again later",
     });
 
     loading.value = false;
