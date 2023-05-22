@@ -13,7 +13,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
         .eq("id", user.value?.id)
         .single();
 
-      if (data) {
+      if (data && data.active_role) {
         role.value = data.active_role;
         return data.selected_yard;
       } else {
