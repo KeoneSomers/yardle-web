@@ -3,7 +3,6 @@
 
 definePageMeta({
   layout: "admin",
-  guards: [],
 });
 
 const user = useSupabaseUser();

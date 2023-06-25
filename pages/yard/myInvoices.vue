@@ -2,7 +2,7 @@
 import { DateTime } from "luxon";
 
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard"],
 });
 
 const client = useSupabaseClient();

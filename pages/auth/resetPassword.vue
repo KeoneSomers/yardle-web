@@ -1,6 +1,5 @@
 <script setup>
 definePageMeta({
-  guards: [],
   layout: "blank",
 });
 
@@ -70,7 +69,7 @@ const handleChangePassword = async () => {
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
         <form @submit.prevent="handleChangePassword" class="space-y-6">
           <div>
             <label
@@ -114,7 +113,7 @@ const handleChangePassword = async () => {
             <button
               v-if="!loading"
               type="submit"
-              class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Change Password
             </button>

@@ -21,7 +21,7 @@ import DeleteServiceModal from "@/components/modals/DeleteServiceModal.vue";
 import BillingCycleWidget from "@/components/BillingCycleWidget.vue";
 
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard", "require-yard-owner"],
 });
 
 const now = ref(DateTime.now());
@@ -155,8 +155,8 @@ await fetchServices();
           <Listbox as="div" v-model="region">
             <ListboxLabel
               class="block text-sm font-medium leading-6 text-gray-900"
-              >Region</ListboxLabel
-            >
+              >Region
+            </ListboxLabel>
             <div class="relative mt-2">
               <ListboxButton
                 class="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6"
@@ -236,14 +236,14 @@ await fetchServices();
           <button
             @click="yardName = yard.name"
             type="button"
-            class="text-blue-gray-900 hover:bg-blue-gray-50 rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            class="text-blue-gray-900 hover:bg-blue-gray-50 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Cancel
           </button>
           <button
             @click="updateYard"
             type="submit"
-            class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Save
           </button>
@@ -252,7 +252,7 @@ await fetchServices();
       </div>
       <hr class="my-10" />
       <h1 class="text-xl font-semibold text-gray-900">Services & Billing</h1>
-      <p class="mt-2 mb-10 text-sm text-gray-700">
+      <p class="mb-10 mt-2 text-sm text-gray-700">
         Manage the services you offer to your clients and configure your billing
         settings.
       </p>
@@ -264,12 +264,12 @@ await fetchServices();
       <SwitchGroup as="li" class="flex items-center justify-between py-4">
         <div class="flex flex-col">
           <SwitchLabel as="p" class="text-sm font-medium text-gray-900" passive
-            >Late Booking Fee</SwitchLabel
-          >
+            >Late Booking Fee
+          </SwitchLabel>
           <SwitchDescription class="text-sm text-gray-500"
             >Services that are booked with less that 24 hours notice will cause
-            the price of the service to be doubled.</SwitchDescription
-          >
+            the price of the service to be doubled.
+          </SwitchDescription>
         </div>
         <Switch
           v-model="enableLateBookingFee"
@@ -298,18 +298,18 @@ await fetchServices();
               Add new livery services to your yard.
             </p>
           </div>
-          <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+          <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
             <button
               @click="createModalOpen = true"
               type="button"
-              class="block rounded-md bg-indigo-600 py-1.5 px-3 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              class="block rounded-md bg-indigo-600 px-3 py-1.5 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Add service
             </button>
           </div>
         </div>
         <div class="mt-8 flow-root">
-          <div class="-my-2 -mx-6 overflow-y-visible lg:-mx-8">
+          <div class="-mx-6 -my-2 overflow-y-visible lg:-mx-8">
             <div
               class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
             >

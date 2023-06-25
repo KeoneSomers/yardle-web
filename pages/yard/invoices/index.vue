@@ -1,7 +1,8 @@
 <script setup>
 import { DateTime } from "luxon";
+
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard", "require-yard-owner"],
 });
 
 const client = useSupabaseClient();
@@ -77,11 +78,11 @@ invoices.value = invoicesData;
         <div>
           <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />
           <!-- <button class="p-2 mr-2 shadow border rounded">
-            View / Edit Items
-          </button>
-          <button class="p-2 mr-2 bg-indigo-500 text-white rounded">
-            Create Invoice
-          </button> -->
+                                View / Edit Items
+                              </button>
+                              <button class="p-2 mr-2 bg-indigo-500 text-white rounded">
+                                Create Invoice
+                              </button> -->
         </div>
       </NuxtLink>
     </div>

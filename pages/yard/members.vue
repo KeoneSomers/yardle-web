@@ -10,7 +10,7 @@ import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
 import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
 
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard"],
 });
 
 const roles = [
@@ -108,8 +108,7 @@ const handleRoleChange = async (memberId, roleId) => {
 </script>
 
 <template>
-  <div v-if="profile &&
-          profile.active_role">
+  <div v-if="profile && profile.active_role">
     <PageHeading
       title="Members"
       description="A list of all the members that are currently in this yard including

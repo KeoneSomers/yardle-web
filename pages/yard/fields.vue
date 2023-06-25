@@ -11,7 +11,7 @@ import DeleteFieldRotationModal from "@/components/modals/DeleteFieldRotationMod
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard"],
 });
 
 const client = useSupabaseClient();
@@ -202,7 +202,7 @@ const handleFieldChange = async (e) => {
               rotation === selectedRotation
                 ? 'border-indigo-500 text-indigo-600'
                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-              'flex cursor-pointer whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium',
+              'flex cursor-pointer whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium',
             ]"
             :aria-current="rotation.is_current ? 'page' : undefined"
           >
@@ -219,7 +219,7 @@ const handleFieldChange = async (e) => {
               Rotation Options
               <icon
                 name="heroicons:chevron-down-solid"
-                class="ml-2 -mr-1 h-5 w-5"
+                class="-mr-1 ml-2 h-5 w-5"
                 aria-hidden="true"
               />
             </MenuButton>
@@ -269,57 +269,57 @@ const handleFieldChange = async (e) => {
           Add field
         </button>
         <!-- <Menu as="div" class="text-left">
-        <div>
-          <MenuButton
-            class="flex ml-2 items-center rounded-full text-gray-300 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-          >
-            <span class="sr-only">Open options</span>
-            <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
-          </MenuButton>
-        </div>
-
-        <transition
-          enter-active-class="transition ease-out duration-100"
-          enter-from-class="transform opacity-0 scale-95"
-          enter-to-class="transform opacity-100 scale-100"
-          leave-active-class="transition ease-in duration-75"
-          leave-from-class="transform opacity-100 scale-100"
-          leave-to-class="transform opacity-0 scale-95"
-        >
-          <MenuItems
-            class="relative right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-          >
-            <div class="py-1">
-              <MenuItem v-slot="{ active }">
-                <a
-                  @click="
-                    selectedRotation = rotation;
-                    editModalOpen2 = true;
-                  "
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  ]"
-                  >Edit</a
+                <div>
+                  <MenuButton
+                    class="flex ml-2 items-center rounded-full text-gray-300 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                  >
+                    <span class="sr-only">Open options</span>
+                    <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
+                  </MenuButton>
+                </div>
+        
+                <transition
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95"
                 >
-              </MenuItem>
-              <MenuItem v-slot="{ active }">
-                <a
-                  @click="
-                    selectedRotation = rotation;
-                    deleteModalOpen2 = true;
-                  "
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  ]"
-                  >Delete</a
-                >
-              </MenuItem>
-            </div>
-          </MenuItems>
-        </transition>
-      </Menu> -->
+                  <MenuItems
+                    class="relative right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  >
+                    <div class="py-1">
+                      <MenuItem v-slot="{ active }">
+                        <a
+                          @click="
+                            selectedRotation = rotation;
+                            editModalOpen2 = true;
+                          "
+                          :class="[
+                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                            'block px-4 py-2 text-sm',
+                          ]"
+                          >Edit</a
+                        >
+                      </MenuItem>
+                      <MenuItem v-slot="{ active }">
+                        <a
+                          @click="
+                            selectedRotation = rotation;
+                            deleteModalOpen2 = true;
+                          "
+                          :class="[
+                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                            'block px-4 py-2 text-sm',
+                          ]"
+                          >Delete</a
+                        >
+                      </MenuItem>
+                    </div>
+                  </MenuItems>
+                </transition>
+              </Menu> -->
       </div>
       <div class="flex flex-1 overflow-x-scroll p-4 pt-2">
         <div
@@ -420,8 +420,8 @@ const handleFieldChange = async (e) => {
                   :key="element.id"
                   :horse="element"
                   class="mt-3 cursor-move"
-                ></HorseFieldCard
-              ></template>
+                ></HorseFieldCard>
+              </template>
 
               <!-- </transition-group> -->
             </draggable>

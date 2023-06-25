@@ -2,7 +2,7 @@
 import CreateHorseModal from "@/components/modals/CreateHorseModal.vue";
 
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard"],
 });
 
 const client = useSupabaseClient();
@@ -97,7 +97,7 @@ const selectHorse = (horseId) => {
       class="flex w-full flex-shrink-0 flex-col border-r border-gray-200 md:flex lg:w-96"
       v-if="horses.length > 0"
     >
-      <div class="px-4 pt-6 pb-4">
+      <div class="px-4 pb-4 pt-6">
         <h2 class="text-lg font-medium text-gray-900">Horses</h2>
         <p v-if="horses" class="mt-1 text-sm text-gray-600">
           Search directory of {{ horses.length }} horse<span
@@ -124,7 +124,7 @@ const selectHorse = (horseId) => {
                 type="text"
                 name="search"
                 id="search"
-                class="block w-full rounded-md border-gray-300 pl-10 focus:border-pink-500 focus:ring-pink-500 sm:text-sm"
+                class="block w-full rounded-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="Search"
               />
             </div>
@@ -137,13 +137,13 @@ const selectHorse = (horseId) => {
             "
             @click="() => (isOpen = true)"
             type="submit"
-            class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+            class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             Add Horse
             <!-- <FunnelIcon
-                            class="h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                        /> -->
+                                                    class="h-5 w-5 text-gray-400"
+                                                    aria-hidden="true"
+                                                /> -->
             <span class="sr-only">Search</span>
           </button>
         </div>
@@ -157,7 +157,7 @@ const selectHorse = (horseId) => {
             class="relative"
           >
             <div
-              class="sticky top-14 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500 md:top-0"
+              class="sticky top-14 z-10 border-b border-t border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500 md:top-0"
             >
               <h3>{{ letter }}</h3>
             </div>
@@ -170,10 +170,10 @@ const selectHorse = (horseId) => {
                 <div
                   :class="
                     horse.id == selectedHorseId
-                      ? 'bg-pink-100'
+                      ? 'bg-indigo-100'
                       : 'hover:bg-gray-50'
                   "
-                  class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500"
+                  class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
                 >
                   <div class="flex-shrink-0">
                     <SupabaseImage
@@ -188,7 +188,7 @@ const selectHorse = (horseId) => {
                       :class="
                         horse.avatar_background
                           ? horse.avatar_background
-                          : 'bg-pink-500'
+                          : 'bg-indigo-500'
                       "
                     >
                       {{ horse.name[0].toUpperCase() }}

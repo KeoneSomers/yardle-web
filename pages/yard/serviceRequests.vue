@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import RequestResponseModal from "@/components/modals/RequestResponseModal.vue";
 
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard", "require-yard-owner"],
 });
 
 const client = useSupabaseClient();
@@ -54,10 +54,10 @@ const indeterminate = computed(
       <!-- here new -->
       <div v-for="(arr, index) in [unrespondedRequests, respondedRequests]">
         <div v-if="arr && arr.length > 0">
-          <p v-if="index === 0" class="mt-10 mb-2">
+          <p v-if="index === 0" class="mb-2 mt-10">
             Pending ({{ arr.length }})
           </p>
-          <p v-else class="mt-20 mb-2">Responded ({{ arr.length }})</p>
+          <p v-else class="mb-2 mt-20">Responded ({{ arr.length }})</p>
           <div class="mt-8 flow-root overflow-hidden rounded-lg sm:border">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div
@@ -66,7 +66,7 @@ const indeterminate = computed(
                 <div class="relative">
                   <div
                     v-if="selectedRequests.length > 0 && index === 0"
-                    class="absolute top-0 left-14 flex h-12 items-center space-x-3 bg-white sm:left-12"
+                    class="absolute left-14 top-0 flex h-12 items-center space-x-3 bg-white sm:left-12"
                   >
                     <button
                       type="button"
@@ -176,10 +176,10 @@ const indeterminate = computed(
                           class="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3"
                         >
                           <!-- <a
-                          href="#"
-                          class="text-indigo-600 hover:text-indigo-900"
-                          >Edit</a
-                        > -->
+                                                                                            href="#"
+                                                                                            class="text-indigo-600 hover:text-indigo-900"
+                                                                                            >Edit</a
+                                                                                          > -->
                           <div class="flex justify-end">
                             <button
                               @click="

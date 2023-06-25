@@ -6,7 +6,7 @@ import Faq from "@/components/landing_page/Faq.vue";
 
 definePageMeta({
   layout: "blank",
-  guards: ["requireNoAuth"],
+  middleware: ["require-no-auth"],
 });
 </script>
 

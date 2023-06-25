@@ -2,7 +2,7 @@
 import { DateTime } from "luxon";
 
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard", "require-yard-owner"],
 });
 
 const client = useSupabaseClient();
@@ -31,7 +31,7 @@ onMounted(async () => {
 
 <template>
   <div>
-    <div class="py-4 px-4">
+    <div class="px-4 py-4">
       <p class="mb-5 mt-5 text-4xl">Your upcoming tasks</p>
       <div
         v-for="task in tasks"

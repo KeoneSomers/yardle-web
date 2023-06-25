@@ -8,7 +8,7 @@ import {
 import DeleteUserAccountModal from "@/components/modals/DeleteUserAccountModal.vue";
 
 definePageMeta({
-  guards: ["requireAuth"],
+  middleware: ["require-auth"],
 });
 
 const deleteUserAccountModalOpen = ref(false);
@@ -82,7 +82,7 @@ const saveChanges = async () => {
 <template>
   <div class="md:h-screen md:overflow-y-auto">
     <div class="mx-auto my-4 max-w-7xl px-4 sm:px-6 md:my-20 lg:px-8">
-      <div class="border-b pt-5 pb-4">
+      <div class="border-b pb-4 pt-5">
         <p class="text-4xl font-bold">Account Settings</p>
       </div>
       <form
@@ -100,112 +100,112 @@ const saveChanges = async () => {
           </div>
 
           <!-- <div class="mt-6 flex flex-col lg:flex-row">
-            <div class="flex-grow space-y-6">
-              <div>
-                <label
-                  for="username"
-                  class="block text-sm font-medium leading-6 text-gray-900"
-                  >Username</label
-                >
-                <div class="mt-2 flex rounded-md shadow-sm">
-                  <span
-                    class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 sm:text-sm"
-                    >workcation.com/</span
-                  >
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    autocomplete="username"
-                    class="block w-full min-w-0 flex-grow rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                    :value="user.handle"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  for="about"
-                  class="block text-sm font-medium leading-6 text-gray-900"
-                  >About</label
-                >
-                <div class="mt-2">
-                  <textarea
-                    id="about"
-                    name="about"
-                    rows="3"
-                    class="mt-1 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:py-1.5 sm:text-sm sm:leading-6"
-                  />
-                </div>
-                <p class="mt-2 text-sm text-gray-500">
-                  Brief description for your profile. URLs are hyperlinked.
-                </p>
-              </div>
-            </div>
-
-            <div
-              class="mt-6 flex-grow lg:mt-0 lg:ml-6 lg:flex-shrink-0 lg:flex-grow-0"
-            >
-              <p
-                class="text-sm font-medium leading-6 text-gray-900"
-                aria-hidden="true"
-              >
-                Photo
-              </p>
-              <div class="mt-2 lg:hidden">
-                <div class="flex items-center">
-                  <div
-                    class="inline-block h-12 w-12 flex-shrink-0 overflow-hidden rounded-full"
-                    aria-hidden="true"
-                  >
-                    <img
-                      class="h-full w-full rounded-full"
-                      :src="user.imageUrl"
-                      alt=""
-                    />
-                  </div>
-                  <div class="relative ml-5">
-                    <input
-                      id="mobile-user-photo"
-                      name="user-photo"
-                      type="file"
-                      class="peer absolute h-full w-full rounded-md opacity-0"
-                    />
-                    <label
-                      for="mobile-user-photo"
-                      class="pointer-events-none block rounded-md py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 peer-hover:ring-gray-400 peer-focus:ring-2 peer-focus:ring-sky-500"
-                    >
-                      <span>Change</span>
-                      <span class="sr-only"> user photo</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                class="relative hidden overflow-hidden rounded-full lg:block"
-              >
-                <img
-                  class="relative h-40 w-40 rounded-full"
-                  :src="user.imageUrl"
-                  alt=""
-                />
-                <label
-                  for="desktop-user-photo"
-                  class="absolute inset-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75 text-sm font-medium text-white opacity-0 focus-within:opacity-100 hover:opacity-100"
-                >
-                  <span>Change</span>
-                  <span class="sr-only"> user photo</span>
-                  <input
-                    type="file"
-                    id="desktop-user-photo"
-                    name="user-photo"
-                    class="absolute inset-0 h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0"
-                  />
-                </label>
-              </div>
-            </div>
-          </div> -->
+                      <div class="flex-grow space-y-6">
+                        <div>
+                          <label
+                            for="username"
+                            class="block text-sm font-medium leading-6 text-gray-900"
+                            >Username</label
+                          >
+                          <div class="mt-2 flex rounded-md shadow-sm">
+                            <span
+                              class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 sm:text-sm"
+                              >workcation.com/</span
+                            >
+                            <input
+                              type="text"
+                              name="username"
+                              id="username"
+                              autocomplete="username"
+                              class="block w-full min-w-0 flex-grow rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                              :value="user.handle"
+                            />
+                          </div>
+                        </div>
+          
+                        <div>
+                          <label
+                            for="about"
+                            class="block text-sm font-medium leading-6 text-gray-900"
+                            >About</label
+                          >
+                          <div class="mt-2">
+                            <textarea
+                              id="about"
+                              name="about"
+                              rows="3"
+                              class="mt-1 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:py-1.5 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                          <p class="mt-2 text-sm text-gray-500">
+                            Brief description for your profile. URLs are hyperlinked.
+                          </p>
+                        </div>
+                      </div>
+          
+                      <div
+                        class="mt-6 flex-grow lg:mt-0 lg:ml-6 lg:flex-shrink-0 lg:flex-grow-0"
+                      >
+                        <p
+                          class="text-sm font-medium leading-6 text-gray-900"
+                          aria-hidden="true"
+                        >
+                          Photo
+                        </p>
+                        <div class="mt-2 lg:hidden">
+                          <div class="flex items-center">
+                            <div
+                              class="inline-block h-12 w-12 flex-shrink-0 overflow-hidden rounded-full"
+                              aria-hidden="true"
+                            >
+                              <img
+                                class="h-full w-full rounded-full"
+                                :src="user.imageUrl"
+                                alt=""
+                              />
+                            </div>
+                            <div class="relative ml-5">
+                              <input
+                                id="mobile-user-photo"
+                                name="user-photo"
+                                type="file"
+                                class="peer absolute h-full w-full rounded-md opacity-0"
+                              />
+                              <label
+                                for="mobile-user-photo"
+                                class="pointer-events-none block rounded-md py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 peer-hover:ring-gray-400 peer-focus:ring-2 peer-focus:ring-sky-500"
+                              >
+                                <span>Change</span>
+                                <span class="sr-only"> user photo</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+          
+                        <div
+                          class="relative hidden overflow-hidden rounded-full lg:block"
+                        >
+                          <img
+                            class="relative h-40 w-40 rounded-full"
+                            :src="user.imageUrl"
+                            alt=""
+                          />
+                          <label
+                            for="desktop-user-photo"
+                            class="absolute inset-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75 text-sm font-medium text-white opacity-0 focus-within:opacity-100 hover:opacity-100"
+                          >
+                            <span>Change</span>
+                            <span class="sr-only"> user photo</span>
+                            <input
+                              type="file"
+                              id="desktop-user-photo"
+                              name="user-photo"
+                              class="absolute inset-0 h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0"
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div> -->
 
           <div class="mt-6 grid grid-cols-12 gap-6">
             <div class="col-span-12 sm:col-span-6">
@@ -265,12 +265,12 @@ const saveChanges = async () => {
                     as="p"
                     class="text-sm font-medium leading-6 text-gray-900"
                     passive
-                    >Service Request Emails</SwitchLabel
-                  >
+                    >Service Request Emails
+                  </SwitchLabel>
                   <SwitchDescription class="text-sm text-gray-500"
                     >The yard owner will receive these emails when a client
-                    requests a service for their horse.</SwitchDescription
-                  >
+                    requests a service for their horse.
+                  </SwitchDescription>
                 </div>
                 <Switch
                   v-model="serviceRequestEmails"
@@ -297,13 +297,12 @@ const saveChanges = async () => {
                     as="p"
                     class="text-sm font-medium leading-6 text-gray-900"
                     passive
-                    >Service Request Reponse Emails</SwitchLabel
-                  >
+                    >Service Request Reponse Emails
+                  </SwitchLabel>
                   <SwitchDescription class="text-sm text-gray-500"
                     >You'll receive these emails to let you know when your yard
-                    owner has responded to your service
-                    requests.</SwitchDescription
-                  >
+                    owner has responded to your service requests.
+                  </SwitchDescription>
                 </div>
                 <Switch
                   v-model="serviceRequestReponseEmails"
@@ -332,13 +331,12 @@ const saveChanges = async () => {
                     as="p"
                     class="text-sm font-medium leading-6 text-gray-900"
                     passive
-                    >Calendar Event Reminder Emails</SwitchLabel
-                  >
+                    >Calendar Event Reminder Emails
+                  </SwitchLabel>
                   <SwitchDescription class="text-sm text-gray-500"
                     >You'll receive these emails the day before any of your
-                    upcoming events are scheduled to take
-                    place.</SwitchDescription
-                  >
+                    upcoming events are scheduled to take place.
+                  </SwitchDescription>
                 </div>
                 <Switch
                   v-model="calendarEventReminderEmails"
@@ -364,13 +362,13 @@ const saveChanges = async () => {
             <button
               @click="resetForm"
               type="button"
-              class="inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              class="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="inline-flex justify-center rounded-md bg-indigo-500 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
+              class="inline-flex justify-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
             >
               Save changes
             </button>

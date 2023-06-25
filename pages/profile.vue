@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  guards: ["requireAuth"],
+  middleware: ["require-auth"],
 });
 
 const user = useSupabaseUser();

@@ -193,7 +193,7 @@ const handleUnassignOwner = async () => {
 </script>
 
 <template>
-  <div class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
+  <div v-if="profile" class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
     <div
       v-if="horse && !horse.owner"
       class="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-2"
@@ -321,7 +321,7 @@ const handleUnassignOwner = async () => {
 
     <div class="mt-10 flex">
       <div>
-        <div class="mt-1 mr-3 rounded-xl bg-blue-100 p-2">
+        <div class="mr-3 mt-1 rounded-xl bg-blue-100 p-2">
           <icon name="heroicons:calendar-days" class="h-5 w-5 text-blue-700" />
         </div>
       </div>
@@ -335,7 +335,7 @@ const handleUnassignOwner = async () => {
       <div>
         <NuxtLink
           to="/yard/calendar"
-          class="mt-1 ml-3 block cursor-pointer rounded-xl bg-blue-500 p-2 hover:bg-blue-600"
+          class="ml-3 mt-1 block cursor-pointer rounded-xl bg-blue-500 p-2 hover:bg-blue-600"
         >
           <icon name="heroicons:arrow-right" class="h-5 w-5 text-white" />
         </NuxtLink>

@@ -17,7 +17,7 @@ const yard = useState("yard");
 const profile = useState("profile");
 
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard"],
 });
 
 const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
@@ -601,7 +601,7 @@ const totalAmount = computed(() => {
                     .
                   </p>
                 </div>
-                <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none"></div>
+                <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none"></div>
               </div>
               <div class="mt-8 flow-root">
                 <table class="min-w-full divide-y divide-gray-300">
@@ -621,14 +621,14 @@ const totalAmount = computed(() => {
                       </th>
                       <th
                         scope="col"
-                        class="hidden py-3.5 px-3 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                        class="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900 sm:table-cell"
                       >
                         booked for
                       </th>
                       <th
                         v-if="yard.enabled_billing_late_booking_fee"
                         scope="col"
-                        class="hidden py-3.5 px-3 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                        class="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900 sm:table-cell"
                       >
                         booked late
                       </th>
@@ -667,7 +667,7 @@ const totalAmount = computed(() => {
                         </div>
                       </td>
                       <td
-                        class="hidden py-4 px-3 text-right text-sm text-gray-500 sm:table-cell"
+                        class="hidden px-3 py-4 text-right text-sm text-gray-500 sm:table-cell"
                       >
                         {{
                           DateTime.fromISO(item.date).toFormat("MMMM d, yyyy")
@@ -675,7 +675,7 @@ const totalAmount = computed(() => {
                       </td>
                       <td
                         v-if="yard.enabled_billing_late_booking_fee"
-                        class="hidden py-4 px-3 text-right text-sm text-gray-500 sm:table-cell"
+                        class="hidden px-3 py-4 text-right text-sm text-gray-500 sm:table-cell"
                         :class="{
                           'text-red-500': item.booked_late,
                         }"

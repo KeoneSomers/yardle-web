@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     "@nuxt/devtools",
     "nuxt-icon",
     "@nuxthq/ui",
+    "@vue-final-modal/nuxt",
   ],
   colorMode: { preference: "light" },
   plugins: [{ src: "@/plugins/vercel.ts", mode: "client" }],

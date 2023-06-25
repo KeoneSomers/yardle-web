@@ -4,7 +4,7 @@ import DeleteYardModal from "@/components/modals/DeleteYardModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 definePageMeta({
-  guards: ["requireAuth", "requireNoYard"],
+  middleware: ["require-auth", "require-no-yard"],
 });
 
 const client = useSupabaseClient();
@@ -105,13 +105,13 @@ const handleLeaveYard = async (yardId) => {
             Your Yards
           </h2>
         </div>
-        <div class="mt-4 flex md:mt-0 md:ml-4">
+        <div class="mt-4 flex md:ml-4 md:mt-0">
           <!-- <button
-                        type="button"
-                        class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Join a Yard
-                    </button> -->
+                                                                                    type="button"
+                                                                                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                                                >
+                                                                                    Join a Yard
+                                                                                </button> -->
           <button
             @click="isOpen = true"
             type="button"
@@ -138,7 +138,7 @@ const handleLeaveYard = async (yardId) => {
             >
               <icon
                 :name="yard.region_id.flag_icon"
-                class="mr-1 -mt-1 block h-4 w-4 flex-shrink-0"
+                class="-mt-1 mr-1 block h-4 w-4 flex-shrink-0"
               />
               {{ yard.name }}
             </div>
@@ -170,7 +170,7 @@ const handleLeaveYard = async (yardId) => {
                 >
                   <div class="py-1">
                     <MenuItem
-                      v-if="yard.created_by != user.id"
+                      v-if="yard.created_by !== user.id"
                       v-slot="{ active }"
                     >
                       <button

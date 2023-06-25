@@ -1,7 +1,7 @@
 <script setup>
 definePageMeta({
   layout: "blank",
-  guards: ["requireNoAuth"],
+  middleware: ["require-no-auth"],
 });
 </script>
 

@@ -10,7 +10,7 @@ import {
 import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard"],
 });
 
 const client = useSupabaseClient();
@@ -153,7 +153,7 @@ const handleDelete = async () => {
 
       <!-- Desktop Table -->
       <div class="mt-8 hidden overflow-hidden rounded-lg border sm:flow-root">
-        <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div
             class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
           >
@@ -255,7 +255,7 @@ const handleDelete = async () => {
                         :key="ingredient.id"
                       >
                         <span
-                          class="mr-3 mb-2 inline-flex items-center rounded-full bg-pink-100 py-0.5 px-2 text-xs font-medium text-pink-700"
+                          class="mb-2 mr-3 inline-flex items-center rounded-full bg-pink-100 px-2 py-0.5 text-xs font-medium text-pink-700"
                         >
                           {{
                             `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
@@ -273,7 +273,7 @@ const handleDelete = async () => {
                         :key="ingredient.id"
                       >
                         <span
-                          class="mr-3 mb-2 inline-flex items-center rounded-full bg-blue-100 py-0.5 px-2 text-xs font-medium text-blue-700"
+                          class="mb-2 mr-3 inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700"
                         >
                           {{
                             `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
@@ -291,7 +291,7 @@ const handleDelete = async () => {
                         :key="ingredient.id"
                       >
                         <span
-                          class="mr-3 mb-2 inline-flex items-center rounded-full bg-yellow-100 py-0.5 px-2 text-xs font-medium text-yellow-700"
+                          class="mb-2 mr-3 inline-flex items-center rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700"
                         >
                           {{
                             `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
@@ -309,7 +309,7 @@ const handleDelete = async () => {
                         :key="ingredient.id"
                       >
                         <span
-                          class="mr-3 mb-2 inline-flex items-center rounded-full bg-purple-100 py-0.5 px-2 text-xs font-medium text-purple-700"
+                          class="mb-2 mr-3 inline-flex items-center rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700"
                         >
                           {{
                             `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
@@ -351,7 +351,7 @@ const handleDelete = async () => {
                           leave-to-class="transform opacity-0 scale-95"
                         >
                           <MenuItems
-                            class="absolute right-10 -top-14 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                            class="absolute -top-14 right-10 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                           >
                             <div class="py-1">
                               <MenuItem>

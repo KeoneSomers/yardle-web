@@ -113,7 +113,8 @@ const handleUnselectYard = async () => {
 
 const handleSignout = async () => {
   sidebarOpen.value = false;
-  supabaseAuthClient.auth.signOut();
+  await supabaseAuthClient.auth.signOut();
+  navigateTo("/");
 };
 </script>
 
@@ -222,7 +223,7 @@ const handleSignout = async () => {
                 item.to == router.currentRoute.value.path
                   ? 'bg-white'
                   : 'bg-white group-hover:bg-gray-200',
-                'ml-3 inline-block rounded-full py-0.5 px-3 text-xs font-medium',
+                'ml-3 inline-block rounded-full px-3 py-0.5 text-xs font-medium',
               ]"
               >{{ item.hint }}</span
             >
@@ -230,7 +231,7 @@ const handleSignout = async () => {
           <div
             v-if="profile && profile.active_role == 1 && selectedYard != null"
           >
-            <p class="pl-2 pt-4 pb-2 text-xs font-semibold text-gray-600">
+            <p class="pb-2 pl-2 pt-4 text-xs font-semibold text-gray-600">
               Admin
             </p>
             <NuxtLink
@@ -276,7 +277,7 @@ const handleSignout = async () => {
               <span class="flex-1">Service Requests</span>
               <span
                 v-if="pendingServiceRequestCount > 0"
-                class="ml-3 inline-block rounded-full bg-red-100 py-0.5 px-3 text-xs font-medium text-red-800"
+                class="ml-3 inline-block rounded-full bg-red-100 px-3 py-0.5 text-xs font-medium text-red-800"
                 >{{ pendingServiceRequestCount }}</span
               >
             </NuxtLink>
@@ -413,8 +414,8 @@ const handleSignout = async () => {
                     <NuxtLink
                       to="/auth/accountSettings"
                       class="block px-4 py-2 text-sm text-gray-700"
-                      >Account settings</NuxtLink
-                    >
+                      >Account settings
+                    </NuxtLink>
                   </MenuItem>
                   <MenuItem>
                     <button

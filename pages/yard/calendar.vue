@@ -1,13 +1,12 @@
 <script setup>
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { DateTime, Info } from "luxon";
-
 import CreateEventModal from "@/components/modals/CreateEventModal.vue";
 import EditEventModal from "@/components/modals/EditEventModal.vue";
 import DeleteEventModal from "@/components/modals/DeleteEventModal.vue";
 
 definePageMeta({
-  guards: ["requireAuth", "requireYard"],
+  middleware: ["require-auth", "require-yard"],
 });
 
 const client = useSupabaseClient();
@@ -63,41 +62,42 @@ const setDays = async () => {
       days: firstWeekdayOfMonth - 1,
     })
   );
-
   let i = 0;
   days.value = [];
 
   while (i < 42) {
-    let day = firstDay.value.plus({ days: i });
-
+    const day = firstDay.value.plus({ days: i });
     // add  events from events array
     // TODO: This could be optimised I think.
     if (events.value) {
       day.events = events.value.filter((e) => {
         return (
-          DateTime.fromISO(e.date_time).toLocaleString() == day.toLocaleString()
+          DateTime.fromISO(e.date_time).toLocaleString() ===
+          day.toLocaleString()
         );
       });
     }
-
     days.value.push(day);
-
     i++;
   }
 };
 
-// watch for added events
-// TODO: have days be stored in useState and add the event
-// directly to the day when it's created (big optimisation)
-watchEffect(() => {
-  if (events.value) {
-    setDays();
-  }
-});
-
-// get days on load
+// get events on server
 await getEvents();
-await setDays();
+
+onMounted(async () => {
+  // get days on client (needs to use local time)
+  //  await setDays();
+
+  // watch for added events
+  // TODO: have days be stored in useState and add the event
+  // directly to the day when it's created (big optimisation)
+  watchEffect(async () => {
+    if (events.value) {
+      await setDays();
+    }
+  });
+});
 
 const goToNextMonth = () => {
   offset.value++;
@@ -198,26 +198,26 @@ const createEvent = (e, day) => {
             @click="selectedDate = day.toISODate()"
             type="button"
             :class="[
-              day.toISODate() == selectedDate && 'text-white',
-              day.toISODate() != selectedDate &&
+              day.toISODate() === selectedDate && 'text-white',
+              day.toISODate() !== selectedDate &&
                 day.toISODate() === trueDateTime.toISODate() &&
                 'text-indigo-600',
               !day.isSelected &&
-                day.toISODate() != trueDateTime.toISODate() &&
-                day.month == trueDateTime.month &&
+                day.toISODate() !== trueDateTime.toISODate() &&
+                day.month === trueDateTime.month &&
                 'text-gray-900',
-              day.toISODate() != selectedDate &&
-                day.toISODate() != trueDateTime.toISODate() &&
-                day.month != dt.month &&
+              day.toISODate() !== selectedDate &&
+                day.toISODate() !== trueDateTime.toISODate() &&
+                day.month !== dt.month &&
                 'text-gray-400',
-              day.toISODate() == selectedDate &&
-                day.toISODate() == trueDateTime.toISODate() &&
+              day.toISODate() === selectedDate &&
+                day.toISODate() === trueDateTime.toISODate() &&
                 'bg-indigo-600',
-              day.toISODate() == selectedDate &&
-                day.toISODate() != trueDateTime.toISODate() &&
+              day.toISODate() === selectedDate &&
+                day.toISODate() !== trueDateTime.toISODate() &&
                 'bg-gray-900',
-              day.toISODate() != selectedDate && 'hover:bg-gray-200',
-              day == selectedDate && 'font-semibold',
+              day.toISODate() !== selectedDate && 'hover:bg-gray-200',
+              day === selectedDate && 'font-semibold',
               'mx-auto flex h-8 w-8 items-center justify-center rounded-full',
             ]"
           >
@@ -228,27 +228,29 @@ const createEvent = (e, day) => {
       <section class="pt-12">
         <h2 class="text-base font-semibold leading-6 text-gray-900">
           Schedule for
-          <time :datetime="selectedDate">{{
-            DateTime.fromISO(selectedDate).toLocaleString(
-              {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              },
-              { locale: "en-GB" }
-            )
-          }}</time>
+          <time :datetime="selectedDate"
+            >{{
+              DateTime.fromISO(selectedDate).toLocaleString(
+                {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                },
+                { locale: "en-GB" }
+              )
+            }}
+          </time>
         </h2>
         <ol
-          v-if="days.find((day) => day.toISODate() == selectedDate)"
+          v-if="days.find((day) => day.toISODate() === selectedDate)"
           class="mt-4 space-y-1 text-sm leading-6 text-gray-500"
         >
           <li
             v-for="(event, index) in days.find(
-              (day) => day.toISODate() == selectedDate
+              (day) => day.toISODate() === selectedDate
             ).events"
             :key="event.id"
-            class="group flex items-center space-x-4 rounded-xl py-2 px-4"
+            class="group flex items-center space-x-4 rounded-xl px-4 py-2"
           >
             <div class="flex-auto">
               <p class="text-gray-900">{{ event.title }}</p>
@@ -346,12 +348,14 @@ const createEvent = (e, day) => {
         class="flex h-16 items-center justify-between border-b border-gray-200 p-4 lg:flex-none"
       >
         <h1 class="text-lg font-semibold text-gray-900">
-          <time :datetime="dt.toISODate()">{{
-            dt.toLocaleString({
-              month: "long",
-              year: "numeric",
-            })
-          }}</time>
+          <time :datetime="dt.toISODate()"
+            >{{
+              dt.toLocaleString({
+                month: "long",
+                year: "numeric",
+              })
+            }}
+          </time>
         </h1>
         <div class="flex items-center">
           <div class="flex items-center rounded-md shadow-sm md:items-stretch">
@@ -370,7 +374,7 @@ const createEvent = (e, day) => {
             <button
               @click="() => goToCurrentMonth()"
               type="button"
-              class="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
+              class="hidden border-b border-t border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
             >
               Today
             </button>
@@ -392,7 +396,7 @@ const createEvent = (e, day) => {
             <button
               @click="createEvent"
               type="button"
-              class="create-event ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              class="create-event ml-6 rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Add event
             </button>
@@ -446,55 +450,55 @@ const createEvent = (e, day) => {
                   </MenuItem>
                 </div>
                 <!-- <div class="py-1">
-                                <MenuItem v-slot="{ active }">
-                                    <a
-                                        href="#"
-                                        :class="[
-                                            active
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-700',
-                                            'block px-4 py-2 text-sm',
-                                        ]"
-                                        >Day view</a
-                                    >
-                                </MenuItem>
-                                <MenuItem v-slot="{ active }">
-                                    <a
-                                        href="#"
-                                        :class="[
-                                            active
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-700',
-                                            'block px-4 py-2 text-sm',
-                                        ]"
-                                        >Week view</a
-                                    >
-                                </MenuItem>
-                                <MenuItem v-slot="{ active }">
-                                    <a
-                                        href="#"
-                                        :class="[
-                                            active
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-700',
-                                            'block px-4 py-2 text-sm',
-                                        ]"
-                                        >Month view</a
-                                    >
-                                </MenuItem>
-                                <MenuItem v-slot="{ active }">
-                                    <a
-                                        href="#"
-                                        :class="[
-                                            active
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-700',
-                                            'block px-4 py-2 text-sm',
-                                        ]"
-                                        >Year view</a
-                                    >
-                                </MenuItem>
-                            </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <MenuItem v-slot="{ active }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <a
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        href="#"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        :class="[
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            active
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ? 'bg-gray-100 text-gray-900'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : 'text-gray-700',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'block px-4 py-2 text-sm',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ]"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        >Day view</a
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    >
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </MenuItem>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <MenuItem v-slot="{ active }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <a
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        href="#"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        :class="[
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            active
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ? 'bg-gray-100 text-gray-900'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : 'text-gray-700',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'block px-4 py-2 text-sm',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ]"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        >Week view</a
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    >
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </MenuItem>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <MenuItem v-slot="{ active }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <a
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        href="#"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        :class="[
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            active
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ? 'bg-gray-100 text-gray-900'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : 'text-gray-700',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'block px-4 py-2 text-sm',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ]"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        >Month view</a
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    >
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </MenuItem>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <MenuItem v-slot="{ active }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <a
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        href="#"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        :class="[
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            active
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ? 'bg-gray-100 text-gray-900'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : 'text-gray-700',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'block px-4 py-2 text-sm',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ]"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        >Year view</a
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    >
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </MenuItem>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div> -->
               </MenuItems>
             </transition>
           </Menu>
@@ -523,20 +527,20 @@ const createEvent = (e, day) => {
               :key="day"
               :class="[
                 day.month == dt.month ? 'bg-white' : 'bg-gray-50 text-gray-500',
-                'create-event relative cursor-pointer py-2 px-3 hover:opacity-75',
+                'create-event relative cursor-pointer px-3 py-2 hover:opacity-75',
               ]"
             >
               <time
                 :datetime="day.date"
                 :class="
-                  day.day == trueDateTime.day &&
-                  day.month == trueDateTime.month &&
-                  day.year == trueDateTime.year
+                  day.day === trueDateTime.day &&
+                  day.month === trueDateTime.month &&
+                  day.year === trueDateTime.year
                     ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
                     : undefined
                 "
-                >{{ day.day }}</time
-              >
+                >{{ day.day }}
+              </time>
 
               <ol v-if="day.events" class="mt-2">
                 <li
@@ -651,7 +655,7 @@ const createEvent = (e, day) => {
     </div>
   </div>
 
-  <!-- Modals -->
+  <!-- Modivdals -->
   <CreateEventModal
     v-if="createModalOpen"
     :is-open="createModalOpen"

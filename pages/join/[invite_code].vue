@@ -1,7 +1,6 @@
 <script setup>
 definePageMeta({
   layout: "blank",
-  guards: [],
 });
 
 const loading = ref(false);
@@ -131,13 +130,13 @@ const handleJoinYard = async () => {
           <NuxtLink
             :to="'/auth/login?invite_code=' + invite_code"
             class="flex-1 rounded bg-pink-500 p-3 text-white"
-            >Login</NuxtLink
-          >
+            >Login
+          </NuxtLink>
           <NuxtLink
             :to="'/auth/signup?invite_code=' + invite_code"
             class="flex-1 rounded bg-indigo-500 p-3 text-white"
-            >Sign up</NuxtLink
-          >
+            >Sign up
+          </NuxtLink>
         </div>
       </div>
     </div>
