@@ -32,6 +32,18 @@ onMounted(async () => {
   }
 });
 
+const sendTestEmail = async () => {
+  await $fetch("/api/sendEmail", {
+    method: "post",
+    body: {
+      recipients: "Keone.somers@outlook.com",
+      subject: "Yardle Test Email",
+      text: ``,
+      html: "<p>Hello from the test email!</p>",
+    },
+  });
+};
+
 const handleDelete = async (id) => {
   const { error } = await supabase.from("feedback").delete().eq("id", id);
 
@@ -68,6 +80,7 @@ const handleSendEventEmailReminders = async () => {
     >
       Manually Generate Todays Invoces
     </button>
+    <button @click="sendTestEmail">Send Test Email</button>
     <button
       disabled
       @click="handleSendEventEmailReminders"

@@ -9,8 +9,10 @@ export default defineEventHandler(async (event) => {
   // props
   const { recipients, subject, html, text } = await readBody(event);
 
+  console.log("sending email");
+
   await resend.emails.send({
-    from: "info@yardle.app",
+    from: "updates@yardle.app",
     to: recipients,
     subject: subject,
     html: html,
