@@ -181,7 +181,7 @@ const handleSignout = async () => {
           >
             <icon
               name="heroicons:rectangle-stack"
-              :class="['mr-3 h-6 w-6 flex-shrink-0']"
+              class="h-6 w-6 flex-shrink-0"
             />
             Your Yards
           </NuxtLink>
@@ -205,7 +205,7 @@ const handleSignout = async () => {
           >
             <icon
               :name="item.icon"
-              :class="['mr-3 h-6 w-6 flex-shrink-0']"
+              class="h-6 w-6 flex-shrink-0"
               aria-hidden="true"
             />
             <span class="flex-1">{{ item.name }}</span>
