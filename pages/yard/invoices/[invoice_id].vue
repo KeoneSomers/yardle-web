@@ -216,9 +216,6 @@ const totalAmount = computed(() => {
           ? 'View and edit the invoice details.'
           : 'View your invoice details.'
       "
-      :back-link="
-        profile.active_role === 1 ? '/yard/invoices' : '/yard/myInvoices'
-      "
     >
       <button
         @click="saveChanges"
@@ -281,6 +278,7 @@ const totalAmount = computed(() => {
     </PageHeading>
     <div class="flex flex-col lg:h-[calc(100vh-4rem)] lg:flex-row">
       <div
+        v-if="profile.active_role === 1"
         class="flex w-full flex-shrink-0 flex-col space-y-4 divide-y border-r border-gray-200 p-4 lg:w-96"
       >
         <SwitchGroup as="div" class="flex items-center justify-between">
@@ -341,10 +339,7 @@ const totalAmount = computed(() => {
           </Switch>
         </SwitchGroup>
 
-        <div
-          v-if="profile.active_role === 1"
-          class="flex flex-col space-y-4 py-4"
-        >
+        <div class="flex flex-col space-y-4 py-4">
           <div class="items-center">
             <label for="name" class="block text-sm font-medium text-gray-700"
               >Client First Name</label
