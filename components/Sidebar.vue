@@ -1,6 +1,14 @@
 <script setup>
 import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
-import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
+import {
+  Menu,
+  MenuButton,
+  MenuItems,
+  MenuItem,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/vue";
 
 const pendingServiceRequestCount = useState("pendingServiceRequestCount");
 
@@ -154,13 +162,14 @@ const handleSignout = async () => {
             </p>
           </div>
           <div class="flex items-center">
-            <button
-              @click="handleUnselectYard"
-              v-tooltip="'Switch Yard'"
-              class="block w-full rounded-full border p-2 text-left text-sm text-gray-500"
-            >
-              <icon name="heroicons:arrows-right-left" class="h-5 w-5" />
-            </button>
+            <UTooltip text="Switch Yard">
+              <button
+                @click="handleUnselectYard"
+                class="block w-full rounded-full border p-2 text-left text-sm text-gray-500"
+              >
+                <icon name="heroicons:arrows-right-left" class="h-5 w-5" />
+              </button>
+            </UTooltip>
           </div>
         </div>
         <div class="space-y-1 px-2">
@@ -194,7 +203,7 @@ const handleSignout = async () => {
               item.to == router.currentRoute.value.path
                 ? 'bg-gray-200 text-gray-900'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-              'group flex items-center rounded-md px-2 py-2 text-sm font-medium',
+              'group mt-2 flex items-center rounded-md px-2 py-2 text-sm font-medium',
               item.hint ? 'pointer-events-none' : '',
               item.hint ? 'pointer-events-none' : '',
             ]"
@@ -228,102 +237,101 @@ const handleSignout = async () => {
               >{{ item.hint }}</span
             >
           </NuxtLink>
-          <div
+          <Disclosure
+            as="div"
+            v-slot="{ open }"
             v-if="profile && profile.active_role == 1 && selectedYard != null"
           >
-            <p class="pb-2 pl-2 pt-4 text-xs font-semibold text-gray-600">
-              Admin
-            </p>
-            <NuxtLink
-              to="/yard/dashboard"
+            <DisclosureButton
               :class="[
-                '/yard/dashboard' == router.currentRoute.value.path
-                  ? 'bg-gray-200 text-gray-900'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                'group flex items-center rounded-md px-2 py-2 text-sm font-medium',
+                'flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm font-semibold leading-6 text-gray-700',
               ]"
             >
-              <icon
-                name="heroicons:rectangle-group"
-                :class="[
-                  '/yard/dashboard' == router.currentRoute.value.path
-                    ? 'text-gray-500'
-                    : 'text-gray-400 group-hover:text-gray-500',
-                  'mr-3 h-6 w-6 flex-shrink-0',
-                ]"
-                aria-hidden="true"
+              <UIcon
+                name="i-heroicons-shield-check"
+                class="h-6 w-6 shrink-0 text-gray-400"
               />
-              <span class="flex-1">Admin Dashboard</span>
-            </NuxtLink>
-            <NuxtLink
-              to="/yard/serviceRequests"
-              :class="[
-                '/yard/serviceRequests' == router.currentRoute.value.path
-                  ? 'bg-gray-200 text-gray-900'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                'group flex items-center rounded-md px-2 py-2 text-sm font-medium',
-              ]"
-            >
-              <icon
-                name="heroicons:inbox"
+              <span>
+                Admin
+                <span
+                  v-if="pendingServiceRequestCount > 0"
+                  class="ml-3 inline-block rounded-full bg-red-100 px-3 py-0.5 text-xs font-medium text-red-800"
+                  >{{ pendingServiceRequestCount }}</span
+                >
+              </span>
+
+              <UIcon
+                name="i-heroicons-chevron-right-solid"
                 :class="[
-                  '/yard/serviceRequests' == router.currentRoute.value.path
-                    ? 'text-gray-500'
-                    : 'text-gray-400 group-hover:text-gray-500',
-                  'mr-3 h-6 w-6 flex-shrink-0',
+                  open ? 'rotate-90 text-gray-500' : 'text-gray-400',
+                  'ml-auto h-5 w-5 shrink-0',
                 ]"
-                aria-hidden="true"
               />
-              <span class="flex-1">Service Requests</span>
-              <span
-                v-if="pendingServiceRequestCount > 0"
-                class="ml-3 inline-block rounded-full bg-red-100 px-3 py-0.5 text-xs font-medium text-red-800"
-                >{{ pendingServiceRequestCount }}</span
-              >
-            </NuxtLink>
-            <NuxtLink
-              to="/yard/invoices"
-              :class="[
-                '/yard/invoices' == router.currentRoute.value.path
-                  ? 'bg-gray-200 text-gray-900'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                'group flex items-center rounded-md px-2 py-2 text-sm font-medium',
-              ]"
-            >
-              <icon
-                name="heroicons:document-text"
-                :class="[
-                  '/yard/invoices' == router.currentRoute.value.path
-                    ? 'text-gray-500'
-                    : 'text-gray-400 group-hover:text-gray-500',
-                  'mr-3 h-6 w-6 flex-shrink-0',
-                ]"
-                aria-hidden="true"
-              />
-              <span class="flex-1">Manage Invoices</span>
-            </NuxtLink>
-            <NuxtLink
-              to="/yard/settings"
-              :class="[
-                '/yard/settings' == router.currentRoute.value.path
-                  ? 'bg-gray-200 text-gray-900'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                'group flex items-center rounded-md px-2 py-2 text-sm font-medium',
-              ]"
-            >
-              <icon
-                name="heroicons:cog-8-tooth"
-                :class="[
-                  '/yard/settings' == router.currentRoute.value.path
-                    ? 'text-gray-500'
-                    : 'text-gray-400 group-hover:text-gray-500',
-                  'mr-3 h-6 w-6 flex-shrink-0',
-                ]"
-                aria-hidden="true"
-              />
-              <span class="flex-1">Yard Settings</span>
-            </NuxtLink>
-          </div>
+            </DisclosureButton>
+            <DisclosurePanel as="ul" class="mt-1 px-2">
+              <li>
+                <!-- 44px -->
+                <NuxtLink
+                  to="/yard/dashboard"
+                  :class="[
+                    '/yard/dashboard' == router.currentRoute.value.path
+                      ? 'bg-gray-200 text-gray-900'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
+                  ]"
+                >
+                  Dashboard
+                </NuxtLink>
+              </li>
+              <li>
+                <!-- 44px -->
+                <NuxtLink
+                  to="/yard/serviceRequests"
+                  :class="[
+                    '/yard/serviceRequests' == router.currentRoute.value.path
+                      ? 'bg-gray-200 text-gray-900'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
+                  ]"
+                >
+                  <span class="flex-1">Service Requests</span>
+                  <span
+                    v-if="pendingServiceRequestCount > 0"
+                    class="ml-3 inline-block rounded-full bg-red-100 px-3 py-0.5 text-xs font-medium text-red-800"
+                    >{{ pendingServiceRequestCount }}</span
+                  >
+                </NuxtLink>
+              </li>
+              <li>
+                <!-- 44px -->
+                <NuxtLink
+                  to="/yard/invoices"
+                  :class="[
+                    '/yard/invoices' == router.currentRoute.value.path
+                      ? 'bg-gray-200 text-gray-900'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
+                  ]"
+                >
+                  Manage Invoices
+                </NuxtLink>
+              </li>
+              <li>
+                <!-- 44px -->
+                <NuxtLink
+                  to="/yard/settings"
+                  :class="[
+                    '/yard/settings' == router.currentRoute.value.path
+                      ? 'bg-gray-200 text-gray-900'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
+                  ]"
+                >
+                  Yard Settings
+                </NuxtLink>
+              </li>
+            </DisclosurePanel>
+          </Disclosure>
         </div>
         <div v-if="yard" class="flex w-full p-4">
           <button
