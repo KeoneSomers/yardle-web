@@ -83,7 +83,6 @@ const handleJoinYard = async () => {
         // }
       });
 
-      loading.value = false;
       selectedYard.value = null;
       await navigateTo("/yards");
     }
