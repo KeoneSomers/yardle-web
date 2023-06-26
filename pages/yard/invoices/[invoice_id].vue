@@ -183,6 +183,30 @@ const saveChanges = async () => {
   // sync the data locally
   invoiceData.value = data;
 
+  // send email to client
+  if (published.value === true && client_email.value) {
+    // send email to livery to  let them know
+    // TODO: this should only run when published has been change from false to true
+    await $fetch("/api/sendEmail", {
+      method: "post",
+      body: {
+        recipients: client_email.value,
+        subject: "Your Yardle invoice is ready to be viewed!",
+        text: ``,
+        html: `
+        <p>Hello, ${client_first_name.value}</p>
+        <br />
+        <p>This is an update email from Yardle to let you know that your latest invoice is ready to be viewed.</p>
+        <p>Please vist <a href='https://www.yardle.app/yard/invoices/${
+          invoice_id * 36
+        }'>Yardle.app/yard/invoices/${
+          invoice_id * 36
+        }</a> to view your invoice.</p>
+        `,
+      },
+    });
+  }
+
   toast.add({
     title: "Changes Saved!",
     description: "Your changes have been saved.",

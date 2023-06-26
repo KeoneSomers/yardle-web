@@ -1,15 +1,9 @@
 import { Resend } from "resend";
 
-// Endpoint for sending emails with Resend.com
-
 export default defineEventHandler(async (event) => {
   const { resendApiKey } = useRuntimeConfig();
   const resend = new Resend(resendApiKey);
-
-  // props
   const { recipients, subject, html, text } = await readBody(event);
-
-  console.log("sending email");
 
   await resend.emails.send({
     from: "updates@yardle.app",
