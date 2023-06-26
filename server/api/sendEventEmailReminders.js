@@ -70,12 +70,7 @@ export default defineEventHandler(async (event) => {
     await $fetch("/api/sendEmail", {
       method: "POST",
       body: {
-        recipients: [
-          {
-            email: user.email,
-            name: user.first_name + " " + user.last_name,
-          },
-        ],
+        recipients: [user.email],
         subject: `${usersEvents.length} upcoming event${
           usersEvents.length === 1 ? "" : "s"
         }`,

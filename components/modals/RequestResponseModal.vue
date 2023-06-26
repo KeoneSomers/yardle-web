@@ -101,15 +101,7 @@ const handleSubmit = async () => {
       await $fetch("/api/sendEmail", {
         method: "post",
         body: {
-          recipients: [
-            {
-              email: props.request.created_by.email,
-              name:
-                props.request.created_by.first_name +
-                " " +
-                props.request.created_by.last_name,
-            },
-          ],
+          recipients: [props.request.created_by.email],
           subject:
             status.value === "accepted"
               ? `${yard.value.name}: Livery Service Request Accepted`

@@ -150,15 +150,7 @@ const handleSubmit = async () => {
       await $fetch("/api/sendEmail", {
         method: "post",
         body: {
-          recipients: [
-            {
-              email: yardOwner.value.profile_id.email,
-              name:
-                yardOwner.value.profile_id.first_name +
-                " " +
-                yardOwner.value.profile_id.last_name,
-            },
-          ],
+          recipients: [yardOwner.value.profile_id.email],
           subject: `${yard.value.name}: New Livery Service Request!`,
           text: ``,
           html: `<p>${profile.value.first_name} ${profile.value.last_name} has requested services for ${horse.value.name} at ${yard.value.name}. Please log in to your account to accept or reject the request.</p>

@@ -74,15 +74,7 @@ const handleDelete = async () => {
     await $fetch("/api/sendEmail", {
       method: "post",
       body: {
-        recipients: [
-          {
-            email: yardOwner.value.profile_id.email,
-            name:
-              yardOwner.value.profile_id.first_name +
-              " " +
-              yardOwner.value.profile_id.last_name,
-          },
-        ],
+        recipients: [yardOwner.value.profile_id.email],
         subject: `${yard.value.name}: A service request has been canceled`,
         text: ``,
         html: `
@@ -151,7 +143,7 @@ const handleDelete = async () => {
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+              class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
             >
               <div class="sm:flex sm:items-start">
                 <div
@@ -163,12 +155,12 @@ const handleDelete = async () => {
                     aria-hidden="true"
                   />
                 </div>
-                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                   <DialogTitle
                     as="h3"
                     class="text-lg font-medium leading-6 text-gray-900"
-                    >Cancel Service</DialogTitle
-                  >
+                    >Cancel Service
+                  </DialogTitle>
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
                       Are you sure you want to cancel this service request?
