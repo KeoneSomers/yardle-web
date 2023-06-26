@@ -128,13 +128,9 @@ const handleSignout = async () => {
 
 <template>
   <!-- Sidebar component, swap this element with another sidebar if you like -->
-  <div
-    class="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-gray-100"
-  >
+  <div class="flex min-h-0 flex-1 flex-col border-r border-gray-200">
     <div class="flex flex-1 flex-col overflow-y-auto pb-4">
-      <div
-        class="flex h-16 flex-shrink-0 items-center border-b bg-gray-50 px-4"
-      >
+      <div class="flex h-16 flex-shrink-0 items-center border-b px-4">
         <Logo class="h-8 w-8" />
       </div>
       <nav class="flex-1" aria-label="Sidebar">
@@ -172,25 +168,20 @@ const handleSignout = async () => {
             </UTooltip>
           </div>
         </div>
-        <div class="space-y-1 px-2">
+        <div class="mt-2 space-y-1 px-2">
           <NuxtLink
             v-if="!selectedYard"
             to="/yards"
             :class="[
-              '/yards' == router.currentRoute.value.path
-                ? 'bg-gray-200 text-gray-900'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-              'group flex items-center rounded-md px-2 py-2 text-sm font-medium',
+              '/yards' === router.currentRoute.value.path
+                ? 'bg-gray-50 text-indigo-600'
+                : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
+              'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
             ]"
           >
             <icon
               name="heroicons:rectangle-stack"
-              :class="[
-                '/yards' == router.currentRoute.value.path
-                  ? 'text-gray-500'
-                  : 'text-gray-400 group-hover:text-gray-500',
-                'mr-3 h-6 w-6 flex-shrink-0',
-              ]"
+              :class="['mr-3 h-6 w-6 flex-shrink-0']"
             />
             Your Yards
           </NuxtLink>
@@ -200,12 +191,10 @@ const handleSignout = async () => {
             :key="item.name"
             :to="item.to"
             :class="[
-              item.to == router.currentRoute.value.path
-                ? 'bg-gray-200 text-gray-900'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-              'group mt-2 flex items-center rounded-md px-2 py-2 text-sm font-medium',
-              item.hint ? 'pointer-events-none' : '',
-              item.hint ? 'pointer-events-none' : '',
+              item.to === router.currentRoute.value.path
+                ? 'bg-gray-50 text-indigo-600'
+                : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
+              'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
             ]"
             v-show="
               item.to != '/yard/settings' ||
@@ -216,12 +205,7 @@ const handleSignout = async () => {
           >
             <icon
               :name="item.icon"
-              :class="[
-                item.to == router.currentRoute.value.path
-                  ? 'text-gray-500'
-                  : 'text-gray-400 group-hover:text-gray-500',
-                'mr-3 h-6 w-6 flex-shrink-0',
-              ]"
+              :class="['mr-3 h-6 w-6 flex-shrink-0']"
               aria-hidden="true"
             />
             <span class="flex-1">{{ item.name }}</span>
@@ -274,9 +258,9 @@ const handleSignout = async () => {
                 <NuxtLink
                   to="/yard/dashboard"
                   :class="[
-                    '/yard/dashboard' == router.currentRoute.value.path
-                      ? 'bg-gray-200 text-gray-900'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    '/yard/dashboard' === router.currentRoute.value.path
+                      ? 'bg-gray-50 text-indigo-600'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
                     'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
                   ]"
                 >
@@ -288,9 +272,9 @@ const handleSignout = async () => {
                 <NuxtLink
                   to="/yard/serviceRequests"
                   :class="[
-                    '/yard/serviceRequests' == router.currentRoute.value.path
-                      ? 'bg-gray-200 text-gray-900'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    '/yard/serviceRequests' === router.currentRoute.value.path
+                      ? 'bg-gray-50 text-indigo-600'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
                     'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
                   ]"
                 >
@@ -307,9 +291,9 @@ const handleSignout = async () => {
                 <NuxtLink
                   to="/yard/invoices"
                   :class="[
-                    '/yard/invoices' == router.currentRoute.value.path
-                      ? 'bg-gray-200 text-gray-900'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    '/yard/invoices' === router.currentRoute.value.path
+                      ? 'bg-gray-50 text-indigo-600'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
                     'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
                   ]"
                 >
@@ -321,9 +305,9 @@ const handleSignout = async () => {
                 <NuxtLink
                   to="/yard/settings"
                   :class="[
-                    '/yard/settings' == router.currentRoute.value.path
-                      ? 'bg-gray-200 text-gray-900'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    '/yard/settings' === router.currentRoute.value.path
+                      ? 'bg-gray-50 text-indigo-600'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
                     'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
                   ]"
                 >
