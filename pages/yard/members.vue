@@ -48,6 +48,18 @@ const removeMemberModalOpen = ref(false);
 const memberToRemove = ref(0);
 const toast = useToast();
 
+const computedMembers = computed(() => {
+  return members.value.map((member) => {
+    return { ...member.profile, role: member.role };
+  });
+});
+
+watchEffect(() => {
+  if (members.value) {
+    console.log(computedMembers.value);
+  }
+});
+
 const handleRemoveMember = (memberId) => {
   memberToRemove.value = memberId;
   removeMemberModalOpen.value = true;
@@ -105,6 +117,30 @@ const handleRoleChange = async (memberId, roleId) => {
     } is now a ${roles.find((role) => role.id == roleId).name}`,
   });
 };
+
+const columns = [
+  {
+    key: "name",
+    label: "Name",
+  },
+  {
+    key: "actions",
+  },
+];
+
+const actionItems = (row) => [
+  [
+    {
+      label: "Remove Member",
+      icon: "i-heroicons-user-minus-20-solid",
+      disabled:
+        !profile.value ||
+        (profile.value && profile.value.active_role !== 1) ||
+        row.id === profile.value.id,
+      click: () => handleRemoveMember(row.id),
+    },
+  ],
+];
 </script>
 
 <template>
@@ -122,210 +158,27 @@ const handleRoleChange = async (memberId, roleId) => {
         Invite member
       </button>
     </PageHeading>
-    <div class="px-0 sm:px-6 md:h-screen md:overflow-y-auto lg:px-8">
-      <div class="rounded-lg border sm:mt-8">
-        <div class="inline-block min-w-full align-middle">
-          <div class="ring-1 ring-black ring-opacity-5">
-            <table class="w-full">
-              <thead>
-                <tr class="border-b">
-                  <th
-                    scope="col"
-                    class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-6"
-                  ></th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-200 bg-white">
-                <tr
-                  v-for="(member, index) in members"
-                  :key="member.profile.id"
-                  :class="index % 2 === 0 ? 'bg-gray-50' : undefined"
-                >
-                  <td
-                    class="flex items-center break-all py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-6"
-                  >
-                    <div
-                      v-if="member.profile.avatar_url"
-                      class="mr-3 h-9 w-9 overflow-hidden rounded-full"
-                    >
-                      <SupabaseImage
-                        id="avatars"
-                        :path="member.profile.avatar_url"
-                      />
-                    </div>
-                    <div
-                      v-else
-                      class="mr-3 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-500 text-sm tracking-tight text-white"
-                    >
-                      {{ member.profile.first_name[0].toUpperCase() }}
-                      {{
-                        member.profile.last_name &&
-                        member.profile.last_name[0].toUpperCase()
-                      }}
-                    </div>
-                    <span class="truncate"
-                      >{{ member.profile.first_name }}
-                      {{ member.profile.last_name }}
-                      <span v-if="user.id == member.profile.id" class="ml-2">
-                        (You)</span
-                      ></span
-                    >
-                  </td>
-                  <td class="py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6">
-                    <div class="flex items-center justify-end">
-                      <!-- Only show this button if user is admin or owner and member.role is > role -->
-                      <div
-                        v-if="
-                          profile &&
-                          profile.active_role < 3 &&
-                          member.role > profile.active_role
-                        "
-                      >
-                        <button
-                          @click="handleRemoveMember(member.profile.id)"
-                          class="mr-3 inline-flex items-center rounded-md bg-red-500 p-2 px-3 font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                        >
-                          <p class="text-sm font-medium">Remove</p>
-                        </button>
-                      </div>
-                      <Listbox as="div" v-model="member.role">
-                        <ListboxLabel class="sr-only">
-                          Change members role
-                        </ListboxLabel>
-                        <div class="relative">
-                          <div
-                            class="inline-flex divide-x rounded-md shadow-sm"
-                          >
-                            <div
-                              class="inline-flex divide-x rounded-md shadow-sm"
-                            >
-                              <div
-                                class="inline-flex items-center rounded-l-md border border-transparent py-2 pl-3 pr-4 shadow-sm"
-                              >
-                                <p class="text-sm font-medium">
-                                  {{ roles[member.role - 1].name }}
-                                </p>
-                              </div>
-                              <ListboxButton
-                                class="inline-flex items-center rounded-l-none rounded-r-md p-2 text-sm font-medium hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                              >
-                                <span class="sr-only"
-                                  >Change published status</span
-                                >
-                                <icon
-                                  name="heroicons:chevron-down-solid"
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </ListboxButton>
-                            </div>
-                          </div>
 
-                          <transition
-                            leave-active-class="transition ease-in duration-100"
-                            leave-from-class="opacity-100"
-                            leave-to-class="opacity-0"
-                          >
-                            <ListboxOptions
-                              class="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                            >
-                              <ListboxOption
-                                @click="
-                                  handleRoleChange(
-                                    member.profile.id,
-                                    roleOption.id
-                                  )
-                                "
-                                as="template"
-                                v-for="roleOption in roles"
-                                :key="roleOption.id"
-                                :value="roleOption.id"
-                              >
-                                <li
-                                  :class="[
-                                    // default styles
-                                    'cursor-pointer p-4 text-sm hover:bg-gray-50',
-                                    {
-                                      // Highlight currenly set role
-                                      'pointer-events-none bg-indigo-500 text-white':
-                                        member.role == roleOption.id,
-                                    },
-                                    {
-                                      // Can't change someones role if you're not owner or admin
-                                      'pointer-events-none opacity-20':
-                                        profile.active_role > 2,
-                                    },
-                                    {
-                                      // Can't promote a member to owner
-                                      // TODO: remove this so that owner can be transfered
-                                      'pointer-events-none opacity-20':
-                                        roleOption.id == 1,
-                                    },
-                                    {
-                                      // Can't change owners role!
-                                      'pointer-events-none opacity-20':
-                                        member.role == 1,
-                                    },
-                                  ]"
-                                >
-                                  <div class="flex flex-col">
-                                    <div class="flex justify-between">
-                                      <p
-                                        :class="
-                                          member.role == roleOption.id
-                                            ? 'font-semibold'
-                                            : 'font-normal'
-                                        "
-                                      >
-                                        {{ roleOption.name }}
-                                      </p>
-                                      <span
-                                        v-if="member.role == roleOption.id"
-                                        :class="
-                                          member.role == roleOption.id
-                                            ? 'text-white'
-                                            : 'text-indigo-500'
-                                        "
-                                      >
-                                        <icon
-                                          name="heroicons:check-solid"
-                                          class="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    </div>
-                                    <p
-                                      :class="[
-                                        member.role == roleOption.id
-                                          ? 'text-indigo-200'
-                                          : 'text-gray-500',
-                                        'mt-2',
-                                      ]"
-                                    >
-                                      {{ roleOption.description }}
-                                    </p>
-                                  </div>
-                                </li>
-                              </ListboxOption>
-                            </ListboxOptions>
-                          </transition>
-                        </div>
-                      </Listbox>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+    <UTable
+      :columns="columns"
+      :rows="computedMembers"
+      class="m-4 overflow-hidden rounded border sm:m-6 md:m-8"
+    >
+      <template #name-data="{ row }">
+        {{ row.first_name }} {{ row.last_name }}
+      </template>
+      <template #actions-data="{ row }">
+        <div class="flex justify-end">
+          <UDropdown :items="actionItems(row)">
+            <UButton
+              color="gray"
+              variant="ghost"
+              icon="i-heroicons-ellipsis-horizontal-20-solid"
+            />
+          </UDropdown>
         </div>
-      </div>
-    </div>
+      </template>
+    </UTable>
   </div>
 
   <!-- Modals -->
