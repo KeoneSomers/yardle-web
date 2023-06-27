@@ -237,11 +237,14 @@ const handleSignout = async () => {
               />
               <span>
                 Admin
-                <span
+                <UBadge
                   v-if="pendingServiceRequestCount > 0"
-                  class="ml-3 inline-block rounded-full bg-red-100 px-3 py-0.5 text-xs font-medium text-red-800"
-                  >{{ pendingServiceRequestCount }}</span
-                >
+                  color="rose"
+                  variant="solid"
+                  :label="pendingServiceRequestCount"
+                  size="xs"
+                  class="ml-2"
+                />
               </span>
 
               <UIcon
@@ -279,11 +282,14 @@ const handleSignout = async () => {
                   ]"
                 >
                   <span class="flex-1">Service Requests</span>
-                  <span
+                  <UBadge
                     v-if="pendingServiceRequestCount > 0"
-                    class="ml-3 inline-block rounded-full bg-red-100 px-3 py-0.5 text-xs font-medium text-red-800"
-                    >{{ pendingServiceRequestCount }}</span
-                  >
+                    color="rose"
+                    variant="solid"
+                    :label="pendingServiceRequestCount"
+                    size="xs"
+                    class="ml-2"
+                  />
                 </NuxtLink>
               </li>
               <li>
@@ -318,14 +324,10 @@ const handleSignout = async () => {
           </Disclosure>
         </div>
         <div v-if="yard" class="flex w-full p-4">
-          <button
-            @click="() => (inviteLinkModalOpen = true)"
-            type="button"
-            class="flex flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-          >
-            <icon name="heroicons:link" class="mr-2 h-5 w-5" />
+          <UButton block @click="() => (inviteLinkModalOpen = true)">
+            <UIcon name="i-heroicons-user-plus" class="mr-2 h-5 w-5" />
             Invite
-          </button>
+          </UButton>
         </div>
       </nav>
     </div>

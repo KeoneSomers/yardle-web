@@ -206,7 +206,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
   >
     <!-- Breadcrumb -->
     <nav
-      class="fixed top-14 left-0 z-40 flex w-full items-start border-b bg-white px-4 py-3 sm:px-6 md:hidden lg:px-8"
+      class="fixed left-0 top-14 z-40 flex w-full items-start border-b bg-white px-4 py-3 sm:px-6 md:hidden lg:px-8"
       aria-label="Breadcrumb"
     >
       <a
@@ -227,7 +227,14 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
         <!-- Profile header -->
         <div>
           <div>
-            <div class="banner-svg h-32 w-full object-cover lg:h-48"></div>
+            <div
+              :class="
+                horse.avatar_background
+                  ? horse.avatar_background
+                  : 'bg-pink-500'
+              "
+              class="h-32 w-full bg-opacity-50 object-cover lg:h-48"
+            ></div>
           </div>
           <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <div
@@ -327,10 +334,10 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
               </div>
             </div>
             <!-- <div class="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
-                <h1 class="truncate text-2xl font-bold text-gray-900">
-                  {{ horse.name }}
-                </h1>
-              </div> -->
+                                                                            <h1 class="truncate text-2xl font-bold text-gray-900">
+                                                                              {{ horse.name }}
+                                                                            </h1>
+                                                                          </div> -->
           </div>
         </div>
 
@@ -347,7 +354,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
                     index == selectedTab
                       ? 'border-pink-500 text-gray-900'
                       : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                    'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium',
+                    'whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium',
                   ]"
                   :aria-current="tab.current ? 'page' : undefined"
                 >
