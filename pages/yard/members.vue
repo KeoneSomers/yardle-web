@@ -124,6 +124,10 @@ const columns = [
     label: "Name",
   },
   {
+    key: "email",
+    label: "Email",
+  },
+  {
     key: "actions",
   },
 ];
