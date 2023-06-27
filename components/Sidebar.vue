@@ -18,35 +18,35 @@ const navigation = [
   {
     name: "Horses",
     to: "/yard/horses",
-    icon: "heroicons:magnifying-glass-circle",
+    icon: "i-heroicons-magnifying-glass-circle",
     hint: "",
   },
   {
     name: "Members",
     to: "/yard/members",
-    icon: "heroicons:user-group",
+    icon: "i-heroicons-user-group",
     hint: "",
   },
   {
     name: "Calendar",
     to: "/yard/calendar",
-    icon: "heroicons:calendar",
+    icon: "i-heroicons-calendar",
     hint: "",
   },
   {
     name: "Feeds",
     to: "/yard/feeds",
-    icon: "heroicons:clipboard-document-list",
+    icon: "i-heroicons-clipboard-document-list",
   },
   {
     name: "Field Groups",
     to: "/yard/fields",
-    icon: "heroicons:rectangle-group",
+    icon: "i-heroicons-rectangle-group",
   },
   {
     name: "My Invoices",
     to: "/yard/myInvoices",
-    icon: "heroicons:document-text",
+    icon: "i-heroicons-document-text",
   },
 ];
 
@@ -203,7 +203,7 @@ const handleSignout = async () => {
                 profile.active_role == 1)
             "
           >
-            <icon
+            <UIcon
               :name="item.icon"
               class="h-6 w-6 flex-shrink-0"
               aria-hidden="true"
@@ -228,13 +228,10 @@ const handleSignout = async () => {
           >
             <DisclosureButton
               :class="[
-                'flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm font-semibold leading-6 text-gray-700',
+                'flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
               ]"
             >
-              <UIcon
-                name="i-heroicons-shield-check"
-                class="h-6 w-6 shrink-0 text-gray-400"
-              />
+              <UIcon name="i-heroicons-shield-check" class="h-6 w-6 shrink-0" />
               <span>
                 Admin
                 <UBadge

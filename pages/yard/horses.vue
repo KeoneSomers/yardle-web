@@ -107,45 +107,27 @@ const selectHorse = (horseId) => {
         </p>
         <div class="mt-6 flex space-x-4">
           <div class="min-w-0 flex-1">
-            <label for="search" class="sr-only">Search</label>
-            <div class="relative rounded-md shadow-sm">
-              <div
-                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-              >
-                <icon
-                  name="heroicons:magnifying-glass-solid"
-                  class="h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
-              </div>
-              <input
-                v-model="searchString"
-                @keyup="handleSearch"
-                type="text"
-                name="search"
-                id="search"
-                class="block w-full rounded-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Search"
-              />
-            </div>
+            <UInput
+              icon="i-heroicons-magnifying-glass-20-solid"
+              size="md"
+              color="white"
+              :trailing="false"
+              placeholder="Search..."
+              v-model="searchString"
+              @keyup="handleSearch"
+            />
           </div>
-          <button
+          <UButton
             v-if="
               profile &&
               profile.active_role &&
-              (profile.active_role == 1 || profile.active_role == 2)
+              (profile.active_role === 1 || profile.active_role === 2)
             "
             @click="() => (isOpen = true)"
-            type="submit"
-            class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            Add Horse
-            <!-- <FunnelIcon
-                                                    class="h-5 w-5 text-gray-400"
-                                                    aria-hidden="true"
-                                                /> -->
-            <span class="sr-only">Search</span>
-          </button>
+            color="white"
+            variant="solid"
+            label="Add Horse"
+          />
         </div>
       </div>
       <div class="flex-1 md:overflow-y-auto">
