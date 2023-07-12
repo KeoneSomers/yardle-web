@@ -178,7 +178,7 @@ const handleFieldChange = async (e) => {
   <div class="flex flex-col">
     <PageHeading title="Field Groups"></PageHeading>
     <div
-      class="flex w-screen flex-1 flex-col md:h-screen md:overflow-y-auto lg:w-[calc(100vw-16rem)]"
+      class="flex w-screen flex-1 flex-col md:overflow-y-auto lg:w-[calc(100vw-16rem)]"
     >
       <div class="mb-4 overflow-x-scroll border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="field_rotations">
