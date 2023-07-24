@@ -238,7 +238,7 @@ const handleSignout = async () => {
                   v-if="pendingServiceRequestCount > 0"
                   color="rose"
                   variant="solid"
-                  :label="pendingServiceRequestCount"
+                  :label="String(pendingServiceRequestCount)"
                   size="xs"
                   class="ml-2"
                 />
@@ -283,7 +283,7 @@ const handleSignout = async () => {
                     v-if="pendingServiceRequestCount > 0"
                     color="rose"
                     variant="solid"
-                    :label="pendingServiceRequestCount"
+                    :label="String(pendingServiceRequestCount)"
                     size="xs"
                     class="ml-2"
                   />

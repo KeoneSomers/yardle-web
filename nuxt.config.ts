@@ -62,7 +62,6 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     mySuperSecretApiKey: process.env.MY_SUPER_SECRET_API_KEY,
-    mailerSendAPIKey: process.env.MAILER_SEND_API_KEY,
     resendApiKey: process.env.RESEND_API_KEY,
     public: {
       // this is where any keys i want visable on the frontend would go.
