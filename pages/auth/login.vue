@@ -12,7 +12,7 @@ const toast = useToast();
 const route = useRoute();
 const { invite_code } = route.query;
 
-const supabaseAuthClient = useSupabaseAuthClient();
+const supabase = useSupabaseClient();
 
 const email = ref("");
 const password = ref("");
@@ -33,7 +33,7 @@ const handleLogin = async () => {
     return;
   }
 
-  const { error } = await supabaseAuthClient.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email: email.value,
     password: password.value,
   });

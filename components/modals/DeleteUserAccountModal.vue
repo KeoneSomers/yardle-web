@@ -13,7 +13,6 @@ const props = defineProps(["isOpen"]);
 const emits = defineEmits(["close"]);
 
 const supabase = useSupabaseClient();
-const supabaseAuth = useSupabaseAuthClient();
 const user = useSupabaseUser();
 
 // TODO: if a user has any images in storage then the delete user account will fail (I think)
@@ -85,7 +84,7 @@ const handleSubmit = async () => {
 
         if (result === "success") {
           loading.value = false;
-          await supabaseAuth.auth.signOut();
+          await supabase.auth.signOut();
           await navigateTo("/");
         } else {
           throw new Error("Error deleting user account");

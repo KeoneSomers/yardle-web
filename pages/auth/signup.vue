@@ -10,7 +10,7 @@ const route = useRoute();
 const { invite_code } = route.query;
 const toast = useToast();
 
-const supabaseAuthClient = useSupabaseAuthClient();
+const supabase = useSupabaseClient();
 
 const firstName = ref("");
 const lastName = ref("");
@@ -74,7 +74,7 @@ const handleSignup = async () => {
     return;
   }
 
-  const { data, error } = await supabaseAuthClient.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
     options: {

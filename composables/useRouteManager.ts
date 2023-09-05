@@ -1,9 +1,9 @@
 export function useRouteManager() {
   const user = useSupabaseUser();
-  const authClient = useSupabaseAuthClient();
+  const supabase = useSupabaseClient();
   const sidebarOpen = useState("sidebarOpen");
 
-  authClient.auth.onAuthStateChange((event, session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
     if (!session) {
       user.value = null;
     }

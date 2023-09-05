@@ -50,7 +50,6 @@ const navigation = [
   },
 ];
 
-const supabaseAuthClient = useSupabaseAuthClient();
 const supabaseClient = useSupabaseClient();
 const router = useRouter();
 const user = useSupabaseUser();
@@ -121,7 +120,7 @@ const handleUnselectYard = async () => {
 
 const handleSignout = async () => {
   sidebarOpen.value = false;
-  await supabaseAuthClient.auth.signOut();
+  await supabaseClient.auth.signOut();
   navigateTo("/");
 };
 </script>

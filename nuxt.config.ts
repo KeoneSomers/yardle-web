@@ -9,6 +9,9 @@ export default defineNuxtConfig({
     "@nuxthq/ui",
     "@vue-final-modal/nuxt",
   ],
+  supabase: {
+    redirect: false, // i am already doing this myself with the middleware
+  },
   colorMode: { preference: "light" },
   plugins: [{ src: "@/plugins/vercel.ts", mode: "client" }],
   typescript: {
