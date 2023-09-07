@@ -10,7 +10,6 @@
   "devDependencies": {
     "@nuxt/devtools": "^0.7.1",
     "@nuxt/image-edge": "^1.0.0-rc.1-28164352.ad7c010",
-    "@nuxthq/ui": "^2.6.0",
     "@nuxtjs/supabase": "^1.0.2",
     "@sidebase/nuxt-pdf": "^0.1.1",
     "@tailwindcss/forms": "^0.5.4",
@@ -24,6 +23,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.14",
+    "@nuxt/ui": "^2.8.0",
     "@vercel/analytics": "^1.0.1",
     "@vue-final-modal/nuxt": "^1.0.0",
     "@vuepic/vue-datepicker": "^5.4.0",

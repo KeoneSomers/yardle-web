@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     "@sidebase/nuxt-pdf",
     "@nuxt/devtools",
     "nuxt-icon",
-    "@nuxthq/ui",
+    "@nuxt/ui",
     "@vue-final-modal/nuxt",
   ],
   supabase: {
