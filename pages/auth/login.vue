@@ -23,7 +23,12 @@ const requestPasswordResetModalOpen = ref(false);
 const handleLogin = async () => {
   loading.value = true;
 
-  if (!email.value || !password.value) {
+  if (
+    !email.value ||
+    !password.value ||
+    email.value === "" ||
+    password.value === ""
+  ) {
     toast.add({
       title: "Error",
       description: "Please enter your email and password",
@@ -68,7 +73,7 @@ const handleLogin = async () => {
 <template>
   <div class="flex min-h-full">
     <div
-      class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24"
+      class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 shadow-lg"
     >
       <div class="mx-auto w-full max-w-sm lg:w-96">
         <div>
@@ -184,14 +189,15 @@ const handleLogin = async () => {
                   >Email address</label
                 >
                 <div class="mt-2">
-                  <input
+                  <UInput
                     v-model="email"
+                    size="lg"
                     id="email"
                     name="email"
                     type="email"
                     autocomplete="off"
+                    :autofocus="true"
                     required
-                    class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -203,15 +209,15 @@ const handleLogin = async () => {
                   >Password</label
                 >
                 <div class="mt-2">
-                  <input
+                  <UInput
                     v-model="password"
+                    size="lg"
                     minlength="6"
                     id="password"
                     name="password"
                     type="password"
                     autocomplete="off"
                     required
-                    class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -242,14 +248,14 @@ const handleLogin = async () => {
               </div>
 
               <div>
-                <button
-                  v-if="!loading"
+                <UButton
                   type="submit"
-                  class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  size="lg"
+                  block
+                  :disabled="email.length < 1 || password.length < 1"
+                  :loading="loading"
+                  >Sign in</UButton
                 >
-                  Sign in
-                </button>
-                <LoadingButtonWide v-else />
               </div>
             </form>
 
