@@ -95,7 +95,7 @@ const selectHorse = (horseId) => {
     <div
       :class="{ hidden: viewingHorse }"
       class="flex w-full flex-shrink-0 flex-col border-r border-gray-200 md:flex lg:w-96"
-      v-if="horses.length > 0"
+      v-if="horses && horses.length > 0"
     >
       <div class="px-4 pb-4 pt-6">
         <h2 class="text-lg font-medium text-gray-900">Horses</h2>
