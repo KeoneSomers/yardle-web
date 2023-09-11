@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  console.log("Running the 'Require Yard Owner' Middleware!");
+  // console.log("Running the 'Require Yard Owner' Middleware!");
   const supabase = useSupabaseClient();
   const user = useSupabaseUser();
   const selectedYardId = useState<number | undefined>("selectedYard", () => 0);

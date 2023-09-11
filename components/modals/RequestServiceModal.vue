@@ -18,7 +18,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const user = useSupabaseUser();
-const yardId = useState("selectedYard");
+const yardId = useSelectedYardId();
 const serviceRequests = useState("service_requests");
 const horse = useState("horse");
 const liveryServices = ref([]);

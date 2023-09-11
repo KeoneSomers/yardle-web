@@ -1,7 +1,7 @@
 <script setup>
 const supabaseClient = useSupabaseClient();
 const user = useSupabaseUser();
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 const yard = useState("yard", () => null);
 const profile = useState("profile", () => null);
 

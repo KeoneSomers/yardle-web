@@ -1,7 +1,7 @@
 <script setup>
 // clear all state
 const yard = useState("yard");
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 const profile = useState("profile");
 
 yard.value = null;

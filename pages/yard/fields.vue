@@ -17,7 +17,7 @@ definePageMeta({
 const client = useSupabaseClient();
 const selectedField = ref(null);
 const selectedRotation = useState("selectedRotation", () => null);
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 const field_rotations = useState("field_rotations", () => []);
 
 // (field modals)
@@ -54,7 +54,7 @@ const fetchFieldRotations = async () => {
 
 await fetchFieldRotations();
 
-const selectedYardId = useState("selectedYard");
+const selectedYardId = useSelectedYardId();
 const horses = ref([]);
 
 const getHorsesSlim = async () => {

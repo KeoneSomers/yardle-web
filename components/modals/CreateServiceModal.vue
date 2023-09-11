@@ -14,7 +14,7 @@ const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
 const user = useSupabaseUser();
-const yardId = useState("selectedYard");
+const yardId = useSelectedYardId();
 const services = useState("services");
 const yard = useState("yard");
 

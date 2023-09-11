@@ -10,7 +10,7 @@ export function useRouteManager() {
   });
 
   const route = useRoute();
-  const selectedYard = useState("selectedYard");
+  const selectedYard = useSelectedYardId();
   // invite code if there is one (could also be undefined or null)
 
   watchEffect(async () => {

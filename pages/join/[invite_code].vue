@@ -10,7 +10,7 @@ const user = useSupabaseUser();
 const yard = ref(null);
 const client = useSupabaseClient();
 const error = ref("");
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 
 // first get some basic info about the yard from the db
 const getBasicYardData = async () => {

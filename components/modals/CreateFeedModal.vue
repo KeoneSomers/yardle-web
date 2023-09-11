@@ -17,7 +17,7 @@ const user = useSupabaseUser();
 const feeds = useState("feeds");
 const horses = useState("horses");
 const selectedHorseId = useState("selectedHorseId");
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 const route = useRoute();
 const mustManualSelectedHorse = ref(route.path == "/yard/feeds");
 

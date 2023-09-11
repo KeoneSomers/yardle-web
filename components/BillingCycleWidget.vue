@@ -5,7 +5,7 @@ const loading2 = ref(false);
 const done2 = ref(false);
 
 const client = useSupabaseClient();
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 const toast = useToast();
 
 const billingPeriodOptions = ref({

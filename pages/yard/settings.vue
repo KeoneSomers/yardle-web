@@ -27,7 +27,7 @@ definePageMeta({
 const now = ref(DateTime.now());
 
 const client = useSupabaseClient();
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 const yard = useState("yard");
 const loading = ref(false);
 const done = ref(false);

@@ -6,7 +6,7 @@ definePageMeta({
 });
 
 const client = useSupabaseClient();
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 const isOpen = ref(false);
 const searchString = ref("");
 const selectedHorseId = useState("selectedHorseId", () => 0);
@@ -28,7 +28,7 @@ await useAsyncData("horses", async () => {
 // auto select first horse if there is one
 onMounted(() => {
   if (horses.value && horses.value.length > 0) {
-    selectedHorseId.value = horses.value[0].id;
+    selectHorse(horses.value[0].id);
   } else {
     selectedHorseId.value = 0;
   }

@@ -24,7 +24,7 @@ const horses = useState("horses");
 const error = ref("");
 const owner = ref(null);
 const members = useState("members");
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 const query = ref("");
 const toast = useToast();
 

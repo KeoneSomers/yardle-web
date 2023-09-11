@@ -13,7 +13,7 @@ const props = defineProps(["isOpen"]);
 const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
-const yardId = useState("selectedYard");
+const yardId = useSelectedYardId();
 const field_rotations = useState("field_rotations");
 const toast = useToast();
 

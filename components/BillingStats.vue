@@ -1,8 +1,7 @@
 <script setup>
 import { DateTime } from "luxon";
 
-const selectedYard = useState("selectedYard");
-const profile = useState("profile");
+const selectedYard = useSelectedYardId();
 const nextBillingDate = ref(null);
 const previousBillingDate = ref(null);
 const client = useSupabaseClient();

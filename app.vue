@@ -8,7 +8,7 @@ import { ModalsContainer } from "vue-final-modal";
 const user = useSupabaseUser();
 const client = useSupabaseClient();
 let realtimeChannel: RealtimeChannel;
-const selectedYard = useState("selectedYard", () => undefined);
+const selectedYard = useSelectedYardId();
 const profile = useState<any>("profile");
 
 // Function for fetching the users "selected_yard" and their "active_role"

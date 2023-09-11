@@ -41,7 +41,7 @@ const user = useSupabaseUser();
 const yard = useState("yard");
 const members = useState("members");
 const profile = useState("profile");
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 
 const inviteLinkModalOpen = ref(false);
 const removeMemberModalOpen = ref(false);

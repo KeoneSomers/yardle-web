@@ -71,7 +71,7 @@ await useAsyncData("horseDetails", async () => {
 watchEffect(async () => {
   // Subsiquent Fetching when horse id changes
   if (selectedHorseId.value) {
-    y.value = 0;
+    y.value = 0; // scroll to top
 
     await useAsyncData("horseDetails", async () => {
       const { data } = await client

@@ -21,7 +21,7 @@ const { event } = toRefs(props);
 const emits = defineEmits(["close"]);
 
 const client = useSupabaseClient();
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 const events = useState("events");
 const horses = useState("horses");
 const toast = useToast();

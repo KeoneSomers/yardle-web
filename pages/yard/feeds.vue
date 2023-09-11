@@ -14,7 +14,7 @@ definePageMeta({
 });
 
 const client = useSupabaseClient();
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 const feeds = useState("feeds");
 const profile = useState("profile");
 

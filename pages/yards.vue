@@ -13,7 +13,7 @@ const isOpen = ref(false);
 const deleteYardModalOpen = ref(false);
 const yardToDelete = ref(0);
 const yards = useState("yards");
-const selectedYard = useState("selectedYard");
+const selectedYard = useSelectedYardId();
 
 // this is not ssr - needs to be cleaned up
 onMounted(async () => {
