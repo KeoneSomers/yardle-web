@@ -4,4 +4,4 @@ interface Alert {
   type: string;
 }
 
-export { Alert };
+export type { Alert };

@@ -2,7 +2,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // console.log("Running the 'Require Yard Owner' Middleware!");
   const supabase = useSupabaseClient();
   const user = useSupabaseUser();
-  const selectedYardId = useState<number | undefined>("selectedYard", () => 0);
+  const selectedYardId = useSelectedYardId();
   const role = ref(4);
 
   const getYard = async () => {
@@ -16,10 +16,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       if (data && data.active_role) {
         role.value = data.active_role;
         return data.selected_yard;
-      } else {
-        return 0;
       }
     }
+
+    return 0;
   };
 
   selectedYardId.value = await getYard();
