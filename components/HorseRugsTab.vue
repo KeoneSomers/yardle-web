@@ -34,7 +34,10 @@ const handleDelete = (rugId) => {
 
 <template>
   <div>
-    <div v-if="rugs.length > 0" class="p-4 sm:p-6 lg:p-8">
+    <div
+      v-if="rugs.length > 0"
+      class="my-6 px-4 sm:px-6 lg:px-8 sm:mt-2 2xl:mt-5"
+    >
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
           <h1 class="text-xl font-semibold text-gray-900">Rugs</h1>

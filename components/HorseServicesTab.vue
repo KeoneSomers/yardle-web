@@ -103,7 +103,7 @@ const goToPreviousWeek = () => {
     v-if="
       (horse.owner && user.id === horse.owner.id) || profile.active_role < 3
     "
-    class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8"
+    class="mx-auto my-6 px-4 sm:px-6 lg:px-8 sm:mt-2 2xl:mt-5"
   >
     <div v-if="viewingHistory === false && viewingInvoces === false">
       <div class="mb-5 border-b pb-5 sm:flex sm:items-center">

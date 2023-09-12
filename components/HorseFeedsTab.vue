@@ -71,7 +71,7 @@ const ingredientTypes = [
 </script>
 
 <template>
-  <div class="mx-auto my-6 max-w-5xl px-4 sm:px-6 lg:px-8">
+  <div class="mx-auto my-6 px-4 sm:px-6 lg:px-8 sm:mt-2 2xl:mt-5">
     <div v-if="feeds.length > 0">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">

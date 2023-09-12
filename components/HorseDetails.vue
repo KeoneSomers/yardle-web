@@ -15,28 +15,34 @@ import { useScroll } from "@vueuse/core";
 const viewingHorse = useState("viewingHorse");
 
 const selectedTab = useState("horseTab", () => 0);
+
 const tabs = [
   {
+    label: "General",
     name: "General",
     component: HorseGeneralTab,
     icon: "heroicons:rectangle-group",
   },
   {
+    label: "Rugs",
     name: "Rugs",
     component: HorseRugsTab,
     icon: "heroicons:clipboard-document",
   },
   {
+    label: "Feeds",
     name: "Feeds",
     component: HorseFeedsTab,
     icon: "heroicons:clipboard-document",
   },
   {
+    label: "Meds",
     name: "Meds",
     component: HorseMedicationsTab,
     icon: "heroicons:clipboard-document",
   },
   {
+    label: "Services",
     name: "Services",
     component: HorseServicesTab,
     icon: "heroicons:currency-pound",
@@ -342,33 +348,21 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
         </div>
 
         <!-- Desktop Tabs -->
-        <div class="mt-6 hidden sm:mt-2 md:block 2xl:mt-5">
-          <div class="border-b border-gray-200">
-            <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-              <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                <button
-                  v-for="(tab, index) in tabs"
-                  @click="() => (selectedTab = index)"
-                  :key="tab.name"
-                  :class="[
-                    index == selectedTab
-                      ? 'border-pink-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                    'whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium',
-                  ]"
-                  :aria-current="tab.current ? 'page' : undefined"
-                >
-                  {{ tab.name }}
-                </button>
-              </nav>
-            </div>
-          </div>
-        </div>
-
-        <component :is="tabs[selectedTab].component" />
+        <UTabs
+          v-model="selectedTab"
+          :items="tabs"
+          class="mt-6 px-4 sm:px-6 lg:px-8 sm:mt-2 2xl:mt-5 hidden md:block"
+        >
+          <!-- <template #item="{ item }">
+            <component :is="item.component" />
+          </template> -->
+        </UTabs>
       </article>
     </div>
 
+    <component :is="tabs[selectedTab].component" />
+
+    <!-- Mobile bottom tab nav -->
     <nav
       class="fixed bottom-0 left-0 z-40 flex w-full items-center justify-around border-t bg-white p-2 md:hidden"
     >
