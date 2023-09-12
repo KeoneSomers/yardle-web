@@ -228,7 +228,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
       </a>
     </nav>
 
-    <div ref="horseDetailsElement" class="overflow-y-auto pb-14 md:py-0">
+    <div ref="horseDetailsElement" class="pb-14 md:py-0">
       <article>
         <!-- Profile header -->
         <div>
@@ -304,7 +304,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
                     leave-to-class="transform opacity-0 scale-95"
                   >
                     <MenuItems
-                      class="absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      class="absolute right-0 z-50 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                     >
                       <div class="py-1">
                         <MenuItem v-slot="{ active }">
