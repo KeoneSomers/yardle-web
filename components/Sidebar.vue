@@ -1,14 +1,5 @@
 <script setup>
 import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
-import {
-  Menu,
-  MenuButton,
-  MenuItems,
-  MenuItem,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-} from "@headlessui/vue";
 
 const pendingServiceRequestCount = useState("pendingServiceRequestCount");
 
@@ -75,7 +66,6 @@ const links = [
 ];
 
 const supabaseClient = useSupabaseClient();
-const router = useRouter();
 const user = useSupabaseUser();
 const selectedYard = useSelectedYardId();
 const yard = useState("yard");
@@ -139,6 +129,7 @@ const handleUnselectYard = async () => {
   }
 
   selectedYard.value = null;
+  sidebarOpen.value = false;
   navigateTo("/yards");
 };
 
@@ -153,12 +144,25 @@ const handleSignout = async () => {
   <!-- Sidebar component, swap this element with another sidebar if you like -->
   <div class="flex min-h-0 flex-1 flex-col border-r border-gray-200">
     <div class="flex flex-1 flex-col overflow-y-auto pb-4">
-      <div class="flex h-16 flex-shrink-0 items-center border-b px-4">
+      <div
+        class="flex h-14 flex-shrink-0 items-center justify-between border-b px-4"
+      >
         <Logo class="h-8 w-8" />
+        <button
+          type="button"
+          class="pt-2 lg:hidden ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+          @click="sidebarOpen = false"
+        >
+          <icon
+            name="heroicons:x-mark"
+            class="h-6 w-6 text-gray-800"
+            aria-hidden="true"
+          />
+        </button>
       </div>
       <nav class="flex-1" aria-label="Sidebar">
         <!-- yard widget -->
-        <div v-if="yard" class="flex border-b bg-gray-50 p-4">
+        <div class="flex border-b bg-gray-50 p-4">
           <div class="flex-1">
             <div class="flex items-center">
               <icon
@@ -192,23 +196,7 @@ const handleSignout = async () => {
           </div>
         </div>
         <div class="mt-2 space-y-1 px-2">
-          <NuxtLink
-            v-if="!selectedYard"
-            to="/yards"
-            :class="[
-              '/yards' === router.currentRoute.value.path
-                ? 'bg-gray-50 text-indigo-600'
-                : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
-              'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
-            ]"
-          >
-            <icon
-              name="heroicons:rectangle-stack"
-              class="h-6 w-6 flex-shrink-0"
-            />
-            Your Yards
-          </NuxtLink>
-          <UVerticalNavigation v-else :links="links" />
+          <UVerticalNavigation :links="links" />
 
           <span
             v-if="profile && profile.active_role == 1 && selectedYard != null"
@@ -226,101 +214,6 @@ const handleSignout = async () => {
           </UButton>
         </div>
       </nav>
-    </div>
-    <div
-      v-if="profile && profile.first_name"
-      class="flex flex-shrink-0 border-t border-gray-200 p-4"
-    >
-      <div class="group block w-full flex-shrink-0">
-        <div class="flex items-center">
-          <div>
-            <SupabaseImage
-              v-if="profile.avatar_url"
-              id="avatars"
-              :path="profile.avatar_url"
-              class="h-9 w-9 overflow-hidden rounded-full"
-            />
-            <div
-              v-else
-              class="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-500 text-white"
-            >
-              {{ profile.first_name[0].toUpperCase() }}
-            </div>
-          </div>
-          <div class="ml-3 flex flex-1 flex-col">
-            <div class="flex w-28 items-center truncate">
-              <p
-                class="truncate text-sm font-medium text-gray-700 group-hover:text-gray-900"
-              >
-                {{ `${profile.first_name} ${profile.last_name}` }}
-              </p>
-              <icon
-                name="heroicons:check-badge-solid"
-                v-if="profile.is_early_adopter"
-                class="ml-2 h-4 w-4 text-blue-500"
-                v-tooltip="'Early Adopter'"
-              />
-            </div>
-
-            <div>
-              <NuxtLink
-                to="/auth/accountSettings"
-                class="cursor-pointer text-xs font-medium text-gray-500 group-hover:text-gray-700"
-              >
-                View account
-              </NuxtLink>
-            </div>
-          </div>
-          <div>
-            <Menu as="div" class="relative ml-3">
-              <div>
-                <MenuButton
-                  class="flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  <span class="sr-only">Open user menu</span>
-
-                  <div
-                    class="flex items-center justify-center rounded-full border-2 p-1"
-                  >
-                    <icon
-                      name="heroicons:ellipsis-horizontal-solid"
-                      class="h-5 w-5 text-gray-500"
-                    />
-                  </div>
-                </MenuButton>
-              </div>
-              <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
-              >
-                <MenuItems
-                  class="absolute bottom-0 right-0 z-10 mt-2 w-48 origin-bottom-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                >
-                  <MenuItem>
-                    <NuxtLink
-                      to="/auth/accountSettings"
-                      class="block px-4 py-2 text-sm text-gray-700"
-                      >Account settings
-                    </NuxtLink>
-                  </MenuItem>
-                  <MenuItem>
-                    <button
-                      @click="handleSignout"
-                      class="block w-full px-4 py-2 text-left text-sm text-gray-700"
-                    >
-                      Sign Out
-                    </button>
-                  </MenuItem>
-                </MenuItems>
-              </transition>
-            </Menu>
-          </div>
-        </div>
-      </div>
     </div>
     <SidebarFooter />
 

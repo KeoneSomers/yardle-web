@@ -15,15 +15,17 @@ const viewingHorse = useState("viewingHorse", () => false);
 const profile = useState("profile");
 
 // Get horses from the db
-await useAsyncData("horses", async () => {
-  const { data } = await client
-    .from("horses")
-    .select("*, owner(id, first_name, last_name)")
-    .eq("yard_id", selectedYard.value)
-    .order("name", { ascending: true });
+if (selectedYard.value > 0) {
+  await useAsyncData("horses", async () => {
+    const { data } = await client
+      .from("horses")
+      .select("*, owner(id, first_name, last_name)")
+      .eq("yard_id", selectedYard.value)
+      .order("name", { ascending: true });
 
-  horses.value = data;
-});
+    horses.value = data;
+  });
+}
 
 // auto select first horse if there is one
 onMounted(() => {
@@ -90,11 +92,11 @@ const selectHorse = (horseId) => {
 </script>
 
 <template>
-  <div class="flex h-full flex-1 lg:h-screen">
+  <div class="flex">
     <!-- TODO: HorseDirectory.vue Component -->
     <div
       :class="{ hidden: viewingHorse }"
-      class="flex w-full flex-shrink-0 flex-col border-r border-gray-200 md:flex lg:w-96"
+      class="flex w-full flex-shrink-0 flex-col border-r border-gray-200 md:flex lg:w-96 h-[calc(100vh-3.5rem)]"
       v-if="horses && horses.length > 0"
     >
       <div class="px-4 pb-4 pt-6">
@@ -139,7 +141,7 @@ const selectHorse = (horseId) => {
             class="relative"
           >
             <div
-              class="sticky top-14 z-10 border-b border-t border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500 md:top-0"
+              class="sticky top-0 z-10 border-b border-t border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500"
             >
               <h3>{{ letter }}</h3>
             </div>
@@ -203,7 +205,7 @@ const selectHorse = (horseId) => {
 
     <!-- Empty State -->
     <div
-      v-if="horses.length == 0"
+      v-if="!horses || horses.length == 0"
       class="flex h-full w-full items-center justify-center"
     >
       <div

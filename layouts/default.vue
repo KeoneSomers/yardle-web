@@ -4,6 +4,7 @@ const user = useSupabaseUser();
 const selectedYard = useSelectedYardId();
 const yard = useState("yard", () => null);
 const profile = useState("profile", () => null);
+const sidebarOpen = useState("sidebarOpen", () => false);
 
 const setProfile = async () => {
   const { data: _profile } = await useAsyncData("profile", async () => {
@@ -55,17 +56,25 @@ onMounted(async () => {
 <template>
   <MobileNavbar />
 
-  <!-- desktop sidebar -->
+  <!-- Desktop Sidebar -->
   <Sidebar
-    class="hidden h-screen w-64 flex-col lg:fixed lg:top-0 lg:left-0 lg:flex"
+    v-if="yard"
+    class="hidden h-screen w-64 flex-col lg:fixed lg:top-0 lg:left-0 lg:flex z-10"
   />
 
-  <MobileSidebar />
+  <!-- Mobile Sidebar -->
+  <USlideover v-if="yard" v-model="sidebarOpen">
+    <Sidebar />
+  </USlideover>
 
   <!-- page content -->
-  <div class="min-h-screen w-full overflow-auto pt-14 pl-0 lg:pt-0 lg:pl-64">
+  <div
+    v-if="yard"
+    class="h-[calc(100vh-3.5rem)] w-full overflow-auto fixed bottom-0 right-0 pl-0 lg:pl-64"
+  >
     <slot />
   </div>
+  <UContainer v-else><slot /></UContainer>
 </template>
 
 <style scoped>

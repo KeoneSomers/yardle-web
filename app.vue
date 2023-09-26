@@ -73,7 +73,7 @@ onUnmounted(() => {
 
     <a
       href="mailto:keone@yardle.app"
-      class="fixed right-16 top-3 z-50 inline-flex cursor-pointer items-center rounded-tr-full rounded-l-full border border-transparent bg-pink-400 p-1 px-3 text-sm text-white hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2 md:bottom-5 md:right-5 md:top-auto md:p-3 md:px-4 md:text-base shadow"
+      class="fixed right-28 top-3 z-50 inline-flex cursor-pointer items-center rounded-tr-full rounded-l-full border border-transparent bg-pink-400 p-1 px-3 text-sm text-white hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2 md:bottom-5 md:right-5 md:top-auto md:p-3 md:px-4 md:text-base shadow"
     >
       <icon
         name="heroicons:envelope"
