@@ -148,7 +148,7 @@ const actionItems = (row) => [
 </script>
 
 <template>
-  <div v-if="profile && profile.active_role">
+  <div v-if="profile && profile.active_role" class="w-full">
     <PageHeading
       title="Members"
       description="A list of all the members that are currently in this yard including

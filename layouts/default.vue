@@ -79,7 +79,7 @@ onMounted(async () => {
       <Sidebar />
     </USlideover>
 
-    <div class="lg:col-span-8 col-span-full overflow-auto">
+    <div class="lg:col-span-8 col-span-full overflow-auto flex">
       <slot />
     </div>
   </div>

@@ -92,163 +92,161 @@ const selectHorse = (horseId) => {
 </script>
 
 <template>
-  <div class="flex">
-    <!-- TODO: HorseDirectory.vue Component -->
-    <div
-      :class="{ hidden: viewingHorse }"
-      class="flex w-full flex-shrink-0 flex-col border-r border-gray-200 md:flex lg:w-96 h-[calc(100vh-3.5rem)]"
-      v-if="horses && horses.length > 0"
-    >
-      <div class="px-4 pb-4 pt-6">
-        <h2 class="text-lg font-medium text-gray-900">Horses</h2>
-        <p v-if="horses" class="mt-1 text-sm text-gray-600">
-          Search directory of {{ horses.length }} horse<span
-            v-if="horses.length != 1"
-            >s</span
-          >
-        </p>
-        <div class="mt-6 flex space-x-4">
-          <div class="min-w-0 flex-1">
-            <UInput
-              icon="i-heroicons-magnifying-glass-20-solid"
-              size="md"
-              color="white"
-              :trailing="false"
-              placeholder="Search..."
-              v-model="searchString"
-              @keyup="handleSearch"
-            />
-          </div>
-          <UButton
-            v-if="
-              profile &&
-              profile.active_role &&
-              (profile.active_role === 1 || profile.active_role === 2)
-            "
-            @click="() => (isOpen = true)"
+  <!-- TODO: HorseDirectory.vue Component -->
+  <div
+    :class="{ hidden: viewingHorse }"
+    class="flex flex-shrink-0 flex-col border-r border-gray-200 md:flex w-full lg:w-96"
+    v-if="horses && horses.length > 0"
+  >
+    <div class="px-4 pb-4 pt-6">
+      <h2 class="text-lg font-medium text-gray-900">Horses</h2>
+      <p v-if="horses" class="mt-1 text-sm text-gray-600">
+        Search directory of {{ horses.length }} horse<span
+          v-if="horses.length != 1"
+          >s</span
+        >
+      </p>
+      <div class="mt-6 flex space-x-4">
+        <div class="min-w-0 flex-1">
+          <UInput
+            icon="i-heroicons-magnifying-glass-20-solid"
+            size="md"
             color="white"
-            variant="solid"
-            label="Add Horse"
+            :trailing="false"
+            placeholder="Search..."
+            v-model="searchString"
+            @keyup="handleSearch"
           />
         </div>
-      </div>
-      <div class="flex-1 md:overflow-y-auto">
-        <!-- Directory list -->
-        <nav class="min-h-0 flex-1" aria-label="Directory">
-          <div
-            v-for="letter in Object.keys(groupedHorses)"
-            :key="letter"
-            class="relative"
-          >
-            <div
-              class="sticky top-0 z-10 border-b border-t border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500"
-            >
-              <h3>{{ letter }}</h3>
-            </div>
-            <ul role="list" class="relative z-0 divide-y divide-gray-200">
-              <li
-                @click="() => selectHorse(horse.id)"
-                v-for="horse in groupedHorses[letter]"
-                :key="horse.id"
-              >
-                <div
-                  :class="
-                    horse.id == selectedHorseId
-                      ? 'bg-indigo-100'
-                      : 'hover:bg-gray-50'
-                  "
-                  class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
-                >
-                  <div class="flex-shrink-0">
-                    <SupabaseImage
-                      v-if="horse.avatar_url"
-                      class="h-10 w-10 overflow-hidden rounded-full"
-                      id="horse-avatars"
-                      v-model:path="horse.avatar_url"
-                    />
-                    <div
-                      v-else
-                      class="flex h-10 w-10 items-center justify-center rounded-full text-white"
-                      :class="
-                        horse.avatar_background
-                          ? horse.avatar_background
-                          : 'bg-indigo-500'
-                      "
-                    >
-                      {{ horse.name[0].toUpperCase() }}
-                    </div>
-                  </div>
-                  <div class="min-w-0 flex-1">
-                    <a href="#" class="focus:outline-none">
-                      <!-- Extend touch target to entire panel -->
-                      <span class="absolute inset-0" aria-hidden="true" />
-                      <p class="text-sm font-medium text-gray-900">
-                        {{ horse.name }}
-                      </p>
-                      <p class="truncate text-sm text-gray-500">
-                        <span v-if="horse.owner">{{
-                          horse.owner.first_name + " " + horse.owner.last_name
-                        }}</span>
-                        <span v-else class="italic text-gray-400"> --</span>
-                      </p>
-                    </a>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </nav>
+        <UButton
+          v-if="
+            profile &&
+            profile.active_role &&
+            (profile.active_role === 1 || profile.active_role === 2)
+          "
+          @click="() => (isOpen = true)"
+          color="white"
+          variant="solid"
+          label="Add Horse"
+        />
       </div>
     </div>
-
-    <HorseDetails v-if="selectedHorseId > 0" />
-
-    <!-- Empty State -->
-    <div
-      v-if="!horses || horses.length == 0"
-      class="flex h-full w-full items-center justify-center"
-    >
-      <div
-        v-if="
-          profile &&
-          profile.active_role &&
-          (profile.active_role == 1 || profile.active_role == 2)
-        "
-        class="text-center"
-      >
-        <svg
-          class="mx-auto h-12 w-12 text-gray-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
+    <div class="flex-1 md:overflow-y-auto">
+      <!-- Directory list -->
+      <nav class="min-h-0 flex-1" aria-label="Directory">
+        <div
+          v-for="letter in Object.keys(groupedHorses)"
+          :key="letter"
+          class="relative"
         >
-          <path
-            vector-effect="non-scaling-stroke"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-          />
-        </svg>
-        <h3 class="mt-2 text-sm font-medium text-gray-900">No horses</h3>
-        <p class="mt-1 text-sm text-gray-500">
-          Get started by adding a horse to your yard.
-        </p>
-        <div class="mt-6">
-          <button
-            @click="() => (isOpen = true)"
-            type="button"
-            class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          <div
+            class="sticky top-0 z-10 border-b border-t border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500"
           >
-            <icon
-              name="heroicons:plus-solid"
-              class="-ml-1 mr-2 h-5 w-5"
-              aria-hidden="true"
-            />
-            New Horse
-          </button>
+            <h3>{{ letter }}</h3>
+          </div>
+          <ul role="list" class="relative z-0 divide-y divide-gray-200">
+            <li
+              @click="() => selectHorse(horse.id)"
+              v-for="horse in groupedHorses[letter]"
+              :key="horse.id"
+            >
+              <div
+                :class="
+                  horse.id == selectedHorseId
+                    ? 'bg-indigo-100'
+                    : 'hover:bg-gray-50'
+                "
+                class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
+              >
+                <div class="flex-shrink-0">
+                  <SupabaseImage
+                    v-if="horse.avatar_url"
+                    class="h-10 w-10 overflow-hidden rounded-full"
+                    id="horse-avatars"
+                    v-model:path="horse.avatar_url"
+                  />
+                  <div
+                    v-else
+                    class="flex h-10 w-10 items-center justify-center rounded-full text-white"
+                    :class="
+                      horse.avatar_background
+                        ? horse.avatar_background
+                        : 'bg-indigo-500'
+                    "
+                  >
+                    {{ horse.name[0].toUpperCase() }}
+                  </div>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <a href="#" class="focus:outline-none">
+                    <!-- Extend touch target to entire panel -->
+                    <span class="absolute inset-0" aria-hidden="true" />
+                    <p class="text-sm font-medium text-gray-900">
+                      {{ horse.name }}
+                    </p>
+                    <p class="truncate text-sm text-gray-500">
+                      <span v-if="horse.owner">{{
+                        horse.owner.first_name + " " + horse.owner.last_name
+                      }}</span>
+                      <span v-else class="italic text-gray-400"> --</span>
+                    </p>
+                  </a>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
+      </nav>
+    </div>
+  </div>
+
+  <HorseDetails v-if="selectedHorseId > 0" />
+
+  <!-- Empty State -->
+  <div
+    v-if="!horses || horses.length == 0"
+    class="flex h-full w-full items-center justify-center"
+  >
+    <div
+      v-if="
+        profile &&
+        profile.active_role &&
+        (profile.active_role == 1 || profile.active_role == 2)
+      "
+      class="text-center"
+    >
+      <svg
+        class="mx-auto h-12 w-12 text-gray-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          vector-effect="non-scaling-stroke"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+        />
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No horses</h3>
+      <p class="mt-1 text-sm text-gray-500">
+        Get started by adding a horse to your yard.
+      </p>
+      <div class="mt-6">
+        <button
+          @click="() => (isOpen = true)"
+          type="button"
+          class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+          <icon
+            name="heroicons:plus-solid"
+            class="-ml-1 mr-2 h-5 w-5"
+            aria-hidden="true"
+          />
+          New Horse
+        </button>
       </div>
     </div>
   </div>

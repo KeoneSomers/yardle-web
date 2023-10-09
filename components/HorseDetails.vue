@@ -207,7 +207,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
 <template>
   <div
     v-if="horse"
-    class="h-[calc(100vh-3.5rem)] pb-20 lg:pb-0 relative z-0 flex flex-1 flex-col overflow-y-auto focus:outline-none md:block md:overflow-y-auto xl:order-last"
+    class="pb-20 lg:pb-0 relative z-0 flex flex-1 flex-col overflow-y-auto focus:outline-none md:block md:overflow-y-auto xl:order-last"
     :class="{ hidden: !viewingHorse }"
   >
     <!-- Breadcrumb -->
