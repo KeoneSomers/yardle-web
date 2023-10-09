@@ -71,6 +71,15 @@ const selectedYard = useSelectedYardId();
 const yard = useState("yard");
 const profile = useState("profile");
 const sidebarOpen = useState("sidebarOpen");
+const route = useRoute();
+
+// auto close sidebar on route change
+watch(
+  () => route.path,
+  () => {
+    sidebarOpen.value = false;
+  }
+);
 
 const countServiceRequests = async () => {
   const {
