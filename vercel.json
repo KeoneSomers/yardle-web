@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/generateInvoces",
+      "path": "/api/TestCronJob",
       "schedule": "0 5 * * *"
     },
     {
