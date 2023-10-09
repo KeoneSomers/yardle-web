@@ -145,7 +145,7 @@ const handleSignout = async () => {
   <div class="flex min-h-0 flex-1 flex-col border-r border-gray-200">
     <div class="flex flex-1 flex-col overflow-y-auto pb-4">
       <div
-        class="flex h-14 flex-shrink-0 items-center justify-between border-b px-4"
+        class="flex h-14 flex-shrink-0 items-center justify-between border-b px-4 lg:hidden"
       >
         <Logo class="h-8 w-8" />
         <button
@@ -163,18 +163,16 @@ const handleSignout = async () => {
       <nav class="flex-1" aria-label="Sidebar">
         <!-- yard widget -->
         <div class="flex border-b bg-gray-50 p-4">
-          <div class="flex-1">
+          <div class="w-3/4">
             <div class="flex items-center">
               <icon
                 :name="yard.region.flag_icon"
                 class="mr-1 block h-4 w-4 flex-shrink-0"
               />
-              <div>
-                <div class="w-52 truncate lg:w-40">
-                  <p class="text-md truncate font-bold text-gray-600">
-                    {{ yard.name }}
-                  </p>
-                </div>
+              <div class="truncate">
+                <p class="text-md truncate font-bold text-gray-600">
+                  {{ yard.name }}
+                </p>
               </div>
             </div>
             <p
@@ -184,7 +182,7 @@ const handleSignout = async () => {
               {{ roles[profile.active_role - 1].name }}
             </p>
           </div>
-          <div class="flex items-center">
+          <div class="flex items-center w-1/4 justify-end">
             <UTooltip text="Switch Yard">
               <button
                 @click="handleUnselectYard"

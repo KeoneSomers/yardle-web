@@ -1,4 +1,11 @@
 <script setup>
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+
+const mobileMode = breakpoints.smaller("lg");
+const DesktopMode = breakpoints.greaterOrEqual("lg");
+
 const supabaseClient = useSupabaseClient();
 const user = useSupabaseUser();
 const selectedYard = useSelectedYardId();
@@ -54,27 +61,32 @@ onMounted(async () => {
 </script>
 
 <template>
-  <MobileNavbar />
-
-  <!-- Desktop Sidebar -->
-  <Sidebar
-    v-if="yard"
-    class="hidden h-screen w-64 flex-col lg:fixed lg:top-0 lg:left-0 lg:flex z-10"
-  />
-
-  <!-- Mobile Sidebar -->
-  <USlideover v-if="yard" v-model="sidebarOpen">
-    <Sidebar />
-  </USlideover>
+  <!-- <div
+    class="fixed bottom-0 font-mono z-50 bg-zinc-950 text-white p-3 bg-opacity-50 backdrop-blur"
+  >
+    {{ breakpoints.current() }}
+  </div> -->
 
   <!-- page content -->
-  <div
-    v-if="yard"
-    class="h-[calc(100vh-3.5rem)] w-full overflow-auto fixed bottom-0 right-0 pl-0 lg:pl-64"
-  >
-    <slot />
+  <div v-if="yard" class="h-screen grid grid-cols-10">
+    <Navbar class="col-span-full" />
+
+    <!-- Desktop Sidebar -->
+    <Sidebar v-if="DesktopMode" class="col-span-2 z-10" />
+
+    <!-- Mobile Sidebar -->
+    <USlideover v-if="mobileMode" v-model="sidebarOpen">
+      <Sidebar />
+    </USlideover>
+
+    <div class="lg:col-span-8 col-span-full overflow-auto">
+      <slot />
+    </div>
   </div>
-  <UContainer v-else><slot /></UContainer>
+  <div v-else class="pt-[3.5rem]">
+    <Navbar class="fixed top-0 left-0 w-full" />
+    <UContainer><slot /></UContainer>
+  </div>
 </template>
 
 <style scoped>

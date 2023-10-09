@@ -55,7 +55,7 @@ const handleDelete = async (id) => {
 };
 
 const handleGenerateInvoices = async () => {
-  const result = await useFetch("/api/generateInvoces", {
+  const result = await useFetch("/api/TestCronJob", {
     method: "POST",
   });
 
