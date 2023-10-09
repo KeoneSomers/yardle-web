@@ -67,10 +67,10 @@ onMounted(async () => {
     {{ breakpoints.current() }}
   </div> -->
 
-  <!-- page content -->
-  <div v-if="yard" class="h-screen grid grid-cols-10">
-    <Navbar class="col-span-full" />
+  <Navbar class="fixed top-0 left-0 w-full" />
 
+  <!-- page content -->
+  <div v-if="yard" class="h-screen grid grid-cols-10 pt-[3.5rem]">
     <!-- Desktop Sidebar -->
     <Sidebar v-if="DesktopMode" class="col-span-2 z-10" />
 
@@ -84,7 +84,6 @@ onMounted(async () => {
     </div>
   </div>
   <div v-else class="pt-[3.5rem]">
-    <Navbar class="fixed top-0 left-0 w-full" />
     <UContainer><slot /></UContainer>
   </div>
 </template>
