@@ -147,6 +147,11 @@ const handleSignout = async () => {
   await supabaseClient.auth.signOut();
   navigateTo("/");
 };
+
+const handleInviteButtonClick = () => {
+  sidebarOpen.value = false;
+  inviteLinkModalOpen.value = true;
+};
 </script>
 
 <template>
@@ -214,8 +219,8 @@ const handleSignout = async () => {
             <UVerticalNavigation :links="adminLinks" />
           </span>
         </div>
-        <div v-if="yard" class="flex w-full p-4">
-          <UButton block @click="() => (inviteLinkModalOpen = true)">
+        <div v-if="yard" class="hidden lg:flex w-full p-4">
+          <UButton block @click="handleInviteButtonClick()">
             <UIcon name="i-heroicons-user-plus" class="mr-2 h-5 w-5" />
             Invite
           </UButton>
