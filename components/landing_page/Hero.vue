@@ -55,7 +55,7 @@
         <h1
           class="mt-10 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl"
         >
-          The yard management platform
+          Equestrian yard management platform
         </h1>
         <p class="mt-6 text-lg leading-8 text-gray-600">
           Whether you're a horse owner, breeder, trainer, or a yard owner,
