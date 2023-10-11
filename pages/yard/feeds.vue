@@ -125,7 +125,7 @@ const handleDelete = async () => {
 </script>
 
 <template>
-  <div>
+  <div class="w-full">
     <PageHeading
       title="Feeds"
       description="A list of all the feeds for the horses in this yard including their

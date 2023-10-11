@@ -25,7 +25,7 @@ if (invoiceData) {
 </script>
 
 <template>
-  <div>
+  <div class="w-full">
     <PageHeading
       title="My Invoices"
       description="A list of all the invoices you have received from the yard owner."

@@ -23,7 +23,7 @@ invoices.value = invoicesData;
 <template>
   <div
     v-if="invoices.length > 0"
-    class="px-4 pb-20 md:h-screen md:overflow-y-auto md:px-0"
+    class="px-4 pb-20 md:h-screen md:overflow-y-auto md:px-0 w-full"
   >
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="py-5">

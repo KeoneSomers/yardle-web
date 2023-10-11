@@ -43,7 +43,7 @@ const indeterminate = computed(
 </script>
 
 <template>
-  <div v-if="requests.length > 0" class="md:h-screen md:overflow-y-auto">
+  <div v-if="requests.length > 0" class="md:h-screen md:overflow-y-auto w-full">
     <PageHeading
       title="Service Requests"
       description="This is a list of all service requests that have been made to your
