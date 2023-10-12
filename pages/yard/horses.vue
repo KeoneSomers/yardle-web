@@ -1,6 +1,4 @@
 <script setup>
-import CreateHorseModal from "@/components/modals/CreateHorseModal.vue";
-
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
 });
@@ -251,15 +249,15 @@ const selectHorse = (horseId) => {
     </div>
   </div>
 
-  <!-- Modals -->
-  <CreateHorseModal
+  <!-- Create Horse Modal -->
+  <UModal
+    v-model="isOpen"
     v-if="
       profile &&
       profile.active_role &&
-      (profile.active_role == 1 || profile.active_role == 2) &&
-      isOpen
+      (profile.active_role == 1 || profile.active_role == 2)
     "
-    :is-open="isOpen"
-    @close="isOpen = false"
-  />
+  >
+    <FormsCreateHorseForm @onSuccess="isOpen = false"
+  /></UModal>
 </template>

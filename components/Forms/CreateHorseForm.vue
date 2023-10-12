@@ -1,7 +1,119 @@
 <script setup>
-//
+const emits = defineEmits(["onSuccess"]);
+
+const loading = ref(false);
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+const selectedYard = useSelectedYardId();
+const horses = useState("horses");
+const selectedHorseId = useState("selectedHorseId");
+const toast = useToast();
+
+const name = ref("");
+
+const error = ref("");
+
+const backgrounds = [
+  "bg-pink-500",
+  "bg-green-500",
+  "bg-orange-500",
+  "bg-indigo-500",
+  "bg-yellow-500",
+  "bg-purple-500",
+  "bg-blue-500",
+  "bg-cyan-500",
+];
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const handleSubmit = async () => {
+  try {
+    // only do this if the form is not already loading
+    if (loading.value === false) {
+      // start the loading animation
+      loading.value = true;
+
+      // create the horse in the database
+      const { data: newHorse, error: createError } = await client
+        .from("horses")
+        .insert({
+          name: capitalizeFirstLetter(name.value),
+          yard_id: selectedYard.value,
+          created_by: user.value.id,
+          avatar_background:
+            backgrounds[Math.floor(Math.random() * backgrounds.length)],
+        })
+        .select()
+        .single();
+
+      // catch any errors
+      if (createError) {
+        throw new Error("Error adding new horse");
+      }
+
+      // add the new horse to the local horses list and sort the list alphabetically
+      horses.value = [...horses.value, newHorse].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+
+      // reset modal values
+      name.value = "";
+
+      // select the new horse automatically
+      selectedHorseId.value = newHorse.id;
+
+      // tell the user the horse was created successfully
+      toast.add({
+        title: "Horse Created!",
+        description: "You have added a horse to the yard.",
+      });
+
+      // end the loading animation
+      loading.value = false;
+
+      emits("onSuccess");
+    }
+  } catch (err) {
+    toast.add({
+      title: "Error Creating Horse!",
+      description: "Please try again, or contact support.",
+    });
+
+    loading.value = false;
+  }
+};
 </script>
 
 <template>
-  <p>Test</p>
+  <div class="p-4">
+    <h3 class="text-lg font-medium leading-6 text-gray-900">Add a horse</h3>
+    <form @submit.prevent="handleSubmit" class="mt-4">
+      <label class="block text-sm font-medium text-gray-700">Name</label>
+      <div class="mt-1">
+        <input
+          type="text"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          v-model="name"
+          required
+        />
+      </div>
+
+      <div v-if="error" class="my-2 rounded-lg bg-red-100 p-2 text-red-500">
+        {{ error }}
+      </div>
+
+      <div class="mt-4 flex justify-end space-x-2">
+        <button
+          v-if="!loading"
+          type="submit"
+          class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
+        >
+          Add
+        </button>
+        <LoadingButton v-else />
+      </div>
+    </form>
+  </div>
 </template>
