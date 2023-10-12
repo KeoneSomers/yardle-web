@@ -1,5 +1,9 @@
 <script setup>
-import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const mobileMode = breakpoints.smaller("lg");
+const DesktopMode = breakpoints.greaterOrEqual("lg");
 
 const pendingServiceRequestCount = useState("pendingServiceRequestCount");
 
@@ -147,11 +151,6 @@ const handleSignout = async () => {
   await supabaseClient.auth.signOut();
   navigateTo("/");
 };
-
-const handleInviteButtonClick = () => {
-  sidebarOpen.value = false;
-  inviteLinkModalOpen.value = true;
-};
 </script>
 
 <template>
@@ -219,8 +218,8 @@ const handleInviteButtonClick = () => {
             <UVerticalNavigation :links="adminLinks" />
           </span>
         </div>
-        <div v-if="yard" class="hidden lg:flex w-full p-4">
-          <UButton block @click="handleInviteButtonClick()">
+        <div v-if="yard" class="flex w-full p-4">
+          <UButton block @click="inviteLinkModalOpen = true">
             <UIcon name="i-heroicons-user-plus" class="mr-2 h-5 w-5" />
             Invite
           </UButton>
@@ -229,10 +228,14 @@ const handleInviteButtonClick = () => {
     </div>
     <SidebarFooter />
 
-    <InviteLinkModal
-      v-if="inviteLinkModalOpen"
-      :is-open="inviteLinkModalOpen"
-      @close="inviteLinkModalOpen = false"
-    />
+    <!-- Invite Link Modal -->
+    <UModal v-model="inviteLinkModalOpen" :fullscreen="mobileMode">
+      <ModalHeaderLayout
+        title="Copy Invite Link"
+        @close="inviteLinkModalOpen = false"
+      >
+        <FormsInviteLinkForm @close="inviteLinkModalOpen = false" />
+      </ModalHeaderLayout>
+    </UModal>
   </div>
 </template>

@@ -8,9 +8,7 @@ const selectedYard = useSelectedYardId();
 const horses = useState("horses");
 const selectedHorseId = useState("selectedHorseId");
 const toast = useToast();
-
 const name = ref("");
-
 const error = ref("");
 
 const backgrounds = [
