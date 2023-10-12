@@ -1,7 +1,7 @@
 <script setup>
 const emits = defineEmits(["onSuccess"]);
 
-const loading = ref(false);
+const isLoading = ref(false);
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const selectedYard = useSelectedYardId();
@@ -31,9 +31,9 @@ function capitalizeFirstLetter(string) {
 const handleSubmit = async () => {
   try {
     // only do this if the form is not already loading
-    if (loading.value === false) {
+    if (isLoading.value === false) {
       // start the loading animation
-      loading.value = true;
+      isLoading.value = true;
 
       // create the horse in the database
       const { data: newHorse, error: createError } = await client
@@ -71,7 +71,7 @@ const handleSubmit = async () => {
       });
 
       // end the loading animation
-      loading.value = false;
+      isLoading.value = false;
 
       emits("onSuccess");
     }
@@ -81,38 +81,23 @@ const handleSubmit = async () => {
       description: "Please try again, or contact support.",
     });
 
-    loading.value = false;
+    isLoading.value = false;
   }
 };
 </script>
 
 <template>
-  <div>
-    <form @submit.prevent="handleSubmit" class="mt-4">
-      <label class="block text-sm font-medium text-gray-700">Name</label>
-      <div class="mt-1">
-        <input
-          type="text"
-          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          v-model="name"
-          required
-        />
-      </div>
+  <UForm @submit="handleSubmit">
+    <UFormGroup label="Name" name="name" required>
+      <UInput v-model="name" required autofocus="true" />
+    </UFormGroup>
 
-      <div v-if="error" class="my-2 rounded-lg bg-red-100 p-2 text-red-500">
-        {{ error }}
-      </div>
+    <div v-if="error" class="my-2 rounded-lg bg-red-100 p-2 text-red-500">
+      {{ error }}
+    </div>
 
-      <div class="mt-4 flex justify-end space-x-2">
-        <button
-          v-if="!loading"
-          type="submit"
-          class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
-        >
-          Add
-        </button>
-        <LoadingButton v-else />
-      </div>
-    </form>
-  </div>
+    <div class="mt-4 flex justify-end space-x-2">
+      <UButton label="Save" :loading="isLoading" type="submit" />
+    </div>
+  </UForm>
 </template>
