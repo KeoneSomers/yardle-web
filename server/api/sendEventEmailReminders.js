@@ -2,6 +2,17 @@ import { serverSupabaseServiceRole } from "#supabase/server";
 import { DateTime } from "luxon";
 
 export default defineEventHandler(async (event) => {
+  // email keone to notify him this is running
+  await $fetch("/api/sendEmail", {
+    method: "POST",
+    body: {
+      recipients: ["Keone.somers@outlook.com"],
+      subject: "Yardle - Sending Event Reminders!",
+      text: "This is an update email for your daily cron job within Yardle.",
+      html: "",
+    },
+  });
+
   const supabase = serverSupabaseServiceRole(event);
 
   // get events that are happening tomorrow
@@ -56,8 +67,8 @@ export default defineEventHandler(async (event) => {
     let emailMessage = `
      <p>Hey ${user.first_name},</p>
      <p>You have ${usersEvents.length} event${
-      usersEvents.length === 1 ? "" : "s"
-    } scheduled for tomorrow:</p><ul>${eventList}</ul>
+       usersEvents.length === 1 ? "" : "s"
+     } scheduled for tomorrow:</p><ul>${eventList}</ul>
       <br>
       <p>More details regarding ${
         usersEvents.length === 1 ? "this event" : "these events"

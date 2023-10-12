@@ -1,8 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/TestCronJob",
-      "schedule": "0 5 * * *"
+      "path": "/api/generateInvoces",
+      "schedule": "0 4 * * *"
     },
     {
       "path": "/api/sendEventEmailReminders",

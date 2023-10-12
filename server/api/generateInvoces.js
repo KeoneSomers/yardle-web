@@ -2,6 +2,17 @@ import { serverSupabaseServiceRole } from "#supabase/server";
 import { DateTime } from "luxon";
 
 export default defineEventHandler(async (event) => {
+  // email keone to notify him this is running
+  await $fetch("/api/sendEmail", {
+    method: "POST",
+    body: {
+      recipients: ["Keone.somers@outlook.com"],
+      subject: "Yardle - Generating todays invoices!",
+      text: "This is an update email for your daily cron job within Yardle.",
+      html: "",
+    },
+  });
+
   const client = serverSupabaseServiceRole(event);
 
   // get all billing cycles
