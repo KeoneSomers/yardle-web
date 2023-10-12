@@ -87,8 +87,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="p-4">
-    <h3 class="text-lg font-medium leading-6 text-gray-900">Add a horse</h3>
+  <div>
     <form @submit.prevent="handleSubmit" class="mt-4">
       <label class="block text-sm font-medium text-gray-700">Name</label>
       <div class="mt-1">
