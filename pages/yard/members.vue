@@ -1,13 +1,10 @@
 <script setup>
-import {
-  Listbox,
-  ListboxLabel,
-  ListboxButton,
-  ListboxOptions,
-  ListboxOption,
-} from "@headlessui/vue";
 import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
-import InviteLinkModal from "@/components/modals/InviteLinkModal.vue";
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const mobileMode = breakpoints.smaller("lg");
+const DesktopMode = breakpoints.greaterOrEqual("lg");
 
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
@@ -192,9 +189,14 @@ const actionItems = (row) => [
     :member-id="memberToRemove"
     @close="removeMemberModalOpen = false"
   />
-  <InviteLinkModal
-    v-if="inviteLinkModalOpen"
-    :is-open="inviteLinkModalOpen"
-    @close="inviteLinkModalOpen = false"
-  />
+
+  <!-- Invite Link Modal -->
+  <UModal v-model="inviteLinkModalOpen" :fullscreen="mobileMode">
+    <ModalHeaderLayout
+      title="Copy Invite Link"
+      @close="inviteLinkModalOpen = false"
+    >
+      <FormsInviteLinkForm @close="inviteLinkModalOpen = false" />
+    </ModalHeaderLayout>
+  </UModal>
 </template>
