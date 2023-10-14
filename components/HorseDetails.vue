@@ -1,16 +1,17 @@
 <script setup>
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
-import { useModal } from "vue-final-modal";
-import ModalConfirm from "@/components/modals/ModalConfirm.vue";
 import EditHorseModal from "@/components/modals/EditHorseModal.vue";
-
 import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
 import HorseRugsTab from "@/components/HorseRugsTab.vue";
 import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
 import HorseMedicationsTab from "@/components/HorseMedicationsTab.vue";
 import HorseServicesTab from "@/components/HorseServicesTab.vue";
-
 import { useScroll } from "@vueuse/core";
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const mobileMode = breakpoints.smaller("lg");
+const DesktopMode = breakpoints.greaterOrEqual("lg");
 
 const viewingHorse = useState("viewingHorse");
 
@@ -53,12 +54,8 @@ const client = useSupabaseClient();
 const selectedHorseId = useState("selectedHorseId");
 const horse = useState("horse");
 const editModalOpen = useState("editModalOpen", () => false);
+const deleteModalOpen = ref(false);
 const profile = useState("profile");
-const horses = useState("horses");
-const loading = ref(false);
-
-const toast = useToast();
-
 const horseDetailsElement = ref(null);
 const { x, y } = useScroll(horseDetailsElement);
 
@@ -95,112 +92,6 @@ watchEffect(async () => {
   if (!viewingHorse.value) {
     y.value = 0;
   }
-});
-
-const handleDeleteHorse = async () => {
-  try {
-    // delete horse image
-    const index = horses.value.map((e) => e.id).indexOf(horse.value.id);
-
-    console.log(horses.value[index].avatar_url);
-
-    if (horses.value[index].avatar_url) {
-      const { error } = await client.storage
-        .from("horse-avatars")
-        .remove([horses.value[index].avatar_url.split("?")[0]]);
-
-      if (error) {
-        console.log(error);
-        return;
-      }
-    }
-
-    // first delete related data
-    await client
-      .from("service_requests")
-      .delete()
-      .eq("horse_id", horse.value.id);
-    await client.from("rugs").delete().eq("horse_id", horse.value.id);
-    await client.from("ingredients").delete().eq("horse_id", horse.value.id);
-    await client.from("feeds").delete().eq("horse_id", horse.value.id);
-    await client.from("medications").delete().eq("horse_id", horse.value.id);
-    await client
-      .from("field_rotation_horses")
-      .delete()
-      .eq("horse_id", horse.value.id);
-
-    // second, delete horse from calendar events
-    const { error: delError } = await client
-      .from("calendar_events_horses")
-      .delete()
-      .eq("horse_id", horse.value.id);
-
-    if (delError) {
-      throw new Error(delError);
-    }
-
-    const { error: horseDeleteError } = await client
-      .from("horses")
-      .delete()
-      .eq("id", horse.value.id)
-      .select();
-
-    if (horseDeleteError) {
-      throw new Error(horseDeleteError);
-    }
-
-    // success! - now handle cleanup on frontend
-    horses.value.splice(index, 1);
-
-    // change selected horse
-    if (horses.value.length > 0) {
-      selectedHorseId.value = horses.value[0].id;
-    } else {
-      selectedHorseId.value = 0;
-    }
-
-    toast.add({
-      title: "Horse deleted!",
-      description: 'Horse "' + horse.value.name + '" has been deleted',
-    });
-
-    viewingHorse.value = false;
-    closeDeleteHorseModal();
-  } catch (error) {
-    // TODO - Push error to snackbar
-    console.log(error);
-    loading.value = false;
-
-    toast.add({
-      title: "Error Deleting Horse",
-      description: "Please try again, or contact support.",
-    });
-  }
-};
-
-// Delete Horse Modal
-const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
-  component: ModalConfirm,
-  attrs: {
-    title: "Delete Horse",
-    message:
-      "Are you sure you want to delete this horse? All of it's data will be permanently removed from your yard forever. This action cannot be undone.",
-    cancelButtonText: "Cancel",
-    confirmButtonText: "Delete",
-    isLoading: loading,
-    onBeforeOpen() {
-      if (loading.value === true) {
-        loading.value = false;
-      }
-    },
-    onCancel() {
-      closeDeleteHorseModal();
-    },
-    async onConfirm() {
-      loading.value = true;
-      await handleDeleteHorse();
-    },
-  },
 });
 </script>
 
@@ -322,7 +213,7 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
                         </MenuItem>
                         <MenuItem v-slot="{ active }">
                           <button
-                            @click="() => openDeleteHorseModal()"
+                            @click="deleteModalOpen = true"
                             :class="[
                               active
                                 ? 'bg-gray-100 text-gray-900'
@@ -388,6 +279,13 @@ const { open: openDeleteHorseModal, close: closeDeleteHorseModal } = useModal({
     :horse="horse"
     @close="editModalOpen = false"
   />
+
+  <!-- Delete Horse Modal -->
+  <UModal v-model="deleteModalOpen" :fullscreen="mobileMode">
+    <ModalHeaderLayout title="Delete Horse" @close="deleteModalOpen = false">
+      <FormsDeleteHorseForm @onSuccess="deleteModalOpen = false" />
+    </ModalHeaderLayout>
+  </UModal>
 </template>
 
 <style scoped>
