@@ -7,6 +7,7 @@ const horse = useState("horse");
 const horses = useState("horses");
 const yard = useState("yard");
 const profile = useState("profile");
+const editModalOpen = useState("editModalOpen", () => false);
 const client = useSupabaseClient();
 const assignOwnerModalOpen = ref(false);
 
@@ -213,6 +214,19 @@ const handleUnassignOwner = async () => {
             horse details.
           </p>
         </div>
+      </div>
+      <div class="col-span-2">
+        <UButton
+          size="lg"
+          icon="i-heroicons-pencil-square"
+          v-if="
+            profile &&
+            ((horse.owner && profile.id === horse.owner.id) ||
+              profile.active_role < 3)
+          "
+          label="Update Horse Details"
+          @click="editModalOpen = true"
+        />
       </div>
     </div>
     <div v-else class="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-2">

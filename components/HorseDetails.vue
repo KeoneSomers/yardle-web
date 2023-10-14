@@ -52,7 +52,7 @@ const tabs = [
 const client = useSupabaseClient();
 const selectedHorseId = useState("selectedHorseId");
 const horse = useState("horse");
-const editModalOpen = ref(false);
+const editModalOpen = useState("editModalOpen", () => false);
 const profile = useState("profile");
 const horses = useState("horses");
 const loading = ref(false);
