@@ -93,7 +93,7 @@ watchEffect(async () => {
 <template>
   <div
     v-if="horse"
-    class="pb-20 lg:pb-0 relative z-0 flex flex-1 flex-col overflow-y-auto focus:outline-none md:block md:overflow-y-auto xl:order-last"
+    class="pb-20 lg:pb-0 relative z-0 flex flex-1 flex-col overflow-y-auto focus:outline-none md:block md:overflow-y-auto lg:order-last"
     :class="{ hidden: !viewingHorse }"
   >
     <!-- Breadcrumb -->
