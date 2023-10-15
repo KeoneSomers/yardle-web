@@ -8,8 +8,11 @@ const selectedYard = useSelectedYardId();
 const horses = useState("horses");
 const selectedHorseId = useState("selectedHorseId");
 const toast = useToast();
-const name = ref("");
 const error = ref("");
+
+const formState = ref({
+  name: "",
+});
 
 const backgrounds = [
   "bg-pink-500",
@@ -37,7 +40,7 @@ const handleSubmit = async () => {
       const { data: newHorse, error: createError } = await client
         .from("horses")
         .insert({
-          name: capitalizeFirstLetter(name.value),
+          name: capitalizeFirstLetter(formState.value.name),
           yard_id: selectedYard.value,
           created_by: user.value.id,
           avatar_background:
@@ -57,7 +60,7 @@ const handleSubmit = async () => {
       );
 
       // reset modal values
-      name.value = "";
+      formState.value.name = "";
 
       // select the new horse automatically
       selectedHorseId.value = newHorse.id;
@@ -85,9 +88,9 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <UForm @submit="handleSubmit">
-    <UFormGroup label="Name" name="name" required>
-      <UInput v-model="name" required autofocus="true" />
+  <UForm @submit="handleSubmit" :state="formState">
+    <UFormGroup label="Name" required>
+      <UInput v-model="formState.name" required :autofocus="true" />
     </UFormGroup>
 
     <div v-if="error" class="my-2 rounded-lg bg-red-100 p-2 text-red-500">

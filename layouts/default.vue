@@ -4,7 +4,6 @@ import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 const breakpoints = useBreakpoints(breakpointsTailwind);
 
 const mobileMode = breakpoints.smaller("lg");
-const DesktopMode = breakpoints.greaterOrEqual("lg");
 
 const supabaseClient = useSupabaseClient();
 const user = useSupabaseUser();
@@ -72,12 +71,12 @@ onMounted(async () => {
   <!-- page content -->
   <div v-if="yard" class="h-screen grid grid-cols-10 pt-[3.5rem]">
     <!-- Desktop Sidebar -->
-    <Sidebar v-if="DesktopMode" class="col-span-2 z-10" />
 
     <!-- Mobile Sidebar -->
     <USlideover v-if="mobileMode" v-model="sidebarOpen">
       <Sidebar />
     </USlideover>
+    <Sidebar v-else class="col-span-2 z-10" />
 
     <div class="lg:col-span-8 col-span-full overflow-auto flex">
       <slot />

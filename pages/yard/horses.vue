@@ -1,13 +1,7 @@
 <script setup>
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
-
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
 });
-
-const breakpoints = useBreakpoints(breakpointsTailwind);
-const mobileMode = breakpoints.smaller("lg");
-const DesktopMode = breakpoints.greaterOrEqual("lg");
 
 const client = useSupabaseClient();
 const selectedYard = useSelectedYardId();
@@ -256,17 +250,16 @@ const selectHorse = (horseId) => {
   </div>
 
   <!-- Add Horse Modal -->
-  <UModal
-    v-model="isOpen"
+  <Modal
     v-if="
       profile &&
       profile.active_role &&
       (profile.active_role == 1 || profile.active_role == 2)
     "
-    :fullscreen="mobileMode"
+    v-model="isOpen"
   >
     <ModalHeaderLayout title="Add a horse" @close="isOpen = false">
       <FormsCreateHorseForm @onSuccess="isOpen = false" />
     </ModalHeaderLayout>
-  </UModal>
+  </Modal>
 </template>
