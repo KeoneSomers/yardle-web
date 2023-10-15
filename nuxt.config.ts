@@ -7,7 +7,6 @@ export default defineNuxtConfig({
     "@nuxt/devtools",
     "nuxt-icon",
     "@nuxt/ui",
-    "@vue-final-modal/nuxt",
   ],
   supabase: {
     redirect: false, // i am already doing this myself with the middleware
@@ -20,7 +19,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ["@vuepic/vue-datepicker"],
   },
-  css: ["@/assets/css/main.css", "vue-final-modal/style.css"],
+  css: ["@/assets/css/main.css"],
   app: {
     head: {
       title: "Yardle - Equestrian Yard Management",

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import { ModalsContainer } from "vue-final-modal";
 
 // TODO: look at issue with this always sending user back to yard/horses on page reload
 //useRouteManager();
@@ -82,7 +81,6 @@ onUnmounted(() => {
       Get in touch!
     </a>
 
-    <ModalsContainer />
     <UNotifications />
   </div>
 </template>

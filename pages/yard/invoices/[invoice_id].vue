@@ -1,14 +1,16 @@
 <script setup>
 import { DateTime } from "luxon";
-import { useModal } from "vue-final-modal";
 import {
   Switch,
   SwitchGroup,
   SwitchLabel,
   SwitchDescription,
 } from "@headlessui/vue";
-import ModalConfirm from "@/components/modals/ModalConfirm.vue";
 import AddServiceModal from "@/components/modals/AddServiceModal.vue";
+
+definePageMeta({
+  middleware: ["require-auth", "require-yard"],
+});
 
 const params = useRoute().params;
 const invoice_id = params.invoice_id / 36;
@@ -16,16 +18,12 @@ const client = useSupabaseClient();
 const yard = useState("yard");
 const profile = useState("profile");
 
-definePageMeta({
-  middleware: ["require-auth", "require-yard"],
-});
-
 const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
   style: "currency",
   currency: yard.value.region.currency_iso_code,
 });
 
-const loading = ref(false);
+const openDeleteItemModal = ref(false);
 const itemToDelete = ref(null);
 const invoiceData = ref(null);
 const itemsData = useState("itemsData", () => []);
@@ -98,61 +96,6 @@ onMounted(async () => {
   });
 
   itemsData.value = _itemsData;
-});
-
-const removeItem = async () => {
-  const item_id = itemToDelete.value;
-  const { data, error } = await client
-    .from("service_requests")
-    .delete()
-    .eq("id", item_id)
-    .select()
-    .single();
-
-  if (error) {
-    console.log(error);
-  } else {
-    // console.log(data);
-
-    // remove from the itemsData
-    itemsData.value = itemsData.value.filter((item) => item.id !== item_id);
-
-    console.log(data);
-    subtotal.value -= data.service_price;
-
-    closeDeleteItemModal();
-  }
-  loading.value = false;
-
-  toast.add({
-    title: "Service Removed!",
-    description: "This item has been removed from the invoice.",
-  });
-};
-
-// Delete Item Modal
-const { open: openDeleteItemModal, close: closeDeleteItemModal } = useModal({
-  component: ModalConfirm,
-  attrs: {
-    title: "Delete Item From Invoice",
-    message:
-      "Are you sure you want to delete this service? It will be completely removed from the invoice.",
-    cancelButtonText: "Cancel",
-    confirmButtonText: "Delete",
-    isLoading: loading,
-    onBeforeOpen() {
-      if (loading.value === true) {
-        loading.value = false;
-      }
-    },
-    onCancel() {
-      closeDeleteItemModal();
-    },
-    async onConfirm() {
-      loading.value = true;
-      await removeItem();
-    },
-  },
 });
 
 const saveChanges = async () => {
@@ -729,7 +672,7 @@ const totalAmount = computed(() => {
                         <div
                           @click="
                             itemToDelete = item.id;
-                            openDeleteItemModal();
+                            openDeleteItemModal = true;
                           "
                           class="flex justify-end hover:cursor-pointer"
                         >
@@ -892,5 +835,18 @@ const totalAmount = computed(() => {
       :invoice-id="invoiceData.id"
       @close="createModalOpen = false"
     />
+
+    <!-- Delete Invoice Item Modal -->
+    <Modal v-model="openDeleteItemModal">
+      <ModalHeaderLayout
+        title="Delete Invoice Item"
+        @close="openDeleteItemModal = false"
+      >
+        <FormsDeleteInvoiceItemForm
+          :item-to-delete="itemToDelete"
+          @onSuccess="openDeleteItemModal = false"
+        />
+      </ModalHeaderLayout>
+    </Modal>
   </div>
 </template>

@@ -231,7 +231,7 @@ const handleUnassignOwner = async () => {
     </div>
     <div v-else class="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
       <div
-        class="relative flex items-center rounded-lg border border-gray-300 bg-stone-50 px-6 py-5 shadow-sm"
+        class="col-span-full flex items-center rounded-lg border border-gray-300 bg-stone-50 px-6 py-5 shadow-sm"
       >
         <div class="flex flex-1 space-x-3">
           <div class="flex-shrink-0">

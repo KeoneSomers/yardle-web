@@ -25,7 +25,6 @@
     "@headlessui/vue": "^1.7.14",
     "@nuxt/ui": "^2.9.0",
     "@vercel/analytics": "^1.0.1",
-    "@vue-final-modal/nuxt": "^1.0.0",
     "@vuepic/vue-datepicker": "^5.4.0",
     "@vueuse/core": "^10.2.1",
     "downloadjs": "^1.4.7",
@@ -35,7 +34,6 @@
     "pdfjs": "^2.5.1",
     "print-js": "^1.6.0",
     "resend": "^1.0.0",
-    "vue-final-modal": "^4.4.4",
     "vuedraggable": "^4.1.0"
   }
 }
