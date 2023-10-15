@@ -215,19 +215,6 @@ const handleUnassignOwner = async () => {
           </p>
         </div>
       </div>
-      <div class="col-span-2">
-        <UButton
-          size="lg"
-          icon="i-heroicons-pencil-square"
-          v-if="
-            profile &&
-            ((horse.owner && profile.id === horse.owner.id) ||
-              profile.active_role < 3)
-          "
-          label="Update Horse Details"
-          @click="editModalOpen = true"
-        />
-      </div>
     </div>
     <div v-else class="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
       <div
@@ -242,7 +229,6 @@ const handleUnassignOwner = async () => {
             </div>
           </div>
           <div class="min-w-0 flex-1">
-            <span class="absolute inset-0" aria-hidden="true" />
             <p class="text-sm font-medium text-gray-900">
               {{ horse.owner.first_name }} {{ horse.owner.last_name }}
             </p>
@@ -293,6 +279,19 @@ const handleUnassignOwner = async () => {
           </transition>
         </Menu>
       </div>
+    </div>
+    <div class="col-span-2 mb-4">
+      <UButton
+        size="lg"
+        icon="i-heroicons-pencil-square"
+        v-if="
+          profile &&
+          ((horse.owner && profile.id === horse.owner.id) ||
+            profile.active_role < 3)
+        "
+        label="Update Horse Details"
+        @click="editModalOpen = true"
+      />
     </div>
     <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
       <!-- About -->
