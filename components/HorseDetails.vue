@@ -1,5 +1,4 @@
 <script setup>
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import EditHorseModal from "@/components/modals/EditHorseModal.vue";
 import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
@@ -8,10 +7,6 @@ import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
 import HorseMedicationsTab from "@/components/HorseMedicationsTab.vue";
 import HorseServicesTab from "@/components/HorseServicesTab.vue";
 import { useScroll } from "@vueuse/core";
-
-const breakpoints = useBreakpoints(breakpointsTailwind);
-const mobileMode = breakpoints.smaller("lg");
-const DesktopMode = breakpoints.greaterOrEqual("lg");
 
 const viewingHorse = useState("viewingHorse");
 
@@ -281,11 +276,11 @@ watchEffect(async () => {
   />
 
   <!-- Delete Horse Modal -->
-  <UModal v-model="deleteModalOpen" :fullscreen="mobileMode">
+  <Modal v-model="deleteModalOpen">
     <ModalHeaderLayout title="Delete Horse" @close="deleteModalOpen = false">
       <FormsDeleteHorseForm @onSuccess="deleteModalOpen = false" />
     </ModalHeaderLayout>
-  </UModal>
+  </Modal>
 </template>
 
 <style scoped>

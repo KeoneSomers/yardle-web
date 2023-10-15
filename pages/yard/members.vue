@@ -1,10 +1,5 @@
 <script setup>
 import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
-
-const breakpoints = useBreakpoints(breakpointsTailwind);
-const mobileMode = breakpoints.smaller("lg");
-const DesktopMode = breakpoints.greaterOrEqual("lg");
 
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
@@ -191,12 +186,12 @@ const actionItems = (row) => [
   />
 
   <!-- Invite Link Modal -->
-  <UModal v-model="inviteLinkModalOpen" :fullscreen="mobileMode">
+  <Modal v-model="inviteLinkModalOpen">
     <ModalHeaderLayout
       title="Copy Invite Link"
       @close="inviteLinkModalOpen = false"
     >
       <FormsInviteLinkForm @close="inviteLinkModalOpen = false" />
     </ModalHeaderLayout>
-  </UModal>
+  </Modal>
 </template>

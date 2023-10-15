@@ -1,10 +1,4 @@
 <script setup>
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
-
-const breakpoints = useBreakpoints(breakpointsTailwind);
-const mobileMode = breakpoints.smaller("lg");
-const DesktopMode = breakpoints.greaterOrEqual("lg");
-
 const pendingServiceRequestCount = useState("pendingServiceRequestCount");
 
 const inviteLinkModalOpen = ref(false);
@@ -229,13 +223,13 @@ const handleSignout = async () => {
     <SidebarFooter />
 
     <!-- Invite Link Modal -->
-    <UModal v-model="inviteLinkModalOpen" :fullscreen="mobileMode">
+    <Modal v-model="inviteLinkModalOpen">
       <ModalHeaderLayout
         title="Copy Invite Link"
         @close="inviteLinkModalOpen = false"
       >
         <FormsInviteLinkForm @close="inviteLinkModalOpen = false" />
       </ModalHeaderLayout>
-    </UModal>
+    </Modal>
   </div>
 </template>
