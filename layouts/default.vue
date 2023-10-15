@@ -76,7 +76,8 @@ onMounted(async () => {
     <USlideover v-if="mobileMode" v-model="sidebarOpen">
       <Sidebar />
     </USlideover>
-    <Sidebar v-else class="col-span-2 z-10" />
+
+    <Sidebar v-if="!mobileMode" class="col-span-2 z-10" />
 
     <div class="lg:col-span-8 col-span-full overflow-auto flex">
       <slot />
