@@ -126,6 +126,7 @@ const selectHorse = (horseId) => {
           color="white"
           variant="solid"
           label="Add Horse"
+          icon="i-heroicons-plus"
         />
       </div>
     </div>

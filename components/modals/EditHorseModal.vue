@@ -103,8 +103,8 @@ const handleSubmit = async () => {
               >
                 Edit this horse
               </DialogTitle>
-              <form
-                @submit.prevent="handleSubmit"
+              <UForm
+                @submit="handleSubmit"
                 class="mt-4 flex flex-col space-y-3"
               >
                 <div>
@@ -114,71 +114,26 @@ const handleSubmit = async () => {
                     :yard-id="yard.id"
                   />
                 </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700"
-                    >Name</label
-                  >
-                  <div class="mt-1">
-                    <input
-                      type="text"
-                      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      v-model="horse.name"
-                      required
-                    />
-                  </div>
-                </div>
 
-                <div>
-                  <label class="block text-sm font-medium text-gray-700"
-                    >Date of Birth</label
-                  >
-                  <div class="mt-1">
-                    <input
-                      type="date"
-                      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      v-model="horse.dob"
-                    />
-                  </div>
-                </div>
+                <UFormGroup label="Name" required>
+                  <UInput v-model="horse.name" required />
+                </UFormGroup>
 
-                <div>
-                  <label class="block text-sm font-medium text-gray-700"
-                    >Breed</label
-                  >
-                  <div class="mt-1">
-                    <input
-                      type="text"
-                      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      v-model="horse.breed"
-                    />
-                  </div>
-                </div>
+                <UFormGroup label="Date of Birth">
+                  <UInput type="date" v-model="horse.dob" />
+                </UFormGroup>
 
-                <div>
-                  <label class="block text-sm font-medium text-gray-700"
-                    >Color & Markings</label
-                  >
-                  <div class="mt-1">
-                    <input
-                      type="text"
-                      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      v-model="horse.color_markings"
-                    />
-                  </div>
-                </div>
+                <UFormGroup label="Breed">
+                  <UInput v-model="horse.breed" />
+                </UFormGroup>
 
-                <div>
-                  <label class="block text-sm font-medium text-gray-700"
-                    >About</label
-                  >
-                  <div class="mt-1">
-                    <textarea
-                      rows="5"
-                      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      v-model="horse.about"
-                    />
-                  </div>
-                </div>
+                <UFormGroup label="Color & Markings">
+                  <UInput v-model="horse.color_markings" />
+                </UFormGroup>
+
+                <UFormGroup label="About">
+                  <UTextarea v-model="horse.about" />
+                </UFormGroup>
 
                 <div
                   v-if="error"
@@ -188,22 +143,9 @@ const handleSubmit = async () => {
                 </div>
 
                 <div class="mt-4 flex justify-end space-x-2">
-                  <button
-                    v-if="!isLoading"
-                    type="submit"
-                    class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
-                  >
-                    Save
-                  </button>
-                  <button
-                    v-else
-                    type="button"
-                    class="inline-flex justify-center rounded-md border border-transparent bg-gray-600 px-4 py-2 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 sm:text-sm"
-                  >
-                    Loading...
-                  </button>
+                  <UButton label="Save" type="submit" :loading="isLoading" />
                 </div>
-              </form>
+              </UForm>
             </DialogPanel>
           </TransitionChild>
         </div>
