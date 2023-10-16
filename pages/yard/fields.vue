@@ -184,13 +184,14 @@ const handleFieldChange = async (e) => {
         <nav class="-mb-px flex space-x-8" aria-label="field_rotations">
           <div class="py-2">
             <div class="border-r pr-2">
-              <div
-                @click="createModalOpen2 = true"
-                v-tooltip="'Add a field rotation'"
-                class="flex cursor-pointer items-center whitespace-nowrap rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-indigo-200 hover:text-gray-700"
-              >
-                <icon name="heroicons:plus-solid" class="h-5 w-5" />
-              </div>
+              <UTooltip text="Add a field rotation">
+                <div
+                  @click="createModalOpen2 = true"
+                  class="flex cursor-pointer items-center whitespace-nowrap rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-indigo-200 hover:text-gray-700"
+                >
+                  <icon name="heroicons:plus-solid" class="h-5 w-5" />
+                </div>
+              </UTooltip>
             </div>
           </div>
 

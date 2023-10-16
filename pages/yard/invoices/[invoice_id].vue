@@ -210,38 +210,27 @@ const totalAmount = computed(() => {
       >
         Add Service
       </button>
-      <div
-        v-tooltip="
+      <DownloadInvoice
+        v-if="
+          client_email != '' &&
+          client_first_name != '' &&
+          client_last_name != ''
+        "
+        :fileName="
+          invoiceData.client_id.first_name +
+          ' ' +
+          invoiceData.client_id.last_name +
+          ' Invoice: ' +
+          DateTime.fromISO(invoiceData.created_at).toFormat(
+            'EEEE, MMMM d, yyyy'
+          )
+        "
+        :is-disabled="
           client_email == '' ||
           client_first_name == '' ||
           client_last_name == ''
-            ? 'Please provide a client name and email'
-            : ''
         "
-        :class="{
-          'w-full cursor-not-allowed opacity-50':
-            client_email == '' ||
-            client_first_name == '' ||
-            client_last_name == '',
-        }"
-      >
-        <DownloadInvoice
-          :fileName="
-            invoiceData.client_id.first_name +
-            ' ' +
-            invoiceData.client_id.last_name +
-            ' Invoice: ' +
-            DateTime.fromISO(invoiceData.created_at).toFormat(
-              'EEEE, MMMM d, yyyy'
-            )
-          "
-          :is-disabled="
-            client_email == '' ||
-            client_first_name == '' ||
-            client_last_name == ''
-          "
-        />
-      </div>
+      />
     </PageHeading>
     <div class="flex flex-col lg:h-[calc(100vh-4rem)] lg:flex-row">
       <div
@@ -669,19 +658,20 @@ const totalAmount = computed(() => {
                         id="invoice-web-only"
                         class="py-4 pl-3 text-right text-sm text-red-500 sm:pr-0"
                       >
-                        <div
-                          @click="
-                            itemToDelete = item.id;
-                            openDeleteItemModal = true;
-                          "
-                          class="flex justify-end hover:cursor-pointer"
-                        >
-                          <icon
-                            name="heroicons:x-mark-solid"
-                            class="h-6 w-6"
-                            v-tooltip="'Remove'"
-                          />
-                        </div>
+                        <UTooltip text="Remove">
+                          <div
+                            @click="
+                              itemToDelete = item.id;
+                              openDeleteItemModal = true;
+                            "
+                            class="flex justify-end hover:cursor-pointer"
+                          >
+                            <icon
+                              name="heroicons:x-mark-solid"
+                              class="h-6 w-6"
+                            />
+                          </div>
+                        </UTooltip>
                       </td>
                     </tr>
                   </tbody>

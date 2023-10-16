@@ -129,27 +129,15 @@ const goToPreviousWeek = () => {
           >
             Order History
           </button> -->
-          <button
-            @click="
-              () => {
-                horse.owner !== null ? (createModalOpen = true) : null;
-              }
-            "
-            type="button"
-            :class="{
-              'bg-gray-300': horse.owner === null,
-              'bg-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2':
-                horse.owner !== null,
-            }"
-            v-tooltip="
-              horse.owner === null
-                ? 'This horse does not have an owner yet.'
-                : ''
-            "
-            class="inline-flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none sm:w-auto"
+          <UTooltip
+            v-if="!horse.owner"
+            text="This horse does not have an owner yet."
           >
+            <UButton :disabled="true"> Book Service </UButton>
+          </UTooltip>
+          <UButton v-else @click="createModalOpen = true">
             Book Service
-          </button>
+          </UButton>
         </div>
       </div>
       <BillingStats />
@@ -224,22 +212,24 @@ const goToPreviousWeek = () => {
                   </div>
                 </div>
                 <div class="flex items-center font-mono text-sm">
-                  <icon
-                    name="heroicons:clock"
-                    v-if="event.booked_late"
-                    v-tooltip="'Late Booking'"
-                    class="mr-2 h-5 w-5 text-orange-400"
-                  />
+                  <UTooltip text="Late Booking" v-if="event.booked_late">
+                    <icon
+                      name="heroicons:clock"
+                      class="mr-2 h-5 w-5 text-orange-400"
+                    />
+                  </UTooltip>
+
                   {{ currencyFormatter.format(event.service_price) }}
-                  <icon
-                    name="heroicons:trash"
-                    @click="
-                      selectedService = event;
-                      cancelModalOpen = true;
-                    "
-                    v-tooltip="'Cancel Service'"
-                    class="ml-2 h-5 w-5 cursor-pointer text-gray-400"
-                  />
+                  <UTooltip text="Cancel Service">
+                    <icon
+                      name="heroicons:trash"
+                      @click="
+                        selectedService = event;
+                        cancelModalOpen = true;
+                      "
+                      class="ml-2 h-5 w-5 cursor-pointer text-gray-400"
+                    />
+                  </UTooltip>
                 </div>
               </div>
             </div>

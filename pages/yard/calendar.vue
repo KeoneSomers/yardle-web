@@ -255,7 +255,6 @@ const createEvent = (e, day) => {
                 :key="horse.id"
                 class="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full text-white ring-2 ring-white"
                 :class="horse.avatar_background"
-                v-tooltip="horse.name"
               >
                 <SupabaseImage
                   v-if="horse.avatar_url"

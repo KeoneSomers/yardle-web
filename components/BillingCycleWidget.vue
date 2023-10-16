@@ -338,13 +338,17 @@ const resetStartDate = () => {
             }}
           </span>
         </p>
-        <div
-          @click="billingPeriodOptions.starting_from = null"
-          class="ml-2 cursor-pointer"
-          v-tooltip="'Edit'"
-        >
-          <icon name="heroicons:pencil-square" class="h-5 w-5 text-blue-500" />
-        </div>
+        <UTooltip text="Edit">
+          <div
+            @click="billingPeriodOptions.starting_from = null"
+            class="ml-2 cursor-pointer"
+          >
+            <icon
+              name="heroicons:pencil-square"
+              class="h-5 w-5 text-blue-500"
+            />
+          </div>
+        </UTooltip>
       </div>
     </div>
 
