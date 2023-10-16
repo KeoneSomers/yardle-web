@@ -100,7 +100,7 @@ const handleSubmit = async () => {
       {{ error }}
     </div>
 
-    <div class="mt-52 flex justify-end space-x-2">
+    <div class="mt-4 mb-48 flex justify-end space-x-2">
       <UButton label="Save" type="submit" :loading="loading" />
     </div>
   </UForm>
