@@ -181,44 +181,46 @@ const indeterminate = computed(
                                                                                             >Edit</a
                                                                                           > -->
                           <div class="flex justify-end">
-                            <button
-                              @click="
-                                selectedRequest = request;
-                                selectedStatus = 'accepted';
-                                selectedRequests = [];
-                                modalOpen = true;
-                              "
-                              v-tooltip="'Accept Request'"
-                              class="mr-2 rounded-full border p-1 hover:bg-gray-50"
-                              :class="{
-                                'bg-green-500 text-white hover:bg-green-600':
-                                  request.status === 'accepted',
-                              }"
-                            >
-                              <icon
-                                name="heroicons:check-solid"
-                                class="h-5 w-5"
-                              />
-                            </button>
-                            <button
-                              @click="
-                                selectedRequest = request;
-                                selectedStatus = 'declined';
-                                selectedRequests = [];
-                                modalOpen = true;
-                              "
-                              v-tooltip="'Decline Request'"
-                              class="rounded-full border p-1 hover:bg-gray-50"
-                              :class="{
-                                'bg-red-500 text-white hover:bg-red-600':
-                                  request.status === 'declined',
-                              }"
-                            >
-                              <icon
-                                name="heroicons:x-mark-solid"
-                                class="h-5 w-5"
-                              />
-                            </button>
+                            <UTooltip text="Accept Request">
+                              <button
+                                @click="
+                                  selectedRequest = request;
+                                  selectedStatus = 'accepted';
+                                  selectedRequests = [];
+                                  modalOpen = true;
+                                "
+                                class="mr-2 rounded-full border p-1 hover:bg-gray-50"
+                                :class="{
+                                  'bg-green-500 text-white hover:bg-green-600':
+                                    request.status === 'accepted',
+                                }"
+                              >
+                                <icon
+                                  name="heroicons:check-solid"
+                                  class="h-5 w-5"
+                                />
+                              </button>
+                            </UTooltip>
+                            <UTooltip text="Decline Request">
+                              <button
+                                @click="
+                                  selectedRequest = request;
+                                  selectedStatus = 'declined';
+                                  selectedRequests = [];
+                                  modalOpen = true;
+                                "
+                                class="rounded-full border p-1 hover:bg-gray-50"
+                                :class="{
+                                  'bg-red-500 text-white hover:bg-red-600':
+                                    request.status === 'declined',
+                                }"
+                              >
+                                <icon
+                                  name="heroicons:x-mark-solid"
+                                  class="h-5 w-5"
+                                />
+                              </button>
+                            </UTooltip>
                           </div>
                         </td>
                       </tr>
