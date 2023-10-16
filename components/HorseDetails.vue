@@ -1,6 +1,5 @@
 <script setup>
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
-import EditHorseModal from "@/components/modals/EditHorseModal.vue";
 import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
 import HorseRugsTab from "@/components/HorseRugsTab.vue";
 import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
@@ -267,13 +266,12 @@ watchEffect(async () => {
     </nav>
   </div>
 
-  <!-- Modals -->
-  <EditHorseModal
-    v-if="editModalOpen"
-    :is-open="editModalOpen"
-    :horse="horse"
-    @close="editModalOpen = false"
-  />
+  <!-- Edit Horse Modal -->
+  <Modal v-model="editModalOpen">
+    <ModalHeaderLayout title="Edit Horse" @close="editModalOpen = false">
+      <FormsEditHorseForm :horse="horse" @onSuccess="editModalOpen = false" />
+    </ModalHeaderLayout>
+  </Modal>
 
   <!-- Delete Horse Modal -->
   <Modal v-model="deleteModalOpen">
