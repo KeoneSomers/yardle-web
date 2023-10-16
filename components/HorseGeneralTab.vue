@@ -1,6 +1,5 @@
 <script setup>
 import { DateTime } from "luxon";
-import AssignHorseOwnerModal from "@/components/modals/AssignHorseOwnerModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 const horse = useState("horse");
@@ -627,9 +626,14 @@ const handleUnassignOwner = async () => {
       </div>
     </dl>
   </div>
-  <AssignHorseOwnerModal
-    v-if="assignOwnerModalOpen"
-    :is-open="assignOwnerModalOpen"
-    @close="assignOwnerModalOpen = false"
-  />
+
+  <!-- Assign Horse Owner Modal -->
+  <Modal v-model="assignOwnerModalOpen">
+    <ModalHeaderLayout
+      title="Assign an owner"
+      @close="assignOwnerModalOpen = false"
+    >
+      <FormsAssignHorseOwnerForm @onSuccess="assignOwnerModalOpen = false" />
+    </ModalHeaderLayout>
+  </Modal>
 </template>
