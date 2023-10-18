@@ -13,7 +13,7 @@ const handleSignout = async () => {
 const items = [
   [
     {
-      label: profile.value.email ?? "",
+      label: profile.value ? profile.value.email : "",
       slot: "account",
       disabled: true,
     },
