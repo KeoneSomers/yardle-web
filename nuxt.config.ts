@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     "nuxt-vercel-analytics",
   ],
   supabase: {
-    redirect: false, // i am already doing this myself with the middleware
+    redirect: false,
   },
   colorMode: { preference: "light" },
   typescript: {

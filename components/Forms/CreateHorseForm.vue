@@ -1,14 +1,17 @@
-<script setup>
+<script setup lang="ts">
+import { Database } from "~/types/supabase";
+
 const emits = defineEmits(["onSuccess"]);
 
-const isLoading = ref(false);
-const client = useSupabaseClient();
+const client = useSupabaseClient<Database>();
 const user = useSupabaseUser();
+
+const isLoading = ref<boolean>(false);
 const selectedYard = useSelectedYardId();
-const horses = useState("horses");
+const horses = useState<any>("horses");
 const selectedHorseId = useState("selectedHorseId");
 const toast = useToast();
-const error = ref("");
+const error = ref<string>("");
 
 const formState = ref({
   name: "",
@@ -25,7 +28,7 @@ const backgrounds = [
   "bg-cyan-500",
 ];
 
-function capitalizeFirstLetter(string) {
+function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -35,6 +38,11 @@ const handleSubmit = async () => {
     if (isLoading.value === false) {
       // start the loading animation
       isLoading.value = true;
+
+      if (!user.value) {
+        isLoading.value = false;
+        return;
+      }
 
       // create the horse in the database
       const { data: newHorse, error: createError } = await client
