@@ -3,8 +3,8 @@ import { serverSupabaseServiceRole } from "#supabase/server";
 export default defineEventHandler(async (event) => {
   const client = serverSupabaseServiceRole(event);
 
-  const start = "2023-09-01";
-  const end = "2023-09-30";
+  const start = "2023-10-01";
+  const end = "2023-10-31";
 
   // get all the service_requests after the start date and before or equal to the end date
   const { data: serviceRequests, error: errorServiceRequests } = await client
