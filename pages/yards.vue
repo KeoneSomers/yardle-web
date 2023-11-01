@@ -1,5 +1,4 @@
 <script setup>
-import CreateYardModal from "@/components/modals/CreateYardModal.vue";
 import DeleteYardModal from "@/components/modals/DeleteYardModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
@@ -252,8 +251,14 @@ const handleLeaveYard = async (yardId) => {
     </div>
   </div>
 
+  <!-- Add Horse Modal -->
+  <Modal v-model="isOpen">
+    <ModalHeaderLayout title="Create a Yard" @close="isOpen = false">
+      <FormsCreateYardForm @onSuccess="isOpen = false" />
+    </ModalHeaderLayout>
+  </Modal>
+
   <!-- Modals -->
-  <CreateYardModal v-if="isOpen" :is-open="isOpen" @close="isOpen = false" />
   <DeleteYardModal
     v-if="deleteYardModalOpen"
     :is-open="deleteYardModalOpen"
