@@ -26,6 +26,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   // if user has a yard selected - send them to the horses page of that yard
   if (selectedYardId.value && selectedYardId.value > 0) {
-    return navigateTo("/yard/horses");
+    return navigateTo("/yard");
   }
 });

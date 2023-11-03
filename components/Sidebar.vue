@@ -32,6 +32,11 @@ const adminLinks = [
 
 const links = [
   {
+    label: "Home",
+    to: "/yard",
+    icon: "i-heroicons-home",
+  },
+  {
     label: "Horses",
     to: "/yard/horses",
     icon: "i-heroicons-magnifying-glass-circle",

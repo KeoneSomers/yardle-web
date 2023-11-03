@@ -60,7 +60,7 @@ const handleSelectYard = async (yardId) => {
     return;
   }
 
-  // update user in db (realtime will navigate them to the /yard/horses page automatically)
+  // update user in db (realtime will navigate them to the /yard page automatically)
   const { error: updateProfileError } = await client
     .from("profiles")
     .update({ selected_yard: yardId, active_role: profile_yard.role })
@@ -72,7 +72,7 @@ const handleSelectYard = async (yardId) => {
   }
 
   selectedYard.value = yardId;
-  navigateTo("/yard/horses");
+  navigateTo("/yard");
 };
 
 // Todo - Need a warning modal

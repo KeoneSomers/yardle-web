@@ -47,7 +47,7 @@ const handleChangePassword = async () => {
 
   // success!
   if (selectedYard.value) {
-    navigateTo("/yard/horses");
+    navigateTo("/yard");
   } else {
     navigateTo("/yards");
   }
