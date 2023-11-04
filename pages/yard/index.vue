@@ -10,14 +10,24 @@ const user = useSupabaseUser();
 const selectedYard = useSelectedYardId();
 const yard = useState("yard");
 const profile = useState("profile");
+const editModalOpen = ref(false);
+const selectedAnnouncement = ref(null);
 
-const announcements = ref([]);
+const announcements = useState("announcements", () => []);
 const formState = ref({
   announcement: "",
 });
 
 const dropdownItems = (row) => [
   [
+    {
+      label: "Edit",
+      icon: "i-heroicons-pencil-square",
+      click: () => {
+        selectedAnnouncement.value = row;
+        editModalOpen.value = true;
+      },
+    },
     {
       label: "Delete",
       icon: "i-heroicons-trash",
@@ -158,4 +168,17 @@ const handleDelete = async (id) => {
       </div>
     </div>
   </div>
+
+  <!-- Edit Horse Modal -->
+  <Modal v-model="editModalOpen">
+    <ModalHeaderLayout title="Edit Announcement" @close="editModalOpen = false">
+      <FormsEditAnnouncementForm
+        :announcement="selectedAnnouncement"
+        @onSuccess="
+          editModalOpen = false;
+          selectedAnnouncement = null;
+        "
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>
