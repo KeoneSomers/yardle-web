@@ -11,6 +11,7 @@ const selectedYard = useSelectedYardId();
 const yard = useState("yard");
 const profile = useState("profile");
 const editModalOpen = ref(false);
+const deleteModalOpen = ref(false);
 const selectedAnnouncement = ref(null);
 
 const announcements = useState("announcements", () => []);
@@ -31,7 +32,10 @@ const dropdownItems = (row) => [
     {
       label: "Delete",
       icon: "i-heroicons-trash",
-      click: () => handleDelete(row.id),
+      click: () => {
+        selectedAnnouncement.value = row;
+        deleteModalOpen.value = true;
+      },
     },
   ],
 ];
@@ -94,6 +98,8 @@ const handleDelete = async (id) => {
 
   if (!error) {
     announcements.value = announcements.value.filter((a) => a.id !== id);
+    deleteModalOpen.value = false;
+    selectedAnnouncement.value = null;
   } else {
     console.log(error);
   }
@@ -180,5 +186,28 @@ const handleDelete = async (id) => {
         "
       />
     </ModalHeaderLayout>
+  </Modal>
+
+  <!-- Delete Horse Modal -->
+  <Modal v-model="deleteModalOpen">
+    <!-- The below div could be extrapolated into a dynamic confirm component called confirmation.vue -->
+    <div class="p-4">
+      <p>Are you sure you would like to delete this announcement?</p>
+      <small>This action cannot be undone.</small>
+      <div class="grid grid-cols-2 gap-3 mt-3">
+        <UButton
+          block
+          label="Cancel"
+          @click="deleteModalOpen = false"
+          color="white"
+        />
+        <UButton
+          block
+          label="Confirm"
+          @click="handleDelete(selectedAnnouncement.id)"
+          color="red"
+        />
+      </div>
+    </div>
   </Modal>
 </template>
