@@ -16,6 +16,16 @@ const formState = ref({
   announcement: "",
 });
 
+const dropdownItems = (row) => [
+  [
+    {
+      label: "Delete",
+      icon: "i-heroicons-trash",
+      click: () => handleDelete(row.id),
+    },
+  ],
+];
+
 const formatDate = (dateString) => {
   return DateTime.fromISO(dateString).toFormat("ccc dd LLL yyyy");
 };
@@ -137,13 +147,10 @@ const handleDelete = async (id) => {
             }}</small>
             <p class="whitespace-pre-wrap">{{ announcement.body }}</p>
           </div>
-          <div v-if="profile.active_role == 1" class="flex items-end">
-            <UButton
-              size="xs"
-              color="red"
-              @click="handleDelete(announcement.id)"
-              >Delete</UButton
-            >
+          <div v-if="profile.active_role == 1">
+            <UDropdown :items="dropdownItems(announcement)">
+              <Icon name="heroicons:ellipsis-vertical" />
+            </UDropdown>
           </div>
         </div>
       </div>
