@@ -96,6 +96,8 @@ const handleDelete = async (id) => {
       <h1 class="text-xl">Welcome to {{ yard.name }}</h1>
       <small class="text-gray-500">{{ formatDate(DateTime.now()) }}</small>
 
+      <QuickLinks class="mt-6" />
+
       <div class="shadow-lg border my-6 rounded-lg">
         <div v-if="profile.active_role == 1" class="p-4 bg-primary-50">
           <div class="flex justify-center-center">
