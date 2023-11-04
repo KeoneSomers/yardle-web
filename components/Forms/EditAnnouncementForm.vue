@@ -51,7 +51,7 @@ const handleSubmit = async () => {
     :state="formState"
     class="flex flex-col space-y-3"
   >
-    <UFormGroup label="About">
+    <UFormGroup>
       <UTextarea v-model="formState.body" />
     </UFormGroup>
 
