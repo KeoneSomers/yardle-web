@@ -25,15 +25,6 @@ if (selectedYard.value > 0) {
   });
 }
 
-// auto select first horse if there is one
-onMounted(() => {
-  if (horses.value && horses.value.length > 0) {
-    selectHorse(horses.value[0].id);
-  } else {
-    selectedHorseId.value = 0;
-  }
-});
-
 const groupByFirstLetter = (input, key) => {
   if (input) {
     return input.reduce((acc, currentValue) => {
@@ -200,6 +191,12 @@ const selectHorse = (horseId) => {
   </div>
 
   <HorseDetails v-if="selectedHorseId > 0" />
+  <div v-else class="flex w-full items-center justify-center">
+    <div class="text-center">
+      <p class="font-semibold text-2xl mb-3">No Horse Selected.</p>
+      <p>Select a horse by clicking their card in the list.</p>
+    </div>
+  </div>
 
   <!-- Empty State -->
   <div
