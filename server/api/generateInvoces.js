@@ -24,8 +24,27 @@ export default defineEventHandler(async (event) => {
     .select("*, yard_id!inner(id, name)");
 
   if (errorBillingCycles) {
-    console.log(errorBillingCycles);
+    await $fetch("/api/sendEmail", {
+      method: "POST",
+      body: {
+        recipients: ["Keone.somers@outlook.com"],
+        subject: "Yardle - Error Generating todays invoices!",
+        text: "Error fetching billing cycles.",
+        html: "",
+      },
+    });
     return;
+  } else {
+    console.log("Billing Cycles fetched successfully!");
+    await $fetch("/api/sendEmail", {
+      method: "POST",
+      body: {
+        recipients: ["Keone.somers@outlook.com"],
+        subject: "Yardle - Good News! Generating todays invoices!",
+        text: "successfully fetched billing cycles",
+        html: "",
+      },
+    });
   }
 
   // Loop through billingCycles to check if their _nextBillingDate is today.
