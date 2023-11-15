@@ -87,6 +87,11 @@ watchEffect(async () => {
     y.value = 0;
   }
 });
+
+const clearHorseSelection = () => {
+  viewingHorse.value = false;
+  selectedHorseId.value = 0;
+};
 </script>
 
 <template>
@@ -95,13 +100,22 @@ watchEffect(async () => {
     class="pb-20 lg:pb-0 relative z-0 flex flex-1 flex-col overflow-y-auto focus:outline-none md:block md:overflow-y-auto lg:order-last"
     :class="{ hidden: !viewingHorse }"
   >
+    <UTooltip text="Close Horse Details" class="absolute top-2 right-2">
+      <div
+        class="bg-gray-500 bg-opacity-20 hover:bg-opacity-30 cursor-pointer rounded-lg p-2"
+        @click="clearHorseSelection()"
+      >
+        <icon name="heroicons:x-mark" class="h-6 w-6" />
+      </div>
+    </UTooltip>
+
     <!-- Breadcrumb -->
     <nav
       class="fixed left-0 top-14 z-40 flex w-full items-start border-b bg-white px-4 py-3 sm:px-6 md:hidden lg:px-8"
       aria-label="Breadcrumb"
     >
       <a
-        @click="() => (viewingHorse = false)"
+        @click="clearHorseSelection()"
         class="inline-flex items-center space-x-1 text-sm font-medium text-blue-500"
       >
         <icon
