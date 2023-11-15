@@ -1,4 +1,5 @@
-import { serverSupabaseServiceRole } from "#supabase/server";
+// import { serverSupabaseServiceRole } from "#supabase/server";
+import { createClient } from "@supabase/supabase-js";
 import { DateTime } from "luxon";
 
 export default defineEventHandler(async (event) => {
@@ -13,7 +14,10 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  const client = serverSupabaseServiceRole(event);
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const client = createClient(supabaseUrl, supabaseServiceRoleKey);
+  // const client = serverSupabaseServiceRole(event);
 
   // get all billing cycles
   const { data: billingCycles, error: errorBillingCycles } = await client

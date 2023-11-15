@@ -1,8 +1,13 @@
-import { serverSupabaseServiceRole } from "#supabase/server";
 import { DateTime } from "luxon";
+import { createClient } from "@supabase/supabase-js";
 
 export default defineEventHandler(async (event) => {
-  const supabase = serverSupabaseServiceRole(event);
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+  // const supabase = serverSupabaseServiceRole(event);
+  console.log(supabase);
   const now = DateTime.utc();
 
   const { data, error } = await supabase.from("horses").insert({
