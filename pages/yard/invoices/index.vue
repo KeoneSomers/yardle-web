@@ -7,6 +7,8 @@ definePageMeta({
 
 const client = useSupabaseClient();
 const selectedYard = useSelectedYardId();
+const yard = useState("yard");
+const toast = useToast();
 
 const invoices = ref([]);
 
@@ -18,6 +20,50 @@ const { data: invoicesData, error: invoicesError } = await client
   .order("published", { ascending: false });
 
 invoices.value = invoicesData;
+
+const dropdownItems = (invoice) => [
+  [
+    {
+      label: "View & Edit Invoice",
+      icon: "i-heroicons-pencil-square",
+      click: () => {
+        navigateTo(`/yard/invoices/${invoice.id * 36}`);
+      },
+    },
+    {
+      label: "Send Email Reminder",
+      icon: "i-heroicons-bell-alert",
+      click: async () => {
+        // send email to client
+        await $fetch("/api/sendEmail", {
+          method: "post",
+          body: {
+            recipients: [invoice.client_email],
+            subject: `Your invoice from ${yard.value.name} is due now!`,
+            text: "",
+            html: `
+            Hey ${invoice.client_id.first_name},<br /><br />
+            This is a friendly reminder that your invoice from ${
+              yard.value.name
+            } is due now.<br /><br />
+            <a href="${window.location.origin}/yard/invoices/${
+              invoice.id * 36
+            }">Click here to view your invoice</a><br /><br />
+            Thanks,<br />
+            ${yard.value.name}
+            `,
+          },
+        });
+
+        // success toast
+        toast.add({
+          title: "Reminder Sent!",
+          description: "A reminder email has been sent to the client.",
+        });
+      },
+    },
+  ],
+];
 </script>
 
 <template>
@@ -32,11 +78,9 @@ invoices.value = invoicesData;
       <hr class="my-10" />
 
       <!-- Table here -->
-      <NuxtLink
+      <div
         v-for="invoice in invoices"
-        :key="invoice.id"
-        :to="`/yard/invoices/${invoice.id * 36}`"
-        class="mb-4 flex items-center justify-between rounded-lg border transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg"
+        class="mb-4 flex items-center justify-between rounded-lg border"
       >
         <div class="flex items-center">
           <icon name="heroicons:document" class="mx-4 h-8 w-8" />
@@ -75,16 +119,19 @@ invoices.value = invoicesData;
             ></span
           >
         </div>
-        <div>
-          <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />
-          <!-- <button class="p-2 mr-2 shadow border rounded">
-                                View / Edit Items
-                              </button>
-                              <button class="p-2 mr-2 bg-indigo-500 text-white rounded">
-                                Create Invoice
-                              </button> -->
+        <div class="flex items-center">
+          <UDropdown :items="dropdownItems(invoice)">
+            <icon name="heroicons:ellipsis-vertical" class="mr-4 h-5 w-5" />
+          </UDropdown>
+          <!-- <NuxtLink
+            :key="invoice.id"
+            :to="`/yard/invoices/${invoice.id * 36}`"
+            class="transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg"
+          >
+            <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />
+          </NuxtLink> -->
         </div>
-      </NuxtLink>
+      </div>
     </div>
   </div>
   <!-- Empty State -->
