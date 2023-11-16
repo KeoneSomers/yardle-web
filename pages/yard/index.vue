@@ -115,7 +115,10 @@ const handleDelete = async (id) => {
       <QuickLinks class="mt-6" />
 
       <div class="shadow-lg border my-6 rounded-lg">
-        <div v-if="profile.active_role == 1" class="p-4 bg-primary-50">
+        <div
+          v-if="profile && profile.active_role == 1"
+          class="p-4 bg-primary-50"
+        >
           <div class="flex justify-center-center">
             <icon
               name="heroicons-megaphone"
