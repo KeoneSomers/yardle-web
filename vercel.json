@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/generateInvoces",
+      "path": "/api/generateInvoices",
       "schedule": "0 4 * * *"
     },
     {
