@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   if (errorBillingCycles) return;
 
   // Loop through each billing cycle
-  billingCycles.forEach(async (billingCycle) => {
+  for (const billingCycle of billingCycles) {
     const endDate = DateTime.fromISO(
       await $fetch("/api/getNextBillingDate", {
         method: "POST",
@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
     ];
 
     // Create an invoice for each client and link all the appropriate service_requests to the invoice
-    horseOwnersIds.forEach(async (clientId) => {
+    for (const clientId of horseOwnersIds) {
       // 1. Create an invoice for each client
       const { data: invoiceData, error: errorInvoiceData } = await client
         .from("invoices")
@@ -72,7 +72,7 @@ export default defineEventHandler(async (event) => {
         .select()
         .single();
 
-      if (errorInvoiceData) return;
+      if (errorInvoiceData) continue;
 
       // 2. Link all the service_requests to the invoice
       await client
@@ -87,8 +87,8 @@ export default defineEventHandler(async (event) => {
         .filter("status", "eq", "accepted")
         .filter("canceled_at", "is", null)
         .not("horse_id.owner", "is", null);
-    });
-  });
+    }
+  }
 
   return { result: "ok" };
 });
