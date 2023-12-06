@@ -14,31 +14,31 @@ export default defineEventHandler(async (event) => {
 
   if (errorBillingCycles) return;
 
-  // Chech the next billing date for each billing cycle
+  // Loop through each billing cycle
   billingCycles.forEach(async (billingCycle) => {
-    const _nextBillingDate = await $fetch("/api/getNextBillingDate", {
-      method: "POST",
-      body: {
-        billingCycle: billingCycle,
-      },
-    });
-
-    const endDate = DateTime.fromISO(_nextBillingDate).toISODate();
+    const endDate = DateTime.fromISO(
+      await $fetch("/api/getNextBillingDate", {
+        method: "POST",
+        body: {
+          billingCycle: billingCycle,
+        },
+      })
+    ).toISODate();
 
     if (endDate !== DateTime.now().toISODate()) return;
 
-    const _start = await $fetch("/api/getPreviousBillingDate", {
-      method: "POST",
-      body: {
-        offset: 1,
-        nextBillingDate: endDate,
-        billingCycle: billingCycle,
-      },
-    });
+    const startDate = DateTime.fromISO(
+      await $fetch("/api/getPreviousBillingDate", {
+        method: "POST",
+        body: {
+          offset: 1,
+          nextBillingDate: endDate,
+          billingCycle: billingCycle,
+        },
+      })
+    ).toISODate();
 
-    const startDate = DateTime.fromISO(_start).toISODate(); // e.g. 2023-03-15
-
-    // get all the service_requests after the start date and before or equal to the end date
+    // get all the service_requests for the billing cycle
     const { data: serviceRequests, error: errorServiceRequests } = await client
       .from("service_requests")
       .select("*, horse_id!inner(id, yard_id, owner)")
@@ -48,6 +48,8 @@ export default defineEventHandler(async (event) => {
       .filter("status", "eq", "accepted")
       .filter("canceled_at", "is", null)
       .not("horse_id.owner", "is", null);
+
+    if (errorServiceRequests) return;
 
     // split the service_requests into groups by horse owner
     const ServiceRequestsGroupedByHorseOwner = serviceRequests.reduce(
@@ -65,7 +67,7 @@ export default defineEventHandler(async (event) => {
       []
     );
 
-    // loop though the groups and create an invoice for each client (uneque horse owner)
+    // Create an invoice for each client and link all the appropriate service_requests to the invoice
     ServiceRequestsGroupedByHorseOwner.forEach(async (horseOwnersRequests) => {
       const clientId = horseOwnersRequests[0].horse_id.owner;
 
