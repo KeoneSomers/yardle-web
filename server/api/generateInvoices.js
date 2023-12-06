@@ -51,26 +51,15 @@ export default defineEventHandler(async (event) => {
 
     if (errorServiceRequests) return;
 
-    // split the service_requests into groups by horse owner
-    const ServiceRequestsGroupedByHorseOwner = serviceRequests.reduce(
-      (acc, item) => {
-        const ownerArr = acc.find(
-          (a) => a[0].horse_id.owner === item.horse_id.owner
-        );
-        if (ownerArr) {
-          ownerArr.push(item);
-        } else {
-          acc.push([item]);
-        }
-        return acc;
-      },
-      []
-    );
+    // Create an array of all unique horse owners ids from the serviceRequests
+    const horseOwnersIds = [
+      ...new Set(
+        serviceRequests.map((serviceRequest) => serviceRequest.horse_id.owner)
+      ),
+    ];
 
     // Create an invoice for each client and link all the appropriate service_requests to the invoice
-    ServiceRequestsGroupedByHorseOwner.forEach(async (horseOwnersRequests) => {
-      const clientId = horseOwnersRequests[0].horse_id.owner;
-
+    horseOwnersIds.forEach(async (clientId) => {
       // 1. Create an invoice for each client
       const { data: invoiceData, error: errorInvoiceData } = await client
         .from("invoices")
@@ -86,14 +75,18 @@ export default defineEventHandler(async (event) => {
       if (errorInvoiceData) return;
 
       // 2. Link all the service_requests to the invoice
-      for (let key in horseOwnersRequests) {
-        await client
-          .from("service_requests")
-          .update({
-            invoice_id: invoiceData.id,
-          })
-          .eq("id", horseOwnersRequests[key].id);
-      }
+      await client
+        .from("service_requests")
+        .update({
+          invoice_id: invoiceData.id,
+        })
+        .eq("client_id", clientId)
+        .eq("horse_id.yard_id", billingCycle.yard_id.id)
+        .gt("date", startDate)
+        .lte("date", endDate)
+        .filter("status", "eq", "accepted")
+        .filter("canceled_at", "is", null)
+        .not("horse_id.owner", "is", null);
     });
   });
 
