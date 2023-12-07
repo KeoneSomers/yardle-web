@@ -1,7 +1,6 @@
 <script setup>
 import { DateTime, Info } from "luxon";
 import RequestServiceModal from "@/components/modals/RequestServiceModal.vue";
-import CancelServiceRequest from "@/components/modals/CancelServiceRequest.vue";
 import HorseInvoices from "@/components/HorseInvoices.vue";
 import BillingStats from "@/components/BillingStats.vue";
 
@@ -12,6 +11,9 @@ const yard = useState("yard");
 const createModalOpen = ref(false);
 const cancelModalOpen = ref(false);
 const selectedService = ref(null);
+
+const toast = useToast();
+const yardOwner = ref(null);
 
 const serviceRequests = useState("service_requests", () => []);
 
@@ -95,6 +97,84 @@ const goToPreviousWeek = () => {
   offset.value--;
   dt.value = DateTime.now().plus({ weeks: offset.value });
   setDays();
+};
+
+const handleDelete = async () => {
+  try {
+    const { error } = await client
+      .from("service_requests")
+      .update({
+        canceled_at: DateTime.now(),
+        canceled_by: user.value.id,
+      })
+      .eq("id", selectedService.value.id);
+
+    if (error) {
+      return;
+    }
+
+    // remove the item from the list
+    const index = serviceRequests.value
+      .map((e) => e.id)
+      .indexOf(selectedService.value.id);
+    serviceRequests.value.splice(index, 1);
+
+    // get yard owner (If it hasn't been fetched already)
+    if (yardOwner.value === null) {
+      const { data: _yardOwner, error: error2 } = await client
+        .from("profiles_yards")
+        .select("*, profile_id(email, first_name, last_name)")
+        .eq("yard_id", yard.value.id)
+        .eq("role", 1)
+        .single();
+
+      yardOwner.value = _yardOwner;
+
+      if (error2) {
+        console.log(error2);
+        return;
+      }
+    }
+
+    // send email to yard owner
+    // TODO: only if they want this type of email
+    await $fetch("/api/sendEmail", {
+      method: "post",
+      body: {
+        recipients: [yardOwner.value.profile_id.email],
+        subject: `${yard.value.name}: A service request has been canceled`,
+        text: ``,
+        html: `
+          <p>${profile.value.first_name} ${
+            profile.value.last_name
+          } has canceled their service request "${
+            selectedService.value.service_name
+          }", for ${horse.value.name} at ${
+            yard.value.name
+          } for ${DateTime.fromISO(selectedService.value.date).toFormat(
+            "LLL dd, yyyy"
+          )}</p>
+        <br/>
+          <small>To unsubscribe from these types of emails, please visit yardle.app/auth/accountSettings</small>
+        `,
+      },
+    });
+
+    toast.add({
+      title: "Request Canceled!",
+      description: "The yard owner will be notified.",
+    });
+
+    // close the modal
+    cancelModalOpen.value = false;
+  } catch (error) {
+    console.log(error);
+
+    toast.add({
+      title: "Error!",
+      description: "There was an error cancelling this request.",
+    });
+  }
 };
 </script>
 
@@ -261,10 +341,17 @@ const goToPreviousWeek = () => {
     :is-open="createModalOpen"
     @close="createModalOpen = false"
   />
-  <CancelServiceRequest
-    v-if="cancelModalOpen"
-    :is-open="cancelModalOpen"
-    :service="selectedService"
-    @close="cancelModalOpen = false"
-  />
+
+  <!-- Delete Rug Confirmation Modal -->
+  <Modal v-model="cancelModalOpen">
+    <ModalHeaderLayout title="Cancel Service" @close="cancelModalOpen = false">
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to cancel this service request?"
+        buttonText="Confirm"
+        @onConfirm="handleDelete()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>
