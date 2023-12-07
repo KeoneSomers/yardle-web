@@ -1,7 +1,6 @@
 <script setup>
 // imports
 import CreateMedicationModal from "@/components/modals/CreateMedicationModal.vue";
-import DeleteMedicationModal from "@/components/modals/DeleteMedicationModal.vue";
 
 // modal toggles
 const createModalOpen = ref(false);
@@ -9,6 +8,8 @@ const deleteModalOpen = ref(false);
 
 // supabase
 const client = useSupabaseClient();
+
+const toast = useToast();
 
 // states
 const medications = useState("medications");
@@ -27,9 +28,43 @@ await useAsyncData("medications", async () => {
 });
 
 // functions
-const handleDelete = (medicationId) => {
+const handleConfirmDelete = (medicationId) => {
   medicationToDelete.value = medicationId;
   deleteModalOpen.value = true;
+};
+
+const handleDelete = async () => {
+  const { data, error } = await client
+    .from("medications")
+    .delete()
+    .eq("id", medicationToDelete.value)
+    .select();
+
+  if (data) {
+    // success! - now remove the deleted medication from the webpage
+    const index = medications.value
+      .map((e) => e.id)
+      .indexOf(medicationToDelete.value);
+    medications.value.splice(index, 1);
+
+    toast.add({
+      title: "Medication Deleted!",
+      description: "Your medication has been deleted.",
+    });
+
+    // close the modal
+    deleteModalOpen.value = false;
+  }
+
+  if (error) {
+    // somthing went wrong!
+    console.log(error);
+
+    toast.add({
+      title: "Error Deleting Medication!",
+      description: "Please try again, or contact support.",
+    });
+  }
 };
 </script>
 
@@ -104,7 +139,7 @@ const handleDelete = (medicationId) => {
                       class="break-all py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
                     >
                       <button
-                        @click="handleDelete(medication.id)"
+                        @click="handleConfirmDelete(medication.id)"
                         class="rounded bg-red-400 px-3 py-1 text-white"
                       >
                         Delete
@@ -162,10 +197,22 @@ const handleDelete = (medicationId) => {
     :is-open="createModalOpen"
     @close="createModalOpen = false"
   />
-  <DeleteMedicationModal
-    v-if="deleteModalOpen"
-    :is-open="deleteModalOpen"
-    :medication-id="medicationToDelete"
-    @close="deleteModalOpen = false"
-  />
+
+  <!-- Delete Medication Confirmation Modal -->
+  <Modal v-model="deleteModalOpen">
+    <ModalHeaderLayout
+      title="Delete Medication"
+      @close="deleteModalOpen = false"
+    >
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete this medication? All of it's data will be
+            permanently removed from your yard forever. This action cannot be
+            undone."
+        buttonText="Delete"
+        @onConfirm="handleDelete()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>

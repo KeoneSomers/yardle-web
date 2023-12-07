@@ -211,14 +211,6 @@ const handleDelete = async () => {
     </UTable>
   </div>
 
-  <!-- Modals -->
-  <!-- <RemoveMemberModal
-    v-if="removeMemberModalOpen"
-    :is-open="removeMemberModalOpen"
-    :member-id="memberToRemove"
-    @close="removeMemberModalOpen = false"
-  /> -->
-
   <!-- Remove Member Confimation Modal -->
   <Modal v-model="removeMemberModalOpen">
     <ModalHeaderLayout
@@ -231,7 +223,7 @@ const handleDelete = async () => {
         body="Are you sure you want to remove this member? All of their
                       data such as horses and calendar events will remain but
                       the user will no longer have access to this yard."
-        buttonText="Delete"
+        buttonText="Confirm"
         @onConfirm="handleDelete()"
       />
     </ModalHeaderLayout>
