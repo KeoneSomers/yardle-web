@@ -2,7 +2,6 @@
 import draggable from "vuedraggable";
 import CreateFieldModal from "@/components/modals/CreateFieldModal.vue";
 import EditFieldModal from "@/components/modals/EditFieldModal.vue";
-import DeleteFieldModal from "@/components/modals/DeleteFieldModal.vue";
 
 import CreateFieldRotationModal from "@/components/modals/CreateFieldRotationModal.vue";
 import EditFieldRotationModal from "@/components/modals/EditFieldRotationModal.vue";
@@ -159,19 +158,50 @@ const handleFieldChange = async (e) => {
     rotation_id: selectedRotation.value.id,
   });
 
-  // update horse field_id
-  // const { error } = await client
-  //   .from("horses")
-  //   .update({ field_id: fieldId == 0 ? null : fieldId })
-  //   .eq("id", horseId);
-
   if (error) {
     console.log(error);
     return;
   }
 };
 
-// AFTER: remove field_id from horses table
+const handleDelete = async () => {
+  // capture the horses of this field so i can move them to another field after deletion
+  const horses = selectedField.value.horses;
+
+  // remove joins for this field in the horse/rotation/field join table
+  const { error: unlinkError } = await client
+    .from("field_rotation_horses")
+    .delete()
+    .eq("field_id", selectedField.value.id);
+
+  if (unlinkError) {
+    console.log(unlinkError);
+    return;
+  }
+
+  // Delete the field
+  const { error } = await client
+    .from("fields")
+    .delete()
+    .eq("id", selectedField.value.id);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  // now remove the deleted feed from the webpage
+  const index = fields.value.map((e) => e.id).indexOf(selectedField.value.id);
+  fields.value.splice(index, 1);
+
+  // now move the horses to another field
+  horses.forEach(async (horse) => {
+    fields.value[0].horses.push(horse);
+  });
+
+  // close the modal
+  deleteModalOpen.value = false;
+};
 </script>
 
 <template>
@@ -449,12 +479,21 @@ const handleFieldChange = async (e) => {
     :field="selectedField"
     @close="editModalOpen = false"
   />
-  <DeleteFieldModal
-    v-if="deleteModalOpen"
-    :is-open="deleteModalOpen"
-    :field="selectedField"
-    @close="deleteModalOpen = false"
-  />
+
+  <!-- Delete Field Confirmation Modal -->
+  <Modal v-model="deleteModalOpen">
+    <ModalHeaderLayout title="Delete Field" @close="deleteModalOpen = false">
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete this field? All of it's data will be
+            permanently removed from your yard forever. This action cannot be
+            undone."
+        buttonText="Delete"
+        @onConfirm="handleDelete()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 
   <CreateFieldRotationModal
     v-if="createModalOpen2"
