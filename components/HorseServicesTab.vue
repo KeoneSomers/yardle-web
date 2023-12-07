@@ -1,6 +1,5 @@
 <script setup>
 import { DateTime, Info } from "luxon";
-import RequestServiceModal from "@/components/modals/RequestServiceModal.vue";
 import HorseInvoices from "@/components/HorseInvoices.vue";
 import BillingStats from "@/components/BillingStats.vue";
 
@@ -343,11 +342,15 @@ const handleDelete = async () => {
     </div>
   </div>
 
-  <RequestServiceModal
-    v-if="createModalOpen"
-    :is-open="createModalOpen"
-    @close="createModalOpen = false"
-  />
+  <!-- Request Service Modal -->
+  <Modal v-model="createModalOpen">
+    <ModalHeaderLayout
+      title="Request a Service"
+      @close="createModalOpen = false"
+    >
+      <FormsRequestServiceForm @onSuccess="createModalOpen = false" />
+    </ModalHeaderLayout>
+  </Modal>
 
   <!-- Delete Rug Confirmation Modal -->
   <Modal v-model="cancelModalOpen">
