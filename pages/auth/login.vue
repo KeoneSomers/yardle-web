@@ -1,6 +1,4 @@
 <script setup>
-import RequestPasswordResetModal from "@/components/modals/RequestPasswordResetModal.vue";
-
 definePageMeta({
   layout: "blank",
   middleware: ["require-no-auth"],
@@ -168,10 +166,15 @@ const handleLogin = async () => {
     </div>
   </div>
 
-  <!-- Modals -->
-  <RequestPasswordResetModal
-    v-if="requestPasswordResetModalOpen"
-    :is-open="requestPasswordResetModalOpen"
-    @close="requestPasswordResetModalOpen = false"
-  />
+  <!-- Request Password Reset Modal -->
+  <Modal v-model="requestPasswordResetModalOpen">
+    <ModalHeaderLayout
+      title="Reset Your Password"
+      @close="requestPasswordResetModalOpen = false"
+    >
+      <FormsRequestPasswordResetForm
+        @onSuccess="requestPasswordResetModalOpen = false"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>
