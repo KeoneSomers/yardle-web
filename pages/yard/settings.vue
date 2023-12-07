@@ -17,7 +17,6 @@ import {
 } from "@headlessui/vue";
 import CreateServiceModal from "@/components/modals/CreateServiceModal.vue";
 import EditServiceModal from "@/components/modals/EditServiceModal.vue";
-import DeleteServiceModal from "@/components/modals/DeleteServiceModal.vue";
 import BillingCycleWidget from "@/components/BillingCycleWidget.vue";
 
 definePageMeta({
@@ -127,10 +126,45 @@ const fetchServices = async () => {
 };
 
 await fetchServices();
+
+const handleDelete = async () => {
+  // first move the horses to the unsorted field
+  const index = services.value
+    .map((e) => e.id)
+    .indexOf(selectedService.value.id);
+
+  // unlink any requests to this service
+  const { error: error2 } = await client
+    .from("service_requests")
+    .update({ service_id: null })
+    .eq("service_id", selectedService.value.id);
+
+  // Delete the service
+  const { error } = await client
+    .from("livery_services")
+    .delete()
+    .eq("id", selectedService.value.id);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  // now remove the deleted service from the webpage
+  services.value.splice(index, 1);
+
+  toast.add({
+    title: "Service Deleted!",
+    description: "This service has been deleted.",
+  });
+
+  // close the modal
+  deleteModalOpen.value = false;
+};
 </script>
 
 <template>
-  <UContainer >
+  <UContainer>
     <div class="py-5">
       <p class="mt-20 text-4xl font-bold">Yard Settings</p>
     </div>
@@ -474,10 +508,26 @@ await fetchServices();
     :service="selectedService"
     @close="editModalOpen = false"
   />
-  <DeleteServiceModal
+  <!-- <DeleteServiceModal
     v-if="deleteModalOpen"
     :is-open="deleteModalOpen"
     :service="selectedService"
     @close="deleteModalOpen = false"
-  />
+  /> -->
+
+  <!-- Delete Rug Confirmation Modal -->
+  <Modal v-model="deleteModalOpen">
+    <ModalHeaderLayout title="Delete Service" @close="deleteModalOpen = false">
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete this livery service?
+                      Clients will no longer be able to select this service and
+                      it will show as deleted on previously created client
+                      requests. This action cannot be undone."
+        buttonText="Delete"
+        @onConfirm="handleDelete()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>
