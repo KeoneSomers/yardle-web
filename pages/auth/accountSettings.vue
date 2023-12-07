@@ -5,7 +5,6 @@ import {
   SwitchGroup,
   SwitchLabel,
 } from "@headlessui/vue";
-import DeleteUserAccountModal from "@/components/modals/DeleteUserAccountModal.vue";
 
 definePageMeta({
   middleware: ["require-auth"],
@@ -14,6 +13,7 @@ definePageMeta({
 const deleteUserAccountModalOpen = ref(false);
 
 const client = useSupabaseClient();
+const user = useSupabaseUser();
 const toast = useToast();
 const profile = useState("profile");
 
@@ -76,6 +76,82 @@ const saveChanges = async () => {
     title: "Changes Saved!",
     description: "Your account has been updated.",
   });
+};
+
+const handleDelete = async () => {
+  try {
+    if (user.value) {
+      // update profile
+      const { error: updateProfileError } = await client
+        .from("profiles")
+        .update({
+          first_name: "deleted",
+          last_name: "user",
+          avatar_url: null,
+          selected_yard: null,
+          active_role: null,
+          email: null,
+        })
+        .eq("id", user.value.id);
+
+      if (updateProfileError) {
+        throw new Error(updateProfileError.message);
+      }
+
+      // TODO TEMP: for each horse that the user has created, delete the avatar if they have one
+      const { data: usersHorses, error: usersHorsesError } = await client
+        .from("horses")
+        .select("avatar_url")
+        .eq("created_by", user.value.id);
+
+      if (usersHorsesError) {
+        throw new Error(usersHorsesError.message);
+      }
+
+      for (let index = 0; index < usersHorses.length; index++) {
+        const horse = usersHorses[index];
+
+        if (horse.avatar_url) {
+          // remove avatar link from row in db
+          const { error: removeAvatarUrlError } = await client
+            .from("horses")
+            .update({ avatar_url: null })
+            .eq("avatar_url", horse.avatar_url);
+
+          if (removeAvatarUrlError) {
+            throw new Error(removeAvatarUrlError.message);
+          }
+
+          // Delete image from storage bucket
+          // TODO: this could be done in a batch (single request)
+          const { error: deleteHorseAvatarError } = await client.storage
+            .from("horse-avatars")
+            .remove([horse.avatar_url]);
+
+          if (deleteHorseAvatarError) {
+            throw new Error(deleteHorseAvatarError.message);
+          }
+        }
+      }
+
+      // TODO: in future - do a proper cleanup of the user's data
+
+      // remove auth account
+      const { result } = await $fetch("/api/deleteUserAccount", {
+        method: "post",
+        body: { userId: user.value.id },
+      });
+
+      if (result === "success") {
+        await client.auth.signOut();
+        await navigateTo("/");
+      } else {
+        throw new Error("Error deleting user account");
+      }
+    }
+  } catch (err) {
+    console.log("error", err.message);
+  }
 };
 </script>
 
@@ -400,10 +476,21 @@ const saveChanges = async () => {
     </div>
   </div>
 
-  <!-- Modals -->
-  <DeleteUserAccountModal
-    v-if="deleteUserAccountModalOpen"
-    :is-open="deleteUserAccountModalOpen"
-    @close="deleteUserAccountModalOpen = false"
-  />
+  <!-- Delete User Account Confirmation Modal -->
+  <Modal v-model="deleteUserAccountModalOpen">
+    <ModalHeaderLayout
+      title="Delete User Account"
+      @close="deleteUserAccountModalOpen = false"
+    >
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete your account? All of your data will be
+            permanently removed. This action cannot be
+            undone."
+        buttonText="Delete"
+        @onConfirm="handleDelete()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>
