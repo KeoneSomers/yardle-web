@@ -5,7 +5,6 @@ import EditFieldModal from "@/components/modals/EditFieldModal.vue";
 
 import CreateFieldRotationModal from "@/components/modals/CreateFieldRotationModal.vue";
 import EditFieldRotationModal from "@/components/modals/EditFieldRotationModal.vue";
-import DeleteFieldRotationModal from "@/components/modals/DeleteFieldRotationModal.vue";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
@@ -18,6 +17,7 @@ const selectedField = ref(null);
 const selectedRotation = useState("selectedRotation", () => null);
 const selectedYard = useSelectedYardId();
 const field_rotations = useState("field_rotations", () => []);
+const toast = useToast();
 
 // (field modals)
 const createModalOpen = ref(false);
@@ -201,6 +201,59 @@ const handleDelete = async () => {
 
   // close the modal
   deleteModalOpen.value = false;
+};
+
+const handleDeleteFieldRotation = async () => {
+  const index = field_rotations.value
+    .map((e) => e.id)
+    .indexOf(selectedRotation.value.id);
+
+  if (field_rotations.value.length < 2) {
+    // errors.value.push("You must have at least one field rotation.");
+
+    toast.add({
+      title: "Unable To Delete!",
+      description: "You must have at least one field rotation.",
+    });
+
+    return;
+  }
+
+  // remove joins for this rotation in the join table
+  const { error: unlinkError } = await client
+    .from("field_rotation_horses")
+    .delete()
+    .eq("rotation_id", selectedRotation.value.id);
+
+  if (unlinkError) {
+    console.log(unlinkError);
+    return;
+  }
+
+  // Delete the field rotation
+  const { error } = await client
+    .from("field_rotations")
+    .delete()
+    .eq("id", selectedRotation.value.id);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  // now remove the deleted field_rotation from the webpage
+  field_rotations.value.splice(index, 1);
+
+  // set users selected rotation back to the first one
+  selectedRotation.value = field_rotations.value[0];
+
+  toast.add({
+    title: "Field Rotation Deleted!",
+    description: "Your field rotation has been deleted.",
+  });
+
+  // close the modal
+  deleteModalOpen2.value = false;
 };
 </script>
 
@@ -506,12 +559,30 @@ const handleDelete = async () => {
     :field="selectedRotation"
     @close="editModalOpen2 = false"
   />
-  <DeleteFieldRotationModal
+  <!-- <DeleteFieldRotationModal
     v-if="deleteModalOpen2"
     :is-open="deleteModalOpen2"
     :field="selectedRotation"
     @close="deleteModalOpen2 = false"
-  />
+  /> -->
+
+  <!-- Delete Field Rotation Confirmation Modal -->
+  <Modal v-model="deleteModalOpen2">
+    <ModalHeaderLayout
+      title="Delete Field Rotation"
+      @close="deleteModalOpen2 = false"
+    >
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete this field rotation? All of it's data will be
+            permanently removed from your yard forever. This action cannot be
+            undone."
+        buttonText="Delete"
+        @onConfirm="handleDeleteFieldRotation()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>
 
 <style scoped>
