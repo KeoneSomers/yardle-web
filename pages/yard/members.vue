@@ -1,6 +1,4 @@
 <script setup>
-import RemoveMemberModal from "@/components/modals/RemoveMemberModal.vue";
-
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
 });
@@ -137,6 +135,42 @@ const actionItems = (row) => [
     },
   ],
 ];
+
+const handleDelete = async () => {
+  await client
+    .from("profiles")
+    .update({ selected_yard: null, active_role: null })
+    .eq("id", memberToRemove.value);
+
+  const { error } = await client
+    .from("profiles_yards")
+    .delete()
+    .eq("profile_id", memberToRemove.value)
+    .eq("yard_id", yard.value.id);
+
+  if (!error) {
+    // success! - now remove the member from the webpage
+    const index = members.value
+      .map((e) => e.profile.id)
+      .indexOf(memberToRemove.value);
+    members.value.splice(index, 1);
+
+    toast.add({
+      title: "Member Removed!",
+      description: "The member has been removed from this yard",
+    });
+
+    // close the modal
+    removeMemberModalOpen.value = false;
+  } else {
+    console.log(error);
+
+    toast.add({
+      title: "Error Removing Member!",
+      description: "Please try again, or contact support.",
+    });
+  }
+};
 </script>
 
 <template>
@@ -178,12 +212,30 @@ const actionItems = (row) => [
   </div>
 
   <!-- Modals -->
-  <RemoveMemberModal
+  <!-- <RemoveMemberModal
     v-if="removeMemberModalOpen"
     :is-open="removeMemberModalOpen"
     :member-id="memberToRemove"
     @close="removeMemberModalOpen = false"
-  />
+  /> -->
+
+  <!-- Remove Member Confimation Modal -->
+  <Modal v-model="removeMemberModalOpen">
+    <ModalHeaderLayout
+      title="Remove Member"
+      @close="removeMemberModalOpen = false"
+    >
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to remove this member? All of their
+                      data such as horses and calendar events will remain but
+                      the user will no longer have access to this yard."
+        buttonText="Delete"
+        @onConfirm="handleDelete()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 
   <!-- Invite Link Modal -->
   <Modal v-model="inviteLinkModalOpen">

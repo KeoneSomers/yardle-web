@@ -559,12 +559,6 @@ const handleDeleteFieldRotation = async () => {
     :field="selectedRotation"
     @close="editModalOpen2 = false"
   />
-  <!-- <DeleteFieldRotationModal
-    v-if="deleteModalOpen2"
-    :is-open="deleteModalOpen2"
-    :field="selectedRotation"
-    @close="deleteModalOpen2 = false"
-  /> -->
 
   <!-- Delete Field Rotation Confirmation Modal -->
   <Modal v-model="deleteModalOpen2">
