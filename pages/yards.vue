@@ -1,5 +1,4 @@
 <script setup>
-import DeleteYardModal from "@/components/modals/DeleteYardModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 definePageMeta({
@@ -35,11 +34,6 @@ onMounted(async () => {
 
   yards.value = profile.yards;
 });
-
-const handleDeleteYard = (yardId) => {
-  yardToDelete.value = yardId;
-  deleteYardModalOpen.value = true;
-};
 
 const handleSelectYard = async (yardId) => {
   // get role of user in yard
@@ -89,6 +83,84 @@ const handleLeaveYard = async (yardId) => {
     yards.value.splice(i, 1);
   } else {
     console.log(error);
+  }
+};
+
+const handleDelete = async () => {
+  try {
+    // TODO: need proper error handling here and everywhere
+    // set all members profiles "selected_yard" to and "active_role" null
+    await client
+      .from("profiles")
+      .update({ selected_yard: null, active_role: null })
+      .eq("selected_yard", yardToDelete.value);
+
+    // first: get all horse id's
+    const { data: _horseIds } = await client
+      .from("horses")
+      .select("id")
+      .eq("yard_id", yardToDelete.value);
+
+    const horseIds = _horseIds.map((e) => e.id);
+
+    // delete calendar_events_horses
+    if (horseIds.length > 0) {
+      await client
+        .from("calendar_events_horses")
+        .delete()
+        .filter("horse_id", "in", `(${horseIds})`);
+    }
+
+    // delete calendar_events
+    await client
+      .from("calendar_events")
+      .delete()
+      .eq("yard_id", yardToDelete.value);
+
+    if (horseIds.length > 0) {
+      // delete rugs, medications, feeds
+      await client
+        .from("rugs")
+        .delete()
+        .filter("horse_id", "in", `(${horseIds})`);
+
+      await client
+        .from("medications")
+        .delete()
+        .filter("horse_id", "in", `(${horseIds})`);
+
+      await client
+        .from("ingredients")
+        .delete()
+        .filter("horse_id", "in", `(${horseIds})`);
+
+      await client
+        .from("feeds")
+        .delete()
+        .filter("horse_id", "in", `(${horseIds})`);
+
+      // delete all the yard horses
+      // TODO: Error here: need to delete feeds first!!
+      await client.from("horses").delete().eq("yard_id", yardToDelete.value);
+    }
+
+    await client.from("fields").delete().eq("yard_id", yardToDelete.value);
+
+    // delete all the yard members
+    await client
+      .from("profiles_yards")
+      .delete()
+      .eq("yard_id", yardToDelete.value);
+
+    // delete the yard
+    await client.from("yards").delete().eq("id", yardToDelete.value);
+
+    // success! - now remove the yard from the webpage
+    const yardIndex = yards.value.map((e) => e.id).indexOf(yardToDelete.value);
+    yards.value.splice(yardIndex, 1);
+    deleteYardModalOpen.value = false;
+  } catch (err) {
+    console.log(err);
   }
 };
 </script>
@@ -186,7 +258,10 @@ const handleLeaveYard = async (yardId) => {
                     </MenuItem>
                     <MenuItem v-else v-slot="{ active }">
                       <button
-                        @click="handleDeleteYard(yard.id)"
+                        @click="
+                          yardToDelete = yard.id;
+                          deleteYardModalOpen = true;
+                        "
                         :class="[
                           active
                             ? 'bg-gray-100 text-gray-900'
@@ -251,18 +326,25 @@ const handleLeaveYard = async (yardId) => {
     </div>
   </div>
 
-  <!-- Add Horse Modal -->
+  <!-- Create Yard Modal -->
   <Modal v-model="isOpen">
     <ModalHeaderLayout title="Create a Yard" @close="isOpen = false">
       <FormsCreateYardForm @onSuccess="isOpen = false" />
     </ModalHeaderLayout>
   </Modal>
 
-  <!-- Modals -->
-  <DeleteYardModal
-    v-if="deleteYardModalOpen"
-    :is-open="deleteYardModalOpen"
-    :yard-id="yardToDelete"
-    @close="deleteYardModalOpen = false"
-  />
+  <!-- Delete Yard Confirmation Modal -->
+  <Modal v-model="deleteYardModalOpen">
+    <ModalHeaderLayout title="Delete Yard" @close="deleteYardModalOpen = false">
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete this yard? All of it's data will be
+            permanently removed forever. This action cannot be
+            undone."
+        buttonText="Delete"
+        @onConfirm="handleDelete()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>
