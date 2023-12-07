@@ -21,6 +21,8 @@ const offset = ref(0);
 const dt = ref(DateTime.now());
 const trueDateTime = DateTime.now();
 
+const isLoading = ref(false);
+
 const days = useState("weekdays", () => []);
 const client = useSupabaseClient();
 const user = useSupabaseUser();
@@ -98,9 +100,9 @@ const goToPreviousWeek = () => {
   dt.value = DateTime.now().plus({ weeks: offset.value });
   setDays();
 };
-
 const handleDelete = async () => {
   try {
+    isLoading.value = true;
     const { error } = await client
       .from("service_requests")
       .update({
@@ -110,6 +112,7 @@ const handleDelete = async () => {
       .eq("id", selectedService.value.id);
 
     if (error) {
+      isLoading.value = false;
       return;
     }
 
@@ -132,6 +135,7 @@ const handleDelete = async () => {
 
       if (error2) {
         console.log(error2);
+        isLoading.value = false;
         return;
       }
     }
@@ -168,6 +172,8 @@ const handleDelete = async () => {
     // close the modal
     cancelModalOpen.value = false;
   } catch (error) {
+    isLoading.value = false;
+
     console.log(error);
 
     toast.add({
@@ -305,6 +311,7 @@ const handleDelete = async () => {
                       name="heroicons:trash"
                       @click="
                         selectedService = event;
+                        isLoading = false;
                         cancelModalOpen = true;
                       "
                       class="ml-2 h-5 w-5 cursor-pointer text-gray-400"
@@ -350,6 +357,7 @@ const handleDelete = async () => {
         icon-color="text-red-600"
         body="Are you sure you want to cancel this service request?"
         buttonText="Confirm"
+        :isLoading="isLoading"
         @onConfirm="handleDelete()"
       />
     </ModalHeaderLayout>

@@ -1,5 +1,11 @@
 <script setup>
-const props = defineProps(["icon", "iconColor", "body", "buttonText"]);
+const props = defineProps([
+  "icon",
+  "iconColor",
+  "body",
+  "isLoading",
+  "buttonText",
+]);
 const emits = defineEmits(["onConfirm"]);
 </script>
 
@@ -25,7 +31,12 @@ const emits = defineEmits(["onConfirm"]);
       </div>
     </div>
     <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-      <UButton color="red" @click="() => $emit('onConfirm')">
+      <UButton
+        :loading="isLoading"
+        :disabled="isLoading"
+        color="red"
+        @click="() => $emit('onConfirm')"
+      >
         {{ props.buttonText }}
       </UButton>
     </div>
