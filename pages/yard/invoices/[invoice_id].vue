@@ -6,7 +6,6 @@ import {
   SwitchLabel,
   SwitchDescription,
 } from "@headlessui/vue";
-import AddServiceModal from "@/components/modals/AddServiceModal.vue";
 
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
@@ -843,15 +842,19 @@ const handleDelete = async () => {
       />
     </div>
 
-    <AddServiceModal
-      v-if="createModalOpen"
-      :is-open="createModalOpen"
-      :client-id="invoiceData.client_id.id"
-      :start-date="invoiceData.start_date"
-      :end-date="invoiceData.end_date"
-      :invoice-id="invoiceData.id"
-      @close="createModalOpen = false"
-    />
+    <!-- Add Service Modal -->
+    <Modal v-model="createModalOpen">
+      <ModalHeaderLayout title="Add a Service" @close="createModalOpen = false">
+        <FormsAddServiceForm
+          :is-open="createModalOpen"
+          :client-id="invoiceData.client_id.id"
+          :start-date="invoiceData.start_date"
+          :end-date="invoiceData.end_date"
+          :invoice-id="invoiceData.id"
+          @onSuccess="createModalOpen = false"
+        />
+      </ModalHeaderLayout>
+    </Modal>
 
     <!-- Delete Invoice Iteme Confirmation Modal -->
     <Modal v-model="openDeleteItemModal">
