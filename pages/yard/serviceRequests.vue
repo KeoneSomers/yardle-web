@@ -1,6 +1,5 @@
 <script setup>
 import { DateTime } from "luxon";
-import RequestResponseModal from "@/components/modals/RequestResponseModal.vue";
 
 definePageMeta({
   middleware: ["require-auth", "require-yard", "require-yard-owner"],
@@ -258,11 +257,14 @@ const indeterminate = computed(
     </div>
   </div>
 
-  <RequestResponseModal
-    v-if="modalOpen"
-    :is-open="modalOpen"
-    :request="selectedRequest"
-    :status="selectedStatus"
-    @close="modalOpen = false"
-  />
+  <!-- Request Response Modal -->
+  <Modal v-model="modalOpen">
+    <ModalHeaderLayout title="Respond to Request" @close="modalOpen = false">
+      <FormsRequestResponseForm
+        :request="selectedRequest"
+        :status="selectedStatus"
+        @onSuccess="modalOpen = false"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>
