@@ -1,7 +1,6 @@
 <script setup>
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { DateTime, Info } from "luxon";
-import CreateEventModal from "@/components/modals/CreateEventModal.vue";
 import EditEventModal from "@/components/modals/EditEventModal.vue";
 
 definePageMeta({
@@ -687,11 +686,19 @@ const handleDelete = async () => {
   </div>
 
   <!-- Modivdals -->
-  <CreateEventModal
+  <!-- <CreateEventModal
     v-if="createModalOpen"
     :is-open="createModalOpen"
     @close="createModalOpen = false"
-  />
+  /> -->
+
+  <!-- Create Event Modal -->
+  <Modal v-model="createModalOpen">
+    <ModalHeaderLayout title="Create an Event" @close="createModalOpen = false">
+      <FormsCreateEventForm @onSuccess="createModalOpen = false" />
+    </ModalHeaderLayout>
+  </Modal>
+
   <EditEventModal
     v-if="editModalOpen"
     :is-open="editModalOpen"
