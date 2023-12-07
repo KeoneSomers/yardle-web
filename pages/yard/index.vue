@@ -191,26 +191,21 @@ const handleDelete = async (id) => {
     </ModalHeaderLayout>
   </Modal>
 
-  <!-- Delete Horse Modal -->
+  <!-- Delete Rug Confirmation Modal -->
   <Modal v-model="deleteModalOpen">
-    <!-- The below div could be extrapolated into a dynamic confirm component called confirmation.vue -->
-    <div class="p-4">
-      <p>Are you sure you would like to delete this announcement?</p>
-      <small>This action cannot be undone.</small>
-      <div class="grid grid-cols-2 gap-3 mt-3">
-        <UButton
-          block
-          label="Cancel"
-          @click="deleteModalOpen = false"
-          color="white"
-        />
-        <UButton
-          block
-          label="Confirm"
-          @click="handleDelete(selectedAnnouncement.id)"
-          color="red"
-        />
-      </div>
-    </div>
+    <ModalHeaderLayout
+      title="Delete Announcement"
+      @close="deleteModalOpen = false"
+    >
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete this announcement? All of it's data will be
+            permanently removed from your yard forever. This action cannot be
+            undone."
+        buttonText="Delete"
+        @onConfirm="handleDelete(selectedAnnouncement.id)"
+      />
+    </ModalHeaderLayout>
   </Modal>
 </template>
