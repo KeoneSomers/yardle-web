@@ -114,10 +114,10 @@ const handleDelete = async (id) => {
 
       <QuickLinks class="mt-6" />
 
-      <div class="shadow-lg border my-6 rounded-lg">
+      <div class="shadow-lg border dark:border-gray-700 my-6 rounded-lg">
         <div
           v-if="profile && profile.active_role == 1"
-          class="p-4 bg-primary-50"
+          class="p-4 bg-primary-50 dark:bg-primary-950"
         >
           <div class="flex justify-center-center">
             <icon
@@ -160,7 +160,7 @@ const handleDelete = async (id) => {
           v-else
           v-for="announcement in announcements"
           :key="announcement.id"
-          class="w-full border-t p-6 flex"
+          class="w-full border-t dark:border-t-gray-700 p-6 flex"
         >
           <div class="flex-1">
             <small class="text-primary-500">{{

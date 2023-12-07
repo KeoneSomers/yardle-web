@@ -1,11 +1,9 @@
 <script setup>
-// imports
-import CreateRugModal from "@/components/modals/CreateRugModal.vue";
-import DeleteRugModal from "@/components/modals/DeleteRugModal.vue";
-
 // modal toggles
 const createModalOpen = ref(false);
 const deleteModalOpen = ref(false);
+
+const toast = useToast();
 
 // supabase
 const client = useSupabaseClient();
@@ -26,9 +24,40 @@ await useAsyncData("rugs", async () => {
   rugs.value = data;
 });
 
-const handleDelete = (rugId) => {
+const confirmDelete = (rugId) => {
   rugToDelete.value = rugId;
   deleteModalOpen.value = true;
+};
+
+const handleDelete = async () => {
+  const { data, error } = await client
+    .from("rugs")
+    .delete()
+    .eq("id", rugToDelete.value)
+    .select();
+
+  if (data) {
+    // success! - now remove the deleted rug from the webpage
+    const index = rugs.value.map((e) => e.id).indexOf(rugToDelete.value);
+    rugs.value.splice(index, 1);
+
+    deleteModalOpen.value = false;
+
+    toast.add({
+      title: "Rug Deleted!",
+      description: "Your rug has been deleted.",
+    });
+  }
+
+  if (error) {
+    // somthing went wrong!
+    console.log(error);
+
+    toast.add({
+      title: "Error Deleting Rug!",
+      description: "Please try again, or contact support.",
+    });
+  }
 };
 </script>
 
@@ -40,8 +69,10 @@ const handleDelete = (rugId) => {
     >
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
-          <h1 class="text-xl font-semibold text-gray-900">Rugs</h1>
-          <p class="mt-2 text-sm text-gray-700">
+          <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
+            Rugs
+          </h1>
+          <p class="mt-2 text-sm text-gray-700 dark:text-gray-400">
             A list of all the rugs that belong to this horse including their
             type and description.
           </p>
@@ -103,7 +134,7 @@ const handleDelete = (rugId) => {
                       class="break-all py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-6"
                     >
                       <button
-                        @click="handleDelete(rug.id)"
+                        @click="confirmDelete(rug.id)"
                         class="rounded bg-red-400 px-3 py-1 text-white"
                       >
                         Delete
@@ -134,7 +165,9 @@ const handleDelete = (rugId) => {
             d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
           />
         </svg>
-        <h3 class="mt-2 text-sm font-medium text-gray-900">No Rugs</h3>
+        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+          No Rugs
+        </h3>
         <p class="mt-1 px-10 text-sm text-gray-500">
           Rugs that belong to your horses will be shown here.
         </p>
@@ -155,16 +188,26 @@ const handleDelete = (rugId) => {
       </div>
     </div>
   </div>
-  <!-- Modals -->
-  <CreateRugModal
-    v-if="createModalOpen"
-    :is-open="createModalOpen"
-    @close="createModalOpen = false"
-  />
-  <DeleteRugModal
-    v-if="deleteModalOpen"
-    :is-open="deleteModalOpen"
-    :rug-id="rugToDelete"
-    @close="deleteModalOpen = false"
-  />
+
+  <!-- Create Rug Modal -->
+  <Modal v-model="createModalOpen">
+    <ModalHeaderLayout title="Add a rug" @close="createModalOpen = false">
+      <FormsCreateRugForm @onSuccess="createModalOpen = false" />
+    </ModalHeaderLayout>
+  </Modal>
+
+  <!-- Delete Rug Confirmation Modal -->
+  <Modal v-model="deleteModalOpen">
+    <ModalHeaderLayout title="Delete Rug" @close="deleteModalOpen = false">
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete this rug? All of it's data will be
+            permanently removed from your yard forever. This action cannot be
+            undone."
+        buttonText="Delete"
+        @onConfirm="handleDelete()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>

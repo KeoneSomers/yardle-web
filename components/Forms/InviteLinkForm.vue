@@ -31,7 +31,7 @@ const copyLinkToClipboard = async () => {
   <div>
     <div class="flex rounded-md shadow-sm">
       <span
-        class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 font-mono text-gray-500 sm:text-sm"
+        class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900 px-3 font-mono text-gray-500 sm:text-sm"
         >https://yardle.app/join/</span
       >
       <input
@@ -39,7 +39,7 @@ const copyLinkToClipboard = async () => {
         readonly
         type="text"
         :value="yard.invite_code"
-        class="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 px-3 py-2 font-mono focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        class="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 px-3 py-2 font-mono focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
       />
     </div>
     <div class="w-full mt-4">

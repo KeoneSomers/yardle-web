@@ -172,6 +172,33 @@ const totalAmount = computed(() => {
     subtotal.value + baseRate.value - discountedAmount.value + vatAmount.value
   );
 });
+
+const handleDelete = async () => {
+  const item_id = itemToDelete.value;
+  const { data, error } = await client
+    .from("service_requests")
+    .delete()
+    .eq("id", item_id)
+    .select()
+    .single();
+
+  if (error) {
+    console.log(error);
+  } else {
+    // remove from the itemsData
+    itemsData.value = itemsData.value.filter((item) => item.id !== item_id);
+
+    // re-calculate the subtotal
+    subtotal.value -= data.service_price;
+
+    openDeleteItemModal.value = false;
+  }
+
+  toast.add({
+    title: "Service Removed!",
+    description: "This item has been removed from the invoice.",
+  });
+};
 </script>
 
 <template>
@@ -826,15 +853,20 @@ const totalAmount = computed(() => {
       @close="createModalOpen = false"
     />
 
-    <!-- Delete Invoice Item Modal -->
+    <!-- Delete Invoice Iteme Confirmation Modal -->
     <Modal v-model="openDeleteItemModal">
       <ModalHeaderLayout
-        title="Delete Invoice Item"
+        title="Delete Rug"
         @close="openDeleteItemModal = false"
       >
-        <FormsDeleteInvoiceItemForm
-          :item-to-delete="itemToDelete"
-          @onSuccess="openDeleteItemModal = false"
+        <FormsConfirmationForm
+          icon="heroicons:exclamation-triangle"
+          icon-color="text-red-600"
+          body="Are you sure you want to delete this item? All of it's data will be
+            permanently removed from your yard forever. This action cannot be
+            undone."
+          buttonText="Delete"
+          @onConfirm="handleDelete()"
         />
       </ModalHeaderLayout>
     </Modal>

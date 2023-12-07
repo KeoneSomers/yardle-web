@@ -3,7 +3,6 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { DateTime, Info } from "luxon";
 import CreateEventModal from "@/components/modals/CreateEventModal.vue";
 import EditEventModal from "@/components/modals/EditEventModal.vue";
-import DeleteEventModal from "@/components/modals/DeleteEventModal.vue";
 
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
@@ -11,6 +10,8 @@ definePageMeta({
 
 const client = useSupabaseClient();
 const selectedYard = useSelectedYardId();
+
+const toast = useToast();
 
 const selectedDate = ref(DateTime.now().toISODate());
 
@@ -127,6 +128,49 @@ const createEvent = (e, day) => {
       selDay.value = null;
       createModalOpen.value = true;
     }
+  }
+};
+
+const handleDelete = async () => {
+  // first delete the horses
+  const { error: delError } = await client
+    .from("calendar_events_horses")
+    .delete()
+    .eq("calendar_event_id", selectedEvent.value);
+
+  if (delError) {
+    return;
+  }
+
+  // now delete the event itself
+  const { data, error } = await client
+    .from("calendar_events")
+    .delete()
+    .eq("id", selectedEvent.value)
+    .select();
+
+  if (data) {
+    // success! - now remove the deleted feed from the webpage
+    const index = events.value.map((e) => e.id).indexOf(selectedEvent.value);
+    events.value.splice(index, 1);
+
+    toast.add({
+      title: "Event Deleted!",
+      description: "Your event has been deleted.",
+    });
+
+    // close the modal
+    deleteModalOpen.value = false;
+  }
+
+  if (error) {
+    // somthing went wrong!
+    console.log(error);
+
+    toast.add({
+      title: "Error Deleting Event!",
+      description: "Please try again, or contact support.",
+    });
   }
 };
 </script>
@@ -654,10 +698,19 @@ const createEvent = (e, day) => {
     @close="editModalOpen = false"
     :event="selectedEvent"
   />
-  <DeleteEventModal
-    v-if="deleteModalOpen"
-    :is-open="deleteModalOpen"
-    @close="deleteModalOpen = false"
-    :eventId="selectedEvent"
-  />
+
+  <!-- Delete Event Confirmation Modal -->
+  <Modal v-model="deleteModalOpen">
+    <ModalHeaderLayout title="Delete Event" @close="deleteModalOpen = false">
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete this event? All of it's data will be
+            permanently removed from your yard forever. This action cannot be
+            undone."
+        buttonText="Delete"
+        @onConfirm="handleDelete()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>

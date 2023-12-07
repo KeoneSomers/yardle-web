@@ -37,11 +37,15 @@ const items = [
 
 <template>
   <div
-    class="z-10 flex h-14 items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-1.5 backdrop-blur bg-opacity-50"
+    class="z-10 flex h-14 items-center justify-between border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 px-4 py-1.5 backdrop-blur bg-opacity-50"
   >
-    <div><Logo class="h-6 w-8" /></div>
+    <div>
+      <Logo class="h-6 w-8 dark:hidden" />
+      <LogoDark class="h-6 w-8 hidden dark:block" />
+    </div>
     <div class="flex items-center">
-      <div v-if="profile && profile.first_name">
+      <!-- <ColorModeButton /> -->
+      <div v-if="profile && profile.first_name" class="ml-3">
         <UDropdown
           :items="items"
           :ui="{ item: { disabled: 'cursor-text select-text' } }"

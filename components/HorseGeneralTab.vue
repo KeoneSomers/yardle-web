@@ -204,11 +204,11 @@ const handleUnassignOwner = async () => {
       <div
         v-if="profile.active_role < 3"
         @click="assignOwnerModalOpen = true"
-        class="col-span-full space-x-3 rounded-lg border-2 border-dashed border-blue-300 bg-blue-50 p-3 text-blue-500 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:cursor-pointer hover:border-blue-400"
+        class="col-span-full space-x-3 rounded-lg border-2 border-dashed border-blue-300 dark:bg-gray-700 dark:border-gray-600 bg-blue-50 p-3 text-blue-500 dark:text-blue-100 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:cursor-pointer hover:border-blue-400"
       >
         <div>
           <p>Assign an owner to this horse</p>
-          <p class="text-xs text-gray-500">
+          <p class="text-xs text-gray-500 dark:text-gray-300">
             Horse owners can view and manage their monthly bills as well as edit
             horse details.
           </p>
@@ -217,7 +217,7 @@ const handleUnassignOwner = async () => {
     </div>
     <div v-else class="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
       <div
-        class="col-span-full flex items-center rounded-lg border border-gray-300 bg-stone-50 px-6 py-5 shadow-sm"
+        class="col-span-full flex items-center rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-none bg-stone-50 px-6 py-5 shadow-sm"
       >
         <div class="flex flex-1 space-x-3">
           <div class="flex-shrink-0">
@@ -228,7 +228,7 @@ const handleUnassignOwner = async () => {
             </div>
           </div>
           <div class="min-w-0 flex-1">
-            <p class="text-sm font-medium text-gray-900">
+            <p class="text-sm font-medium text-gray-900 dark:text-white">
               {{ horse.owner.first_name }} {{ horse.owner.last_name }}
             </p>
             <p class="truncate text-sm text-gray-500">Owns this horse</p>
@@ -242,7 +242,7 @@ const handleUnassignOwner = async () => {
         >
           <div>
             <MenuButton
-              class="flex items-center rounded-full p-2 text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+              class="flex items-center rounded-full p-2 text-gray-700 dark:text-white hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
             >
               <span class="sr-only">Open options</span>
               <icon
@@ -296,7 +296,9 @@ const handleUnassignOwner = async () => {
       <!-- About -->
       <div class="sm:col-span-2">
         <dt class="text-sm font-medium text-gray-500">About</dt>
-        <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+        <dd
+          class="mt-1 max-w-prose space-y-5 text-sm text-gray-900 dark:text-white"
+        >
           <p v-if="horse.about">
             {{ horse.about }}
           </p>
@@ -307,7 +309,7 @@ const handleUnassignOwner = async () => {
       <!-- Breed -->
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Breed</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span v-if="horse.breed">{{ horse.breed }}</span>
           <span v-else>--</span>
         </dd>
@@ -316,7 +318,7 @@ const handleUnassignOwner = async () => {
       <!-- Color & Markings -->
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Colour and Markings</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span v-if="horse.color_markings">{{ horse.color_markings }}</span>
           <span v-else>--</span>
         </dd>
@@ -325,7 +327,7 @@ const handleUnassignOwner = async () => {
       <!-- DoB -->
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Date of Birth</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span v-if="horse.dob">{{
             DateTime.fromISO(horse.dob).toLocaleString(DateTime.DATE_MED)
           }}</span>
@@ -358,12 +360,12 @@ const handleUnassignOwner = async () => {
     </div>
 
     <dl
-      class="mt-3 grid grid-cols-1 gap-x-4 gap-y-8 rounded-xl border p-4 sm:grid-cols-2"
+      class="mt-3 grid grid-cols-1 gap-x-4 gap-y-8 rounded-xl border dark:border-gray-700 p-4 sm:grid-cols-2"
     >
       <!-- Farrier -->
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Last Farrier Visit</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span v-if="farrierLastAndNext.prevDate">{{
             `${DateTime.fromISO(
               farrierLastAndNext.prevDate.date_time
@@ -377,7 +379,7 @@ const handleUnassignOwner = async () => {
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Next Farrier Visit</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span
             v-if="farrierLastAndNext.nextDate"
             :class="[
@@ -416,7 +418,7 @@ const handleUnassignOwner = async () => {
       <!-- Dentist -->
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Last Dentist Visit</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span v-if="dentistLastAndNext.prevDate">{{
             `${DateTime.fromISO(
               dentistLastAndNext.prevDate.date_time
@@ -430,7 +432,7 @@ const handleUnassignOwner = async () => {
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Next Dentist Visit</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span
             v-if="dentistLastAndNext.nextDate"
             :class="[
@@ -468,7 +470,7 @@ const handleUnassignOwner = async () => {
       <!-- Worming -->
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Last Worming</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span v-if="wormingLastAndNext.prevDate">{{
             `${DateTime.fromISO(
               wormingLastAndNext.prevDate.date_time
@@ -482,7 +484,7 @@ const handleUnassignOwner = async () => {
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Next Worming</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span
             v-if="wormingLastAndNext.nextDate"
             :class="[
@@ -520,7 +522,7 @@ const handleUnassignOwner = async () => {
       <!-- Vaccinations -->
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Last Vaccinations</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span v-if="vaccinationsLastAndNext.prevDate">{{
             `${DateTime.fromISO(
               vaccinationsLastAndNext.prevDate.date_time
@@ -534,7 +536,7 @@ const handleUnassignOwner = async () => {
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Next Vaccinations</dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span
             v-if="vaccinationsLastAndNext.nextDate"
             :class="[
@@ -574,7 +576,7 @@ const handleUnassignOwner = async () => {
         <dt class="text-sm font-medium text-gray-500">
           Last Chiropractor Visit
         </dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span v-if="chiropractorLastAndNext.prevDate">{{
             `${DateTime.fromISO(
               chiropractorLastAndNext.prevDate.date_time
@@ -590,7 +592,7 @@ const handleUnassignOwner = async () => {
         <dt class="text-sm font-medium text-gray-500">
           Next Chiropractor Visit
         </dt>
-        <dd class="mt-1 text-sm text-gray-900">
+        <dd class="mt-1 text-sm text-gray-900 dark:text-white">
           <span
             v-if="chiropractorLastAndNext.nextDate"
             :class="[

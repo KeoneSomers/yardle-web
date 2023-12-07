@@ -84,11 +84,11 @@ const selectHorse = (horseId) => {
   <!-- TODO: HorseDirectory.vue Component -->
   <div
     :class="{ hidden: viewingHorse }"
-    class="flex flex-shrink-0 flex-col border-r border-gray-200 md:flex w-full lg:w-96"
+    class="flex flex-shrink-0 flex-col border-r border-gray-200 dark:border-gray-700 md:flex w-full lg:w-96"
     v-if="horses && horses.length > 0"
   >
     <div class="px-4 pb-4 pt-6">
-      <h2 class="text-lg font-medium text-gray-900">Horses</h2>
+      <h2 class="text-lg font-medium text-gray-900 dark:text-white">Horses</h2>
       <p v-if="horses" class="mt-1 text-sm text-gray-600">
         Search directory of {{ horses.length }} horse<span
           v-if="horses.length != 1"
@@ -130,11 +130,14 @@ const selectHorse = (horseId) => {
           class="relative"
         >
           <div
-            class="sticky top-0 z-10 border-b border-t border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500"
+            class="sticky top-0 z-10 border-b border-t border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900 px-6 py-1 text-sm font-medium text-gray-500"
           >
             <h3>{{ letter }}</h3>
           </div>
-          <ul role="list" class="relative z-0 divide-y divide-gray-200">
+          <ul
+            role="list"
+            class="relative z-0 divide-y divide-gray-200 dark:divide-gray-700"
+          >
             <li
               @click="() => selectHorse(horse.id)"
               v-for="horse in groupedHorses[letter]"
@@ -143,8 +146,8 @@ const selectHorse = (horseId) => {
               <div
                 :class="
                   horse.id == selectedHorseId
-                    ? 'bg-indigo-100'
-                    : 'hover:bg-gray-50'
+                    ? 'bg-indigo-100 dark:bg-indigo-950'
+                    : 'hover:bg-gray-50 dark:hover:bg-gray-900'
                 "
                 class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
               >
@@ -171,7 +174,9 @@ const selectHorse = (horseId) => {
                   <a href="#" class="focus:outline-none">
                     <!-- Extend touch target to entire panel -->
                     <span class="absolute inset-0" aria-hidden="true" />
-                    <p class="text-sm font-medium text-gray-900">
+                    <p
+                      class="text-sm font-medium text-gray-900 dark:text-white"
+                    >
                       {{ horse.name }}
                     </p>
                     <p class="truncate text-sm text-gray-500">
@@ -191,7 +196,10 @@ const selectHorse = (horseId) => {
   </div>
 
   <HorseDetails v-if="selectedHorseId > 0" />
-  <div v-else class="flex w-full items-center justify-center">
+  <div
+    v-else-if="horses && horses.length > 0"
+    class="flex w-full items-center justify-center"
+  >
     <div class="text-center">
       <p class="font-semibold text-2xl mb-3">No Horse Selected.</p>
       <p>Select a horse by clicking their card in the list.</p>
@@ -226,7 +234,9 @@ const selectHorse = (horseId) => {
           d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
         />
       </svg>
-      <h3 class="mt-2 text-sm font-medium text-gray-900">No horses</h3>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+        No horses
+      </h3>
       <p class="mt-1 text-sm text-gray-500">
         Get started by adding a horse to your yard.
       </p>

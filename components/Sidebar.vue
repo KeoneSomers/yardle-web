@@ -154,7 +154,9 @@ const handleSignout = async () => {
 
 <template>
   <!-- Sidebar component, swap this element with another sidebar if you like -->
-  <div class="flex min-h-0 flex-1 flex-col border-r border-gray-200">
+  <div
+    class="flex min-h-0 flex-1 flex-col border-r border-gray-200 dark:border-gray-700"
+  >
     <div class="flex flex-1 flex-col overflow-y-auto pb-4">
       <div
         class="flex h-14 flex-shrink-0 items-center justify-between border-b px-4 lg:hidden"
@@ -174,7 +176,9 @@ const handleSignout = async () => {
       </div>
       <nav class="flex-1" aria-label="Sidebar">
         <!-- yard widget -->
-        <div class="flex border-b bg-gray-50 p-4">
+        <div
+          class="flex border-b dark:border-b-gray-700 bg-gray-50 dark:bg-gray-900 p-4"
+        >
           <div class="w-3/4">
             <div class="flex items-center">
               <icon
@@ -182,14 +186,16 @@ const handleSignout = async () => {
                 class="mr-1 block h-4 w-4 flex-shrink-0"
               />
               <div class="truncate">
-                <p class="text-md truncate font-bold text-gray-600">
+                <p
+                  class="text-md truncate font-bold text-gray-600 dark:text-white"
+                >
                   {{ yard.name }}
                 </p>
               </div>
             </div>
             <p
               v-if="profile && profile.active_role"
-              class="text-xs text-gray-500"
+              class="text-xs text-gray-500 dark:text-white"
             >
               {{ roles[profile.active_role - 1].name }}
             </p>
@@ -198,7 +204,7 @@ const handleSignout = async () => {
             <UTooltip text="Switch Yard">
               <button
                 @click="handleUnselectYard"
-                class="block w-full rounded-full border p-2 text-left text-sm text-gray-500"
+                class="block w-full rounded-full border dark:border-gray-700 p-2 text-left text-sm text-gray-500"
               >
                 <icon name="heroicons:arrows-right-left" class="h-5 w-5" />
               </button>

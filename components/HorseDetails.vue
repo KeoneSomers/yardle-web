@@ -1,5 +1,4 @@
 <script setup>
-import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import HorseGeneralTab from "@/components/HorseGeneralTab.vue";
 import HorseRugsTab from "@/components/HorseRugsTab.vue";
 import HorseFeedsTab from "@/components/HorseFeedsTab.vue";
@@ -10,6 +9,9 @@ import { useScroll } from "@vueuse/core";
 const viewingHorse = useState("viewingHorse");
 
 const selectedTab = useState("horseTab", () => 0);
+
+const horses = useState("horses");
+const toast = useToast();
 
 const tabs = [
   {
@@ -92,6 +94,77 @@ const clearHorseSelection = () => {
   viewingHorse.value = false;
   selectedHorseId.value = 0;
 };
+
+const handleDelete = async () => {
+  try {
+    // delete horse image
+    const index = horses.value.map((e) => e.id).indexOf(horse.value.id);
+
+    if (horses.value[index].avatar_url) {
+      const { error } = await client.storage
+        .from("horse-avatars")
+        .remove([horses.value[index].avatar_url.split("?")[0]]);
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+    }
+
+    // first delete related data
+    await client
+      .from("service_requests")
+      .delete()
+      .eq("horse_id", horse.value.id);
+    await client.from("rugs").delete().eq("horse_id", horse.value.id);
+    await client.from("ingredients").delete().eq("horse_id", horse.value.id);
+    await client.from("feeds").delete().eq("horse_id", horse.value.id);
+    await client.from("medications").delete().eq("horse_id", horse.value.id);
+    await client
+      .from("field_rotation_horses")
+      .delete()
+      .eq("horse_id", horse.value.id);
+
+    // second, delete horse from calendar events
+    const { error: delError } = await client
+      .from("calendar_events_horses")
+      .delete()
+      .eq("horse_id", horse.value.id);
+
+    if (delError) {
+      throw new Error(delError);
+    }
+
+    const { error: horseDeleteError } = await client
+      .from("horses")
+      .delete()
+      .eq("id", horse.value.id)
+      .select();
+
+    if (horseDeleteError) {
+      throw new Error(horseDeleteError);
+    }
+
+    // success! - now handle cleanup on frontend
+    deleteModalOpen.value = false;
+    horses.value.splice(index, 1);
+
+    //  unselecte horse
+    selectedHorseId.value = 0;
+
+    toast.add({
+      title: "Horse deleted!",
+      description: 'Horse "' + horse.value.name + '" has been deleted',
+    });
+
+    viewingHorse.value = false;
+  } catch (error) {
+    toast.add({
+      title: "Error Deleting Horse",
+      description: "Please try again, or contact support.",
+    });
+  }
+};
 </script>
 
 <template>
@@ -148,7 +221,7 @@ const clearHorseSelection = () => {
               <div class="flex">
                 <SupabaseImage
                   v-if="horse.avatar_url"
-                  class="h-24 w-24 overflow-hidden rounded-full ring-4 ring-white sm:h-32 sm:w-32"
+                  class="h-24 w-24 overflow-hidden rounded-full ring-4 ring-white dark:ring-gray-950 sm:h-32 sm:w-32"
                   id="horse-avatars"
                   :path="horse.avatar_url"
                   alt=""
@@ -167,82 +240,42 @@ const clearHorseSelection = () => {
               </div>
               <div class="mt-6 flex items-center justify-between">
                 <div>
-                  <h1 class="truncate text-2xl font-bold text-gray-900">
+                  <h1
+                    class="truncate text-2xl font-bold text-gray-900 dark:text-white"
+                  >
                     {{ horse.name }}
                   </h1>
                 </div>
 
-                <Menu
-                  as="div"
-                  class="relative"
+                <UDropdown
                   v-if="
                     profile &&
                     ((horse.owner && profile.id === horse.owner.id) ||
                       profile.active_role < 3)
                   "
+                  :items="[
+                    [
+                      {
+                        label: 'Edit',
+                        onClick: () => (editModalOpen = true),
+                      },
+                    ],
+                    [
+                      {
+                        label: 'Delete',
+                        onClick: () => (deleteModalOpen = true),
+                      },
+                    ],
+                  ]"
+                  :popper="{ placement: 'bottom-start' }"
                 >
-                  <div>
-                    <MenuButton
-                      class="-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600"
-                    >
-                      <span class="sr-only">Open options</span>
-                      <icon
-                        name="heroicons:ellipsis-vertical"
-                        class="h-6 w-6"
-                        aria-hidden="true"
-                      />
-                    </MenuButton>
-                  </div>
-
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <MenuItems
-                      class="absolute right-0 z-50 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                    >
-                      <div class="py-1">
-                        <MenuItem v-slot="{ active }">
-                          <button
-                            @click="() => (editModalOpen = true)"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block w-full px-4 py-2 text-left text-sm',
-                            ]"
-                          >
-                            Edit
-                          </button>
-                        </MenuItem>
-                        <MenuItem v-slot="{ active }">
-                          <button
-                            @click="deleteModalOpen = true"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'block w-full px-4 py-2 text-left text-sm',
-                            ]"
-                          >
-                            Delete
-                          </button>
-                        </MenuItem>
-                      </div>
-                    </MenuItems>
-                  </transition>
-                </Menu>
+                  <UButton
+                    color="white"
+                    trailing-icon="i-heroicons-ellipsis-vertical-20-solid"
+                  />
+                </UDropdown>
               </div>
             </div>
-            <!-- <div class="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
-                                                                            <h1 class="truncate text-2xl font-bold text-gray-900">
-                                                                              {{ horse.name }}
-                                                                            </h1>
-                                                                          </div> -->
           </div>
         </div>
 
@@ -287,10 +320,18 @@ const clearHorseSelection = () => {
     </ModalHeaderLayout>
   </Modal>
 
-  <!-- Delete Horse Modal -->
+  <!-- Delete Horse Confirmation Modal -->
   <Modal v-model="deleteModalOpen">
     <ModalHeaderLayout title="Delete Horse" @close="deleteModalOpen = false">
-      <FormsDeleteHorseForm @onSuccess="deleteModalOpen = false" />
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete this horse? All of it's data will be
+            permanently removed from your yard forever. This action cannot be
+            undone."
+        buttonText="Delete"
+        @onConfirm="handleDelete()"
+      />
     </ModalHeaderLayout>
   </Modal>
 </template>
