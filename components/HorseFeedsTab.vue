@@ -2,7 +2,6 @@
 // imports
 import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
 import EditFeedModal from "@/components/modals/EditFeedModal.vue";
-import DeleteFeedModal from "@/components/modals/DeleteFeedModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 // modal toggles
@@ -16,6 +15,8 @@ const client = useSupabaseClient();
 // states
 const feeds = useState("feeds");
 const selectedHorseId = useState("selectedHorseId");
+
+const toast = useToast();
 
 // refs
 const selectedFeedId = ref(0);
@@ -50,9 +51,44 @@ await useAsyncData("feeds", async () => {
 });
 
 // functions
-const handleDelete = (feedId) => {
-  selectedFeedId.value = feedId;
-  deleteModalOpen.value = true;
+const handleDelete = async () => {
+  // delete the feeds ingredients
+  const { error: ingredientsError } = await client
+    .from("ingredients")
+    .delete()
+    .eq("feed_id", selectedFeedId.value)
+    .select();
+
+  if (ingredientsError) {
+    // somthing went wrong!
+    console.log(ingredientsError);
+    return;
+  }
+
+  // delete the feed
+  const { error: feedError } = await client
+    .from("feeds")
+    .delete()
+    .eq("id", selectedFeedId.value)
+    .select();
+
+  if (feedError) {
+    // somthing went wrong!
+    console.log(feedError);
+    return;
+  }
+
+  // success! - now remove the deleted feed from the webpage
+  const index = feeds.value.map((e) => e.id).indexOf(selectedFeedId.value);
+  feeds.value.splice(index, 1);
+
+  toast.add({
+    title: "Feed Deleted!",
+    description: "Your feed has been deleted.",
+  });
+
+  // close the modal
+  deleteModalOpen.value = false;
 };
 
 const handleEdit = (feedId) => {
@@ -239,7 +275,10 @@ const ingredientTypes = [
                       </MenuItem>
                       <MenuItem v-slot="{ active }">
                         <button
-                          @click="handleDelete(feed.id)"
+                          @click="
+                            selectedFeedId = feed.id;
+                            deleteModalOpen = true;
+                          "
                           :class="[
                             active
                               ? 'bg-gray-100 text-gray-900'
@@ -310,10 +349,25 @@ const ingredientTypes = [
     :feed-id="selectedFeedId"
     @close="editModalOpen = false"
   />
-  <DeleteFeedModal
+  <!-- <DeleteFeedModal
     v-if="deleteModalOpen"
     :is-open="deleteModalOpen"
     :feed-id="selectedFeedId"
     @close="deleteModalOpen = false"
-  />
+  /> -->
+
+  <!-- Delete Feed Confirmation Modal -->
+  <Modal v-model="deleteModalOpen">
+    <ModalHeaderLayout title="Delete Feed" @close="deleteModalOpen = false">
+      <FormsConfirmationForm
+        icon="heroicons:exclamation-triangle"
+        icon-color="text-red-600"
+        body="Are you sure you want to delete this feed? All of it's data will be
+            permanently removed from your yard forever. This action cannot be
+            undone."
+        buttonText="Delete"
+        @onConfirm="handleDelete()"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 </template>

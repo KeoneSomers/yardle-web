@@ -81,7 +81,6 @@ const feedsGroupedByHorse = computed(() => {
   }, {});
 });
 
-// TODO: why is this here and not handled in the modal?
 const handleDelete = async () => {
   // delete the feeds ingredients
   const { error: ingredientsError } = await client
@@ -118,7 +117,7 @@ const handleDelete = async () => {
     description: "Your feed has been deleted.",
   });
 
-  // close the modal
+  // cleanup
   deleteModalOpen.value = false;
   selectedFeedId.value = 0;
 };
@@ -459,50 +458,20 @@ const handleDelete = async () => {
       :feed-id="selectedFeedId"
       @close="editModalOpen = false"
     />
-    <!-- Delete Feed Modal -->
-    <UModal v-model="deleteModalOpen">
-      <UCard :ui="{ divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-        <template #header>
-          <div class="flex items-center space-x-4">
-            <div
-              class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
-            >
-              <icon
-                name="heroicons:exclamation-triangle"
-                class="h-6 w-6 text-red-600"
-                aria-hidden="true"
-              />
-            </div>
-            <h3 class="text-lg font-medium leading-6 text-gray-900">
-              Delete Feed
-            </h3>
-          </div>
-        </template>
 
-        <!-- Main Content -->
-        <p class="text-sm text-gray-500">
-          Are you sure you want to delete this feed? All of it's data will be
-          permanently removed from your yard forever. This action cannot be
-          undone.
-        </p>
-
-        <template #footer>
-          <div class="flex justify-end space-x-2">
-            <UButton
-              @click="deleteModalOpen = false"
-              color="gray"
-              variant="soft"
-              label="Cancel"
-            />
-            <UButton
-              @click="handleDelete"
-              color="red"
-              variant="solid"
-              label="Delete"
-            />
-          </div>
-        </template>
-      </UCard>
-    </UModal>
+    <!-- Delete Feed Confirmation Modal -->
+    <Modal v-model="deleteModalOpen">
+      <ModalHeaderLayout title="Delete Feed" @close="deleteModalOpen = false">
+        <FormsConfirmationForm
+          icon="heroicons:exclamation-triangle"
+          icon-color="text-red-600"
+          body="Are you sure you want to delete this feed? All of it's data will be
+            permanently removed from your yard forever. This action cannot be
+            undone."
+          buttonText="Delete"
+          @onConfirm="handleDelete()"
+        />
+      </ModalHeaderLayout>
+    </Modal>
   </div>
 </template>
