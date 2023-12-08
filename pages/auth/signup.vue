@@ -109,14 +109,17 @@ const handleSignup = async () => {
 <template>
   <div class="flex min-h-full">
     <div
-      class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 shadow-lg"
+      class="flex flex-1 flex-col justify-center dark:bg-gray-900 px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 shadow-lg"
     >
       <div class="mx-auto w-full max-w-sm lg:w-96">
         <div>
           <NuxtLink class="inline-flex" to="/">
-            <Logo class="h-12 w-12" />
+            <Logo class="h-12 w-12 dark:hidden" />
+            <LogoDark class="h-12 w-12 hidden dark:block" />
           </NuxtLink>
-          <h2 class="mt-6 text-3xl font-bold tracking-tight text-gray-900">
+          <h2
+            class="mt-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
+          >
             Create an account
           </h2>
         </div>
@@ -235,7 +238,7 @@ const handleSignup = async () => {
     </div>
     <div class="relative hidden w-0 flex-1 lg:block">
       <div
-        class="absolute inset-0 h-full w-full bg-gradient-to-br from-pink-100 via-transparent to-indigo-100"
+        class="absolute inset-0 h-full w-full bg-gradient-to-br from-pink-100 dark:from-black via-transparent to-indigo-100 dark:to-indigo-950"
       ></div>
     </div>
   </div>

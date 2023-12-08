@@ -67,7 +67,7 @@ const handleResetPassword = async () => {
               aria-hidden="true"
             />
           </div>
-          <input
+          <UInput
             v-model="email"
             type="email"
             name="email"

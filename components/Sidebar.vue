@@ -144,12 +144,6 @@ const handleUnselectYard = async () => {
   sidebarOpen.value = false;
   navigateTo("/yards");
 };
-
-const handleSignout = async () => {
-  sidebarOpen.value = false;
-  await supabaseClient.auth.signOut();
-  navigateTo("/");
-};
 </script>
 
 <template>
@@ -220,7 +214,9 @@ const handleSignout = async () => {
             <p class="mx-4 text-xs mb-1 font-semibold mt-3 text-gray-500">
               Admin Pages
             </p>
-            <UVerticalNavigation :links="adminLinks" />
+            <ClientOnly>
+              <UVerticalNavigation :links="adminLinks" />
+            </ClientOnly>
           </span>
         </div>
         <div v-if="yard" class="flex w-full p-4">
