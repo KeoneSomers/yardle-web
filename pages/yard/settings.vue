@@ -390,7 +390,7 @@ const handleDelete = async () => {
   <Modal v-model="deleteModalOpen">
     <ModalHeaderLayout title="Delete Service" @close="deleteModalOpen = false">
       <FormsConfirmationForm
-        icon="heroicons:exclamation-triangle"
+        icon="i-heroicons-exclamation-triangle"
         icon-color="text-red-600"
         body="Are you sure you want to delete this livery service?
                       Clients will no longer be able to select this service and

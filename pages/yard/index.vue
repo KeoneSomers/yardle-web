@@ -198,7 +198,7 @@ const handleDelete = async (id) => {
       @close="deleteModalOpen = false"
     >
       <FormsConfirmationForm
-        icon="heroicons:exclamation-triangle"
+        icon="i-heroicons-exclamation-triangle"
         icon-color="text-red-600"
         body="Are you sure you want to delete this announcement? All of it's data will be
             permanently removed from your yard forever. This action cannot be

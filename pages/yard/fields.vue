@@ -420,7 +420,7 @@ const handleDeleteFieldRotation = async () => {
   <Modal v-model="deleteModalOpen">
     <ModalHeaderLayout title="Delete Field" @close="deleteModalOpen = false">
       <FormsConfirmationForm
-        icon="heroicons:exclamation-triangle"
+        icon="i-heroicons-exclamation-triangle"
         icon-color="text-red-600"
         body="Are you sure you want to delete this field? All of it's data will be
             permanently removed from your yard forever. This action cannot be
@@ -461,7 +461,7 @@ const handleDeleteFieldRotation = async () => {
       @close="deleteModalOpen2 = false"
     >
       <FormsConfirmationForm
-        icon="heroicons:exclamation-triangle"
+        icon="i-heroicons-exclamation-triangle"
         icon-color="text-red-600"
         body="Are you sure you want to delete this field rotation? All of it's data will be
             permanently removed from your yard forever. This action cannot be

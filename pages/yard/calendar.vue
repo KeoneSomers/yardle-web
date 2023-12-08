@@ -580,7 +580,7 @@ const handleDelete = async () => {
   <Modal v-model="deleteModalOpen">
     <ModalHeaderLayout title="Delete Event" @close="deleteModalOpen = false">
       <FormsConfirmationForm
-        icon="heroicons:exclamation-triangle"
+        icon="i-heroicons-exclamation-triangle"
         icon-color="text-red-600"
         body="Are you sure you want to delete this event? All of it's data will be
             permanently removed from your yard forever. This action cannot be

@@ -298,7 +298,7 @@ const handleDelete = async () => {
   <Modal v-model="deleteYardModalOpen">
     <ModalHeaderLayout title="Delete Yard" @close="deleteYardModalOpen = false">
       <FormsConfirmationForm
-        icon="heroicons:exclamation-triangle"
+        icon="i-heroicons-exclamation-triangle"
         icon-color="text-red-600"
         body="Are you sure you want to delete this yard? All of it's data will be
             permanently removed forever. This action cannot be

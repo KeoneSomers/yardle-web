@@ -356,7 +356,7 @@ const handleDelete = async () => {
   <Modal v-model="cancelModalOpen">
     <ModalHeaderLayout title="Cancel Service" @close="cancelModalOpen = false">
       <FormsConfirmationForm
-        icon="heroicons:exclamation-triangle"
+        icon="i-heroicons-exclamation-triangle"
         icon-color="text-red-600"
         body="Are you sure you want to cancel this service request?"
         buttonText="Confirm"

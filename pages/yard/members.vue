@@ -218,7 +218,7 @@ const handleDelete = async () => {
       @close="removeMemberModalOpen = false"
     >
       <FormsConfirmationForm
-        icon="heroicons:exclamation-triangle"
+        icon="i-heroicons-exclamation-triangle"
         icon-color="text-red-600"
         body="Are you sure you want to remove this member? All of their
                       data such as horses and calendar events will remain but

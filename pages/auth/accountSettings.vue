@@ -421,7 +421,7 @@ const handleDelete = async () => {
       @close="deleteUserAccountModalOpen = false"
     >
       <FormsConfirmationForm
-        icon="heroicons:exclamation-triangle"
+        icon="i-heroicons-exclamation-triangle"
         icon-color="text-red-600"
         body="Are you sure you want to delete your account? All of your data will be
             permanently removed. This action cannot be
