@@ -15,7 +15,6 @@ import {
   ListboxOption,
   ListboxOptions,
 } from "@headlessui/vue";
-import CreateServiceModal from "@/components/modals/CreateServiceModal.vue";
 import EditServiceModal from "@/components/modals/EditServiceModal.vue";
 import BillingCycleWidget from "@/components/BillingCycleWidget.vue";
 
@@ -497,11 +496,16 @@ const handleDelete = async () => {
     <hr class="my-10" />
   </UContainer>
 
-  <CreateServiceModal
-    v-if="createModalOpen"
-    :is-open="createModalOpen"
-    @close="createModalOpen = false"
-  />
+  <!-- Create Service Modal -->
+  <Modal v-model="createModalOpen">
+    <ModalHeaderLayout
+      title="Add a Livery Service"
+      @close="createModalOpen = false"
+    >
+      <FormsCreateServiceForm @onSuccess="createModalOpen = false" />
+    </ModalHeaderLayout>
+  </Modal>
+
   <EditServiceModal
     v-if="editModalOpen"
     :is-open="editModalOpen"
