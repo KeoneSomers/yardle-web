@@ -1,7 +1,4 @@
 <script setup>
-// imports
-import CreateMedicationModal from "@/components/modals/CreateMedicationModal.vue";
-
 // modal toggles
 const createModalOpen = ref(false);
 const deleteModalOpen = ref(false);
@@ -191,12 +188,16 @@ const handleDelete = async () => {
       </div>
     </div>
   </div>
-  <!-- Modals -->
-  <CreateMedicationModal
-    v-if="createModalOpen"
-    :is-open="createModalOpen"
-    @close="createModalOpen = false"
-  />
+
+  <!-- Create Medication Modal -->
+  <Modal v-model="createModalOpen">
+    <ModalHeaderLayout
+      title="Add a Medication"
+      @close="createModalOpen = false"
+    >
+      <FormsCreateMedicationForm @onSuccess="createModalOpen = false" />
+    </ModalHeaderLayout>
+  </Modal>
 
   <!-- Delete Medication Confirmation Modal -->
   <Modal v-model="deleteModalOpen">
