@@ -1,7 +1,4 @@
 <script setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-
-// modal toggles
 const createModalOpen = ref(false);
 const editModalOpen = ref(false);
 const deleteModalOpen = ref(false);
@@ -231,65 +228,31 @@ const ingredientTypes = [
               </dl>
             </div>
             <div>
-              <Menu as="div" class="relative inline-block text-left">
-                <div>
-                  <MenuButton
-                    class="flex items-center rounded-full bg-gray-100 p-0.5 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                  >
-                    <span class="sr-only">Open options</span>
-                    <icon
-                      name="heroicons:ellipsis-vertical-solid"
-                      class="h-6 w-6"
-                      aria-hidden="true"
-                    />
-                  </MenuButton>
-                </div>
-
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  >
-                    <div class="py-1">
-                      <MenuItem v-slot="{ active }">
-                        <button
-                          @click="handleEdit(feed.id)"
-                          :class="[
-                            active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block w-full px-4 py-2 text-left text-sm',
-                          ]"
-                        >
-                          Edit
-                        </button>
-                      </MenuItem>
-                      <MenuItem v-slot="{ active }">
-                        <button
-                          @click="
-                            selectedFeedId = feed.id;
-                            deleteModalOpen = true;
-                          "
-                          :class="[
-                            active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block w-full px-4 py-2 text-left text-sm',
-                          ]"
-                        >
-                          Delete
-                        </button>
-                      </MenuItem>
-                    </div>
-                  </MenuItems>
-                </transition>
-              </Menu>
+              <UDropdown
+                :items="[
+                  [
+                    {
+                      label: 'Edit',
+                      icon: 'i-heroicons-pencil-20-solid',
+                      click: () => handleEdit(feed.id),
+                    },
+                    {
+                      label: 'Delete',
+                      icon: 'i-heroicons-trash-20-solid',
+                      click: () => {
+                        selectedFeedId = feed.id;
+                        deleteModalOpen = true;
+                      },
+                    },
+                  ],
+                ]"
+                :popper="{ placement: 'bottom-start' }"
+              >
+                <UButton
+                  color="white"
+                  trailing-icon="i-heroicons-ellipsis-vertical-20-solid"
+                />
+              </UDropdown>
             </div>
           </div>
         </div>

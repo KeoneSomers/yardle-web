@@ -1,8 +1,6 @@
 <script setup>
 import draggable from "vuedraggable";
 
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
 });
@@ -290,115 +288,35 @@ const handleDeleteFieldRotation = async () => {
         </nav>
       </div>
       <div class="flex justify-end px-4 pb-0 md:pb-2">
-        <Menu as="div" class="relative inline-block text-left">
-          <div>
-            <MenuButton
-              class="inline-flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium shadow"
-            >
-              Rotation Options
-              <icon
-                name="heroicons:chevron-down-solid"
-                class="-mr-1 ml-2 h-5 w-5"
-                aria-hidden="true"
-              />
-            </MenuButton>
-          </div>
-
-          <transition
-            enter-active-class="transition duration-100 ease-out"
-            enter-from-class="transform scale-95 opacity-0"
-            enter-to-class="transform scale-100 opacity-100"
-            leave-active-class="transition duration-75 ease-in"
-            leave-from-class="transform scale-100 opacity-100"
-            leave-to-class="transform scale-95 opacity-0"
+        <div class="relative inline-block text-left">
+          <UDropdown
+            :items="[
+              [
+                {
+                  label: 'Edit',
+                  icon: 'i-heroicons-pencil-20-solid',
+                  click: () => (editModalOpen2 = true),
+                },
+                {
+                  label: 'Delete',
+                  icon: 'i-heroicons-trash-20-solid',
+                  click: () => (deleteModalOpen2 = true),
+                },
+              ],
+            ]"
+            :popper="{ placement: 'bottom-start' }"
           >
-            <MenuItems
-              class="absolute right-0 z-20 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            >
-              <div class="px-1 py-1">
-                <MenuItem v-slot="{ active }">
-                  <a
-                    @click="editModalOpen2 = true"
-                    :class="[
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block px-4 py-2 text-sm',
-                    ]"
-                    >Edit</a
-                  >
-                </MenuItem>
-                <MenuItem v-slot="{ active }">
-                  <a
-                    @click="deleteModalOpen2 = true"
-                    :class="[
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block px-4 py-2 text-sm',
-                    ]"
-                    >Delete</a
-                  >
-                </MenuItem>
-              </div>
-            </MenuItems>
-          </transition>
-        </Menu>
-        <button
-          @click="createModalOpen = true"
-          type="button"
-          class="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
+            <UButton
+              color="white"
+              label="Rotation Options"
+              trailing-icon="i-heroicons-chevron-down-20-solid"
+            />
+          </UDropdown>
+        </div>
+
+        <UButton @click="createModalOpen = true" class="ml-3">
           Add field
-        </button>
-        <!-- <Menu as="div" class="text-left">
-                <div>
-                  <MenuButton
-                    class="flex ml-2 items-center rounded-full text-gray-300 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                  >
-                    <span class="sr-only">Open options</span>
-                    <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
-                  </MenuButton>
-                </div>
-        
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="relative right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  >
-                    <div class="py-1">
-                      <MenuItem v-slot="{ active }">
-                        <a
-                          @click="
-                            selectedRotation = rotation;
-                            editModalOpen2 = true;
-                          "
-                          :class="[
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block px-4 py-2 text-sm',
-                          ]"
-                          >Edit</a
-                        >
-                      </MenuItem>
-                      <MenuItem v-slot="{ active }">
-                        <a
-                          @click="
-                            selectedRotation = rotation;
-                            deleteModalOpen2 = true;
-                          "
-                          :class="[
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block px-4 py-2 text-sm',
-                          ]"
-                          >Delete</a
-                        >
-                      </MenuItem>
-                    </div>
-                  </MenuItems>
-                </transition>
-              </Menu> -->
+        </UButton>
       </div>
       <div class="flex flex-1 overflow-x-scroll p-4 pt-2">
         <div
@@ -415,70 +333,35 @@ const handleDeleteFieldRotation = async () => {
               </p>
             </div>
 
-            <Menu
+            <UDropdown
               v-if="field.id != 0"
-              as="div"
-              class="relative inline-block text-left"
+              :items="[
+                [
+                  {
+                    label: 'Edit',
+                    icon: 'i-heroicons-pencil-20-solid',
+                    click: () => {
+                      selectedField = field;
+                      editModalOpen = true;
+                    },
+                  },
+                  {
+                    label: 'Delete',
+                    icon: 'i-heroicons-trash-20-solid',
+                    click: () => {
+                      selectedField = field;
+                      deleteModalOpen = true;
+                    },
+                  },
+                ],
+              ]"
+              :popper="{ placement: 'bottom-end' }"
             >
-              <div>
-                <MenuButton
-                  class="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                >
-                  <span class="sr-only">Open options</span>
-                  <icon
-                    name="heroicons:ellipsis-vertical-solid"
-                    class="h-5 w-5"
-                    aria-hidden="true"
-                  />
-                </MenuButton>
-              </div>
-
-              <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
-              >
-                <MenuItems
-                  class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                >
-                  <div class="py-1">
-                    <MenuItem v-slot="{ active }">
-                      <a
-                        @click="
-                          selectedField = field;
-                          editModalOpen = true;
-                        "
-                        :class="[
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm',
-                        ]"
-                        >Edit</a
-                      >
-                    </MenuItem>
-                    <MenuItem v-slot="{ active }">
-                      <a
-                        @click="
-                          selectedField = field;
-                          deleteModalOpen = true;
-                        "
-                        :class="[
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm',
-                        ]"
-                        >Delete</a
-                      >
-                    </MenuItem>
-                  </div>
-                </MenuItems>
-              </transition>
-            </Menu>
+              <UButton
+                color="white"
+                trailing-icon="i-heroicons-ellipsis-vertical-20-solid"
+              />
+            </UDropdown>
           </div>
           <div class="flex-1">
             <!-- Draggable component comes from vuedraggable. It provides drag & drop functionality -->

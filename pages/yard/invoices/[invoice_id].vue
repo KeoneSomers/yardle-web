@@ -1,11 +1,5 @@
 <script setup>
 import { DateTime } from "luxon";
-import {
-  Switch,
-  SwitchGroup,
-  SwitchLabel,
-  SwitchDescription,
-} from "@headlessui/vue";
 
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
@@ -263,63 +257,29 @@ const handleDelete = async () => {
         v-if="profile.active_role === 1"
         class="flex w-full flex-shrink-0 flex-col space-y-4 divide-y border-r border-gray-200 p-4 lg:w-96"
       >
-        <SwitchGroup as="div" class="flex items-center justify-between">
+        <div class="flex items-center justify-between">
           <span class="flex flex-grow flex-col pr-2">
-            <SwitchLabel
-              as="span"
-              class="text-sm font-medium leading-6 text-gray-900"
-              passive
-              >Published</SwitchLabel
+            <span class="text-sm font-medium leading-6 text-gray-900" passive
+              >Published</span
             >
-            <SwitchDescription as="span" class="text-sm text-gray-500"
+            <span class="text-sm text-gray-500"
               >Mark this invoice as published to make it visible on Yardle to
-              the client.</SwitchDescription
+              the client.</span
             >
           </span>
-          <Switch
-            v-model="published"
-            :class="[
-              published ? 'bg-indigo-600' : 'bg-gray-200',
-              'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2',
-            ]"
-          >
-            <span
-              aria-hidden="true"
-              :class="[
-                published ? 'translate-x-5' : 'translate-x-0',
-                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-              ]"
-            />
-          </Switch>
-        </SwitchGroup>
-        <SwitchGroup as="div" class="flex items-center justify-between pt-2">
+          <UToggle v-model="published" size="lg" />
+        </div>
+        <div class="flex items-center justify-between pt-2">
           <span class="flex flex-grow flex-col pr-2">
-            <SwitchLabel
-              as="span"
-              class="text-sm font-medium leading-6 text-gray-900"
-              passive
-              >Paid</SwitchLabel
+            <span class="text-sm font-medium leading-6 text-gray-900" passive
+              >Paid</span
             >
-            <SwitchDescription as="span" class="text-sm text-gray-500"
-              >Has this client paid their invoice?</SwitchDescription
+            <span class="text-sm text-gray-500"
+              >Has this client paid their invoice?</span
             >
           </span>
-          <Switch
-            v-model="paid"
-            :class="[
-              paid ? 'bg-indigo-600' : 'bg-gray-200',
-              'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2',
-            ]"
-          >
-            <span
-              aria-hidden="true"
-              :class="[
-                paid ? 'translate-x-5' : 'translate-x-0',
-                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-              ]"
-            />
-          </Switch>
-        </SwitchGroup>
+          <UToggle v-model="paid" size="lg" />
+        </div>
 
         <div class="flex flex-col space-y-4 py-4">
           <div class="items-center">

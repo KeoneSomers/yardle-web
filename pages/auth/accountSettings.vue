@@ -1,11 +1,4 @@
 <script setup>
-import {
-  Switch,
-  SwitchDescription,
-  SwitchGroup,
-  SwitchLabel,
-} from "@headlessui/vue";
-
 definePageMeta({
   middleware: ["require-auth"],
 });
@@ -332,106 +325,51 @@ const handleDelete = async () => {
               </p>
             </div>
             <ul role="list" class="mt-2 divide-y divide-gray-200">
-              <SwitchGroup
-                as="li"
-                class="flex items-center justify-between py-4"
-              >
+              <li class="flex items-center justify-between py-4">
                 <div class="flex flex-col">
-                  <SwitchLabel
-                    as="p"
+                  <p
                     class="text-sm font-medium leading-6 text-gray-900"
                     passive
-                    >Service Request Emails
-                  </SwitchLabel>
-                  <SwitchDescription class="text-sm text-gray-500"
-                    >The yard owner will receive these emails when a client
+                  >
+                    Service Request Emails
+                  </p>
+                  <div class="text-sm text-gray-500">
+                    The yard owner will receive these emails when a client
                     requests a service for their horse.
-                  </SwitchDescription>
+                  </div>
                 </div>
-                <Switch
-                  v-model="serviceRequestEmails"
-                  :class="[
-                    serviceRequestEmails ? 'bg-teal-500' : 'bg-gray-200',
-                    'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2',
-                  ]"
-                >
-                  <span
-                    aria-hidden="true"
-                    :class="[
-                      serviceRequestEmails ? 'translate-x-5' : 'translate-x-0',
-                      'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-                    ]"
-                  />
-                </Switch>
-              </SwitchGroup>
-              <SwitchGroup
-                as="li"
-                class="flex items-center justify-between py-4"
-              >
+                <UToggle v-model="serviceRequestEmails" size="lg" />
+              </li>
+              <li class="flex items-center justify-between py-4">
                 <div class="flex flex-col">
-                  <SwitchLabel
-                    as="p"
+                  <p
                     class="text-sm font-medium leading-6 text-gray-900"
                     passive
-                    >Service Request Reponse Emails
-                  </SwitchLabel>
-                  <SwitchDescription class="text-sm text-gray-500"
-                    >You'll receive these emails to let you know when your yard
+                  >
+                    Service Request Reponse Emails
+                  </p>
+                  <div class="text-sm text-gray-500">
+                    You'll receive these emails to let you know when your yard
                     owner has responded to your service requests.
-                  </SwitchDescription>
+                  </div>
                 </div>
-                <Switch
-                  v-model="serviceRequestReponseEmails"
-                  :class="[
-                    serviceRequestReponseEmails ? 'bg-teal-500' : 'bg-gray-200',
-                    'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2',
-                  ]"
-                >
-                  <span
-                    aria-hidden="true"
-                    :class="[
-                      serviceRequestReponseEmails
-                        ? 'translate-x-5'
-                        : 'translate-x-0',
-                      'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-                    ]"
-                  />
-                </Switch>
-              </SwitchGroup>
-              <SwitchGroup
-                as="li"
-                class="flex items-center justify-between py-4"
-              >
+                <UToggle v-model="serviceRequestReponseEmails" size="lg" />
+              </li>
+              <li class="flex items-center justify-between py-4">
                 <div class="flex flex-col">
-                  <SwitchLabel
-                    as="p"
+                  <p
                     class="text-sm font-medium leading-6 text-gray-900"
                     passive
-                    >Calendar Event Reminder Emails
-                  </SwitchLabel>
-                  <SwitchDescription class="text-sm text-gray-500"
-                    >You'll receive these emails the day before any of your
+                  >
+                    Calendar Event Reminder Emails
+                  </p>
+                  <div class="text-sm text-gray-500">
+                    You'll receive these emails the day before any of your
                     upcoming events are scheduled to take place.
-                  </SwitchDescription>
+                  </div>
                 </div>
-                <Switch
-                  v-model="calendarEventReminderEmails"
-                  :class="[
-                    calendarEventReminderEmails ? 'bg-teal-500' : 'bg-gray-200',
-                    'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2',
-                  ]"
-                >
-                  <span
-                    aria-hidden="true"
-                    :class="[
-                      calendarEventReminderEmails
-                        ? 'translate-x-5'
-                        : 'translate-x-0',
-                      'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-                    ]"
-                  />
-                </Switch>
-              </SwitchGroup>
+                <UToggle v-model="calendarEventReminderEmails" size="lg" />
+              </li>
             </ul>
           </div>
           <div class="mt-4 flex justify-end gap-x-3 py-4">

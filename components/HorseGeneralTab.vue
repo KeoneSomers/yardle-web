@@ -1,6 +1,5 @@
 <script setup>
 import { DateTime } from "luxon";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 const horse = useState("horse");
 const horses = useState("horses");
@@ -234,49 +233,23 @@ const handleUnassignOwner = async () => {
             <p class="truncate text-sm text-gray-500">Owns this horse</p>
           </div>
         </div>
-
-        <Menu
+        <UDropdown
           v-if="profile.active_role < 3 || profile.id === horse.owner.id"
-          as="div"
-          class="relative inline-block text-left"
+          :items="[
+            [
+              {
+                label: 'Unassign Horse Owner',
+                click: () => handleUnassignOwner(),
+              },
+            ],
+          ]"
+          :popper="{ placement: 'bottom-start' }"
         >
-          <div>
-            <MenuButton
-              class="flex items-center rounded-full p-2 text-gray-700 dark:text-white hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-            >
-              <span class="sr-only">Open options</span>
-              <icon
-                name="heroicons:ellipsis-vertical-solid"
-                class="h-5 w-5"
-                aria-hidden="true"
-              />
-            </MenuButton>
-          </div>
-
-          <transition
-            enter-active-class="transition ease-out duration-100"
-            enter-from-class="transform opacity-0 scale-95"
-            enter-to-class="transform opacity-100 scale-100"
-            leave-active-class="transition ease-in duration-75"
-            leave-from-class="transform opacity-100 scale-100"
-            leave-to-class="transform opacity-0 scale-95"
-          >
-            <MenuItems
-              class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            >
-              <div class="py-1">
-                <MenuItem>
-                  <button
-                    @click="handleUnassignOwner()"
-                    class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100"
-                  >
-                    Unassign Horse Owner
-                  </button>
-                </MenuItem>
-              </div>
-            </MenuItems>
-          </transition>
-        </Menu>
+          <UButton
+            color="white"
+            trailing-icon="i-heroicons-ellipsis-vertical-20-solid"
+          />
+        </UDropdown>
       </div>
     </div>
     <div class="col-span-2 mb-4">

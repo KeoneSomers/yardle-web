@@ -1,6 +1,4 @@
 <script setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
 });
@@ -311,66 +309,39 @@ const handleDelete = async () => {
                     <td
                       class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right align-top text-sm font-medium sm:pr-3"
                     >
-                      <Menu
+                      <UDropdown
                         v-if="
                           profile &&
                           profile.active_role &&
                           profile.active_role < 3
                         "
-                        as="div"
-                        class="relative inline-block text-left"
+                        :items="[
+                          [
+                            {
+                              label: 'Edit',
+                              icon: 'i-heroicons-pencil-20-solid',
+                              click: () => {
+                                selectedFeedId = feed.id;
+                                editModalOpen = true;
+                              },
+                            },
+                            {
+                              label: 'Delete',
+                              icon: 'i-heroicons-trash-20-solid',
+                              click: () => {
+                                selectedFeedId = feed.id;
+                                deleteModalOpen = true;
+                              },
+                            },
+                          ],
+                        ]"
+                        :popper="{ placement: 'bottom-start' }"
                       >
-                        <div>
-                          <MenuButton
-                            class="flex items-center rounded-full p-2 text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                          >
-                            <span class="sr-only">Open options</span>
-                            <icon
-                              name="heroicons:ellipsis-vertical-solid"
-                              class="h-5 w-5"
-                              aria-hidden="true"
-                            />
-                          </MenuButton>
-                        </div>
-
-                        <transition
-                          enter-active-class="transition ease-out duration-100"
-                          enter-from-class="transform opacity-0 scale-95"
-                          enter-to-class="transform opacity-100 scale-100"
-                          leave-active-class="transition ease-in duration-75"
-                          leave-from-class="transform opacity-100 scale-100"
-                          leave-to-class="transform opacity-0 scale-95"
-                        >
-                          <MenuItems
-                            class="absolute -top-14 right-10 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                          >
-                            <div class="py-1">
-                              <MenuItem>
-                                <button
-                                  @click="
-                                    selectedFeedId = feed.id;
-                                    editModalOpen = true;
-                                  "
-                                  class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100"
-                                >
-                                  Edit
-                                </button>
-                              </MenuItem>
-                              <MenuItem>
-                                <button
-                                  @click="
-                                    selectedFeedId = feed.id;
-                                    deleteModalOpen = true;
-                                  "
-                                  class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100"
-                                >
-                                  Delete
-                                </button>
-                              </MenuItem>
-                            </div>
-                          </MenuItems>
-                        </transition>
-                      </Menu>
+                        <UButton
+                          color="white"
+                          trailing-icon="i-heroicons-ellipsis-vertical-20-solid"
+                        />
+                      </UDropdown>
                     </td>
                   </tr>
                 </template>

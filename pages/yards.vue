@@ -1,6 +1,4 @@
 <script setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-
 definePageMeta({
   middleware: ["require-auth", "require-no-yard"],
 });
@@ -214,68 +212,31 @@ const handleDelete = async () => {
               {{ yard.name }}
             </div>
             <!-- TODO: this should be based off role and not created_by -->
-            <Menu as="div" class="relative inline-block text-left">
-              <div>
-                <MenuButton
-                  class="flex items-center rounded-full p-2 text-gray-700 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                >
-                  <span class="sr-only">Open options</span>
-                  <icon
-                    name="heroicons:ellipsis-vertical-solid"
-                    class="h-5 w-5"
-                    aria-hidden="true"
-                  />
-                </MenuButton>
-              </div>
-
-              <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
-              >
-                <MenuItems
-                  class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                >
-                  <div class="py-1">
-                    <MenuItem
-                      v-if="yard.created_by !== user.id"
-                      v-slot="{ active }"
-                    >
-                      <button
-                        @click="handleLeaveYard(yard.id)"
-                        :class="[
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block w-full px-4 py-2 text-left text-sm',
-                        ]"
-                      >
-                        Leave
-                      </button>
-                    </MenuItem>
-                    <MenuItem v-else v-slot="{ active }">
-                      <button
-                        @click="
+            <div>
+              <UDropdown
+                :items="[
+                  [
+                    {
+                      label: yard.created_by !== user.id ? 'Leave' : 'Delete',
+                      click: () => {
+                        if (yard.created_by !== user.id) {
+                          handleLeaveYard(yard.id);
+                        } else {
                           yardToDelete = yard.id;
                           deleteYardModalOpen = true;
-                        "
-                        :class="[
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block w-full px-4 py-2 text-left text-sm',
-                        ]"
-                      >
-                        Delete
-                      </button>
-                    </MenuItem>
-                  </div>
-                </MenuItems>
-              </transition>
-            </Menu>
+                        }
+                      },
+                    },
+                  ],
+                ]"
+                :popper="{ placement: 'bottom-start' }"
+              >
+                <UButton
+                  color="white"
+                  trailing-icon="i-heroicons-ellipsis-vertical-20-solid"
+                />
+              </UDropdown>
+            </div>
           </div>
         </div>
         <div v-else>
