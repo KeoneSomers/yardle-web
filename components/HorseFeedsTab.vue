@@ -1,6 +1,4 @@
 <script setup>
-// imports
-import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
 import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
@@ -337,24 +335,19 @@ const ingredientTypes = [
     </div>
   </div>
 
-  <!-- Modals -->
-  <CreateFeedModal
-    v-if="createModalOpen"
-    :is-open="createModalOpen"
-    @close="createModalOpen = false"
-  />
+  <!-- Create Feed Modal -->
+  <Modal v-model="createModalOpen">
+    <ModalHeaderLayout title="Create a Feed" @close="createModalOpen = false">
+      <FormsCreateFeedForm @onSuccess="createModalOpen = false" />
+    </ModalHeaderLayout>
+  </Modal>
+
   <EditFeedModal
     v-if="editModalOpen"
     :is-open="editModalOpen"
     :feed-id="selectedFeedId"
     @close="editModalOpen = false"
   />
-  <!-- <DeleteFeedModal
-    v-if="deleteModalOpen"
-    :is-open="deleteModalOpen"
-    :feed-id="selectedFeedId"
-    @close="deleteModalOpen = false"
-  /> -->
 
   <!-- Delete Feed Confirmation Modal -->
   <Modal v-model="deleteModalOpen">

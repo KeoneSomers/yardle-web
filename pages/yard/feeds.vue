@@ -1,12 +1,5 @@
 <script setup>
-import CreateFeedModal from "@/components/modals/CreateFeedModal.vue";
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  DialogTitle,
-} from "@headlessui/vue";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 
 definePageMeta({
@@ -445,12 +438,12 @@ const handleDelete = async () => {
     </div>
 
     <!-- Create Feed Modal -->
-    <CreateFeedModal
-      v-if="createModalOpen"
-      :is-open="createModalOpen"
-      :feed-id="selectedFeedId"
-      @close="createModalOpen = false"
-    />
+    <Modal v-model="createModalOpen">
+      <ModalHeaderLayout title="Create a Feed" @close="createModalOpen = false">
+        <FormsCreateFeedForm @onSuccess="createModalOpen = false" />
+      </ModalHeaderLayout>
+    </Modal>
+
     <!-- Edit Feed Modal -->
     <EditFeedModal
       v-if="editModalOpen"
