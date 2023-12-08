@@ -191,7 +191,7 @@ const handleDelete = async () => {
 
   <!-- Create Rug Modal -->
   <Modal v-model="createModalOpen">
-    <ModalHeaderLayout title="Add a rug" @close="createModalOpen = false">
+    <ModalHeaderLayout title="Add a Rug" @close="createModalOpen = false">
       <FormsCreateRugForm @onSuccess="createModalOpen = false" />
     </ModalHeaderLayout>
   </Modal>

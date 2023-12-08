@@ -1,6 +1,5 @@
 <script setup>
 import draggable from "vuedraggable";
-import CreateFieldModal from "@/components/modals/CreateFieldModal.vue";
 import EditFieldModal from "@/components/modals/EditFieldModal.vue";
 
 import CreateFieldRotationModal from "@/components/modals/CreateFieldRotationModal.vue";
@@ -521,11 +520,13 @@ const handleDeleteFieldRotation = async () => {
     </div>
   </div>
 
-  <CreateFieldModal
-    v-if="createModalOpen"
-    :is-open="createModalOpen"
-    @close="createModalOpen = false"
-  />
+  <!-- Create Field Modal -->
+  <Modal v-model="createModalOpen">
+    <ModalHeaderLayout title="Create a Field" @close="createModalOpen = false">
+      <FormsCreateFieldForm @onSuccess="createModalOpen = false" />
+    </ModalHeaderLayout>
+  </Modal>
+
   <EditFieldModal
     v-if="editModalOpen"
     :is-open="editModalOpen"

@@ -1,5 +1,5 @@
 <script setup>
-import { SpeedInsights } from "@vercel/speed-insights/nuxt";
+// import { SpeedInsights } from "@vercel/speed-insights/nuxt";
 </script>
 
 <template>
@@ -7,7 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/nuxt";
     <NuxtLayout>
       <NuxtLoadingIndicator />
       <NuxtPage />
-      <SpeedInsights />
+      <!-- <SpeedInsights /> -->
     </NuxtLayout>
 
     <a
