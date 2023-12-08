@@ -15,7 +15,6 @@ import {
   ListboxOption,
   ListboxOptions,
 } from "@headlessui/vue";
-import EditServiceModal from "@/components/modals/EditServiceModal.vue";
 import BillingCycleWidget from "@/components/BillingCycleWidget.vue";
 
 definePageMeta({
@@ -506,18 +505,15 @@ const handleDelete = async () => {
     </ModalHeaderLayout>
   </Modal>
 
-  <EditServiceModal
-    v-if="editModalOpen"
-    :is-open="editModalOpen"
-    :service="selectedService"
-    @close="editModalOpen = false"
-  />
-  <!-- <DeleteServiceModal
-    v-if="deleteModalOpen"
-    :is-open="deleteModalOpen"
-    :service="selectedService"
-    @close="deleteModalOpen = false"
-  /> -->
+  <!-- Edit Service Modal -->
+  <Modal v-model="editModalOpen">
+    <ModalHeaderLayout title="Edit Service" @close="editModalOpen = false">
+      <FormsEditServiceForm
+        :service="selectedService"
+        @onSuccess="editModalOpen = false"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 
   <!-- Delete Rug Confirmation Modal -->
   <Modal v-model="deleteModalOpen">
