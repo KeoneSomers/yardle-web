@@ -31,9 +31,11 @@ const selectedHorse = ref(null);
 const selectedHorses = ref([]);
 
 onMounted(async () => {
-  // TODO: fix this - date and time not populating
-  // date.value = event.value.date_time.substring(0, 10);
-  // time.value = event.value.date_time.substring(11, 16);
+  // get the date.value and time.value from the event.value.date_time iso date
+  date.value = DateTime.fromISO(event.value.date_time).toISODate();
+  time.value = DateTime.fromISO(event.value.date_time).toFormat("HH:mm");
+
+  console.log(time.value);
 
   const { data } = await client
     .from("calendar_events_horses")
@@ -67,17 +69,6 @@ const error = ref("");
 const handleSubmit = async () => {
   // build date
   let formattedDateTime = DateTime.fromJSDate(new Date(date.value));
-
-  // // build time
-  // if (time.value && !event.value.all_day) {
-  //   const h = time.value.split(":")[0];
-  //   const m = time.value.split(":")[1];
-
-  //   formattedDateTime = formattedDateTime.plus({
-  //     hours: h,
-  //     minutes: m,
-  //   });
-  // }
 
   formattedDateTime =
     time.value && !event.value.all_day
@@ -123,7 +114,7 @@ const handleSubmit = async () => {
     const i = events.value.map((e) => e.id).indexOf(event.value.id);
     events.value[i] = {
       ...event.value,
-      date_time: formattedDateTime,
+      date_time: formattedDateTime.toISO(),
       horses: selectedHorses.value,
     };
 
