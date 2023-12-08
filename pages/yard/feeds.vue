@@ -1,6 +1,5 @@
 <script setup>
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
@@ -445,12 +444,14 @@ const handleDelete = async () => {
     </Modal>
 
     <!-- Edit Feed Modal -->
-    <EditFeedModal
-      v-if="editModalOpen"
-      :is-open="editModalOpen"
-      :feed-id="selectedFeedId"
-      @close="editModalOpen = false"
-    />
+    <Modal v-model="editModalOpen">
+      <ModalHeaderLayout title="Edit Feed" @close="editModalOpen = false">
+        <FormsEditFeedForm
+          :feed-id="selectedFeedId"
+          @onSuccess="editModalOpen = false"
+        />
+      </ModalHeaderLayout>
+    </Modal>
 
     <!-- Delete Feed Confirmation Modal -->
     <Modal v-model="deleteModalOpen">

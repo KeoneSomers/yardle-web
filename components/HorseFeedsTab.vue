@@ -1,5 +1,4 @@
 <script setup>
-import EditFeedModal from "@/components/modals/EditFeedModal.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 // modal toggles
@@ -342,12 +341,15 @@ const ingredientTypes = [
     </ModalHeaderLayout>
   </Modal>
 
-  <EditFeedModal
-    v-if="editModalOpen"
-    :is-open="editModalOpen"
-    :feed-id="selectedFeedId"
-    @close="editModalOpen = false"
-  />
+  <!-- Edit Feed Modal -->
+  <Modal v-model="editModalOpen">
+    <ModalHeaderLayout title="Edit Feed" @close="editModalOpen = false">
+      <FormsEditFeedForm
+        :feed-id="selectedFeedId"
+        @onSuccess="editModalOpen = false"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 
   <!-- Delete Feed Confirmation Modal -->
   <Modal v-model="deleteModalOpen">
