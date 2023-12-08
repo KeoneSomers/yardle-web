@@ -1,6 +1,5 @@
 <script setup>
 import draggable from "vuedraggable";
-import EditFieldRotationModal from "@/components/modals/EditFieldRotationModal.vue";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
@@ -559,12 +558,18 @@ const handleDeleteFieldRotation = async () => {
     </ModalHeaderLayout>
   </Modal>
 
-  <EditFieldRotationModal
-    v-if="editModalOpen2"
-    :is-open="editModalOpen2"
-    :field="selectedRotation"
-    @close="editModalOpen2 = false"
-  />
+  <!-- Edit Field Rotation Modal -->
+  <Modal v-model="editModalOpen2">
+    <ModalHeaderLayout
+      title="Edit Field Rotation"
+      @close="editModalOpen2 = false"
+    >
+      <FormsEditFieldRotationForm
+        :field="selectedRotation"
+        @onSuccess="editModalOpen2 = false"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 
   <!-- Delete Field Rotation Confirmation Modal -->
   <Modal v-model="deleteModalOpen2">
