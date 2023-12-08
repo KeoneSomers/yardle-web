@@ -1,7 +1,6 @@
 <script setup>
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { DateTime, Info } from "luxon";
-import EditEventModal from "@/components/modals/EditEventModal.vue";
 
 definePageMeta({
   middleware: ["require-auth", "require-yard"],
@@ -699,12 +698,15 @@ const handleDelete = async () => {
     </ModalHeaderLayout>
   </Modal>
 
-  <EditEventModal
-    v-if="editModalOpen"
-    :is-open="editModalOpen"
-    @close="editModalOpen = false"
-    :event="selectedEvent"
-  />
+  <!-- Edit Event Modal -->
+  <Modal v-model="editModalOpen">
+    <ModalHeaderLayout title="Edit Event" @close="editModalOpen = false">
+      <FormsEditEventForm
+        :event="selectedEvent"
+        @onSuccess="editModalOpen = false"
+      />
+    </ModalHeaderLayout>
+  </Modal>
 
   <!-- Delete Event Confirmation Modal -->
   <Modal v-model="deleteModalOpen">
