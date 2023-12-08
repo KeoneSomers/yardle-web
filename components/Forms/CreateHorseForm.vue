@@ -1,17 +1,15 @@
-<script setup lang="ts">
-import { Database } from "~/types/supabase";
-
+<script setup>
 const emits = defineEmits(["onSuccess"]);
 
-const client = useSupabaseClient<Database>();
+const client = useSupabaseClient();
 const user = useSupabaseUser();
 
-const isLoading = ref<boolean>(false);
+const isLoading = ref(false);
 const selectedYard = useSelectedYardId();
-const horses = useState<any>("horses");
+const horses = useState("horses");
 const selectedHorseId = useState("selectedHorseId");
 const toast = useToast();
-const error = ref<string>("");
+const error = ref("");
 
 const formState = ref({
   name: "",
@@ -28,7 +26,7 @@ const backgrounds = [
   "bg-cyan-500",
 ];
 
-function capitalizeFirstLetter(string: string) {
+function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 

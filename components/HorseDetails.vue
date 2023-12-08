@@ -257,13 +257,13 @@ const handleDelete = async () => {
                     [
                       {
                         label: 'Edit',
-                        onClick: () => (editModalOpen = true),
+                        click: () => (editModalOpen = true),
                       },
                     ],
                     [
                       {
                         label: 'Delete',
-                        onClick: () => (deleteModalOpen = true),
+                        click: () => (deleteModalOpen = true),
                       },
                     ],
                   ]"
@@ -324,7 +324,7 @@ const handleDelete = async () => {
   <Modal v-model="deleteModalOpen">
     <ModalHeaderLayout title="Delete Horse" @close="deleteModalOpen = false">
       <FormsConfirmationForm
-        icon="heroicons:exclamation-triangle"
+        icon="i-heroicons-exclamation-triangle"
         icon-color="text-red-600"
         body="Are you sure you want to delete this horse? All of it's data will be
             permanently removed from your yard forever. This action cannot be

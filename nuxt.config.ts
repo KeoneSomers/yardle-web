@@ -2,12 +2,11 @@
 export default defineNuxtConfig({
   modules: [
     "@nuxtjs/supabase",
-    "@nuxt/image-edge",
     "@sidebase/nuxt-pdf",
-    "@nuxt/devtools",
     "nuxt-icon",
     "@nuxt/ui",
     "nuxt-vercel-analytics",
+    "@nuxt/image",
   ],
   supabase: {
     redirect: false,

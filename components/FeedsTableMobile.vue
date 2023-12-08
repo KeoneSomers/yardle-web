@@ -11,19 +11,6 @@ const emits = defineEmits(["editFeed", "deleteFeed"]);
       class="-mx-4 mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg"
     >
       <table class="min-w-full divide-y divide-gray-300">
-        <!-- <thead class="bg-gray-50">
-          <tr>
-            <th
-              scope="col"
-              class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-            >
-              Name
-            </th>
-            <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-              <span class="sr-only">Edit</span>
-            </th>
-          </tr>
-        </thead> -->
         <tbody class="divide-y divide-gray-200 bg-white">
           <tr v-for="feed in feeds" :key="feed.id">
             <td

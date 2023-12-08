@@ -13,14 +13,7 @@ const handleSignout = async () => {
 const items = [
   [
     {
-      label: profile.value ? profile.value.email : "",
-      slot: "account",
-      disabled: true,
-    },
-  ],
-  [
-    {
-      label: "Settings",
+      label: "Account Settings",
       icon: "i-heroicons-cog-8-tooth",
       to: "/auth/accountSettings",
     },
@@ -29,7 +22,9 @@ const items = [
     {
       label: "Sign out",
       icon: "i-heroicons-arrow-left-on-rectangle",
-      action: handleSignout,
+      click: () => {
+        handleSignout();
+      },
     },
   ],
 ];
@@ -46,11 +41,7 @@ const items = [
     <div class="flex items-center">
       <!-- <ColorModeButton /> -->
       <div v-if="profile && profile.first_name" class="ml-3">
-        <UDropdown
-          :items="items"
-          :ui="{ item: { disabled: 'cursor-text select-text' } }"
-          :popper="{ placement: 'bottom-start' }"
-        >
+        <UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
           <div>
             <SupabaseImage
               v-if="profile.avatar_url"
@@ -66,41 +57,6 @@ const items = [
               {{ profile.last_name[0].toUpperCase() }}
             </div>
           </div>
-          <template #account="{ item }">
-            <div class="text-left truncate">
-              <p>Signed in as</p>
-              <p class="truncate font-medium text-gray-900 dark:text-white">
-                {{ item.label }}
-              </p>
-            </div>
-          </template>
-          <template #item="{ item }">
-            <NuxtLink v-if="item.to" :to="item.to" class="w-full flex">
-              <span class="truncate">{{ item.label }}</span>
-              <UIcon
-                :name="item.icon"
-                class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto"
-            /></NuxtLink>
-            <span v-else-if="item.action" class="w-full">
-              <button
-                @click="item.action()"
-                class="flex justify-between w-full"
-              >
-                <span class="truncate">{{ item.label }}</span>
-                <UIcon
-                  :name="item.icon"
-                  class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto"
-                />
-              </button>
-            </span>
-            <span v-else class="w-full">
-              <span class="truncate">{{ item.label }}</span>
-              <UIcon
-                :name="item.icon"
-                class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto"
-              />
-            </span>
-          </template>
         </UDropdown>
       </div>
 
