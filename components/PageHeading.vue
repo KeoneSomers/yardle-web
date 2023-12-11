@@ -12,8 +12,8 @@ const props = defineProps(["title", "description", "backLink"]);
           to="/yard/invoices"
           class="mr-4 flex h-6 w-6 shrink-0 items-center justify-center rounded bg-gray-100 md:h-12 md:w-12"
         >
-          <icon
-            name="heroicons:chevron-left-solid"
+          <UIcon
+            name="i-heroicons-chevron-left-solid"
             class="h-4 w-4 md:h-6 md:w-6"
           />
         </NuxtLink>

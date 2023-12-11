@@ -18,31 +18,31 @@ const tabs = [
     label: "General",
     name: "General",
     component: HorseGeneralTab,
-    icon: "heroicons:rectangle-group",
+    icon: "i-heroicons-rectangle-group",
   },
   {
     label: "Rugs",
     name: "Rugs",
     component: HorseRugsTab,
-    icon: "heroicons:clipboard-document",
+    icon: "i-heroicons-clipboard-document",
   },
   {
     label: "Feeds",
     name: "Feeds",
     component: HorseFeedsTab,
-    icon: "heroicons:clipboard-document",
+    icon: "i-heroicons-clipboard-document",
   },
   {
     label: "Meds",
     name: "Meds",
     component: HorseMedicationsTab,
-    icon: "heroicons:clipboard-document",
+    icon: "i-heroicons-clipboard-document",
   },
   {
     label: "Services",
     name: "Services",
     component: HorseServicesTab,
-    icon: "heroicons:currency-pound",
+    icon: "i-heroicons-currency-pound",
   },
 ];
 
@@ -178,7 +178,7 @@ const handleDelete = async () => {
         class="bg-gray-500 bg-opacity-20 hover:bg-opacity-30 cursor-pointer rounded-lg p-2"
         @click="clearHorseSelection()"
       >
-        <icon name="heroicons:x-mark" class="h-6 w-6" />
+        <UIcon name="i-heroicons-x-mark" class="h-6 w-6" />
       </div>
     </UTooltip>
 
@@ -191,8 +191,8 @@ const handleDelete = async () => {
         @click="clearHorseSelection()"
         class="inline-flex items-center space-x-1 text-sm font-medium text-blue-500"
       >
-        <icon
-          name="heroicons:chevron-left-solid"
+        <UIcon
+          name="i-heroicons-chevron-left-solid"
           class="-ml-2 h-7 w-7"
           aria-hidden="true"
         />
@@ -307,7 +307,7 @@ const handleDelete = async () => {
           'flex flex-1 flex-col items-center rounded py-1',
         ]"
       >
-        <icon :name="tab.icon" class="mb-1 h-5 w-5" />
+        <UIcon :name="tab.icon" class="mb-1 h-5 w-5" />
         <small class="text-xs">{{ tab.name }}</small>
       </div>
     </nav>

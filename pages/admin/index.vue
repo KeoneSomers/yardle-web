@@ -102,7 +102,7 @@ const handleSendEventEmailReminders = async () => {
       </div>
       <div class="p-2">
         <button @click="handleDelete(item.id)">
-          <icon name="heroicons:trash" class="h-4 w-4" />
+          <UIcon name="i-heroicons-trash" class="h-4 w-4" />
         </button>
       </div>
     </div>

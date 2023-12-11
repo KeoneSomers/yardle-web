@@ -47,8 +47,8 @@ const copyLinkToClipboard = async () => {
         @click="copyLinkToClipboard"
         class="w-full rounded bg-indigo-500 px-3 py-2 text-white"
       >
-        <icon
-          name="heroicons:clipboard-document"
+        <UIcon
+          name="i-heroicons-clipboard-document"
           class="mr-2 inline-block h-4 w-4"
         />
         {{ copyButtonText }}

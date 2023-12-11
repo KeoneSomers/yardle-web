@@ -190,8 +190,8 @@ const handleDelete = async () => {
         class="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
       >
         <span class="sr-only">Previous month</span>
-        <icon
-          name="heroicons:chevron-left-solid"
+        <UIcon
+          name="i-heroicons-chevron-left-solid"
           class="h-5 w-5"
           aria-hidden="true"
         />
@@ -202,8 +202,8 @@ const handleDelete = async () => {
         class="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
       >
         <span class="sr-only">Next month</span>
-        <icon
-          name="heroicons:chevron-right-solid"
+        <UIcon
+          name="i-heroicons-chevron-right-solid"
           class="h-5 w-5"
           aria-hidden="true"
         />
@@ -214,7 +214,11 @@ const handleDelete = async () => {
         class="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
       >
         <span class="sr-only">Create event</span>
-        <icon name="heroicons:plus-solid" class="h-5 w-5" aria-hidden="true" />
+        <UIcon
+          name="i-heroicons-plus-solid"
+          class="h-5 w-5"
+          aria-hidden="true"
+        />
       </button>
     </div>
     <div
@@ -366,8 +370,8 @@ const handleDelete = async () => {
             class="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
           >
             <span class="sr-only">Previous month</span>
-            <icon
-              name="heroicons:chevron-left-solid"
+            <UIcon
+              name="i-heroicons-chevron-left-solid"
               class="h-5 w-5"
               aria-hidden="true"
             />
@@ -386,8 +390,8 @@ const handleDelete = async () => {
             class="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
           >
             <span class="sr-only">Next month</span>
-            <icon
-              name="heroicons:chevron-right-solid"
+            <UIcon
+              name="i-heroicons-chevron-right-solid"
               class="h-5 w-5"
               aria-hidden="true"
             />

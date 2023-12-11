@@ -343,8 +343,8 @@ const resetStartDate = () => {
             @click="billingPeriodOptions.starting_from = null"
             class="ml-2 cursor-pointer"
           >
-            <icon
-              name="heroicons:pencil-square"
+            <UIcon
+              name="i-heroicons-pencil-square"
               class="h-5 w-5 text-blue-500"
             />
           </div>

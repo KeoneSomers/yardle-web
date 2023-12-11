@@ -39,7 +39,7 @@ const links = [
         {{ link.name }}
       </div>
       <div>
-        <Icon name="heroicons:chevron-right" class="h-5 w-5 text-gray-500" />
+        <UIcon name="i-heroicons-chevron-right" class="h-5 w-5 text-gray-500" />
       </div>
     </ULink>
   </div>

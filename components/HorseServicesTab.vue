@@ -298,16 +298,16 @@ const handleDelete = async () => {
                 </div>
                 <div class="flex items-center font-mono text-sm">
                   <UTooltip text="Late Booking" v-if="event.booked_late">
-                    <icon
-                      name="heroicons:clock"
+                    <UIcon
+                      name="i-heroicons-clock"
                       class="mr-2 h-5 w-5 text-orange-400"
                     />
                   </UTooltip>
 
                   {{ currencyFormatter.format(event.service_price) }}
                   <UTooltip text="Cancel Service">
-                    <icon
-                      name="heroicons:trash"
+                    <UIcon
+                      name="i-heroicons-trash"
                       @click="
                         selectedService = event;
                         isLoading = false;
@@ -331,8 +331,8 @@ const handleDelete = async () => {
   </div>
   <div v-else class="my-20 flex w-full items-center justify-center">
     <div class="text-center">
-      <icon
-        name="heroicons:lock-closed"
+      <UIcon
+        name="i-heroicons-lock-closed"
         class="mx-auto h-12 w-12 text-gray-400"
       />
       <h3 class="mt-2 text-sm font-medium text-gray-900">Private</h3>

@@ -44,8 +44,8 @@
               class="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-600"
             >
               <span>Just shipped v1.0</span>
-              <icon
-                name="heroicons:chevron-right-solid"
+              <UIcon
+                name="i-heroicons-chevron-right-solid"
                 class="h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />

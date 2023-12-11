@@ -67,7 +67,7 @@ const items = [
           @click="sidebarOpen = true"
         >
           <span class="sr-only">Open sidebar</span>
-          <icon name="heroicons:bars-3" class="h-6 w-6" aria-hidden="true" />
+          <UIcon name="i-heroicons-bars-3" class="h-6 w-6" aria-hidden="true" />
         </button>
       </div>
     </div>

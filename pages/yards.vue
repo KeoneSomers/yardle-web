@@ -205,10 +205,10 @@ const handleDelete = async () => {
               @click.self="handleSelectYard(yard.id)"
               class="flex-1 font-bold text-gray-700"
             >
-              <icon
+              <!-- <UIcon
                 :name="yard.region_id.flag_icon"
                 class="-mt-1 mr-1 block h-4 w-4 flex-shrink-0"
-              />
+              /> -->
               {{ yard.name }}
             </div>
             <!-- TODO: this should be based off role and not created_by -->
@@ -276,8 +276,8 @@ const handleDelete = async () => {
           type="button"
           class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
-          <icon
-            name="heroicons:plus-solid"
+          <UIcon
+            name="i-heroicons-plus-solid"
             class="-ml-1 mr-2 h-5 w-5"
             aria-hidden="true"
           />

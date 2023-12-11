@@ -45,8 +45,8 @@ const handleResetPassword = async () => {
       <div
         class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 sm:mx-0 sm:h-10 sm:w-10"
       >
-        <icon
-          name="heroicons:key"
+        <UIcon
+          name="i-heroicons-key"
           class="h-6 w-6 text-orange-600"
           aria-hidden="true"
         />
@@ -61,8 +61,8 @@ const handleResetPassword = async () => {
           <div
             class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
           >
-            <icon
-              name="heroicons:envelope-solid"
+            <UIcon
+              name="i-heroicons-envelope-solid"
               class="h-5 w-5 text-gray-400"
               aria-hidden="true"
             />

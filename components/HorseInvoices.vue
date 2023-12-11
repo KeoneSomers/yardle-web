@@ -80,7 +80,7 @@ if (invoiceData) {
       }"
     >
       <div class="flex items-center">
-        <icon name="heroicons:document" class="mx-4 h-8 w-8" />
+        <UIcon name="i-heroicons-document" class="mx-4 h-8 w-8" />
         <div class="py-4 pr-4">
           <p>
             {{ DateTime.fromISO(invoice.end_date).toFormat("DDDD") }}
@@ -99,7 +99,7 @@ if (invoiceData) {
       </div>
 
       <div class="pl-4">
-        <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />
+        <UIcon name="i-heroicons-chevron-right-solid" class="mr-4 h-8 w-8" />
         <!-- <button class="p-2 mr-2 shadow border rounded">
             View / Edit Items
           </button>

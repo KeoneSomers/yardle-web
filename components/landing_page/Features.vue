@@ -74,8 +74,8 @@ const features = [
             class="relative pl-9"
           >
             <dt class="font-semibold text-gray-900">
-              <icon
-                name="heroicons:check-solid"
+              <UIcon
+                name="i-heroicons-check-solid"
                 class="absolute top-1 left-0 h-5 w-5 text-indigo-500"
                 aria-hidden="true"
               />

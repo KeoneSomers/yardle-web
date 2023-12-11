@@ -3,7 +3,6 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/supabase",
     "@sidebase/nuxt-pdf",
-    "nuxt-icon",
     "@nuxt/ui",
     "nuxt-vercel-analytics",
     "@nuxt/image",

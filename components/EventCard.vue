@@ -36,14 +36,14 @@ const { data: horses } = await useAsyncData(String(event.id), async () => {
         @click="() => $emit('edit')"
         class="my-1 cursor-pointer rounded-full p-3 hover:bg-white hover:text-indigo-500"
       >
-        <icon name="heroicons:pencil" class="h-6 w-6" />
+        <UIcon name="i-heroicons-pencil" class="h-6 w-6" />
       </a>
       <a
         v-close-popper.all
         @click="() => $emit('delete')"
         class="my-1 cursor-pointer rounded-full p-3 hover:bg-white hover:text-red-500"
       >
-        <icon name="heroicons:trash" class="h-6 w-6" />
+        <UIcon name="i-heroicons-trash" class="h-6 w-6" />
       </a>
     </div>
     <div class="p-5">

@@ -73,7 +73,7 @@ if (invoiceData) {
         }"
       >
         <div class="flex items-center">
-          <icon name="heroicons:document" class="mx-4 h-8 w-8" />
+          <UIcon name="i-heroicons-document" class="mx-4 h-8 w-8" />
           <div class="py-4 pr-4">
             <ClientOnly>
               <p>
@@ -94,7 +94,7 @@ if (invoiceData) {
         </div>
 
         <div class="pl-4">
-          <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />
+          <UIcon name="i-heroicons-chevron-right-solid" class="mr-4 h-8 w-8" />
         </div>
       </NuxtLink>
     </div>

@@ -155,7 +155,7 @@ watchEffect(async () => {
           to="/yard/settings"
           class="ml-2 flex items-center text-blue-500"
           >(Edit
-          <icon name="heroicons:pencil" class="ml-1 h-3 w-3" />)</NuxtLink
+          <UIcon name="i-heroicons-pencil" class="ml-1 h-3 w-3" />)</NuxtLink
         ></span
       >
     </p> -->

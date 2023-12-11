@@ -120,7 +120,7 @@ const handleDelete = async (id) => {
           class="p-4 bg-primary-50 dark:bg-primary-950"
         >
           <div class="flex justify-center-center">
-            <icon
+            <UIcon
               name="heroicons-megaphone"
               class="h-6 w-6 mr-2 text-primary-500"
             />
@@ -145,7 +145,7 @@ const handleDelete = async (id) => {
         </div>
         <div v-else class="p-4 bg-primary-50">
           <div class="flex justify-center-center">
-            <icon
+            <UIcon
               name="heroicons-megaphone"
               class="h-6 w-6 mr-2 text-primary-500"
             />
@@ -170,7 +170,7 @@ const handleDelete = async (id) => {
           </div>
           <div v-if="profile.active_role == 1">
             <UDropdown :items="dropdownItems(announcement)">
-              <Icon name="heroicons:ellipsis-vertical" />
+              <UIcon name="i-heroicons-ellipsis-vertical" />
             </UDropdown>
           </div>
         </div>

@@ -265,7 +265,7 @@ const handleDeleteFieldRotation = async () => {
                   @click="createModalOpen2 = true"
                   class="flex cursor-pointer items-center whitespace-nowrap rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-indigo-200 hover:text-gray-700"
                 >
-                  <icon name="heroicons:plus-solid" class="h-5 w-5" />
+                  <UIcon name="i-heroicons-plus-solid" class="h-5 w-5" />
                 </div>
               </UTooltip>
             </div>
@@ -393,7 +393,7 @@ const handleDeleteFieldRotation = async () => {
           @click="createModalOpen = true"
           class="flex w-80 items-center justify-center rounded-lg border-4 border-dashed border-gray-100 text-gray-100 hover:cursor-pointer hover:bg-gray-50 hover:text-white"
         >
-          <icon name="heroicons:plus-solid" class="h-24 w-24" />
+          <UIcon name="i-heroicons-plus-solid" class="h-24 w-24" />
         </div>
       </div>
     </div>

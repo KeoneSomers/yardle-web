@@ -194,8 +194,8 @@ const indeterminate = computed(
                                     request.status === 'accepted',
                                 }"
                               >
-                                <icon
-                                  name="heroicons:check-solid"
+                                <UIcon
+                                  name="i-heroicons-check-solid"
                                   class="h-5 w-5"
                                 />
                               </button>
@@ -214,8 +214,8 @@ const indeterminate = computed(
                                     request.status === 'declined',
                                 }"
                               >
-                                <icon
-                                  name="heroicons:x-mark-solid"
+                                <UIcon
+                                  name="i-heroicons-x-mark-solid"
                                   class="h-5 w-5"
                                 />
                               </button>

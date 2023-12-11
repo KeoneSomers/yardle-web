@@ -315,8 +315,8 @@ const handleDelete = async () => {
                 <div
                   class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
                 >
-                  <icon
-                    name="heroicons:envelope-solid"
+                  <UIcon
+                    name="i-heroicons-envelope-solid"
                     class="h-5 w-5 text-gray-400"
                     aria-hidden="true"
                   />
@@ -652,8 +652,8 @@ const handleDelete = async () => {
                             "
                             class="flex justify-end hover:cursor-pointer"
                           >
-                            <icon
-                              name="heroicons:x-mark-solid"
+                            <UIcon
+                              name="i-heroicons-x-mark-solid"
                               class="h-6 w-6"
                             />
                           </div>

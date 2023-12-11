@@ -83,7 +83,7 @@ const dropdownItems = (invoice) => [
         class="mb-4 flex items-center justify-between rounded-lg border"
       >
         <div class="flex items-center">
-          <icon name="heroicons:document" class="mx-4 h-8 w-8" />
+          <UIcon name="i-heroicons-document" class="mx-4 h-8 w-8" />
           <div class="py-4 pr-4">
             <ClientOnly>
               <p>
@@ -121,14 +121,14 @@ const dropdownItems = (invoice) => [
         </div>
         <div class="flex items-center">
           <UDropdown :items="dropdownItems(invoice)">
-            <icon name="heroicons:ellipsis-vertical" class="mr-4 h-5 w-5" />
+            <UIcon name="i-heroicons-ellipsis-vertical" class="mr-4 h-5 w-5" />
           </UDropdown>
           <!-- <NuxtLink
             :key="invoice.id"
             :to="`/yard/invoices/${invoice.id * 36}`"
             class="transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg"
           >
-            <icon name="heroicons:chevron-right-solid" class="mr-4 h-8 w-8" />
+            <UIcon name="i-heroicons-chevron-right-solid" class="mr-4 h-8 w-8" />
           </NuxtLink> -->
         </div>
       </div>

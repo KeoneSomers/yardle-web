@@ -161,8 +161,8 @@ const handleUnselectYard = async () => {
           class="pt-2 lg:hidden ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
           @click="sidebarOpen = false"
         >
-          <icon
-            name="heroicons:x-mark"
+          <UIcon
+            name="i-heroicons-x-mark"
             class="h-6 w-6 text-gray-800"
             aria-hidden="true"
           />
@@ -175,10 +175,10 @@ const handleUnselectYard = async () => {
         >
           <div class="w-3/4">
             <div class="flex items-center">
-              <icon
+              <!-- <UIcon
                 :name="yard.region.flag_icon"
                 class="mr-1 block h-4 w-4 flex-shrink-0"
-              />
+              /> -->
               <div class="truncate">
                 <p
                   class="text-md truncate font-bold text-gray-600 dark:text-white"
@@ -195,14 +195,16 @@ const handleUnselectYard = async () => {
             </p>
           </div>
           <div class="flex items-center w-1/4 justify-end">
-            <UTooltip text="Switch Yard">
-              <button
-                @click="handleUnselectYard"
-                class="block w-full rounded-full border dark:border-gray-700 p-2 text-left text-sm text-gray-500"
-              >
-                <icon name="heroicons:arrows-right-left" class="h-5 w-5" />
-              </button>
-            </UTooltip>
+            <div>
+              <UTooltip text="Switch Yard">
+                <button
+                  @click="handleUnselectYard"
+                  class="flex w-full rounded-full border dark:border-gray-700 p-2 text-left text-sm text-gray-500"
+                >
+                  <UIcon name="i-heroicons-arrows-right-left" class="h-5 w-5" />
+                </button>
+              </UTooltip>
+            </div>
           </div>
         </div>
         <div class="mt-2 space-y-1 px-2">
