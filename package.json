@@ -13,13 +13,13 @@
     "@sidebase/nuxt-pdf": "^0.1.1",
     "@types/luxon": "^3.3.1",
     "nuxt": "^3.8.2",
-    "nuxt-vercel-analytics": "^0.2.2",
+    "nuxt-vercel-analytics": "^1.0.0",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.2.8"
   },
   "dependencies": {
     "@nuxt/ui": "^2.11.0",
-    "@vercel/speed-insights": "^1.0.0",
+    "@vercel/speed-insights": "^1.0.2",
     "@vuepic/vue-datepicker": "^5.4.0",
     "@vueuse/core": "^10.2.1",
     "downloadjs": "^1.4.7",
