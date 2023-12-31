@@ -7,6 +7,8 @@ export default defineEventHandler(async (event) => {
   const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const client = createClient(supabaseUrl, supabaseServiceRoleKey);
 
+  let invoiceItems = [];
+
   console.log("Running generateInvoices cron job");
 
   // Fetch billingCycles where the next billing date is today
@@ -68,10 +70,13 @@ export default defineEventHandler(async (event) => {
       continue;
     }
 
-    // Create an array of all unique horse owners ids from the serviceRequests
+    // Add the serviceRequests to the invoiceItems array (TODO: could be mapped to clean the data up - dont need every field)
+    invoiceItems = serviceRequests;
+
+    // Create an array of all unique horse owners ids from the invoiceItems
     const horseOwnersIds = [
       ...new Set(
-        serviceRequests.map((serviceRequest) => serviceRequest.horse_id.owner)
+        invoiceItems.map((serviceRequest) => serviceRequest.horse_id.owner)
       ),
     ];
 
@@ -97,23 +102,34 @@ export default defineEventHandler(async (event) => {
         continue;
       }
 
-      // 2. Link all the service_requests to the invoice
-      await client
-        .from("service_requests")
-        .update({
-          invoice_id: invoiceData.id,
-        })
-        .eq("client_id", clientId)
-        .eq("horse_id.yard_id", billingCycle.yard_id.id)
-        .gt("date", startDate)
-        .lte("date", endDate)
-        .filter("status", "eq", "accepted")
-        .filter("canceled_at", "is", null)
-        .not("horse_id.owner", "is", null);
+      // update the invoiceItems with the invoice_id
+      for (const invoiceItem of invoiceItems) {
+        // console.log("here:" + invoiceItem.horse_id.owner);
+
+        if (invoiceItem.horse_id.owner !== clientId) {
+          continue;
+        }
+
+        // Set the invoice_id
+        invoiceItem.invoice_id = invoiceData.id;
+      }
 
       console.log("Invoice created for client: " + clientId);
     }
   }
+
+  // Insert all the invoice_items records
+  const { error: errorInvoiceItemData } = await client
+    .from("invoice_items")
+    .insert(invoiceItems);
+
+  if (errorInvoiceItemData) {
+    console.log("Error in invoiceItemData");
+    console.log(errorInvoiceItemData);
+    return;
+  }
+
+  console.log("Invoice items created");
 
   return { result: "ok" };
 });

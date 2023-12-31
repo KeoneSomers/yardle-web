@@ -76,7 +76,7 @@ onMounted(async () => {
   invoiceData.value = _invoiceData;
 
   const { data: _itemsData, error: itemsError } = await client
-    .from("service_requests")
+    .from("invoice_items")
     .select("*, horse_id (id, name)")
     .eq("invoice_id", invoice_id)
     .filter("canceled_at", "is", null)
@@ -169,7 +169,7 @@ const totalAmount = computed(() => {
 const handleDelete = async () => {
   const item_id = itemToDelete.value;
   const { data, error } = await client
-    .from("service_requests")
+    .from("invoice_items")
     .delete()
     .eq("id", item_id)
     .select()
@@ -228,7 +228,7 @@ const handleDelete = async () => {
         @click="() => (createModalOpen = true)"
         class="mr-2 mt-2 cursor-pointer rounded-lg border bg-white px-3 py-2 hover:bg-gray-100 md:mt-0"
       >
-        Add Service
+        Add Item
       </button>
       <DownloadInvoice
         v-if="

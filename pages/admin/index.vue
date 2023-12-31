@@ -58,8 +58,12 @@ const handleGenerateInvoices = async () => {
   const result = await useFetch("/api/generateInvoices", {
     method: "POST",
   });
-
   console.log(result);
+  // const { error } = await supabase
+  //   .from("invoice_items")
+  //   .delete()
+  //   .is("invoice_id", null);
+  // console.log(error);
 };
 
 const handleSendEventEmailReminders = async () => {

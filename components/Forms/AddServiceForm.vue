@@ -79,7 +79,7 @@ const handleSubmit = async () => {
     return;
   }
   const { data, error } = await client
-    .from("service_requests")
+    .from("invoice_items")
     .insert({
       created_by: user.value.id,
       invoice_id: props.invoiceId,
