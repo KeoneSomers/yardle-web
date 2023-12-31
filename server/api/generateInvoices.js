@@ -7,15 +7,23 @@ export default defineEventHandler(async (event) => {
   const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const client = createClient(supabaseUrl, supabaseServiceRoleKey);
 
+  console.log("Running generateInvoices cron job");
+
   // Fetch billingCycles where the next billing date is today
   const { data: billingCycles, error: errorBillingCycles } = await client
     .from("yard_billing_cycles")
     .select("*, yard_id!inner(id, name)");
 
-  if (errorBillingCycles) return;
+  if (errorBillingCycles) {
+    console.log("Error in billingCycles");
+    console.log(errorBillingCycles);
+    return;
+  }
 
   // Loop through each billing cycle
   for (const billingCycle of billingCycles) {
+    console.log("Proccessing billing cycle: " + billingCycle.id);
+
     const endDate = DateTime.fromISO(
       await $fetch("/api/getNextBillingDate", {
         method: "POST",
@@ -25,7 +33,10 @@ export default defineEventHandler(async (event) => {
       })
     ).toISODate();
 
-    if (endDate !== DateTime.now().toISODate()) return;
+    if (endDate !== DateTime.now().toISODate()) {
+      console.log("Not the next billing date");
+      continue;
+    }
 
     const startDate = DateTime.fromISO(
       await $fetch("/api/getPreviousBillingDate", {
@@ -38,6 +49,8 @@ export default defineEventHandler(async (event) => {
       })
     ).toISODate();
 
+    console.log("Start date: " + startDate);
+
     // get all the service_requests for the billing cycle
     const { data: serviceRequests, error: errorServiceRequests } = await client
       .from("service_requests")
@@ -49,7 +62,11 @@ export default defineEventHandler(async (event) => {
       .filter("canceled_at", "is", null)
       .not("horse_id.owner", "is", null);
 
-    if (errorServiceRequests) return;
+    if (errorServiceRequests) {
+      console.log("Error in serviceRequests");
+      console.log(errorServiceRequests);
+      continue;
+    }
 
     // Create an array of all unique horse owners ids from the serviceRequests
     const horseOwnersIds = [
@@ -57,6 +74,8 @@ export default defineEventHandler(async (event) => {
         serviceRequests.map((serviceRequest) => serviceRequest.horse_id.owner)
       ),
     ];
+
+    console.log("Horse owners ids: " + horseOwnersIds);
 
     // Create an invoice for each client and link all the appropriate service_requests to the invoice
     for (const clientId of horseOwnersIds) {
@@ -72,7 +91,11 @@ export default defineEventHandler(async (event) => {
         .select()
         .single();
 
-      if (errorInvoiceData) continue;
+      if (errorInvoiceData) {
+        console.log("Error in invoiceData");
+        console.log(errorInvoiceData);
+        continue;
+      }
 
       // 2. Link all the service_requests to the invoice
       await client
@@ -87,6 +110,8 @@ export default defineEventHandler(async (event) => {
         .filter("status", "eq", "accepted")
         .filter("canceled_at", "is", null)
         .not("horse_id.owner", "is", null);
+
+      console.log("Invoice created for client: " + clientId);
     }
   }
 
