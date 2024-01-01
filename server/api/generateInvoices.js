@@ -7,8 +7,6 @@ export default defineEventHandler(async (event) => {
   const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const client = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-  let invoiceItems = [];
-
   console.log("Running generateInvoices cron job");
 
   // Fetch billingCycles where the next billing date is today
@@ -22,7 +20,7 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
-  // Loop through each billing cycle
+  // Loop through each billing cycle (Each Yard)
   for (const billingCycle of billingCycles) {
     console.log("Proccessing billing cycle: " + billingCycle.id);
 
@@ -71,7 +69,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Add the serviceRequests to the invoiceItems array (TODO: could be mapped to clean the data up - dont need every field)
-    invoiceItems = serviceRequests;
+    let invoiceItems = serviceRequests;
 
     // Create an array of all unique horse owners ids from the invoiceItems
     const horseOwnersIds = [
@@ -116,20 +114,20 @@ export default defineEventHandler(async (event) => {
 
       console.log("Invoice created for client: " + clientId);
     }
-  }
 
-  // Insert all the invoice_items records
-  const { error: errorInvoiceItemData } = await client
-    .from("invoice_items")
-    .insert(invoiceItems);
+    // Insert all the invoice_items records
+    const { error: errorInvoiceItemData } = await client
+      .from("invoice_items")
+      .insert(invoiceItems);
 
-  if (errorInvoiceItemData) {
-    console.log("Error in invoiceItemData");
-    console.log(errorInvoiceItemData);
-    return;
-  }
+    if (errorInvoiceItemData) {
+      console.log("Error in invoiceItemData");
+      console.log(errorInvoiceItemData);
+      return;
+    }
 
-  console.log("Invoice items created");
+    console.log("Invoice items created");
+  } // end of billing cycle loop
 
   return { result: "ok" };
 });

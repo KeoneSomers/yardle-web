@@ -816,7 +816,7 @@ const handleDelete = async () => {
       </ModalHeaderLayout>
     </Modal>
 
-    <!-- Delete Invoice Iteme Confirmation Modal -->
+    <!-- Delete Invoice Item Confirmation Modal -->
     <Modal v-model="openDeleteItemModal">
       <ModalHeaderLayout
         title="Delete Rug"
