@@ -100,22 +100,15 @@ export default defineEventHandler(async (event) => {
         continue;
       }
 
-      // update the invoiceItems with the invoice_id
+      // Attach the invoice items to this invoice.
       for (const invoiceItem of invoiceItems) {
-        // console.log("here:" + invoiceItem.horse_id.owner);
-
-        if (invoiceItem.horse_id.owner !== clientId) {
-          continue;
+        if (invoiceItem.horse_id.owner === clientId) {
+          invoiceItem.invoice_id = invoiceData.id;
         }
-
-        // Set the invoice_id
-        invoiceItem.invoice_id = invoiceData.id;
       }
+    } // end of client loop (1 invoice per client (per yard))
 
-      console.log("Invoice created for client: " + clientId);
-    }
-
-    // Insert all the invoice_items records
+    // Insert all the invoice_items records (for this yard)
     const { error: errorInvoiceItemData } = await client
       .from("invoice_items")
       .insert(invoiceItems);
