@@ -104,6 +104,7 @@ export default defineEventHandler(async (event) => {
       for (const invoiceItem of invoiceItems) {
         if (invoiceItem.horse_id.owner === clientId) {
           invoiceItem.invoice_id = invoiceData.id;
+          invoiceItem.horse_id = invoiceItem.horse_id.id;
         }
       }
     } // end of client loop (1 invoice per client (per yard))
@@ -111,7 +112,7 @@ export default defineEventHandler(async (event) => {
     // Insert all the invoice_items records (for this yard)
     const { error: errorInvoiceItemData } = await client
       .from("invoice_items")
-      .insert(invoiceItems);
+      .insert(invoiceItems.map(({ id, ...item }) => item));
 
     if (errorInvoiceItemData) {
       console.log("Error in invoiceItemData");
