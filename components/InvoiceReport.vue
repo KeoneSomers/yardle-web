@@ -123,7 +123,7 @@ const currencyFormatter = Intl.NumberFormat(yard.region.locale_code, {
               <td class="px-[15px] pb-[15px]">
                 <div>
                   <p>
-                    {{ item.horse_id.name }}
+                    {{ item.horse_name }}
                   </p>
                 </div>
               </td>

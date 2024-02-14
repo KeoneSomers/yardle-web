@@ -142,6 +142,7 @@ const handleDelete = async () => {
       .select();
 
     if (horseDeleteError) {
+      console.log(horseDeleteError);
       throw new Error(horseDeleteError);
     }
 

@@ -105,6 +105,7 @@ export default defineEventHandler(async (event) => {
         if (invoiceItem.horse_id.owner === clientId) {
           invoiceItem.invoice_id = invoiceData.id;
           invoiceItem.horse_id = invoiceItem.horse_id.id;
+          invoiceItem.horse_name = invoiceItem.horse_id.name;
         }
       }
     } // end of client loop (1 invoice per client (per yard))

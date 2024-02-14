@@ -12,7 +12,6 @@ const yardId = useSelectedYardId();
 const liveryServices = ref([]);
 const clientHorses = ref([]);
 const yard = useState("yard");
-const horse = useState("horse");
 const itemsData = useState("itemsData");
 const subtotal = useState("subtotal");
 const toast = useToast();
@@ -85,6 +84,7 @@ const handleSubmit = async () => {
       invoice_id: props.invoiceId,
       status: "accepted",
       horse_id: selectedHorse.value.id,
+      horse_name: selectedHorse.value.name,
       date: date.value,
       service_id: selectedService.value.id,
       service_name: selectedService.value.name,
@@ -106,10 +106,8 @@ const handleSubmit = async () => {
   // update itemsData locally
   itemsData.value.push({
     ...data,
-    horse_id: {
-      id: selectedHorse.value.id,
-      name: selectedHorse.value.name,
-    },
+    horse_id: selectedHorse.value.id,
+    horse_name: selectedHorse.value.name,
     livery_services: {
       name: selectedService.value.name,
       price: selectedService.value.price,

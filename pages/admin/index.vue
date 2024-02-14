@@ -68,11 +68,42 @@ const handleSendEventEmailReminders = async () => {
 
   console.log(result);
 };
+
+const updateInvoiceItemHorseNames = async () => {
+  const { data: data1, error: error1 } = await supabase
+    .from("invoice_items")
+    .select("horse_id(id, name)");
+
+  console.log(data1, error1);
+
+  if (error1) {
+    return;
+  }
+
+  for (const item of data1) {
+    const { data: data2, error: error2 } = await supabase
+      .from("invoice_items")
+      .update({ horse_name: item.horse_id.name })
+      .eq("horse_id", item.horse_id.id);
+
+    console.log(data2, error2);
+
+    if (error2) {
+      return;
+    }
+  }
+};
 </script>
 
 <template>
   <div class="p-10">
     <h1 class="mb-10 text-3xl">Admin Page</h1>
+    <button
+      @click="updateInvoiceItemHorseNames"
+      class="my-4 mr-4 rounded bg-indigo-500 p-4 text-white"
+    >
+      Update Invoice Item Horse Names
+    </button>
     <button
       @click="handleGenerateInvoices"
       class="my-4 mr-4 rounded bg-indigo-500 p-4 text-white"

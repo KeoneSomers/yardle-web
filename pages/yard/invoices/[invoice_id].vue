@@ -77,7 +77,7 @@ onMounted(async () => {
 
   const { data: _itemsData, error: itemsError } = await client
     .from("invoice_items")
-    .select("*, horse_id (id, name)")
+    .select("*")
     .eq("invoice_id", invoice_id)
     .filter("canceled_at", "is", null)
     .order("date", { ascending: true });
@@ -592,7 +592,7 @@ const handleDelete = async () => {
                       <td class="py-4 pl-4 pr-3 text-sm sm:pl-0">
                         <div class="font-medium text-gray-900">
                           <p class="truncate whitespace-pre-wrap">
-                            {{ item.horse_id.name }}
+                            {{ item.horse_name }}
                           </p>
                         </div>
                       </td>
