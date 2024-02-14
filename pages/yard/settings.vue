@@ -386,7 +386,7 @@ const handleDelete = async () => {
     </ModalHeaderLayout>
   </Modal>
 
-  <!-- Delete Rug Confirmation Modal -->
+  <!-- Delete Service Confirmation Modal -->
   <Modal v-model="deleteModalOpen">
     <ModalHeaderLayout title="Delete Service" @close="deleteModalOpen = false">
       <FormsConfirmationForm
