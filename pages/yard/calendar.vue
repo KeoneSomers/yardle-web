@@ -17,6 +17,7 @@ const editModalOpen = ref(false);
 const deleteModalOpen = ref(false);
 
 const selectedEvent = ref(null);
+const isViewingEventDetails = ref(false);
 
 const openEditModal = (e) => {
   selectedEvent.value = e;
@@ -420,148 +421,131 @@ const handleDelete = async () => {
 
       <!-- Days -->
       <div
-        class="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto"
+        class="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto"
       >
         <div
-          class="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px"
+          @click="(e) => createEvent(e, day.ts)"
+          v-for="day in days"
+          :key="day"
+          :class="[
+            day.month == dt.month ? 'bg-white' : 'bg-gray-50 text-gray-500',
+            'create-event cursor-pointer px-3 py-2',
+          ]"
         >
-          <div
-            @click="(e) => createEvent(e, day.ts)"
-            v-for="day in days"
-            :key="day"
-            :class="[
-              day.month == dt.month ? 'bg-white' : 'bg-gray-50 text-gray-500',
-              'create-event relative cursor-pointer px-3 py-2 hover:opacity-75',
-            ]"
-          >
-            <time
-              :datetime="day.date"
-              :class="
-                day.day === trueDateTime.day &&
-                day.month === trueDateTime.month &&
-                day.year === trueDateTime.year
-                  ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
-                  : undefined
-              "
-              >{{ day.day }}
-            </time>
+          <time
+            :datetime="day.date"
+            :class="
+              day.day === trueDateTime.day &&
+              day.month === trueDateTime.month &&
+              day.year === trueDateTime.year
+                ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
+                : undefined
+            "
+            >{{ day.day }}
+          </time>
 
-            <ol v-if="day.events" class="mt-2">
-              <li
-                v-for="event in day.events.slice(0, 2)"
-                :key="event.id"
-                :class="event.all_day ? 'rounded bg-indigo-100 px-1' : ''"
+          <ol v-if="day.events" class="mt-2">
+            <li
+              v-for="event in day.events.slice(0, 2)"
+              :key="event.id"
+              :class="event.all_day ? 'rounded bg-indigo-100 px-1' : ''"
+            >
+              <button
+                class="group flex w-full text-left"
+                @click="
+                  isViewingEventDetails = true;
+                  selectedEvent = event;
+                "
               >
-                <VDropdown placement="right">
-                  <!-- This will be the popover target (for the events and position) -->
-                  <button class="group flex w-full text-left">
-                    <p
-                      class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
-                    >
-                      {{ event.title }}
-                    </p>
+                <p
+                  class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
+                >
+                  {{ event.title }}
+                </p>
 
-                    <time
-                      :datetime="event.datetime"
-                      class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
-                    >
-                      <span v-if="!event.all_day">
-                        {{
-                          DateTime.fromISO(String(event.date_time)).toFormat(
-                            "h:mma"
-                          )
-                        }}
-                      </span>
-                      <span v-else> All Day </span>
-                    </time>
-                  </button>
-                  <!-- This will be the content of the popover -->
-                  <template #popper>
-                    <EventCard
-                      :event="event"
-                      @edit="() => openEditModal(event)"
-                      @delete="() => openDeleteModal(event)"
-                    />
-                  </template>
-                </VDropdown>
-              </li>
-              <li v-if="day.events.length > 2" class="text-gray-500">
-                <VDropdown>
-                  <!-- This will be the popover target (for the events and position) -->
-                  <button class="w-full text-left">
+                <time
+                  :datetime="event.datetime"
+                  class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
+                >
+                  <span v-if="!event.all_day">
+                    {{
+                      DateTime.fromISO(String(event.date_time)).toFormat(
+                        "h:mma"
+                      )
+                    }}
+                  </span>
+                  <span v-else> All Day </span>
+                </time>
+              </button>
+            </li>
+            <li v-if="day.events.length > 2" class="text-gray-500">
+              <UPopover>
+                <!-- This will be the popover target (for the events and position) -->
+                <button class="w-full text-left">
+                  +
+                  {{ day.events.length - 2 }} more
+                </button>
+                <!-- This will be the content of the popover -->
+                <template #panel>
+                  <div class="w-64 rounded-lg bg-white py-5 shadow">
                     <div>
-                      +
-                      {{ day.events.length - 2 }} more
-                    </div>
-                  </button>
-                  <!-- This will be the content of the popover -->
-                  <template #popper>
-                    <div class="w-64 rounded-lg bg-white py-5 shadow">
-                      <div>
-                        <ol>
-                          <li
-                            v-for="event in day.events.slice(
-                              2,
-                              day.events.lenth
-                            )"
-                            :key="event.id"
-                            :class="
-                              event.all_day ? 'rounded bg-indigo-100 px-1' : ''
+                      <ol>
+                        <li
+                          v-for="event in day.events.slice(2, day.events.lenth)"
+                          :key="event.id"
+                          :class="
+                            event.all_day ? 'rounded bg-indigo-100 px-1' : ''
+                          "
+                          class="mb-1 px-5"
+                        >
+                          <button
+                            class="group flex w-full text-left"
+                            @click="
+                              isViewingEventDetails = true;
+                              selectedEvent = event;
                             "
-                            class="mb-1 px-5"
                           >
-                            <VDropdown placement="right">
-                              <!-- This will be the popover target (for the events and position) -->
-                              <button class="group flex w-full text-left">
-                                <p
-                                  class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
-                                >
-                                  {{ event.title }}
-                                </p>
+                            <p
+                              class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
+                            >
+                              {{ event.title }}
+                            </p>
 
-                                <time
-                                  :datetime="event.datetime"
-                                  class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
-                                >
-                                  <span v-if="!event.all_day">
-                                    {{
-                                      DateTime.fromISO(
-                                        String(event.date_time)
-                                      ).toFormat("h:mma")
-                                    }}
-                                  </span>
-                                  <span v-else> All Day </span>
-                                </time>
-                              </button>
-                              <!-- This will be the content of the popover -->
-                              <template #popper>
-                                <EventCard
-                                  :event="event"
-                                  @edit="() => openEditModal(event)"
-                                  @delete="() => openDeleteModal(event)"
-                                />
-                              </template>
-                            </VDropdown>
-                          </li>
-                        </ol>
-                      </div>
+                            <time
+                              :datetime="event.datetime"
+                              class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
+                            >
+                              <span v-if="!event.all_day">
+                                {{
+                                  DateTime.fromISO(
+                                    String(event.date_time)
+                                  ).toFormat("h:mma")
+                                }}
+                              </span>
+                              <span v-else> All Day </span>
+                            </time>
+                          </button>
+                        </li>
+                      </ol>
                     </div>
-                  </template>
-                </VDropdown>
-              </li>
-            </ol>
-          </div>
+                  </div>
+                </template>
+              </UPopover>
+            </li>
+          </ol>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modivdals -->
-  <!-- <CreateEventModal
-    v-if="createModalOpen"
-    :is-open="createModalOpen"
-    @close="createModalOpen = false"
-  /> -->
+  <!-- Event Details -->
+  <USlideover v-model="isViewingEventDetails">
+    <EventCard
+      :event="selectedEvent"
+      @edit="() => openEditModal(selectedEvent)"
+      @delete="() => openDeleteModal(selectedEvent)"
+    />
+  </USlideover>
 
   <!-- Create Event Modal -->
   <Modal v-model="createModalOpen">

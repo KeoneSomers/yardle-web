@@ -29,22 +29,28 @@ const { data: horses } = await useAsyncData(String(event.id), async () => {
 </script>
 
 <template>
-  <div class="w-96 rounded-lg bg-white shadow">
-    <div class="mb-2 flex items-center justify-end bg-gray-50 px-3">
-      <a
-        v-close-popper.all
-        @click="() => $emit('edit')"
-        class="my-1 cursor-pointer rounded-full p-3 hover:bg-white hover:text-indigo-500"
-      >
-        <UIcon name="i-heroicons-pencil" class="h-6 w-6" />
-      </a>
-      <a
-        v-close-popper.all
-        @click="() => $emit('delete')"
-        class="my-1 cursor-pointer rounded-full p-3 hover:bg-white hover:text-red-500"
-      >
-        <UIcon name="i-heroicons-trash" class="h-6 w-6" />
-      </a>
+  <div>
+    <div class="mb-2 flex items-center justify-between bg-gray-50 px-3">
+      <div class="font-semibold">Event Details</div>
+      <div class="flex py-2">
+        <UButton
+          @click="() => $emit('edit')"
+          icon="i-heroicons-pencil"
+          variant="soft"
+          color="blue"
+          size="xl"
+          :ui="{ rounded: 'rounded-full' }"
+        />
+        <UButton
+          @click="() => $emit('delete')"
+          icon="i-heroicons-trash"
+          variant="soft"
+          color="red"
+          size="xl"
+          :ui="{ rounded: 'rounded-full' }"
+          class="ml-1"
+        />
+      </div>
     </div>
     <div class="p-5">
       <h1 class="text-xl font-bold">{{ event.title }}</h1>

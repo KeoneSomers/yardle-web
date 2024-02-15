@@ -12,10 +12,10 @@
     "@nuxtjs/supabase": "^1.0.2",
     "@sidebase/nuxt-pdf": "^0.1.1",
     "@types/luxon": "^3.3.1",
-    "nuxt": "^3.8.2",
+    "nuxt": "^3.10.2",
     "nuxt-vercel-analytics": "^1.0.0",
-    "prettier": "^3.0.0",
-    "prettier-plugin-tailwindcss": "^0.2.8"
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11"
   },
   "dependencies": {
     "@nuxt/ui": "^2.11.0",
@@ -23,7 +23,6 @@
     "@vuepic/vue-datepicker": "^5.4.0",
     "@vueuse/core": "^10.2.1",
     "downloadjs": "^1.4.7",
-    "floating-vue": "^2.0.0-beta.24",
     "html-to-image": "^1.11.11",
     "luxon": "^3.3.0",
     "pdfjs": "^2.5.1",
