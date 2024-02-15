@@ -25,6 +25,7 @@ const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
 const formState = ref({
   selectedService: null,
   dates: [],
+  notes: "",
 });
 
 const fetchLiveryServices = async () => {
@@ -84,6 +85,7 @@ const handleSubmit = async () => {
           created_by: user.value.id,
           horse_id: horse.value.id,
           date: formattedDate,
+          notes: formState.value.notes,
           service_id: formState.value.selectedService.id,
           service_name: formState.value.selectedService.name,
           service_price:
@@ -197,6 +199,14 @@ const handleSubmit = async () => {
           />
         </div>
       </div>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+      <textarea
+        rows="3"
+        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        v-model="formState.notes"
+      />
     </div>
 
     <div

@@ -33,7 +33,6 @@ const respondedRequests = computed(() => {
 });
 
 const selectedRequests = useState("selectedRequests", () => []);
-const checked = ref(false);
 const indeterminate = computed(
   () =>
     selectedRequests.value.length > 0 &&
@@ -168,8 +167,13 @@ const indeterminate = computed(
                                 },
                                 { locale: "en-GB" }
                               )
-                            }}
-                          </span>
+                            }} </span
+                          ><br />
+                          <span
+                            v-if="request.notes"
+                            class="text-gray-600 italic"
+                            >{{ request.notes }}</span
+                          >
                         </td>
                         <td
                           class="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3"

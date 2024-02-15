@@ -36,7 +36,7 @@ onMounted(async () => {
     <div
       v-for="task in tasks"
       :key="task.id"
-      class="rounded border-t p-4 w-full"
+      class="rounded border-t p-4 w-full pb-8"
     >
       <p class="font-semibold text-indigo-500 pb-2">
         {{ DateTime.fromISO(task.date).toLocaleString() }} ({{
@@ -44,6 +44,9 @@ onMounted(async () => {
         }})
       </p>
       <p>{{ task.service_name }} for {{ task.horse_id.name }}.</p>
+      <p v-if="task.notes" class="text-gray-600 italic">
+        {{ task.notes }}
+      </p>
     </div>
   </div>
 </template>
