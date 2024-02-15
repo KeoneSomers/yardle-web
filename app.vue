@@ -5,7 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/vue";
 <template>
   <div>
     <NuxtLayout>
-      <NuxtLoadingIndicator />
+      <!-- <NuxtLoadingIndicator /> -->
       <NuxtPage />
     </NuxtLayout>
 

@@ -2,11 +2,11 @@
 import { DateTime } from "luxon";
 
 definePageMeta({
+  layout: "yard",
   middleware: ["require-auth", "require-yard"],
 });
 
 const supabaseClient = useSupabaseClient();
-const user = useSupabaseUser();
 const selectedYard = useSelectedYardId();
 const yard = useState("yard");
 const profile = useState("profile");
@@ -114,14 +114,14 @@ const handleDelete = async (id) => {
 
       <QuickLinks class="mt-6" />
 
-      <div class="shadow-lg border dark:border-gray-700 my-6 rounded-lg">
+      <div class="border dark:border-gray-700 my-6 rounded-lg">
         <div
           v-if="profile && profile.active_role == 1"
           class="p-4 bg-primary-50 dark:bg-primary-950"
         >
           <div class="flex justify-center-center">
             <UIcon
-              name="heroicons-megaphone"
+              name="i-heroicons-megaphone"
               class="h-6 w-6 mr-2 text-primary-500"
             />
             <h1 class="mb-6">Announcements</h1>

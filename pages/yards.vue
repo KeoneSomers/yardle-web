@@ -1,5 +1,6 @@
 <script setup>
 definePageMeta({
+  layout: "basic-logged-in",
   middleware: ["require-auth", "require-no-yard"],
 });
 

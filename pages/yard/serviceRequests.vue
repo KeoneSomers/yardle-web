@@ -2,6 +2,7 @@
 import { DateTime } from "luxon";
 
 definePageMeta({
+  layout: "yard",
   middleware: ["require-auth", "require-yard", "require-yard-owner"],
 });
 

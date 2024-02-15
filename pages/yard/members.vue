@@ -1,5 +1,6 @@
 <script setup>
 definePageMeta({
+  layout: "yard",
   middleware: ["require-auth", "require-yard"],
 });
 

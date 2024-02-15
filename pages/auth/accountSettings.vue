@@ -1,5 +1,6 @@
 <script setup>
 definePageMeta({
+  layout: "basic-logged-in",
   middleware: ["require-auth"],
 });
 
@@ -151,6 +152,9 @@ const handleDelete = async () => {
 <template>
   <div class="md:h-screen md:overflow-y-auto">
     <div class="mx-auto my-4 max-w-7xl px-4 sm:px-6 md:my-20 lg:px-8">
+      <NuxtLink :to="true ? '/yards' : '/yard'">
+        <UButton label="Back" icon="i-heroicons-chevron-left" />
+      </NuxtLink>
       <div class="border-b pb-4 pt-5">
         <p class="text-4xl font-bold">Account Settings</p>
       </div>

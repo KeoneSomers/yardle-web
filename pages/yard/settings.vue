@@ -1,12 +1,10 @@
 <script setup>
-import { DateTime } from "luxon";
 import BillingCycleWidget from "@/components/BillingCycleWidget.vue";
 
 definePageMeta({
+  layout: "yard",
   middleware: ["require-auth", "require-yard", "require-yard-owner"],
 });
-
-const now = ref(DateTime.now());
 
 const client = useSupabaseClient();
 const selectedYard = useSelectedYardId();

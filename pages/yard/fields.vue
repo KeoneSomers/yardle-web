@@ -2,6 +2,7 @@
 import draggable from "vuedraggable";
 
 definePageMeta({
+  layout: "yard",
   middleware: ["require-auth", "require-yard"],
 });
 
