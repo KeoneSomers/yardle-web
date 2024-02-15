@@ -181,44 +181,37 @@ const indeterminate = computed(
                                                                                           > -->
                           <div class="flex justify-end">
                             <UTooltip text="Accept Request">
-                              <button
+                              <UButton
+                                icon="i-heroicons-check-solid"
+                                :ui="{ rounded: 'rounded-full' }"
+                                :color="
+                                  request.status === 'accepted'
+                                    ? 'green'
+                                    : 'gray'
+                                "
                                 @click="
                                   selectedRequest = request;
                                   selectedStatus = 'accepted';
                                   selectedRequests = [];
                                   modalOpen = true;
                                 "
-                                class="mr-2 rounded-full border p-1 hover:bg-gray-50"
-                                :class="{
-                                  'bg-green-500 text-white hover:bg-green-600':
-                                    request.status === 'accepted',
-                                }"
-                              >
-                                <UIcon
-                                  name="i-heroicons-check-solid"
-                                  class="h-5 w-5"
-                                />
-                              </button>
+                                class="mr-2"
+                              />
                             </UTooltip>
                             <UTooltip text="Decline Request">
-                              <button
+                              <UButton
+                                icon="i-heroicons-x-mark-solid"
+                                :ui="{ rounded: 'rounded-full' }"
+                                :color="
+                                  request.status === 'declined' ? 'red' : 'gray'
+                                "
                                 @click="
                                   selectedRequest = request;
                                   selectedStatus = 'declined';
                                   selectedRequests = [];
                                   modalOpen = true;
                                 "
-                                class="rounded-full border p-1 hover:bg-gray-50"
-                                :class="{
-                                  'bg-red-500 text-white hover:bg-red-600':
-                                    request.status === 'declined',
-                                }"
-                              >
-                                <UIcon
-                                  name="i-heroicons-x-mark-solid"
-                                  class="h-5 w-5"
-                                />
-                              </button>
+                              />
                             </UTooltip>
                           </div>
                         </td>
