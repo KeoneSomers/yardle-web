@@ -5,7 +5,7 @@ const inviteLinkModalOpen = ref(false);
 
 const adminLinks = [
   {
-    label: "Upcoming Tasks",
+    label: "Tasks",
     to: "/yard/dashboard",
     icon: "i-heroicons-rectangle-stack",
   },

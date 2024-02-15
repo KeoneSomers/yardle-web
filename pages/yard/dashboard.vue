@@ -32,7 +32,7 @@ onMounted(async () => {
 
 <template>
   <div class="px-4 w-full">
-    <p class="mb-6 mt-5 text-xl">Your upcoming tasks</p>
+    <p class="mb-6 mt-5 text-xl">Your tasks</p>
     <div
       v-for="task in tasks"
       :key="task.id"
