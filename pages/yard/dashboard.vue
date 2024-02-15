@@ -30,21 +30,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <div class="px-4 py-4">
-      <p class="mb-5 mt-5 text-4xl">Your upcoming tasks</p>
-      <div
-        v-for="task in tasks"
-        :key="task.id"
-        class="mb-4 rounded border bg-gray-50 p-4"
-      >
-        <p>
-          Due {{ DateTime.fromISO(task.date).toLocaleString() }} ({{
-            DateTime.fromISO(task.date).toRelativeCalendar()
-          }})
-        </p>
-        <p>{{ task.service_name }} for {{ task.horse_id.name }}.</p>
-      </div>
+  <div class="px-4 w-full">
+    <p class="mb-6 mt-5 text-xl">Your upcoming tasks</p>
+    <div
+      v-for="task in tasks"
+      :key="task.id"
+      class="rounded border-t p-4 w-full"
+    >
+      <p class="font-semibold text-indigo-500 pb-2">
+        {{ DateTime.fromISO(task.date).toLocaleString() }} ({{
+          DateTime.fromISO(task.date).toRelativeCalendar()
+        }})
+      </p>
+      <p>{{ task.service_name }} for {{ task.horse_id.name }}.</p>
     </div>
   </div>
 </template>
