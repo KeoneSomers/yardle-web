@@ -190,12 +190,13 @@ const handleSubmit = async () => {
           <VueDatePicker
             v-model="formState.dates"
             multi-dates
-            :teleport="true"
+            teleport
             :enable-time-picker="false"
             :utc="true"
             required
             auto-apply
             :close-on-auto-apply="false"
+            @click.stop
           />
         </div>
       </div>
