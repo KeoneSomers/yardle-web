@@ -23,6 +23,7 @@ onMounted(async () => {
     .gte("date", start)
     .eq("status", "accepted")
     .eq("horse_id.yard_id", yard_id.value)
+    .filter("canceled_at", "is", null)
     .order("date", { ascending: true });
 
   tasks.value = _tasks;
