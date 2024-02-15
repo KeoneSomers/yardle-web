@@ -1,34 +1,32 @@
-<script setup>
+<script setup lang="ts">
 import { DateTime } from "luxon";
+import type { Database } from "~/types/supabase";
+import type { QueryData } from "@supabase/supabase-js";
 
 definePageMeta({
   layout: "yard",
   middleware: ["require-auth", "require-yard", "require-yard-owner"],
 });
 
-const client = useSupabaseClient();
+type RequestsWithHorseInfo = QueryData<typeof requestsWithHorseInfoQuery>;
+
+const supabase = useSupabaseClient<Database>();
 const yard_id = useSelectedYardId();
+const tasks = ref<RequestsWithHorseInfo>([]);
+const start = DateTime.now().toISODate(); // e.g. 2023-03-15
 
-console.log(yard_id.value);
+const requestsWithHorseInfoQuery = supabase
+  .from("service_requests")
+  .select("*, horses!inner(yard_id, name)")
+  .gte("date", start)
+  .eq("status", "accepted")
+  .eq("horses.yard_id", yard_id.value)
+  .filter("canceled_at", "is", null)
+  .order("date", { ascending: true });
 
-const tasks = ref([]);
-
-onMounted(async () => {
-  const start = DateTime.now().toISODate(); // e.g. 2023-03-15
-
-  console.log(start);
-
-  const { data: _tasks } = await client
-    .from("service_requests")
-    .select("*, horse_id!inner(yard_id, name)")
-    .gte("date", start)
-    .eq("status", "accepted")
-    .eq("horse_id.yard_id", yard_id.value)
-    .filter("canceled_at", "is", null)
-    .order("date", { ascending: true });
-
-  tasks.value = _tasks;
-});
+const { data, error } = await requestsWithHorseInfoQuery;
+if (error) throw error;
+tasks.value = data;
 </script>
 
 <template>
@@ -39,12 +37,14 @@ onMounted(async () => {
       :key="task.id"
       class="rounded border-t p-4 w-full pb-8"
     >
-      <p class="font-semibold text-indigo-500 pb-2">
+      <p v-if="task.date" class="font-semibold text-indigo-500 pb-2">
         {{ DateTime.fromISO(task.date).toLocaleString() }} ({{
           DateTime.fromISO(task.date).toRelativeCalendar()
         }})
       </p>
-      <p>{{ task.service_name }} for {{ task.horse_id.name }}.</p>
+      <p v-if="task.horses">
+        {{ task.service_name }} for {{ task.horses.name }}.
+      </p>
       <p v-if="task.notes" class="text-gray-600 italic">
         {{ task.notes }}
       </p>

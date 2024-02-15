@@ -40,3 +40,9 @@ npm run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+Generate Supabase Types:
+
+```bash
+npx supabase gen types typescript --project-id "nmnocneeuuygbwymgrxl" --schema public > types/supabase.ts
+```
