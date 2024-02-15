@@ -171,16 +171,20 @@ const handleDelete = async () => {
 <template>
   <div
     v-if="horse"
-    class="pb-20 lg:pb-0 relative z-0 flex flex-1 flex-col overflow-y-auto focus:outline-none md:block md:overflow-y-auto lg:order-last"
+    class="pb-20 relative z-0 flex flex-1 flex-col overflow-y-auto focus:outline-none md:block md:overflow-y-auto lg:order-last"
     :class="{ hidden: !viewingHorse }"
   >
-    <UTooltip text="Close Horse Details" class="absolute top-2 right-2">
-      <div
-        class="bg-gray-500 bg-opacity-20 hover:bg-opacity-30 cursor-pointer rounded-lg p-2"
+    <UTooltip
+      text="Close Horse Details"
+      class="absolute top-4 right-4"
+      :popper="{ placement: 'left' }"
+    >
+      <UButton
+        icon="i-heroicons-x-mark"
+        size="lg"
+        class="bg-gray-500 bg-opacity-20 hover:bg-opacity-30 cursor-pointer rounded-lg"
         @click="clearHorseSelection()"
-      >
-        <UIcon name="i-heroicons-x-mark" class="h-6 w-6" />
-      </div>
+      />
     </UTooltip>
 
     <!-- Breadcrumb -->
@@ -286,9 +290,6 @@ const handleDelete = async () => {
           :items="tabs"
           class="mt-6 px-4 sm:px-6 lg:px-8 sm:mt-2 2xl:mt-5 hidden md:block"
         >
-          <!-- <template #item="{ item }">
-            <component :is="item.component" />
-          </template> -->
         </UTabs>
       </article>
     </div>

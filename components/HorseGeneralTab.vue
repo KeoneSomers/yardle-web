@@ -311,10 +311,10 @@ const handleUnassignOwner = async () => {
 
     <div class="mt-10 flex">
       <div>
-        <div class="mr-3 mt-1 rounded-xl bg-blue-100 p-2">
+        <div class="mr-3 mt-1 rounded-xl bg-blue-100 flex items-center">
           <UIcon
             name="i-heroicons-calendar-days"
-            class="h-5 w-5 text-blue-700"
+            class="h-5 w-5 text-blue-700 m-2"
           />
         </div>
       </div>
@@ -326,11 +326,8 @@ const handleUnassignOwner = async () => {
         </p>
       </div>
       <div>
-        <NuxtLink
-          to="/yard/calendar"
-          class="ml-3 mt-1 block cursor-pointer rounded-xl bg-blue-500 p-2 hover:bg-blue-600"
-        >
-          <UIcon name="i-heroicons-arrow-right" class="h-5 w-5 text-white" />
+        <NuxtLink to="/yard/calendar" class="ml-3 mt-1">
+          <UButton icon="i-heroicons-arrow-right" color="blue" />
         </NuxtLink>
       </div>
     </div>
