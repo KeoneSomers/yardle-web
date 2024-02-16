@@ -11,34 +11,18 @@ const toast = useToast();
 
 const formState = ref({
   yardName: "",
-  region: null,
 });
-
-const { data: regions, error: regionsError } = await client
-  .from("regions")
-  .select()
-  .order("name", { ascending: true });
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 const createYard = async () => {
-  if (formState.value.region === null) {
-    toast.add({
-      title: "Error",
-      description: "Please select a region",
-    });
-    loading.value = false;
-    return;
-  }
-
   const { data: newYard, error: createError } = await client
     .from("yards")
     .insert({
       created_by: user.value.id,
       name: capitalizeFirstLetter(formState.value.yardName),
-      region_id: formState.value.region.id,
       invite_code:
         Math.random().toString(36).substring(2, 15) +
         Math.random().toString(36).substring(2, 15),
@@ -110,7 +94,7 @@ const createYard = async () => {
 
   // update local state
   if (yards.value) {
-    yards.value.unshift({ ...newYard, region_id: formState.value.region });
+    yards.value.unshift({ ...newYard });
   } else {
     yards.value = [newYard];
   }
@@ -152,15 +136,11 @@ const handleSubmit = async () => {
       <UInput v-model="formState.yardName" required :autofocus="true" />
     </UFormGroup>
 
-    <UFormGroup label="Region" required>
+    <!-- <UFormGroup label="Region" required>
       <div>
-        <USelectMenu
-          v-model="formState.region"
-          :options="regions"
-          option-attribute="name"
-        />
+        <USelectMenu v-model="formState.region" :options="regions" />
       </div>
-    </UFormGroup>
+    </UFormGroup> -->
 
     <div class="pb-48 flex justify-end space-x-2">
       <UButton label="Create" :loading="loading" type="submit" />
