@@ -1,5 +1,9 @@
 <script setup>
 import { DateTime, Info } from "luxon";
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const mobileMode = breakpoints.smaller("lg");
 
 definePageMeta({
   layout: "yard",
@@ -176,7 +180,7 @@ const handleDelete = async () => {
 
 <template>
   <!-- Mobile Calendar -->
-  <div class="flex-1 px-4 pt-4 lg:hidden lg:pt-0 w-full">
+  <div v-if="mobileMode" class="flex-1 px-4 pt-4 w-full">
     <div class="flex items-center">
       <h2 class="flex-auto text-sm font-semibold text-gray-900">
         {{
@@ -350,7 +354,7 @@ const handleDelete = async () => {
     </section>
   </div>
   <!-- Desktop  -->
-  <div class="hidden lg:flex flex-1 lg:flex-col w-full">
+  <div v-else class="flex flex-1 flex-col w-full">
     <header
       class="flex h-16 items-center justify-between border-b border-gray-200 p-4 lg:flex-none"
     >
@@ -540,7 +544,7 @@ const handleDelete = async () => {
   </div>
 
   <!-- Event Details -->
-  <USlideover v-model="isViewingEventDetails">
+  <USlideover v-if="!mobileMode" v-model="isViewingEventDetails">
     <EventCard
       :event="selectedEvent"
       @edit="() => openEditModal(selectedEvent)"
