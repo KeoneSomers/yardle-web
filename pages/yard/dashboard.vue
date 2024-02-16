@@ -49,5 +49,11 @@ tasks.value = data;
         {{ task.notes }}
       </p>
     </div>
+    <div v-if="!tasks || tasks.length < 1">
+      <p class="mt-6 text-sm">
+        No Tasks today! Service requests that you've accepted will appear here
+        as tasks.
+      </p>
+    </div>
   </div>
 </template>
