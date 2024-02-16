@@ -17,7 +17,7 @@ const start = DateTime.now().toISODate(); // e.g. 2023-03-15
 
 const requestsWithHorseInfoQuery = supabase
   .from("service_requests")
-  .select("id, service_name, date, notes, horse:horses!inner(yard_id, name)")
+  .select("id, service_name, date, notes, horse:horses!inner(name)")
   .gte("date", start)
   .eq("status", "accepted")
   .eq("horses.yard_id", yard_id.value)
