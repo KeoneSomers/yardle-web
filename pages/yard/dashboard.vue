@@ -17,7 +17,7 @@ const start = DateTime.now().toISODate(); // e.g. 2023-03-15
 
 const requestsWithHorseInfoQuery = supabase
   .from("service_requests")
-  .select("*, horses!inner(yard_id, name)")
+  .select("*, horse:horses!inner(yard_id, name)")
   .gte("date", start)
   .eq("status", "accepted")
   .eq("horses.yard_id", yard_id.value)
@@ -42,8 +42,8 @@ tasks.value = data;
           DateTime.fromISO(task.date).toRelativeCalendar()
         }})
       </p>
-      <p v-if="task.horses">
-        {{ task.service_name }} for {{ task.horses.name }}.
+      <p v-if="task.horse">
+        {{ task.service_name }} for {{ task.horse.name }}.
       </p>
       <p v-if="task.notes" class="text-gray-600 italic">
         {{ task.notes }}
