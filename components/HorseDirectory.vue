@@ -78,7 +78,6 @@ const selectHorse = (horseId) => {
 
 <template>
   <div
-    :class="{ hidden: viewingHorse }"
     class="flex flex-shrink-0 flex-col border-r border-gray-200 dark:border-gray-700 md:flex w-full lg:w-96"
     v-if="horses && horses.length > 0"
   >

@@ -1,18 +1,22 @@
 <script setup>
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+
 definePageMeta({
   layout: "yard",
   middleware: ["require-auth", "require-yard"],
 });
 
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const mobileMode = breakpoints.smaller("lg");
 const isOpen = ref(false);
 const selectedHorseId = useState("selectedHorseId");
 const horses = useState("horses");
 const profile = useState("profile");
+const viewingHorse = useState("viewingHorse");
 </script>
 
 <template>
-  <HorseDirectory />
-
+  <HorseDirectory v-if="(mobileMode && !viewingHorse) || !mobileMode" />
   <HorseDetails v-if="selectedHorseId > 0" />
   <div
     v-else-if="horses && horses.length > 0"
