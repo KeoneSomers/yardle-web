@@ -19,7 +19,7 @@ const viewingHorse = useState("viewingHorse");
   <HorseDirectory v-if="(mobileMode && !viewingHorse) || !mobileMode" />
   <HorseDetails v-if="selectedHorseId > 0" />
   <div
-    v-else-if="horses && horses.length > 0"
+    v-else-if="horses && horses.length > 0 && !mobileMode"
     class="flex w-full items-center justify-center"
   >
     <div class="text-center">

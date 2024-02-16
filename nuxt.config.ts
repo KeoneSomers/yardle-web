@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   supabase: {
     redirect: false,
   },
+  devtools: true,
   colorMode: { preference: "light" },
   typescript: {
     shim: false,
