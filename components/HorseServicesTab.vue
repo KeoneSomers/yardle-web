@@ -191,6 +191,27 @@ const handleDelete = async () => {
     class="mx-auto my-6 px-4 sm:px-6 lg:px-8 sm:mt-2 2xl:mt-5"
   >
     <div v-if="viewingHistory === false && viewingInvoces === false">
+      <UAlert
+        icon="i-heroicons-device-phone-mobile"
+        color="primary"
+        variant="soft"
+        title="Try our now IOS app!"
+        description="You can now request services, view your invoices and more on the go with our new app for iPhone."
+        :actions="[
+          {
+            variant: 'solid',
+            color: 'primary',
+            label: 'View on App Store',
+            click: () => {
+              navigateTo('https://apps.apple.com/gb/app/yardle/id6478441857', {
+                target: '_blank',
+                external: true,
+              });
+            },
+          },
+        ]"
+        class="mb-3"
+      />
       <div class="mb-5 border-b pb-5 sm:flex sm:items-center">
         <div class="sm:flex-auto">
           <h1 class="text-xl font-semibold text-gray-900">Services</h1>
