@@ -195,7 +195,7 @@ const handleDelete = async () => {
         icon="i-heroicons-device-phone-mobile"
         color="primary"
         variant="soft"
-        title="Try our now IOS app!"
+        title="Try our new IOS app!"
         description="You can now request services, view your invoices and more on the go with our new app for iPhone."
         :actions="[
           {
