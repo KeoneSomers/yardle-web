@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/generateInvoices",
-      "schedule": "0 4 * * *"
+      "schedule": "0 1 * * *"
     },
     {
       "path": "/api/sendEventEmailReminders",
