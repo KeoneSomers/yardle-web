@@ -57,17 +57,16 @@ export default defineEventHandler(async (event) => {
 
     return DateTime.fromISO(res).toISODate();
   }
-  async function getServiceRequests(billingCycle, startDate, endDate) {
+  async function getMembersServiceRequests(clientId, startDate, endDate) {
     console.log("Running getServiceRequests()");
     const { data, error } = await supabase
       .from("service_requests")
-      .select("*, horse_id!inner(id, yard_id, owner)")
-      .eq("horse_id.yard_id", billingCycle.yard_id.id)
+      .select("*, horse_id!inner(id, yard_id, owner, name)")
+      .eq("horse_id.owner", clientId)
       .gt("date", startDate)
       .lte("date", endDate)
       .filter("status", "eq", "accepted")
-      .filter("canceled_at", "is", null)
-      .not("horse_id.owner", "is", null);
+      .filter("canceled_at", "is", null);
 
     if (error) {
       console.log("Error getting Service Requests", error);
@@ -106,7 +105,7 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
-  // Loop over each billingCycle (1 per yard)
+  // YARD LOOP: Loop over each billingCycle (1 per yard)
   for (const billingCycle of billingCycles) {
     console.log("Proccessing billing cycle: " + billingCycle.id);
 
@@ -126,24 +125,29 @@ export default defineEventHandler(async (event) => {
       continue;
     }
 
-    let requestedServices = await getServiceRequests(
-      billingCycle,
-      startDate,
-      endDate
-    );
-    if (!requestedServices) {
-      console.log("No service requests found");
+    const { data: yardMembers, error: errorYardMembers } = await supabase
+      .from("profiles_yards")
+      .select("profile_id")
+      .eq("yard_id", billingCycle.yard_id.id);
+    if (errorYardMembers) {
+      console.log("Error getting yard members", errorYardMembers);
       continue;
     }
 
-    const uniqueClientIds = [
-      ...new Set(
-        requestedServices.map((serviceRequest) => serviceRequest.horse_id.owner)
-      ),
-    ];
+    // MEMBERS LOOP: Loop over each client (who has made at least 1 service request in this billing cycle)
+    for (const yardMember of yardMembers) {
+      const clientId = yardMember.profile_id;
 
-    // Loop over each client (who has made at least 1 service request in this billing cycle)
-    for (const clientId of uniqueClientIds) {
+      let requestedServices = await getMembersServiceRequests(
+        clientId,
+        startDate,
+        endDate
+      );
+      if (!requestedServices || requestedServices.length === 0) {
+        console.log("No service requests found for this member");
+        continue;
+      }
+
       // Create an invoice record for the client and capture the response
       const newInvoice = await createInvoice(
         billingCycle,
@@ -156,26 +160,34 @@ export default defineEventHandler(async (event) => {
         continue;
       }
 
-      // Loop though all the services that have been requested in this billing cycle (from anyone in the yard)
-      for (const requestedService of requestedServices) {
-        if (requestedService.horse_id.owner === clientId) {
-          requestedService.invoice_id = newInvoice.id;
-          requestedService.horse_id = requestedService.horse_id.id;
-          requestedService.horse_name = requestedService.horse_id.name;
-        }
+      // Insert all the invoice_items records (for this client)
+      const invoiceItems = requestedServices.map((serviceRequest) => {
+        return {
+          created_by: serviceRequest.created_by,
+          canceled_by: serviceRequest.canceled_by,
+          horse_id: serviceRequest.horse_id.id,
+          horse_name: serviceRequest.horse_id.name,
+          service_id: serviceRequest.service_id,
+          date: serviceRequest.date,
+          canceled_at: serviceRequest.canceled_at,
+          service_name: serviceRequest.service_name,
+          service_price: serviceRequest.service_price,
+          accepted: serviceRequest.accepted,
+          booked_late: serviceRequest.booked_late,
+          invoice_id: newInvoice.id,
+          status: serviceRequest.status,
+          status_note: serviceRequest.status_note,
+          notes: serviceRequest.notes,
+        };
+      });
+      const { error: errorInvoiceItemData } = await supabase
+        .from("invoice_items")
+        .insert(invoiceItems);
+      if (errorInvoiceItemData) {
+        console.log("Error creating invoice items", errorInvoiceItemData);
+        continue;
       }
     } // End of client loop
-
-    // Insert all the invoice_items records (for this yard)
-    const { error: errorInvoiceItemData } = await supabase
-      .from("invoice_items")
-      .insert(requestedServices.map(({ id, ...item }) => item));
-
-    if (errorInvoiceItemData) {
-      console.log("Error in invoiceItemData");
-      console.log(errorInvoiceItemData);
-      return;
-    }
   } // end of billing cycle loop
 
   return { result: "ok" };
