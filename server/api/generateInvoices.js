@@ -95,6 +95,32 @@ export default defineEventHandler(async (event) => {
 
     return data;
   }
+  async function createInvoiceItems(invoiceId, requestedServices) {
+    console.log("Running createInvoiceItems()");
+
+    const invoiceItems = requestedServices.map((serviceRequest) => {
+      return {
+        invoice_id: invoiceId,
+        created_by: serviceRequest.created_by,
+        canceled_by: serviceRequest.canceled_by, // TODO: needed? should they not all be null at this point?
+        horse_id: serviceRequest.horse_id.id,
+        horse_name: serviceRequest.horse_id.name,
+        service_id: serviceRequest.service_id,
+        date: serviceRequest.date,
+        canceled_at: serviceRequest.canceled_at, // TODO: needed? should they not all be null at this point?
+        service_name: serviceRequest.service_name,
+        service_price: serviceRequest.service_price,
+        accepted: serviceRequest.accepted, // TODO: needed? should they not all be true at this point?
+        booked_late: serviceRequest.booked_late,
+        status: serviceRequest.status, // TODO: needed? should they not all be true at this point?
+        status_note: serviceRequest.status_note,
+        notes: serviceRequest.notes,
+      }; // BONUS TODO: trim the fat from the services requests table (fields not needed anymore like invoice_id)
+    });
+    const { error } = await supabase.from("invoice_items").insert(invoiceItems);
+
+    return error;
+  }
 
   //====================//
   // MAIN FUNCTION CODE //
@@ -161,30 +187,9 @@ export default defineEventHandler(async (event) => {
       }
 
       // Insert all the invoice_items records (for this client)
-      const invoiceItems = requestedServices.map((serviceRequest) => {
-        return {
-          created_by: serviceRequest.created_by,
-          canceled_by: serviceRequest.canceled_by,
-          horse_id: serviceRequest.horse_id.id,
-          horse_name: serviceRequest.horse_id.name,
-          service_id: serviceRequest.service_id,
-          date: serviceRequest.date,
-          canceled_at: serviceRequest.canceled_at,
-          service_name: serviceRequest.service_name,
-          service_price: serviceRequest.service_price,
-          accepted: serviceRequest.accepted,
-          booked_late: serviceRequest.booked_late,
-          invoice_id: newInvoice.id,
-          status: serviceRequest.status,
-          status_note: serviceRequest.status_note,
-          notes: serviceRequest.notes,
-        };
-      });
-      const { error: errorInvoiceItemData } = await supabase
-        .from("invoice_items")
-        .insert(invoiceItems);
-      if (errorInvoiceItemData) {
-        console.log("Error creating invoice items", errorInvoiceItemData);
+      const error = await createInvoiceItems(newInvoice.id, requestedServices);
+      if (error) {
+        console.log("Error creating invoice items");
         continue;
       }
     } // End of client loop
