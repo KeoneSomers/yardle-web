@@ -14,24 +14,15 @@ const selectedYard = useSelectedYardId();
 
 // this is not ssr - needs to be cleaned up
 onMounted(async () => {
-  // set profiles selected yard to null
-  // await client
-  //   .from("profiles")
-  //   .update({ selected_yard: null, active_role: null })
-  //   .eq("id", user.value.id);
+  const { data, error: yardsError } = await client
+    .from("yards")
+    .select("id, name, created_by, test: profiles_yards!inner (profile_id)")
+    .eq("profiles_yards.profile_id", user.value.id)
+    .order("id", { ascending: false });
 
-  // get yards
-  const { data: profile, error } = await client
-    .from("profiles")
-    .select("yards!profiles_yards(*, region_id(*))")
-    .eq("id", user.value.id) // TODO: Error here: Cannot read properties of null (reading 'id') - happens when creating a new user
-    .order("created_at", {
-      foreignTable: "yards",
-      ascending: false,
-    })
-    .single();
+  yards.value = data;
 
-  yards.value = profile.yards;
+  console.log(yards.value);
 });
 
 const handleSelectYard = async (yardId) => {
@@ -167,7 +158,7 @@ const handleDelete = async () => {
 <template>
   <div v-if="yards && yards.length > 0" class="md:h-screen md:overflow-y-auto">
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between sm:my-10 md:my-14">
+      <div class="flex items-center justify-between sm:mt-10 md:mt-14">
         <div class="min-w-0 flex-1">
           <h2
             class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
@@ -175,41 +166,25 @@ const handleDelete = async () => {
             Your Yards
           </h2>
         </div>
-        <div class="mt-4 flex md:ml-4 md:mt-0">
-          <!-- <button
-                                                                                    type="button"
-                                                                                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                                                                >
-                                                                                    Join a Yard
-                                                                                </button> -->
-          <button
-            @click="isOpen = true"
-            type="button"
-            class="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            Create a Yard
-          </button>
+        <div class="mt-4 flex md:ml-4 md:mt-4">
+          <UButton @click="isOpen = true" size="lg"> Create a Yard </UButton>
         </div>
       </div>
       <div class="py-4">
         <div
           v-if="yards && yards.length > 0"
-          class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3"
+          class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
         >
           <div
             v-for="yard in yards"
             :key="yard.id"
-            class="flex h-28 cursor-pointer rounded border bg-gray-50 p-4 transition-all duration-300 ease-in-out hover:bg-indigo-50 hover:shadow"
+            class="flex h-36 cursor-pointer rounded-2xl border shadow bg-white p-4 transition-all duration-300 ease-in-out hover:bg-gray-50 hover:shadow"
             @click.self="handleSelectYard(yard.id)"
           >
             <div
               @click.self="handleSelectYard(yard.id)"
               class="flex-1 font-bold text-gray-700"
             >
-              <!-- <UIcon
-                :name="yard.region_id.flag_icon"
-                class="-mt-1 mr-1 block h-4 w-4 flex-shrink-0"
-              /> -->
               {{ yard.name }}
             </div>
             <!-- TODO: this should be based off role and not created_by -->
@@ -234,6 +209,7 @@ const handleDelete = async () => {
               >
                 <UButton
                   color="white"
+                  variant="ghost"
                   trailing-icon="i-heroicons-ellipsis-vertical-20-solid"
                 />
               </UDropdown>
