@@ -1,7 +1,33 @@
 import { DateTime } from "luxon";
+import { createClient } from "@supabase/supabase-js";
 
 export default defineEventHandler(async (event) => {
-  const { offset, nextBillingDate, billingCycle } = await readBody(event);
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+  const { offset, nextBillingDate, yardId } = await readBody(event);
+
+  async function getBillingCycle() {
+    console.log("Running getBillingCycle()");
+    const { data, error } = await supabase
+      .from("yard_billing_cycles")
+      .select("*")
+      .eq("yard_id", yardId)
+      .single();
+
+    if (error) {
+      console.log("Error in getBillingCycle()", error);
+      return null;
+    }
+
+    return data;
+  }
+
+  const billingCycle = await getBillingCycle();
+  if (!billingCycle) {
+    return null;
+  }
 
   // offset prop - how many billing cycles to go back (last billing cycle = 1, 2nd last = 2, etc.)
   const next = DateTime.fromISO(nextBillingDate);

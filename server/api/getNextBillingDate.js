@@ -1,7 +1,33 @@
 import { DateTime } from "luxon";
+import { createClient } from "@supabase/supabase-js";
 
 export default defineEventHandler(async (event) => {
-  const { billingCycle } = await readBody(event);
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+  const { yardId } = await readBody(event);
+
+  async function getBillingCycle() {
+    console.log("Running getBillingCycle()");
+    const { data, error } = await supabase
+      .from("yard_billing_cycles")
+      .select("*")
+      .eq("yard_id", yardId)
+      .single();
+
+    if (error) {
+      console.log("Error in getBillingCycle()", error);
+      return null;
+    }
+
+    return data;
+  }
+
+  const billingCycle = await getBillingCycle();
+  if (!billingCycle) {
+    return null;
+  }
 
   const now = DateTime.utc();
   // console.log(now);

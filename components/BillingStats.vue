@@ -14,37 +14,10 @@ const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
 
 const serviceRequestsLog = useState("service_requests");
 
-// init with fallback values
-const billingCycle = ref({
-  yard_id: selectedYard.value,
-  every: 1, // interval
-  period: 2, // weekly or monthly
-  on_the: 2, // first or last - month only
-  day: 1, // day, monday, tuesday, wednesday, etc.
-  starting_from: null, // the date the billing will start
-});
-
-// TODO: fetch billing cycle info for this yard from db
-const getBillingCycle = async () => {
-  await useAsyncData("billingCycle", async () => {
-    const { data, error } = await client
-      .from("yard_billing_cycles")
-      .select()
-      .eq("yard_id", selectedYard.value)
-      .single();
-
-    if (data) {
-      billingCycle.value = data;
-    }
-  });
-};
-
-await getBillingCycle();
-
 const { data: _nextBillingDate } = await useFetch("/api/getNextBillingDate", {
   method: "POST",
   body: {
-    billingCycle: billingCycle.value,
+    yardId: selectedYard.value,
   },
 });
 nextBillingDate.value = DateTime.fromISO(_nextBillingDate.value); // TODO: do this in the line above (single line (if you can))
@@ -57,7 +30,7 @@ const { data: _previousBillingDate } = await useFetch(
     body: {
       offset: 1,
       nextBillingDate: _nextBillingDate.value,
-      billingCycle: billingCycle.value,
+      yardId: selectedYard.value,
     },
   }
 );

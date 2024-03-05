@@ -8,50 +8,48 @@ export default defineEventHandler(async (event) => {
   //==================//
   // DELARE FUNCTIONS //
   //==================//
-  async function getBillingCycles() {
-    console.log("Running getBillingCycles()");
-    const { data, error } = await supabase
-      .from("yard_billing_cycles")
-      .select("*, yard_id!inner(id, name)");
+  async function getYards() {
+    console.log("Running getYards()");
+    const { data, error } = await supabase.from("yards").select("id");
 
     if (error) {
-      console.log("Error in billingCycles", error);
+      console.log("Error in getYards()", error);
       return null;
     }
 
     return data;
   }
-  async function getBillingCycleNextBillingDate(billingCycle) {
-    console.log("Running getBillingCycleNextBillingDate()");
+  async function getCurrentCycleEndDate(yardId) {
+    console.log("Running getCurrentCycleEndDate()");
 
     const res = await $fetch("/api/getNextBillingDate", {
       method: "POST",
       body: {
-        billingCycle: billingCycle,
+        yardId: yardId,
       },
     });
 
     if (!res) {
-      console.log("Error in getBillingCycleNextBillingDate");
+      console.log("Error in getCurrentCycleEndDate");
       return null;
     }
 
     return DateTime.fromISO(res).toISODate();
   }
-  async function getBillingCycleStartDate(billingCycle) {
-    console.log("Running getBillingCycleStartDate()");
+  async function getCurrentCycleStartDate(yardId) {
+    console.log("Running getCurrentCycleStartDate()");
 
     const res = await $fetch("/api/getPreviousBillingDate", {
       method: "POST",
       body: {
         offset: 1,
         nextBillingDate: endDate,
-        billingCycle: billingCycle,
+        yardId: yardId,
       },
     });
 
     if (!res) {
-      console.log("Error in getBillingCycleStartDate");
+      console.log("Error in getCurrentCycleStartDate");
       return null;
     }
 
@@ -75,12 +73,12 @@ export default defineEventHandler(async (event) => {
 
     return data;
   }
-  async function createInvoice(billingCycle, clientId, startDate, endDate) {
+  async function createInvoice(yardId, clientId, startDate, endDate) {
     console.log("Running createInvoice()");
     const { data, error } = await supabase
       .from("invoices")
       .insert({
-        yard_id: billingCycle.yard_id.id,
+        yard_id: yardId,
         client_id: clientId,
         start_date: startDate,
         end_date: endDate,
@@ -125,17 +123,17 @@ export default defineEventHandler(async (event) => {
   //====================//
   // MAIN FUNCTION CODE //
   //====================//
-  const billingCycles = await getBillingCycles();
-  if (!billingCycles) {
-    console.log("No billing cycles found");
+  const yards = await getYards();
+  if (!yards) {
+    console.log("No yards found");
     return;
   }
 
-  // YARD LOOP: Loop over each billingCycle (1 per yard)
-  for (const billingCycle of billingCycles) {
-    console.log("Proccessing billing cycle: " + billingCycle.id);
+  // YARD LOOP
+  for (const yard of yards) {
+    console.log("Proccessing yard: " + yard.id);
 
-    const endDate = await getBillingCycleNextBillingDate(billingCycle);
+    const endDate = await getCurrentCycleEndDate(yard.id);
     if (!endDate) {
       console.log("No end date found");
       continue;
@@ -145,7 +143,7 @@ export default defineEventHandler(async (event) => {
       continue;
     }
 
-    const startDate = await getBillingCycleStartDate(billingCycle);
+    const startDate = await getCurrentCycleStartDate(yard.id);
     if (!startDate) {
       console.log("No start date found");
       continue;
@@ -154,7 +152,7 @@ export default defineEventHandler(async (event) => {
     const { data: yardMembers, error: errorYardMembers } = await supabase
       .from("profiles_yards")
       .select("profile_id")
-      .eq("yard_id", billingCycle.yard_id.id);
+      .eq("yard_id", yard.id);
     if (errorYardMembers) {
       console.log("Error getting yard members", errorYardMembers);
       continue;
@@ -176,7 +174,7 @@ export default defineEventHandler(async (event) => {
 
       // Create an invoice record for the client and capture the response
       const newInvoice = await createInvoice(
-        billingCycle,
+        yard.id,
         clientId,
         startDate,
         endDate
