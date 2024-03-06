@@ -4,7 +4,7 @@ import { DateTime } from "luxon";
 const selectedYard = useSelectedYardId();
 const nextBillingDate = ref(null);
 const previousBillingDate = ref(null);
-const client = useSupabaseClient();
+const supabase = useSupabaseClient();
 const yard = useState("yard");
 
 const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
@@ -14,27 +14,28 @@ const currencyFormatter = Intl.NumberFormat(yard.value.region.locale_code, {
 
 const serviceRequestsLog = useState("service_requests");
 
-const { data: _nextBillingDate } = await useFetch("/api/getNextBillingDate", {
-  method: "POST",
-  body: {
-    yardId: selectedYard.value,
-  },
-});
-nextBillingDate.value = DateTime.fromISO(_nextBillingDate.value); // TODO: do this in the line above (single line (if you can))
-
-// previousBillingDate.value = await getPreviousBillingDate(1);
-const { data: _previousBillingDate } = await useFetch(
-  "/api/getPreviousBillingDate",
+const { data: _nextBillingDate } = await supabase.functions.invoke(
+  "get-next-billing-date",
   {
-    method: "POST",
     body: {
-      offset: 1,
-      nextBillingDate: _nextBillingDate.value,
       yardId: selectedYard.value,
     },
   }
 );
-previousBillingDate.value = DateTime.fromISO(_previousBillingDate.value); // TODO: do this in the line above (single line (if you can))
+nextBillingDate.value = DateTime.fromISO(_nextBillingDate); // TODO: do this in the line above (single line (if you can))
+
+const { data: _previousBillingDate } = await supabase.functions.invoke(
+  "get-previous-billing-date",
+  {
+    body: {
+      offset: 1,
+      nextBillingDate: _nextBillingDate,
+      yardId: selectedYard.value,
+    },
+  }
+);
+console.log(_previousBillingDate);
+previousBillingDate.value = DateTime.fromISO(_previousBillingDate); // TODO: do this in the line above (single line (if you can))
 
 const thisWeekServices = ref(null);
 const thisPeriodsServices = ref(null);

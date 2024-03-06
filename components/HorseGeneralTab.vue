@@ -15,155 +15,155 @@ const todaysDateString = DateTime.fromMillis(DateTime.now().ts)
   .toISO()
   .slice(0, 10);
 
-const getLastAndNextDates = async (days) => {
-  let nextDateIndexesByDiff = [];
-  let prevDateIndexesByDiff = [];
+// const getLastAndNextDates = async (days) => {
+//   let nextDateIndexesByDiff = [];
+//   let prevDateIndexesByDiff = [];
 
-  for (var i = 0; i < days.length; i++) {
-    var thisDate = DateTime.fromISO(days[i].date_time);
-    var curDiff = DateTime.now() - thisDate;
+//   for (var i = 0; i < days.length; i++) {
+//     var thisDate = DateTime.fromISO(days[i].date_time);
+//     var curDiff = DateTime.now() - thisDate;
 
-    curDiff < 0
-      ? nextDateIndexesByDiff.push([i, curDiff])
-      : prevDateIndexesByDiff.push([i, curDiff]);
-  }
+//     curDiff < 0
+//       ? nextDateIndexesByDiff.push([i, curDiff])
+//       : prevDateIndexesByDiff.push([i, curDiff]);
+//   }
 
-  nextDateIndexesByDiff.sort(function (a, b) {
-    return a[1] < b[1];
-  });
-  prevDateIndexesByDiff.sort(function (a, b) {
-    return a[1] > b[1];
-  });
+//   nextDateIndexesByDiff.sort(function (a, b) {
+//     return a[1] < b[1];
+//   });
+//   prevDateIndexesByDiff.sort(function (a, b) {
+//     return a[1] > b[1];
+//   });
 
-  let prevDate;
-  let nextDate;
+//   let prevDate;
+//   let nextDate;
 
-  if (prevDateIndexesByDiff.length > 0) {
-    prevDate = days[prevDateIndexesByDiff[prevDateIndexesByDiff.length - 1][0]];
-  }
+//   if (prevDateIndexesByDiff.length > 0) {
+//     prevDate = days[prevDateIndexesByDiff[prevDateIndexesByDiff.length - 1][0]];
+//   }
 
-  if (nextDateIndexesByDiff.length > 0) {
-    nextDate = days[nextDateIndexesByDiff[0][0]];
-  }
+//   if (nextDateIndexesByDiff.length > 0) {
+//     nextDate = days[nextDateIndexesByDiff[0][0]];
+//   }
 
-  return { prevDate, nextDate };
-};
+//   return { prevDate, nextDate };
+// };
 
-const farrierLastAndNext = ref({
-  prevDate: undefined,
-  nextDate: undefined,
-});
+// const farrierLastAndNext = ref({
+//   prevDate: undefined,
+//   nextDate: undefined,
+// });
 
-const dentistLastAndNext = ref({
-  prevDate: undefined,
-  nextDate: undefined,
-});
+// const dentistLastAndNext = ref({
+//   prevDate: undefined,
+//   nextDate: undefined,
+// });
 
-const wormingLastAndNext = ref({
-  prevDate: undefined,
-  nextDate: undefined,
-});
+// const wormingLastAndNext = ref({
+//   prevDate: undefined,
+//   nextDate: undefined,
+// });
 
-const vaccinationsLastAndNext = ref({
-  prevDate: undefined,
-  nextDate: undefined,
-});
-const chiropractorLastAndNext = ref({
-  prevDate: undefined,
-  nextDate: undefined,
-});
+// const vaccinationsLastAndNext = ref({
+//   prevDate: undefined,
+//   nextDate: undefined,
+// });
+// const chiropractorLastAndNext = ref({
+//   prevDate: undefined,
+//   nextDate: undefined,
+// });
 
-watchEffect(async () => {
-  farrierLastAndNext.value = {
-    prevDate: undefined,
-    nextDate: undefined,
-  };
-  await useAsyncData(String(horse.value.id + "farrier"), async () => {
-    const { data, error } = await client
-      .from("calendar_events")
-      .select("*, calendar_events_horses!inner(horse_id)")
-      .eq("yard_id", yard.value.id)
-      .eq("type", 3)
-      .eq("calendar_events_horses.horse_id", horse.value.id)
-      .order("date_time", { ascending: true });
+// watchEffect(async () => {
+//   farrierLastAndNext.value = {
+//     prevDate: undefined,
+//     nextDate: undefined,
+//   };
+//   await useAsyncData(String(horse.value.id + "farrier"), async () => {
+//     const { data, error } = await client
+//       .from("calendar_events")
+//       .select("*, calendar_events_horses!inner(horse_id)")
+//       .eq("yard_id", yard.value.id)
+//       .eq("type", 3)
+//       .eq("calendar_events_horses.horse_id", horse.value.id)
+//       .order("date_time", { ascending: true });
 
-    if (!error) {
-      farrierLastAndNext.value = await getLastAndNextDates(data);
-    }
-  });
+//     if (!error) {
+//       farrierLastAndNext.value = await getLastAndNextDates(data);
+//     }
+//   });
 
-  dentistLastAndNext.value = {
-    prevDate: undefined,
-    nextDate: undefined,
-  };
-  await useAsyncData(String(horse.value.id + "dentist"), async () => {
-    const { data, error } = await client
-      .from("calendar_events")
-      .select("*, calendar_events_horses!inner(horse_id)")
-      .eq("yard_id", yard.value.id)
-      .eq("type", 5)
-      .eq("calendar_events_horses.horse_id", horse.value.id)
-      .order("date_time", { ascending: true });
+//   dentistLastAndNext.value = {
+//     prevDate: undefined,
+//     nextDate: undefined,
+//   };
+//   await useAsyncData(String(horse.value.id + "dentist"), async () => {
+//     const { data, error } = await client
+//       .from("calendar_events")
+//       .select("*, calendar_events_horses!inner(horse_id)")
+//       .eq("yard_id", yard.value.id)
+//       .eq("type", 5)
+//       .eq("calendar_events_horses.horse_id", horse.value.id)
+//       .order("date_time", { ascending: true });
 
-    if (!error) {
-      dentistLastAndNext.value = await getLastAndNextDates(data);
-    }
-  });
+//     if (!error) {
+//       dentistLastAndNext.value = await getLastAndNextDates(data);
+//     }
+//   });
 
-  wormingLastAndNext.value = {
-    prevDate: undefined,
-    nextDate: undefined,
-  };
-  await useAsyncData(String(horse.value.id + "worming"), async () => {
-    const { data, error } = await client
-      .from("calendar_events")
-      .select("*, calendar_events_horses!inner(horse_id)")
-      .eq("yard_id", yard.value.id)
-      .eq("type", 2)
-      .eq("calendar_events_horses.horse_id", horse.value.id)
-      .order("date_time", { ascending: true });
+//   wormingLastAndNext.value = {
+//     prevDate: undefined,
+//     nextDate: undefined,
+//   };
+//   await useAsyncData(String(horse.value.id + "worming"), async () => {
+//     const { data, error } = await client
+//       .from("calendar_events")
+//       .select("*, calendar_events_horses!inner(horse_id)")
+//       .eq("yard_id", yard.value.id)
+//       .eq("type", 2)
+//       .eq("calendar_events_horses.horse_id", horse.value.id)
+//       .order("date_time", { ascending: true });
 
-    if (!error) {
-      wormingLastAndNext.value = await getLastAndNextDates(data);
-    }
-  });
+//     if (!error) {
+//       wormingLastAndNext.value = await getLastAndNextDates(data);
+//     }
+//   });
 
-  vaccinationsLastAndNext.value = {
-    prevDate: undefined,
-    nextDate: undefined,
-  };
-  await useAsyncData(String(horse.value.id + "vaccination"), async () => {
-    const { data, error } = await client
-      .from("calendar_events")
-      .select("*, calendar_events_horses!inner(horse_id)")
-      .eq("yard_id", yard.value.id)
-      .eq("type", 4)
-      .eq("calendar_events_horses.horse_id", horse.value.id)
-      .order("date_time", { ascending: true });
+//   vaccinationsLastAndNext.value = {
+//     prevDate: undefined,
+//     nextDate: undefined,
+//   };
+//   await useAsyncData(String(horse.value.id + "vaccination"), async () => {
+//     const { data, error } = await client
+//       .from("calendar_events")
+//       .select("*, calendar_events_horses!inner(horse_id)")
+//       .eq("yard_id", yard.value.id)
+//       .eq("type", 4)
+//       .eq("calendar_events_horses.horse_id", horse.value.id)
+//       .order("date_time", { ascending: true });
 
-    if (!error) {
-      vaccinationsLastAndNext.value = await getLastAndNextDates(data);
-    }
-  });
+//     if (!error) {
+//       vaccinationsLastAndNext.value = await getLastAndNextDates(data);
+//     }
+//   });
 
-  chiropractorLastAndNext.value = {
-    prevDate: undefined,
-    nextDate: undefined,
-  };
-  await useAsyncData(String(horse.value.id + "chiropractor"), async () => {
-    const { data, error } = await client
-      .from("calendar_events")
-      .select("*, calendar_events_horses!inner(horse_id)")
-      .eq("yard_id", yard.value.id)
-      .eq("type", 6)
-      .eq("calendar_events_horses.horse_id", horse.value.id)
-      .order("date_time", { ascending: true });
+//   chiropractorLastAndNext.value = {
+//     prevDate: undefined,
+//     nextDate: undefined,
+//   };
+//   await useAsyncData(String(horse.value.id + "chiropractor"), async () => {
+//     const { data, error } = await client
+//       .from("calendar_events")
+//       .select("*, calendar_events_horses!inner(horse_id)")
+//       .eq("yard_id", yard.value.id)
+//       .eq("type", 6)
+//       .eq("calendar_events_horses.horse_id", horse.value.id)
+//       .order("date_time", { ascending: true });
 
-    if (!error) {
-      chiropractorLastAndNext.value = await getLastAndNextDates(data);
-    }
-  });
-});
+//     if (!error) {
+//       chiropractorLastAndNext.value = await getLastAndNextDates(data);
+//     }
+//   });
+// });
 
 const handleUnassignOwner = async () => {
   const { data, error } = await client
@@ -309,7 +309,7 @@ const handleUnassignOwner = async () => {
       </div>
     </dl>
 
-    <div class="mt-10 flex">
+    <div v-if="false" class="mt-10 flex">
       <div>
         <div class="mr-3 mt-1 rounded-xl bg-blue-100 flex items-center">
           <UIcon
@@ -333,6 +333,7 @@ const handleUnassignOwner = async () => {
     </div>
 
     <dl
+      v-if="false"
       class="mt-3 grid grid-cols-1 gap-x-4 gap-y-8 rounded-xl border dark:border-gray-700 p-4 sm:grid-cols-2"
     >
       <!-- Farrier -->
