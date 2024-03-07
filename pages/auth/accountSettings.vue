@@ -131,12 +131,10 @@ const handleDelete = async () => {
       // TODO: in future - do a proper cleanup of the user's data
 
       // remove auth account
-      const { result } = await $fetch("/api/deleteUserAccount", {
-        method: "post",
-        body: { userId: user.value.id },
-      });
+      const { data: response } =
+        await client.functions.invoke("delete-account");
 
-      if (result === "success") {
+      if (response.message === "User deleted successfully") {
         await client.auth.signOut();
         await navigateTo("/");
       } else {

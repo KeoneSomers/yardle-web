@@ -1,4 +1,6 @@
 <script setup>
+import { DateTime } from "luxon";
+
 // super admin page
 
 definePageMeta({
@@ -30,6 +32,38 @@ onMounted(async () => {
   } else {
     feedback.value = data;
   }
+
+  // const { data: requests, error: errorRequests } = await supabase
+  //   .from("service_requests")
+  //   .select("*, horse_id!inner(id, yard_id, owner, name)")
+  //   .eq("horse_id.owner", "13957855-6f61-4a0b-b2fe-69391fb38c4a");
+  // // .lte("id", 100);
+
+  // console.log(requests, errorRequests);
+
+  const { data: dd1, error: ee1 } = await supabase.functions.invoke(
+    "get-next-billing-date",
+    {
+      body: {
+        yardId: 136,
+      },
+    }
+  );
+
+  console.log(dd1, ee1);
+
+  const { data: dd, error: ee } = await supabase.functions.invoke(
+    "get-previous-billing-date",
+    {
+      body: {
+        offset: 1,
+        nextBillingDate: dd1,
+        yardId: 136,
+      },
+    }
+  );
+
+  console.log(dd, ee);
 });
 
 const sendTestEmail = async () => {
@@ -72,7 +106,8 @@ const handleSendEventEmailReminders = async () => {
 const updateInvoiceItemHorseNames = async () => {
   const { data: data1, error: error1 } = await supabase
     .from("invoice_items")
-    .select("horse_id(id, name)");
+    .select("id, horse_id, horse_name")
+    .filter("horse_name", "is", null);
 
   console.log(data1, error1);
 
@@ -81,10 +116,17 @@ const updateInvoiceItemHorseNames = async () => {
   }
 
   for (const item of data1) {
+    // get the horse name
+    const { data: data, error: error } = await supabase
+      .from("horses")
+      .select("id, name")
+      .eq("id", item.horse_id)
+      .single();
+
     const { data: data2, error: error2 } = await supabase
       .from("invoice_items")
-      .update({ horse_name: item.horse_id.name })
-      .eq("horse_id", item.horse_id.id);
+      .update({ horse_name: data.name })
+      .eq("id", item.id);
 
     console.log(data2, error2);
 
@@ -98,7 +140,7 @@ const updateInvoiceItemHorseNames = async () => {
 <template>
   <div class="p-10">
     <h1 class="mb-10 text-3xl">Admin Page</h1>
-    <button
+    <!-- <button
       @click="updateInvoiceItemHorseNames"
       class="my-4 mr-4 rounded bg-indigo-500 p-4 text-white"
     >
@@ -117,7 +159,7 @@ const updateInvoiceItemHorseNames = async () => {
       class="my-4 rounded bg-blue-500 p-4 text-white"
     >
       Manually Send event email reminders
-    </button>
+    </button> -->
     <div class="font-fold my-5 text-xl">Feedback</div>
     <div
       v-for="(item, index) in feedback"
