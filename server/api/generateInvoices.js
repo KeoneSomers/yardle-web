@@ -10,7 +10,9 @@ export default defineEventHandler(async (event) => {
   //==================//
   async function getYards() {
     console.log("Running getYards()");
-    const { data, error } = await supabase.from("yards").select("id");
+    const { data, error } = await supabase
+      .from("yards")
+      .select("id, yard_billing_cycles!inner(id)"); // using this inner join to only get yards that have a billing cycle
 
     if (error) {
       console.log("Error in getYards()", error);
@@ -38,7 +40,7 @@ export default defineEventHandler(async (event) => {
 
     return DateTime.fromISO(data).toISODate();
   }
-  async function getCurrentCycleStartDate(yardId) {
+  async function getCurrentCycleStartDate(yardId, endDate) {
     console.log("Running getCurrentCycleStartDate()");
 
     const { data, error } = await supabase.functions.invoke(
@@ -138,6 +140,7 @@ export default defineEventHandler(async (event) => {
     console.log("Proccessing yard: " + yard.id);
 
     const endDate = await getCurrentCycleEndDate(yard.id);
+    console.log("End date: " + endDate);
     if (!endDate) {
       console.log("No end date found");
       continue;
@@ -147,10 +150,8 @@ export default defineEventHandler(async (event) => {
       continue;
     }
 
-    console.log("End date: " + endDate);
+    const startDate = await getCurrentCycleStartDate(yard.id, endDate);
     console.log("Start date: " + startDate);
-
-    const startDate = await getCurrentCycleStartDate(yard.id);
     if (!startDate) {
       console.log("No start date found");
       continue;
