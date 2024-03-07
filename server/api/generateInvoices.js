@@ -22,38 +22,42 @@ export default defineEventHandler(async (event) => {
   async function getCurrentCycleEndDate(yardId) {
     console.log("Running getCurrentCycleEndDate()");
 
-    const res = await $fetch("/api/getNextBillingDate", {
-      method: "POST",
-      body: {
-        yardId: yardId,
-      },
-    });
+    const { data, error } = await supabase.functions.invoke(
+      "get-next-billing-date",
+      {
+        body: {
+          yardId: yardId,
+        },
+      }
+    );
 
-    if (!res) {
+    if (error) {
       console.log("Error in getCurrentCycleEndDate");
       return null;
     }
 
-    return DateTime.fromISO(res).toISODate();
+    return DateTime.fromISO(data).toISODate();
   }
   async function getCurrentCycleStartDate(yardId) {
     console.log("Running getCurrentCycleStartDate()");
 
-    const res = await $fetch("/api/getPreviousBillingDate", {
-      method: "POST",
-      body: {
-        offset: 1,
-        nextBillingDate: endDate,
-        yardId: yardId,
-      },
-    });
+    const { data, error } = await supabase.functions.invoke(
+      "get-previous-billing-date",
+      {
+        body: {
+          offset: 1,
+          nextBillingDate: endDate,
+          yardId: yardId,
+        },
+      }
+    );
 
-    if (!res) {
+    if (error) {
       console.log("Error in getCurrentCycleStartDate");
       return null;
     }
 
-    return DateTime.fromISO(res).toISODate();
+    return DateTime.fromISO(data).toISODate();
   }
   async function getMembersServiceRequests(clientId, startDate, endDate) {
     console.log("Running getServiceRequests()");
@@ -142,6 +146,9 @@ export default defineEventHandler(async (event) => {
       console.log("Not the next billing date");
       continue;
     }
+
+    console.log("End date: " + endDate);
+    console.log("Start date: " + startDate);
 
     const startDate = await getCurrentCycleStartDate(yard.id);
     if (!startDate) {
