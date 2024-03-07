@@ -168,7 +168,7 @@ const handleDelete = async (id) => {
             }}</small>
             <p class="whitespace-pre-wrap">{{ announcement.body }}</p>
           </div>
-          <div v-if="profile.active_role == 1">
+          <div v-if="profile && profile.active_role == 1">
             <UDropdown :items="dropdownItems(announcement)">
               <UIcon name="i-heroicons-ellipsis-vertical" />
             </UDropdown>

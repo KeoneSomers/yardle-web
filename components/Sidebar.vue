@@ -181,6 +181,7 @@ const handleUnselectYard = async () => {
               /> -->
               <div class="truncate">
                 <p
+                  v-if="yard"
                   class="text-md truncate font-bold text-gray-600 dark:text-white"
                 >
                   {{ yard.name }}
