@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const faqs = [
   {
     label: "What is Yardle?",
@@ -47,7 +47,9 @@ const faqs = [
         >
           Frequently asked questions
         </h2>
-        <UAccordion color="indigo" variant="solid" size="xl" :items="faqs" />
+        <ClientOnly>
+          <UAccordion color="indigo" variant="solid" size="xl" :items="faqs" />
+        </ClientOnly>
       </div>
     </div>
   </div>
