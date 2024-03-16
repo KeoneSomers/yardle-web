@@ -46,11 +46,9 @@ await setProfile();
     <div class="h-14 col-span-2">
       <Navbar />
     </div>
-    <div v-if="!mobileMode" class="w-72">
-      <Sidebar />
-    </div>
-    <div v-else class="w-0">
-      <USlideover v-model="sidebarOpen">
+    <div class="w-0 lg:w-72">
+      <Sidebar v-if="mobileMode === false" />
+      <USlideover v-else v-model="sidebarOpen">
         <Sidebar />
       </USlideover>
     </div>
