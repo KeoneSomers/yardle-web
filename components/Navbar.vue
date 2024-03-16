@@ -32,7 +32,7 @@ const items = [
 
 <template>
   <div
-    class="z-10 flex h-14 items-center justify-between border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 px-4 py-1.5 backdrop-blur bg-opacity-50"
+    class="flex h-14 items-center justify-between border-b border-gray-200 px-4"
   >
     <div>
       <Logo class="h-6 w-8 dark:hidden" />

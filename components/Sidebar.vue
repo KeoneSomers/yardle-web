@@ -149,7 +149,7 @@ const handleUnselectYard = async () => {
 <template>
   <!-- Sidebar component, swap this element with another sidebar if you like -->
   <div
-    class="flex min-h-0 flex-1 flex-col border-r border-gray-200 dark:border-gray-700"
+    class="flex min-h-full flex-1 flex-col border-r border-gray-200 dark:border-gray-700"
   >
     <div class="flex flex-1 flex-col overflow-y-auto pb-4">
       <div
@@ -170,9 +170,7 @@ const handleUnselectYard = async () => {
       </div>
       <nav class="flex-1" aria-label="Sidebar">
         <!-- yard widget -->
-        <div
-          class="flex border-b dark:border-b-gray-700 bg-gray-50 dark:bg-gray-900 p-4"
-        >
+        <div class="flex border-b dark:border-b-gray-700 dark:bg-gray-900 p-4">
           <div class="w-3/4">
             <div class="flex items-center">
               <!-- <UIcon

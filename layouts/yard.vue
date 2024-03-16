@@ -39,28 +39,22 @@ const setYard = async () => {
 
 await setYard();
 await setProfile();
-
-// onMounted(async () => {
-//   await setYard();
-//   await setProfile();
-// });
 </script>
 
 <template>
-  <Navbar class="fixed top-0 left-0 w-full" />
-
-  <!-- page content -->
-  <div class="h-screen grid grid-cols-10 pt-[3.5rem]">
-    <!-- Desktop Sidebar -->
-
-    <!-- Mobile Sidebar -->
-    <USlideover v-if="mobileMode" v-model="sidebarOpen">
+  <div class="grid grid-cols-2 grid-rows-2 h-screen">
+    <div class="h-14 col-span-2">
+      <Navbar />
+    </div>
+    <div v-if="!mobileMode" class="w-72">
       <Sidebar />
-    </USlideover>
-
-    <Sidebar v-if="!mobileMode" class="col-span-2 z-10" />
-
-    <div class="lg:col-span-8 col-span-full overflow-auto flex">
+    </div>
+    <div v-else class="w-0">
+      <USlideover v-model="sidebarOpen">
+        <Sidebar />
+      </USlideover>
+    </div>
+    <div class="flex overflow-auto">
       <slot />
     </div>
   </div>
@@ -73,5 +67,10 @@ html {
 
 body {
   height: 100%;
+}
+
+.grid {
+  grid-template-rows: auto 1fr;
+  grid-template-columns: auto 1fr;
 }
 </style>
