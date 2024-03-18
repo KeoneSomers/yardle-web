@@ -192,10 +192,7 @@ const handleUnassignOwner = async () => {
 </script>
 
 <template>
-  <div
-    v-if="profile"
-    class="mx-auto my-6 px-4 sm:px-6 lg:px-8 sm:mt-2 2xl:mt-5"
-  >
+  <div v-if="profile">
     <div
       v-if="horse && !horse.owner"
       class="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-2"

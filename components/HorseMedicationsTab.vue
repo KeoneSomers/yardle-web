@@ -67,10 +67,7 @@ const handleDelete = async () => {
 
 <template>
   <div>
-    <div
-      v-if="medications.length > 0"
-      class="my-6 px-4 sm:px-6 lg:px-8 sm:mt-2 2xl:mt-5"
-    >
+    <div v-if="medications.length > 0">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
           <h1 class="text-xl font-semibold text-gray-900">Medications</h1>

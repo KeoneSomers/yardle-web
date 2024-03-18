@@ -188,7 +188,6 @@ const handleDelete = async () => {
     v-if="
       (horse.owner && user.id === horse.owner.id) || profile.active_role < 3
     "
-    class="mx-auto my-6 px-4 sm:px-6 lg:px-8 sm:mt-2 2xl:mt-5"
   >
     <div v-if="viewingHistory === false && viewingInvoces === false">
       <!-- <UAlert

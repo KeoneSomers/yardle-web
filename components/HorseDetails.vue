@@ -219,7 +219,7 @@ const handleDelete = async () => {
               class="h-32 w-full bg-opacity-50 object-cover lg:h-48"
             ></div>
           </div>
-          <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <UContainer>
             <div
               class="-mt-12 border-b pb-5 sm:-mt-16 sm:items-end md:border-none md:pb-0"
             >
@@ -281,20 +281,23 @@ const handleDelete = async () => {
                 </UDropdown>
               </div>
             </div>
-          </div>
+          </UContainer>
         </div>
 
         <!-- Desktop Tabs -->
-        <UTabs
-          v-model="selectedTab"
-          :items="tabs"
-          class="mt-6 px-4 sm:px-6 lg:px-8 sm:mt-2 2xl:mt-5 hidden md:block"
-        >
-        </UTabs>
+        <UContainer class="my-6 sm:mt-2 2xl:mt-5">
+          <UTabs
+            v-model="selectedTab"
+            :items="tabs"
+            class="mt-6 sm:mt-2 2xl:mt-5 hidden md:block"
+          >
+          </UTabs>
+        </UContainer>
       </article>
     </div>
-
-    <component :is="tabs[selectedTab].component" />
+    <UContainer>
+      <component :is="tabs[selectedTab].component" />
+    </UContainer>
 
     <!-- Mobile bottom tab nav -->
     <nav
