@@ -107,7 +107,7 @@ const handleDelete = async (id) => {
 </script>
 
 <template>
-  <div v-if="yard && selectedYard" class="px-8 mt-6 w-full">
+  <UContainer v-if="yard && selectedYard" class="mt-6">
     <div>
       <h1 class="text-xl">Welcome to {{ yard.name }}</h1>
       <small class="text-gray-500">{{ formatDate(DateTime.now()) }}</small>
@@ -176,7 +176,7 @@ const handleDelete = async (id) => {
         </div>
       </div>
     </div>
-  </div>
+  </UContainer>
 
   <!-- Edit Horse Modal -->
   <Modal v-model="editModalOpen">
