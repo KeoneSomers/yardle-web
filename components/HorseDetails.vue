@@ -72,15 +72,13 @@ watchEffect(async () => {
   if (selectedHorseId.value) {
     y.value = 0; // scroll to top
 
-    await useAsyncData("horseDetails", async () => {
-      const { data } = await client
-        .from("horses")
-        .select(`*, owner("first_name", "last_name", "id")`)
-        .eq("id", selectedHorseId.value)
-        .single();
+    const { data: horseDetailsData } = await client
+      .from("horses")
+      .select(`*, owner("first_name", "last_name", "id")`)
+      .eq("id", selectedHorseId.value)
+      .single();
 
-      horse.value = data;
-    });
+    horse.value = horseDetailsData;
   }
 });
 

@@ -9,17 +9,15 @@ const viewingHorse = useState("viewingHorse", () => false);
 const profile = useState("profile");
 
 // Get horses from the db
-if (selectedYard.value > 0) {
-  await useAsyncData("horses", async () => {
-    const { data } = await supabase
-      .from("horses")
-      .select("*, owner(id, first_name, last_name)")
-      .eq("yard_id", selectedYard.value)
-      .order("name", { ascending: true });
+await useAsyncData("horses", async () => {
+  const { data } = await supabase
+    .from("horses")
+    .select("id, name, avatar_background, owner(id, first_name, last_name)")
+    .eq("yard_id", selectedYard.value)
+    .order("name", { ascending: true });
 
-    horses.value = data;
-  });
-}
+  horses.value = data;
+});
 
 const groupByFirstLetter = (input, key) => {
   if (input) {
