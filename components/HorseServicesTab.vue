@@ -276,7 +276,7 @@ const handleDelete = async () => {
                     day.day == trueDateTime.day &&
                     day.month == trueDateTime.month &&
                     day.year == trueDateTime.year
-                      ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 text-xs font-semibold text-white'
+                      ? 'flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-xs font-semibold text-white'
                       : 'flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold'
                   "
                   >{{ day.day }}</time

@@ -132,7 +132,7 @@ const handleSubmit = async () => {
       <select
         v-model="selectedHorse"
         required
-        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm"
       >
         <option v-for="item in clientHorses" :key="item.id" :value="item">
           {{ item.name }}
@@ -144,7 +144,7 @@ const handleSubmit = async () => {
       <select
         v-model="selectedService"
         required
-        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm"
       >
         <option v-for="item in liveryServices" :key="item.id" :value="item">
           {{ item.name }} -
@@ -166,7 +166,7 @@ const handleSubmit = async () => {
             :min="startDate"
             :max="endDate"
             type="date"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             v-model="date"
             required
           />
@@ -180,7 +180,7 @@ const handleSubmit = async () => {
           <input
             v-model="bookedLate"
             type="checkbox"
-            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+            class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-600"
           />
         </div>
         <div class="ml-3 text-sm">
@@ -199,7 +199,7 @@ const handleSubmit = async () => {
         v-if="!loading"
         :disabled="date === null || selectedService === null"
         type="submit"
-        class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
+        class="inline-flex justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 sm:text-sm"
       >
         Submit
       </button>

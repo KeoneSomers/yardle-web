@@ -264,7 +264,7 @@ const handleDeleteFieldRotation = async () => {
               <UTooltip text="Add a field rotation">
                 <div
                   @click="createModalOpen2 = true"
-                  class="flex cursor-pointer items-center whitespace-nowrap rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-indigo-200 hover:text-gray-700"
+                  class="flex cursor-pointer items-center whitespace-nowrap rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-emerald-200 hover:text-gray-700"
                 >
                   <UIcon name="i-heroicons-plus-solid" class="h-5 w-5" />
                 </div>
@@ -278,7 +278,7 @@ const handleDeleteFieldRotation = async () => {
             @click="selectedRotation = rotation"
             :class="[
               rotation === selectedRotation
-                ? 'border-indigo-500 text-indigo-600'
+                ? 'border-emerald-500 text-emerald-600'
                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
               'flex cursor-pointer whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium',
             ]"

@@ -95,7 +95,7 @@ const handleJoinYard = async () => {
         <button
           v-if="!loading"
           @click="handleJoinYard"
-          class="w-full rounded bg-indigo-500 p-4 text-white hover:bg-indigo-600"
+          class="w-full rounded bg-emerald-500 p-4 text-white hover:bg-emerald-600"
         >
           Join
         </button>
@@ -123,7 +123,7 @@ const handleJoinYard = async () => {
           </NuxtLink>
           <NuxtLink
             :to="'/auth/signup?invite_code=' + invite_code"
-            class="flex-1 rounded bg-indigo-500 p-3 text-white"
+            class="flex-1 rounded bg-emerald-500 p-3 text-white"
             >Sign up
           </NuxtLink>
         </div>

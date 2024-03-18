@@ -175,7 +175,7 @@ const removeSelectedHorse = (i) => {
       <div class="mt-1">
         <input
           type="text"
-          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           v-model="title"
           required
         />
@@ -187,7 +187,7 @@ const removeSelectedHorse = (i) => {
       <select
         v-model="event_type"
         required
-        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm"
       >
         <option
           v-for="eventType in eventTypes"
@@ -207,7 +207,7 @@ const removeSelectedHorse = (i) => {
             v-model="all_day"
             id="all_day"
             type="checkbox"
-            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
           />
         </div>
       </div>
@@ -219,7 +219,7 @@ const removeSelectedHorse = (i) => {
         <div class="mt-1">
           <input
             type="date"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             v-model="date"
             required
           />
@@ -231,7 +231,7 @@ const removeSelectedHorse = (i) => {
         <div class="mt-1">
           <input
             type="time"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             v-model="time"
           />
         </div>
@@ -319,7 +319,7 @@ const removeSelectedHorse = (i) => {
           <button
             @click="removeSelectedHorse(index)"
             type="button"
-            class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:bg-indigo-500 focus:text-white focus:outline-none"
+            class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-emerald-400 hover:bg-emerald-200 hover:text-emerald-500 focus:bg-emerald-500 focus:text-white focus:outline-none"
           >
             <svg
               class="h-2 w-2"
@@ -342,7 +342,7 @@ const removeSelectedHorse = (i) => {
       <div class="mt-1">
         <textarea
           rows="4"
-          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           v-model="notes"
         />
       </div>
@@ -356,7 +356,7 @@ const removeSelectedHorse = (i) => {
       <button
         v-if="!loading"
         type="submit"
-        class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
+        class="inline-flex justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 sm:text-sm"
       >
         Create
       </button>

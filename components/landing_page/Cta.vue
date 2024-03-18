@@ -5,7 +5,7 @@
 <template>
   <div class="relative bg-gray-900">
     <div
-      class="relative h-80 overflow-hidden bg-indigo-600 md:absolute md:left-0 md:h-full md:w-1/3 lg:w-1/2"
+      class="relative h-80 overflow-hidden bg-emerald-600 md:absolute md:left-0 md:h-full md:w-1/3 lg:w-1/2"
     >
       <nuxt-img
         quality="20"
@@ -43,7 +43,7 @@
       <div
         class="pr-6 pl-6 md:ml-auto md:w-2/3 md:pl-16 lg:w-1/2 lg:pl-24 lg:pr-0 xl:pl-32"
       >
-        <h2 class="text-base font-semibold leading-7 text-indigo-400">
+        <h2 class="text-base font-semibold leading-7 text-emerald-400">
           Effortless Equestrian Management
         </h2>
         <p class="mt-2 text-4xl font-bold tracking-tight text-white">

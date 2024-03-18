@@ -87,7 +87,7 @@ const indeterminate = computed(
                         >
                           <input
                             type="checkbox"
-                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-600"
                             :checked="
                               indeterminate ||
                               selectedRequests.length ===
@@ -132,11 +132,11 @@ const indeterminate = computed(
                         >
                           <div
                             v-if="selectedRequests.includes(request.id)"
-                            class="absolute inset-y-0 left-0 w-0.5 bg-indigo-600"
+                            class="absolute inset-y-0 left-0 w-0.5 bg-emerald-600"
                           ></div>
                           <input
                             type="checkbox"
-                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-600"
                             :value="request.id"
                             v-model="selectedRequests"
                           />
@@ -145,7 +145,7 @@ const indeterminate = computed(
                           :class="[
                             'py-4 pr-3 text-sm font-medium',
                             selectedRequests.includes(request.id)
-                              ? 'text-indigo-600'
+                              ? 'text-emerald-600'
                               : 'text-gray-900',
                             index === 0 ? 'pl-7 sm:pl-6' : 'pl-3 sm:pl-2',
                           ]"
@@ -181,7 +181,7 @@ const indeterminate = computed(
                         >
                           <!-- <a
                                                                                             href="#"
-                                                                                            class="text-indigo-600 hover:text-indigo-900"
+                                                                                            class="text-emerald-600 hover:text-emerald-900"
                                                                                             >Edit</a
                                                                                           > -->
                           <div class="flex justify-end">

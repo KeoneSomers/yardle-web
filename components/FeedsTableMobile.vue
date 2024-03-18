@@ -113,7 +113,7 @@ const emits = defineEmits(["editFeed", "deleteFeed"]);
                       :key="ingredient.id"
                     >
                       <span
-                        class="mr-1 mb-1 inline-flex items-center rounded-full bg-indigo-100 py-0.5 px-2 text-xs font-medium text-indigo-700"
+                        class="mr-1 mb-1 inline-flex items-center rounded-full bg-emerald-100 py-0.5 px-2 text-xs font-medium text-emerald-700"
                       >
                         {{
                           `${ingredient.name} - ${ingredient.quantity} ${ingredient.metric}`
@@ -163,7 +163,7 @@ const emits = defineEmits(["editFeed", "deleteFeed"]);
               </dl>
             </td>
             <!-- <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900"
+              <a href="#" class="text-emerald-600 hover:text-emerald-900"
                 >Edit<span class="sr-only">, {{ feed.name }}</span></a
               >
             </td> -->

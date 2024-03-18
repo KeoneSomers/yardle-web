@@ -51,7 +51,7 @@ const features = [
       >
         <div>
           <h2
-            class="text-lg font-semibold leading-8 tracking-tight text-indigo-600"
+            class="text-lg font-semibold leading-8 tracking-tight text-emerald-600"
           >
             Everything you need
           </h2>
@@ -76,7 +76,7 @@ const features = [
             <dt class="font-semibold text-gray-900">
               <UIcon
                 name="i-heroicons-check-solid"
-                class="absolute top-1 left-0 h-5 w-5 text-indigo-500"
+                class="absolute top-1 left-0 h-5 w-5 text-emerald-500"
                 aria-hidden="true"
               />
               {{ feature.name }}

@@ -57,7 +57,7 @@ const handleSubmit = async () => {
       <div class="mt-1">
         <input
           type="text"
-          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           v-model="name"
           required
         />
@@ -71,7 +71,7 @@ const handleSubmit = async () => {
       <div class="mt-1">
         <input
           type="text"
-          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           v-model="description"
         />
       </div>
@@ -87,7 +87,7 @@ const handleSubmit = async () => {
           pattern="^\d+(?:\.\d{1,2})?$"
           type="number"
           step=".01"
-          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           v-model="price"
           required
         />
@@ -98,7 +98,7 @@ const handleSubmit = async () => {
       <button
         v-if="!loading"
         type="submit"
-        class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
+        class="inline-flex justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 sm:text-sm"
       >
         Create
       </button>

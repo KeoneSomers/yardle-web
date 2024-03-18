@@ -141,7 +141,7 @@ const handleSubmit = async () => {
               type="radio"
               :checked="status === 'accepted'"
               @click="status = 'accepted'"
-              class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-transparent"
+              class="h-4 w-4 border-gray-300 text-emerald-600 focus:ring-transparent"
             />
             <label
               class="ml-3 block text-sm font-medium leading-6 text-gray-900"
@@ -153,7 +153,7 @@ const handleSubmit = async () => {
               type="radio"
               :checked="status === 'declined'"
               @click="status = 'declined'"
-              class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-transparent"
+              class="h-4 w-4 border-gray-300 text-emerald-600 focus:ring-transparent"
             />
             <label
               class="ml-3 block text-sm font-medium leading-6 text-gray-900"
@@ -171,7 +171,7 @@ const handleSubmit = async () => {
         <textarea
           rows="3"
           type="text"
-          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           v-model="note"
         />
       </div>

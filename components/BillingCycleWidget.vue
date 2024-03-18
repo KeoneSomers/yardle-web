@@ -311,9 +311,9 @@ const resetStartDate = () => {
             billingPeriodOptions.starting_from =
               possibleBillingDate(item).toISODate()
           "
-          class="mr-2 mt-2 cursor-pointer rounded-lg border border-dashed px-3 py-2 text-gray-500 hover:bg-indigo-100"
+          class="mr-2 mt-2 cursor-pointer rounded-lg border border-dashed px-3 py-2 text-gray-500 hover:bg-emerald-100"
           :class="{
-            'bg-indigo-100':
+            'bg-emerald-100':
               billingPeriodOptions.starting_from ==
               possibleBillingDate(item).toISODate(),
           }"

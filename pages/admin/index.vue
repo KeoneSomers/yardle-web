@@ -142,13 +142,13 @@ const updateInvoiceItemHorseNames = async () => {
     <h1 class="mb-10 text-3xl">Admin Page</h1>
     <!-- <button
       @click="updateInvoiceItemHorseNames"
-      class="my-4 mr-4 rounded bg-indigo-500 p-4 text-white"
+      class="my-4 mr-4 rounded bg-emerald-500 p-4 text-white"
     >
       Update Invoice Item Horse Names
     </button>
     <button
       @click="handleGenerateInvoices"
-      class="my-4 mr-4 rounded bg-indigo-500 p-4 text-white"
+      class="my-4 mr-4 rounded bg-emerald-500 p-4 text-white"
     >
       Manually Generate Todays Invoces
     </button>

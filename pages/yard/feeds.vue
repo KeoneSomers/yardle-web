@@ -124,7 +124,7 @@ const handleDelete = async () => {
       <button
         @click="() => (createModalOpen = true)"
         type="button"
-        class="inline-flex w-full items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 md:mr-2 md:w-fit md:px-4"
+        class="inline-flex w-full items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-emerald-600 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 md:mr-2 md:w-fit md:px-4"
       >
         <UIcon
           name="i-heroicons-plus-solid"
@@ -395,7 +395,7 @@ const handleDelete = async () => {
           <button
             @click="() => (createModalOpen = true)"
             type="button"
-            class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            class="inline-flex items-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
           >
             <UIcon
               name="i-heroicons-plus-solid"

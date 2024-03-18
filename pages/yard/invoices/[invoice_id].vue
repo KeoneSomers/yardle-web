@@ -291,7 +291,7 @@ const handleDelete = async () => {
               <input
                 v-model="client_first_name"
                 type="text"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
               />
             </div>
           </div>
@@ -303,7 +303,7 @@ const handleDelete = async () => {
               <input
                 v-model="client_last_name"
                 type="text"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
               />
             </div>
           </div>
@@ -327,7 +327,7 @@ const handleDelete = async () => {
                   type="email"
                   name="email"
                   id="email"
-                  class="block w-full rounded-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  class="block w-full rounded-md border-gray-300 pl-10 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
                   placeholder="you@example.com"
                 />
               </div>
@@ -346,7 +346,7 @@ const handleDelete = async () => {
                   min="0"
                   required
                   v-model="numberOfDaysDue"
-                  class="block w-full rounded-md border-gray-300 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  class="block w-full rounded-md border-gray-300 pr-12 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
                 />
                 <div
                   class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
@@ -371,7 +371,7 @@ const handleDelete = async () => {
                   min="0"
                   v-model="baseRate"
                   name="base-rate"
-                  class="block w-full rounded-md border-gray-300 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  class="block w-full rounded-md border-gray-300 pr-12 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
                   placeholder="0.00"
                   aria-describedby="price-currency"
                 />
@@ -396,7 +396,7 @@ const handleDelete = async () => {
                 min="0"
                 max="100"
                 placeholder="0"
-                class="mt-1 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                class="mt-1 block w-full rounded-md border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
               />
               <p class="mt-2 text-sm text-gray-500" id="email-description">
                 Only included in the invoice if value is greater than 0.
@@ -414,7 +414,7 @@ const handleDelete = async () => {
                 <input
                   v-model="vatNumber"
                   type="text"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
                 />
               </div>
             </div>
@@ -430,7 +430,7 @@ const handleDelete = async () => {
                 min="0"
                 max="100"
                 placeholder="0"
-                class="mt-1 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                class="mt-1 block w-full rounded-md border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
               />
               <p class="mt-2 text-sm text-gray-500" id="email-description">
                 Only included in the invoice if value is greater than 0.
@@ -448,7 +448,7 @@ const handleDelete = async () => {
                 <input
                   v-model="discountNote"
                   type="text"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
                   placeholder="i.e. Multi-horse discount"
                 />
               </div>

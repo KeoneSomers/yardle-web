@@ -247,7 +247,7 @@ const handleDelete = async () => {
             day.toISODate() === selectedDate && 'text-white',
             day.toISODate() !== selectedDate &&
               day.toISODate() === trueDateTime.toISODate() &&
-              'text-indigo-600',
+              'text-emerald-600',
             !day.isSelected &&
               day.toISODate() !== trueDateTime.toISODate() &&
               day.month === trueDateTime.month &&
@@ -258,7 +258,7 @@ const handleDelete = async () => {
               'text-gray-400',
             day.toISODate() === selectedDate &&
               day.toISODate() === trueDateTime.toISODate() &&
-              'bg-indigo-600',
+              'bg-emerald-600',
             day.toISODate() === selectedDate &&
               day.toISODate() !== trueDateTime.toISODate() &&
               'bg-gray-900',
@@ -407,7 +407,7 @@ const handleDelete = async () => {
           <button
             @click="createEvent"
             type="button"
-            class="create-event ml-6 rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            class="create-event ml-6 rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
           >
             Add event
           </button>
@@ -443,7 +443,7 @@ const handleDelete = async () => {
               day.day === trueDateTime.day &&
               day.month === trueDateTime.month &&
               day.year === trueDateTime.year
-                ? 'flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
+                ? 'flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 font-semibold text-white'
                 : undefined
             "
             >{{ day.day }}
@@ -453,7 +453,7 @@ const handleDelete = async () => {
             <li
               v-for="event in day.events.slice(0, 2)"
               :key="event.id"
-              :class="event.all_day ? 'rounded bg-indigo-100 px-1' : ''"
+              :class="event.all_day ? 'rounded bg-emerald-100 px-1' : ''"
             >
               <button
                 class="group flex w-full text-left"
@@ -463,14 +463,14 @@ const handleDelete = async () => {
                 "
               >
                 <p
-                  class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
+                  class="flex-auto truncate font-medium text-gray-900 group-hover:text-emerald-600"
                 >
                   {{ event.title }}
                 </p>
 
                 <time
                   :datetime="event.datetime"
-                  class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
+                  class="ml-3 hidden flex-none text-gray-500 group-hover:text-emerald-600 xl:block"
                 >
                   <span v-if="!event.all_day">
                     {{
@@ -499,7 +499,7 @@ const handleDelete = async () => {
                           v-for="event in day.events.slice(2, day.events.lenth)"
                           :key="event.id"
                           :class="
-                            event.all_day ? 'rounded bg-indigo-100 px-1' : ''
+                            event.all_day ? 'rounded bg-emerald-100 px-1' : ''
                           "
                           class="mb-1 px-5"
                         >
@@ -511,14 +511,14 @@ const handleDelete = async () => {
                             "
                           >
                             <p
-                              class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
+                              class="flex-auto truncate font-medium text-gray-900 group-hover:text-emerald-600"
                             >
                               {{ event.title }}
                             </p>
 
                             <time
                               :datetime="event.datetime"
-                              class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
+                              class="ml-3 hidden flex-none text-gray-500 group-hover:text-emerald-600 xl:block"
                             >
                               <span v-if="!event.all_day">
                                 {{

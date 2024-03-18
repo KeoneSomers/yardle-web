@@ -188,7 +188,7 @@ const handleCreateFeed = async () => {
       <span
         v-for="ing in ingredients"
         :key="ing"
-        class="mr-3 mb-2 inline-flex items-center rounded-full bg-indigo-100 py-0.5 pl-2 pr-0.5 text-xs font-medium text-indigo-700"
+        class="mr-3 mb-2 inline-flex items-center rounded-full bg-emerald-100 py-0.5 pl-2 pr-0.5 text-xs font-medium text-emerald-700"
       >
         {{ ingredientTypes[ing.type] }}
         -
@@ -196,7 +196,7 @@ const handleCreateFeed = async () => {
         <button
           @click="() => ingredients.splice(ingredients.indexOf(ing), 1)"
           type="button"
-          class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:bg-indigo-500 focus:text-white focus:outline-none"
+          class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-emerald-400 hover:bg-emerald-200 hover:text-emerald-500 focus:bg-emerald-500 focus:text-white focus:outline-none"
         >
           <span class="sr-only">Remove small option</span>
           <svg
@@ -223,7 +223,7 @@ const handleCreateFeed = async () => {
           id="location"
           name="location"
           v-model="horseId"
-          class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+          class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm"
         >
           <option value="0">Pick one</option>
           <option v-for="horse in horses" :key="horse.id" :value="horse.id">
@@ -239,7 +239,7 @@ const handleCreateFeed = async () => {
           <input
             type="text"
             placeholder="i.e: Soak well"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             v-model="instructions"
           />
         </div>
@@ -253,7 +253,7 @@ const handleCreateFeed = async () => {
           <input
             type="text"
             placeholder="i.e: Morning, Evening, After Riding"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             v-model="condition"
           />
         </div>
@@ -276,7 +276,7 @@ const handleCreateFeed = async () => {
       <div class="mt-4 flex justify-end space-x-2">
         <button
           type="submit"
-          class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
+          class="inline-flex justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 sm:text-sm"
         >
           Add
         </button>
@@ -293,7 +293,7 @@ const handleCreateFeed = async () => {
         <input
           type="text"
           placeholder="i.e: Hi-Fi Origional, Basic Chaff"
-          class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          class="w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           v-model="newIngredient.name"
           required
         />
@@ -303,7 +303,7 @@ const handleCreateFeed = async () => {
         <input
           type="number"
           placeholder="i.e: 1,2,3"
-          class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          class="w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           v-model="newIngredient.quantity"
           required
         />
@@ -313,7 +313,7 @@ const handleCreateFeed = async () => {
         <input
           type="text"
           placeholder="i.e: scoops, clear cup, sachet, kg"
-          class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          class="w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           v-model="newIngredient.metric"
           required
         />
@@ -326,7 +326,7 @@ const handleCreateFeed = async () => {
           id="location"
           name="location"
           v-model="newIngredient.type"
-          class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+          class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm"
         >
           <option
             v-for="(type, index) in ingredientTypes"
@@ -350,7 +350,7 @@ const handleCreateFeed = async () => {
       <div class="col-span-6">
         <button
           @click="() => (addingIngredient = false)"
-          class="w-full justify-center rounded-md border border-transparent bg-gray-500 px-4 py-2 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
+          class="w-full justify-center rounded-md border border-transparent bg-gray-500 px-4 py-2 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 sm:text-sm"
         >
           Back
         </button>
@@ -359,7 +359,7 @@ const handleCreateFeed = async () => {
         <button
           v-if="!loading"
           @click="addIngredient"
-          class="w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:text-sm"
+          class="w-full justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 sm:text-sm"
         >
           Add
         </button>

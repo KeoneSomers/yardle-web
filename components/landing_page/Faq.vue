@@ -48,7 +48,7 @@ const faqs = [
           Frequently asked questions
         </h2>
         <ClientOnly>
-          <UAccordion color="indigo" variant="solid" size="xl" :items="faqs" />
+          <UAccordion color="emerald" variant="solid" size="xl" :items="faqs" />
         </ClientOnly>
       </div>
     </div>

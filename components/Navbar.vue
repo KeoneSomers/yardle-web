@@ -51,7 +51,7 @@ const items = [
             />
             <div
               v-else
-              class="flex h-9 w-9 items-center tracking-tighter text-sm justify-center rounded-full bg-indigo-500 text-white"
+              class="flex h-9 w-9 items-center tracking-tighter text-sm justify-center rounded-full bg-emerald-500 text-white"
             >
               {{ profile.first_name[0].toUpperCase() }}
               {{ profile.last_name[0].toUpperCase() }}

@@ -126,7 +126,7 @@ const handleLogin = async () => {
                 <div class="text-sm">
                   <a
                     @click="() => (requestPasswordResetModalOpen = true)"
-                    class="cursor-pointer font-medium text-indigo-600 hover:text-indigo-500"
+                    class="cursor-pointer font-medium text-emerald-600 hover:text-emerald-500"
                     >Forgot your password?</a
                   >
                 </div>
@@ -164,7 +164,7 @@ const handleLogin = async () => {
     </div>
     <div class="relative hidden w-0 flex-1 lg:block">
       <div
-        class="absolute inset-0 h-full w-full bg-gradient-to-br from-pink-100 dark:from-black via-transparent to-indigo-100 dark:to-indigo-950"
+        class="absolute inset-0 h-full w-full bg-gradient-to-br from-pink-100 dark:from-black via-transparent to-emerald-100 dark:to-emerald-950"
       ></div>
     </div>
   </div>

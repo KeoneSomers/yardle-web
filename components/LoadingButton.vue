@@ -2,7 +2,7 @@
   <div>
     <button
       type="button"
-      class="inline-flex cursor-not-allowed items-center rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold leading-6 text-white shadow transition duration-150 ease-in-out hover:bg-indigo-400"
+      class="inline-flex cursor-not-allowed items-center rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold leading-6 text-white shadow transition duration-150 ease-in-out hover:bg-emerald-400"
       disabled
     >
       <svg

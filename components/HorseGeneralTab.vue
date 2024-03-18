@@ -200,7 +200,7 @@ const handleUnassignOwner = async () => {
       <div
         v-if="profile.active_role < 3"
         @click="assignOwnerModalOpen = true"
-        class="col-span-full space-x-3 rounded-lg border-2 border-dashed border-blue-300 dark:bg-gray-700 dark:border-gray-600 bg-blue-50 p-3 text-blue-500 dark:text-blue-100 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:cursor-pointer hover:border-blue-400"
+        class="col-span-full space-x-3 rounded-lg border-2 border-dashed border-blue-300 dark:bg-gray-700 dark:border-gray-600 bg-blue-50 p-3 text-blue-500 dark:text-blue-100 shadow-sm focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 hover:cursor-pointer hover:border-blue-400"
       >
         <div>
           <p>Assign an owner to this horse</p>

@@ -308,7 +308,7 @@ const handleDelete = async () => {
         :key="tab.name"
         @click="() => (selectedTab = index)"
         :class="[
-          index == selectedTab ? 'bg-indigo-100 text-indigo-700' : '',
+          index == selectedTab ? 'bg-emerald-100 text-emerald-700' : '',
           'flex flex-1 flex-col items-center rounded py-1',
         ]"
       >

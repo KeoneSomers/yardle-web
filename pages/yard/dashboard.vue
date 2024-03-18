@@ -37,7 +37,7 @@ tasks.value = data;
       :key="task.id"
       class="rounded border-t p-4 w-full pb-8"
     >
-      <p v-if="task.date" class="font-semibold text-indigo-500 pb-2">
+      <p v-if="task.date" class="font-semibold text-emerald-500 pb-2">
         {{ DateTime.fromISO(task.date).toLocaleString() }} ({{
           DateTime.fromISO(task.date).toRelativeCalendar()
         }})

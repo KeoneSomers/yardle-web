@@ -39,13 +39,13 @@ const copyLinkToClipboard = async () => {
         readonly
         type="text"
         :value="yard.invite_code"
-        class="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 px-3 py-2 font-mono focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        class="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 px-3 py-2 font-mono focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
       />
     </div>
     <div class="w-full mt-4">
       <button
         @click="copyLinkToClipboard"
-        class="w-full rounded bg-indigo-500 px-3 py-2 text-white"
+        class="w-full rounded bg-emerald-500 px-3 py-2 text-white"
       >
         <UIcon
           name="i-heroicons-clipboard-document"

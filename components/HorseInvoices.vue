@@ -103,7 +103,7 @@ if (invoiceData) {
         <!-- <button class="p-2 mr-2 shadow border rounded">
             View / Edit Items
           </button>
-          <button class="p-2 mr-2 bg-indigo-500 text-white rounded">
+          <button class="p-2 mr-2 bg-emerald-500 text-white rounded">
             Create Invoice
           </button> -->
       </div>

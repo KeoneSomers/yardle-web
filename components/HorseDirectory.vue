@@ -140,10 +140,10 @@ const selectHorse = (horseId) => {
               <div
                 :class="
                   horse.id == selectedHorseId
-                    ? 'bg-indigo-100 dark:bg-indigo-950'
+                    ? 'bg-emerald-100 dark:bg-emerald-950'
                     : 'hover:bg-gray-50 dark:hover:bg-gray-900'
                 "
-                class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
+                class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-emerald-500"
               >
                 <div class="flex-shrink-0">
                   <SupabaseImage
@@ -158,7 +158,7 @@ const selectHorse = (horseId) => {
                     :class="
                       horse.avatar_background
                         ? horse.avatar_background
-                        : 'bg-indigo-500'
+                        : 'bg-emerald-500'
                     "
                   >
                     {{ horse.name[0].toUpperCase() }}
