@@ -109,7 +109,9 @@ const handleDelete = async (id) => {
 <template>
   <UContainer v-if="yard && selectedYard" class="mt-6">
     <div>
-      <h1 class="text-xl">Welcome to {{ yard.name }}</h1>
+      <h1 class="text-xl md:text-2xl lg:text-3xl font-serif text-zinc-800">
+        Welcome to {{ yard.name }}
+      </h1>
       <small class="text-gray-500">{{ formatDate(DateTime.now()) }}</small>
 
       <QuickLinks class="mt-6" />
