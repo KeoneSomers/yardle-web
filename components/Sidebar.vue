@@ -46,11 +46,12 @@ const links = [
     to: "/yard/members",
     icon: "i-heroicons-user-group",
   },
-  {
-    label: "Calendar",
-    to: "/yard/calendar",
-    icon: "i-heroicons-calendar",
-  },
+  // {
+  //   label: "Calendar",
+  //   to: "/yard/calendar",
+  //   icon: "i-heroicons-calendar",
+  //   disabled: true,
+  // },
   {
     label: "Feeds",
     to: "/yard/feeds",
